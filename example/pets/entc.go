@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("creating entoas extension: %v", err)
 	}
-	ogen, err := ogent.NewExtension(ogent.ReadFrom(r))
+	ogen, err := ogent.NewExtension(r)
 	if err != nil {
 		log.Fatalf("creating ogent extension: %v", err)
 	}

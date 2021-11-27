@@ -1,6 +1,7 @@
 package ogent
 
 import (
+	"errors"
 	"io"
 
 	"entgo.io/ent/entc"
@@ -17,20 +18,15 @@ type (
 )
 
 // NewExtension returns a new ogent extension with default configuration.
-func NewExtension(opts ...ExtensionOption) (*Extension, error) {
-	ex := &Extension{}
+func NewExtension(src io.Reader, opts ...ExtensionOption) (*Extension, error) {
+	if src == nil {
+		return nil, errors.New("ogent: src cannot be nil")
+	}
+	ex := &Extension{src: src}
 	for _, opt := range opts {
 		if err := opt(ex); err != nil {
 			return nil, err
 		}
 	}
 	return ex, nil
-}
-
-// ReadFrom attempts to read an OpenAPI Specification document from the given reader.
-func ReadFrom(src io.Reader) ExtensionOption {
-	return func(ex *Extension) error {
-		ex.src = src
-		return nil
-	}
 }
