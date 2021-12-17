@@ -14,15 +14,20 @@ import (
 )
 
 type (
+	// Config is injected into the code generation templates.
+	Config struct {
+		// Target holds the filepath to write the ogen assets to.
+		Target string
+		// Package holds the package name of the ogen assets.
+		Package string
+	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
 		entc.DefaultExtension
 		// The OpenAPI Specification to generate handler implementations for.
 		spec *ogen.Spec
-		// target holds the filepath to write the ogen assets to.
-		target string
-		// pkg holds the package name of the ogen assets.
-		pkg string
+		// Code generation configuration.
+		cfg *Config
 	}
 	// ExtensionOption allows managing Extension configuration using functional arguments
 	ExtensionOption func(*Extension) error
@@ -33,7 +38,7 @@ func NewExtension(spec *ogen.Spec, opts ...ExtensionOption) (*Extension, error) 
 	if spec == nil {
 		return nil, errors.New("ogent: spec cannot be nil")
 	}
-	ex := &Extension{spec: spec}
+	ex := &Extension{spec: spec, cfg: new(Config)}
 	for _, opt := range opts {
 		if err := opt(ex); err != nil {
 			return nil, err
@@ -45,7 +50,7 @@ func NewExtension(spec *ogen.Spec, opts ...ExtensionOption) (*Extension, error) 
 // Target sets the directory the ogen assets are written to.
 func Target(t string) ExtensionOption {
 	return func(ex *Extension) error {
-		ex.target = t
+		ex.cfg.Target = t
 		return nil
 	}
 }
@@ -53,11 +58,12 @@ func Target(t string) ExtensionOption {
 // Package sets the package name for the ogen assets.
 func Package(pkg string) ExtensionOption {
 	return func(ex *Extension) error {
-		ex.pkg = pkg
+		ex.cfg.Package = pkg
 		return nil
 	}
 }
 
+// Hooks of the extension.
 func (ex Extension) Hooks() []gen.Hook {
 	return []gen.Hook{
 		ex.ogen,
@@ -71,7 +77,7 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 			return err
 		}
 		// Ensure target exists.
-		t := ex.target
+		t := ex.cfg.Target
 		if t == "" {
 			t = filepath.Join(g.Target, "api")
 		}
@@ -85,7 +91,7 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 			}
 		}
 		// Ensure there is a package name given.
-		pkg := ex.pkg
+		pkg := ex.cfg.Package
 		if pkg == "" {
 			pkg = "api"
 		}
@@ -98,6 +104,9 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 	})
 }
 
+// Name implements the entc.Annotation interface.
+func (Config) Name() string { return "OgentCfg" }
+
 type formatFS struct{ Root string }
 
 func (f formatFS) WriteFile(name string, content []byte) error {
@@ -107,3 +116,5 @@ func (f formatFS) WriteFile(name string, content []byte) error {
 	}
 	return os.WriteFile(filepath.Join(f.Root, name), buf, 0600)
 }
+
+var _ entc.Annotation = (*Config)(nil)
