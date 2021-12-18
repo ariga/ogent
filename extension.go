@@ -18,8 +18,6 @@ type (
 	Config struct {
 		// Target holds the filepath to write the ogen assets to.
 		Target string
-		// Package holds the package name of the ogen assets.
-		Package string
 	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
@@ -55,14 +53,6 @@ func Target(t string) ExtensionOption {
 	}
 }
 
-// Package sets the package name for the ogen assets.
-func Package(pkg string) ExtensionOption {
-	return func(ex *Extension) error {
-		ex.cfg.Package = pkg
-		return nil
-	}
-}
-
 // Hooks of the extension.
 func (ex Extension) Hooks() []gen.Hook {
 	return []gen.Hook{
@@ -90,17 +80,12 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 				return fmt.Errorf("ogent: create target dir: %w", err)
 			}
 		}
-		// Ensure there is a package name given.
-		pkg := ex.cfg.Package
-		if pkg == "" {
-			pkg = "api"
-		}
 		// Run the ogen code generator.
 		generator, err := ogengen.NewGenerator(ex.spec, ogengen.Options{})
 		if err != nil {
 			return err
 		}
-		return generator.WriteSource(formatFS{t}, pkg)
+		return generator.WriteSource(formatFS{t}, "api")
 	})
 }
 
