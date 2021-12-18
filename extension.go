@@ -60,6 +60,11 @@ func (ex Extension) Hooks() []gen.Hook {
 	}
 }
 
+// Templates of the extension.
+func (Extension) Templates() []*gen.Template {
+	return []*gen.Template{Templates}
+}
+
 func (ex Extension) ogen(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
 		// Let ent create all of its assets.
