@@ -3,6 +3,8 @@ package ogent
 import (
 	"embed"
 	"fmt"
+	"net/http"
+	"path"
 	"text/template"
 
 	"entgo.io/contrib/entoas"
@@ -41,13 +43,13 @@ func hasRequestBody(op entoas.Operation) bool {
 func httpVerb(op entoas.Operation) (string, error) {
 	switch op {
 	case entoas.OpCreate:
-		return "POST", nil
+		return http.MethodPost, nil
 	case entoas.OpRead, entoas.OpList:
-		return "GET", nil
+		return http.MethodGet, nil
 	case entoas.OpUpdate:
-		return "PATCH", nil
+		return http.MethodPatch, nil
 	case entoas.OpDelete:
-		return "DELETE", nil
+		return http.MethodDelete, nil
 	}
 	return "", fmt.Errorf("unknown operation: %q", op)
 }
@@ -58,7 +60,7 @@ func httpRoute(root string, op entoas.Operation) (string, error) {
 	case entoas.OpCreate, entoas.OpList:
 		return root, nil
 	case entoas.OpRead, entoas.OpUpdate, entoas.OpDelete:
-		return root + "/{id}", nil
+		return path.Join(root, "{id}"), nil
 	}
 	return "", fmt.Errorf("unknown operation: %q", op)
 }
