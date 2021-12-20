@@ -1,0 +1,37 @@
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "api/oas_server_impl_gen" }}
+{{- with extend $ "Package" "api" }}{{ template "header" . }}{{ end }}
+
+import (
+	"context"
+)
+
+// OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
+type OgentHandler struct {}
+
+{{- range $n := $.Nodes }}
+	{{- $root := print "/" ($n.Name | plural | kebab) }}
+	{{- range $op := nodeOperations $n }}
+		{{- $opID := print ($op | toString | pascal) $n.Name }}
+		// {{ $opID }} handles {{ httpVerb $op }} {{ httpRoute $root $op }} requests.
+		func (OgentHandler) {{ $opID }}(ctx context.Context
+			{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}
+			{{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
+			panic("unimplemented")
+		}
+	{{ end }}
+	{{- range $e := $n.Edges }}
+		{{- range $op := edgeOperations $e }}
+			{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal)}}
+			// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
+			func (OgentHandler) {{ $opID }}(ctx context.Context
+				{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}, params {{ $opID }}Params) ({{ $opID }}Res, error) {
+				panic("unimplemented")
+			}
+		{{ end }}
+	{{ end }}
+{{ end }}
+
+var _ Handler = (*OgentHandler)(nil)
+{{ end }}
