@@ -79,8 +79,7 @@
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -126,8 +125,7 @@
             "in": "path",
             "description": "ID of the Category",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -167,8 +165,7 @@
             "in": "path",
             "description": "ID of the Category",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -201,8 +198,7 @@
             "in": "path",
             "description": "ID of the Category",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -220,8 +216,7 @@
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -270,8 +265,7 @@
             "in": "path",
             "description": "ID of the Category",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           },
@@ -332,8 +326,7 @@
             "in": "path",
             "description": "ID of the Category",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -349,8 +342,7 @@
                     "type": "string"
                   },
                   "weight": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "birthday": {
                     "type": "string",
@@ -359,26 +351,22 @@
                   "categories": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "owner": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "friends": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
                 "required": [
                   "name",
-                  "weight",
-                  "birthday"
+                  "owner"
                 ]
               }
             }
@@ -476,8 +464,7 @@
                     "type": "string"
                   },
                   "weight": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "birthday": {
                     "type": "string",
@@ -486,26 +473,22 @@
                   "categories": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "owner": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "friends": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
                 "required": [
                   "name",
-                  "weight",
-                  "birthday"
+                  "owner"
                 ]
               }
             }
@@ -546,8 +529,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -587,8 +569,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -621,8 +602,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -638,8 +618,7 @@
                     "type": "string"
                   },
                   "weight": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "birthday": {
                     "type": "string",
@@ -648,26 +627,22 @@
                   "categories": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "owner": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "friends": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
                 "required": [
                   "name",
-                  "weight",
-                  "birthday"
+                  "owner"
                 ]
               }
             }
@@ -711,8 +686,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           },
@@ -773,8 +747,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -792,8 +765,7 @@
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -839,8 +811,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           },
@@ -901,8 +872,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -918,8 +888,7 @@
                     "type": "string"
                   },
                   "weight": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "birthday": {
                     "type": "string",
@@ -928,26 +897,22 @@
                   "categories": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "owner": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "friends": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
                 "required": [
                   "name",
-                  "weight",
-                  "birthday"
+                  "owner"
                 ]
               }
             }
@@ -988,8 +953,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1029,8 +993,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1046,14 +1009,12 @@
                     "type": "string"
                   },
                   "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -1098,8 +1059,7 @@
             "in": "path",
             "description": "ID of the Pet",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1191,14 +1151,12 @@
                     "type": "string"
                   },
                   "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -1245,8 +1203,7 @@
             "in": "path",
             "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1286,8 +1243,7 @@
             "in": "path",
             "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1320,8 +1276,7 @@
             "in": "path",
             "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1337,14 +1292,12 @@
                     "type": "string"
                   },
                   "age": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "pets": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
@@ -1394,8 +1347,7 @@
             "in": "path",
             "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           },
@@ -1456,8 +1408,7 @@
             "in": "path",
             "description": "ID of the User",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             },
             "required": true
           }
@@ -1473,8 +1424,7 @@
                     "type": "string"
                   },
                   "weight": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "birthday": {
                     "type": "string",
@@ -1483,26 +1433,22 @@
                   "categories": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   },
                   "owner": {
-                    "type": "integer",
-                    "format": "int32"
+                    "type": "integer"
                   },
                   "friends": {
                     "type": "array",
                     "items": {
-                      "type": "integer",
-                      "format": "int32"
+                      "type": "integer"
                     }
                   }
                 },
                 "required": [
                   "name",
-                  "weight",
-                  "birthday"
+                  "owner"
                 ]
               }
             }
@@ -1536,8 +1482,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1558,8 +1503,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1574,8 +1518,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1590,8 +1533,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1606,8 +1548,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1622,15 +1563,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1639,24 +1578,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "Category_PetsList": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1665,24 +1600,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "Pet": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1707,49 +1638,86 @@
         "required": [
           "id",
           "name",
-          "weight",
-          "birthday"
+          "owner"
         ]
       },
       "PetCreate": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PetCreate_Categories"
+            }
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PetCreate_Owner"
           }
         },
         "required": [
           "id",
           "name",
-          "weight",
-          "birthday"
+          "owner"
+        ]
+      },
+      "PetCreate_Categories": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "PetCreate_Owner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
         ]
       },
       "PetList": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1758,24 +1726,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "PetRead": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1784,24 +1748,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "PetUpdate": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1810,17 +1770,14 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "Pet_CategoriesCreate": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1835,8 +1792,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
@@ -1851,15 +1807,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1868,24 +1822,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "Pet_FriendsList": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -1894,24 +1844,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "Pet_OwnerCreate": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -1924,15 +1870,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -1945,15 +1889,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "pets": {
             "type": "array",
@@ -1972,15 +1914,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -1993,15 +1933,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2014,15 +1952,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2035,15 +1971,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "age": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           }
         },
         "required": [
@@ -2056,15 +1990,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -2073,24 +2005,20 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       },
       "User_PetsList": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "name": {
             "type": "string"
           },
           "weight": {
-            "type": "integer",
-            "format": "int32"
+            "type": "integer"
           },
           "birthday": {
             "type": "string",
@@ -2099,9 +2027,7 @@
         },
         "required": [
           "id",
-          "name",
-          "weight",
-          "birthday"
+          "name"
         ]
       }
     },

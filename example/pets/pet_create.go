@@ -34,9 +34,25 @@ func (pc *PetCreate) SetWeight(i int) *PetCreate {
 	return pc
 }
 
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (pc *PetCreate) SetNillableWeight(i *int) *PetCreate {
+	if i != nil {
+		pc.SetWeight(*i)
+	}
+	return pc
+}
+
 // SetBirthday sets the "birthday" field.
 func (pc *PetCreate) SetBirthday(t time.Time) *PetCreate {
 	pc.mutation.SetBirthday(t)
+	return pc
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (pc *PetCreate) SetNillableBirthday(t *time.Time) *PetCreate {
+	if t != nil {
+		pc.SetBirthday(*t)
+	}
 	return pc
 }
 
@@ -58,14 +74,6 @@ func (pc *PetCreate) AddCategories(c ...*Category) *PetCreate {
 // SetOwnerID sets the "owner" edge to the User entity by ID.
 func (pc *PetCreate) SetOwnerID(id int) *PetCreate {
 	pc.mutation.SetOwnerID(id)
-	return pc
-}
-
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (pc *PetCreate) SetNillableOwnerID(id *int) *PetCreate {
-	if id != nil {
-		pc = pc.SetOwnerID(*id)
-	}
 	return pc
 }
 
@@ -162,11 +170,8 @@ func (pc *PetCreate) check() error {
 	if _, ok := pc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`pets: missing required field "Pet.name"`)}
 	}
-	if _, ok := pc.mutation.Weight(); !ok {
-		return &ValidationError{Name: "weight", err: errors.New(`pets: missing required field "Pet.weight"`)}
-	}
-	if _, ok := pc.mutation.Birthday(); !ok {
-		return &ValidationError{Name: "birthday", err: errors.New(`pets: missing required field "Pet.birthday"`)}
+	if _, ok := pc.mutation.OwnerID(); !ok {
+		return &ValidationError{Name: "owner", err: errors.New(`pets: missing required edge "Pet.owner"`)}
 	}
 	return nil
 }

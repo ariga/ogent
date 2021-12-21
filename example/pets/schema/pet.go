@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"entgo.io/contrib/entoas"
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -15,8 +17,10 @@ type Pet struct {
 func (Pet) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
-		field.Int("weight"),
-		field.Time("birthday"),
+		field.Int("weight").
+			Optional(),
+		field.Time("birthday").
+			Optional(),
 	}
 }
 
@@ -24,10 +28,20 @@ func (Pet) Fields() []ent.Field {
 func (Pet) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("categories", Category.Type).
-			Ref("pets"),
+			Ref("pets").
+			Annotations(entoas.Groups("pet:create")),
 		edge.From("owner", User.Type).
 			Ref("pets").
-			Unique(),
+			Unique().
+			Required().
+			Annotations(entoas.Groups("pet:create")),
 		edge.To("friends", Pet.Type),
+	}
+}
+
+// Annotations of the Pet.
+func (Pet) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entoas.CreateOperation(entoas.OperationGroups("pet:create")),
 	}
 }

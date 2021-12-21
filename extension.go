@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/ogen-go/ogen"
@@ -18,6 +19,8 @@ type (
 	Config struct {
 		// Target holds the filepath to write the ogen assets to.
 		Target string
+		// The Views created by entoas.
+		Views map[string]*entoas.View
 	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
@@ -65,16 +68,17 @@ func (Extension) Templates() []*gen.Template {
 	return []*gen.Template{Templates}
 }
 
+// Annotations of the extension.
+func (ex Extension) Annotations() []entc.Annotation {
+	return []entc.Annotation{ex.cfg}
+}
+
 func (ex Extension) ogen(next gen.Generator) gen.Generator {
 	return gen.GenerateFunc(func(g *gen.Graph) error {
-		// Let ent create all of its assets.
-		if err := next.Generate(g); err != nil {
-			return err
-		}
 		// Ensure target exists.
 		t := ex.cfg.Target
 		if t == "" {
-			t = filepath.Join(g.Target, "api")
+			t = filepath.Join(g.Target, "ogent")
 		}
 		_, err := os.Stat(t)
 		if err != nil && !os.IsNotExist(err) {
@@ -85,17 +89,26 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 				return fmt.Errorf("ogent: create target dir: %w", err)
 			}
 		}
+		// Initialize viewsCache.
+		ex.cfg.Views, err = entoas.Views(g)
+		if err != nil {
+			return err
+		}
+		// Let ent create all of its assets.
+		if err := next.Generate(g); err != nil {
+			return err
+		}
 		// Run the ogen code generator.
 		generator, err := ogengen.NewGenerator(ex.spec, ogengen.Options{})
 		if err != nil {
 			return err
 		}
-		return generator.WriteSource(formatFS{t}, "api")
+		return generator.WriteSource(formatFS{t}, "ogent")
 	})
 }
 
 // Name implements the entc.Annotation interface.
-func (Config) Name() string { return "OgentCfg" }
+func (Config) Name() string { return "Ogent" }
 
 type formatFS struct{ Root string }
 

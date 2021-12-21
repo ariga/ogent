@@ -1,0 +1,24 @@
+{{ define "ogent/ogent/helper/error" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
+if err != nil {
+	switch {
+	{{- range $err := $.Scope.Errors }}
+		{{- if eq $err "not-found" }}
+			case {{ $.Type.Config.Package | base }}.IsNotFound(err):
+				return &R400{
+					Code: NewOptInt32(http.StatusNotFound), // TODO(masseelch): make required, make ogen.Int()
+					Status: NewOptString(http.StatusText(http.StatusNotFound)), // TODO(masseelch): make required
+					Errors: NewOptString(err.Error()),
+				}, nil
+		{{- else if eq $err "not-singular" }}
+			// case ent.IsNotFound(err): TODO(masseelch): Add 409 to entoas generator
+			//	return R409{}, nil
+		{{- else if eq $err "privacy" }}
+			// Privacy error
+		{{- end }}
+	{{- end }}
+	default:
+		// Let the server handle the error.
+		return nil, err
+	}
+}
+{{ end }}

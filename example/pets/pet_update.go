@@ -43,15 +43,43 @@ func (pu *PetUpdate) SetWeight(i int) *PetUpdate {
 	return pu
 }
 
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (pu *PetUpdate) SetNillableWeight(i *int) *PetUpdate {
+	if i != nil {
+		pu.SetWeight(*i)
+	}
+	return pu
+}
+
 // AddWeight adds i to the "weight" field.
 func (pu *PetUpdate) AddWeight(i int) *PetUpdate {
 	pu.mutation.AddWeight(i)
 	return pu
 }
 
+// ClearWeight clears the value of the "weight" field.
+func (pu *PetUpdate) ClearWeight() *PetUpdate {
+	pu.mutation.ClearWeight()
+	return pu
+}
+
 // SetBirthday sets the "birthday" field.
 func (pu *PetUpdate) SetBirthday(t time.Time) *PetUpdate {
 	pu.mutation.SetBirthday(t)
+	return pu
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (pu *PetUpdate) SetNillableBirthday(t *time.Time) *PetUpdate {
+	if t != nil {
+		pu.SetBirthday(*t)
+	}
+	return pu
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (pu *PetUpdate) ClearBirthday() *PetUpdate {
+	pu.mutation.ClearBirthday()
 	return pu
 }
 
@@ -73,14 +101,6 @@ func (pu *PetUpdate) AddCategories(c ...*Category) *PetUpdate {
 // SetOwnerID sets the "owner" edge to the User entity by ID.
 func (pu *PetUpdate) SetOwnerID(id int) *PetUpdate {
 	pu.mutation.SetOwnerID(id)
-	return pu
-}
-
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (pu *PetUpdate) SetNillableOwnerID(id *int) *PetUpdate {
-	if id != nil {
-		pu = pu.SetOwnerID(*id)
-	}
 	return pu
 }
 
@@ -164,12 +184,18 @@ func (pu *PetUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(pu.hooks) == 0 {
+		if err = pu.check(); err != nil {
+			return 0, err
+		}
 		affected, err = pu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PetMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = pu.check(); err != nil {
+				return 0, err
 			}
 			pu.mutation = mutation
 			affected, err = pu.sqlSave(ctx)
@@ -211,6 +237,14 @@ func (pu *PetUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (pu *PetUpdate) check() error {
+	if _, ok := pu.mutation.OwnerID(); pu.mutation.OwnerCleared() && !ok {
+		return errors.New(`pets: clearing a required unique edge "Pet.owner"`)
+	}
+	return nil
+}
+
 func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -250,10 +284,22 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: pet.FieldWeight,
 		})
 	}
+	if pu.mutation.WeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Column: pet.FieldWeight,
+		})
+	}
 	if value, ok := pu.mutation.Birthday(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
+			Column: pet.FieldBirthday,
+		})
+	}
+	if pu.mutation.BirthdayCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Column: pet.FieldBirthday,
 		})
 	}
@@ -432,15 +478,43 @@ func (puo *PetUpdateOne) SetWeight(i int) *PetUpdateOne {
 	return puo
 }
 
+// SetNillableWeight sets the "weight" field if the given value is not nil.
+func (puo *PetUpdateOne) SetNillableWeight(i *int) *PetUpdateOne {
+	if i != nil {
+		puo.SetWeight(*i)
+	}
+	return puo
+}
+
 // AddWeight adds i to the "weight" field.
 func (puo *PetUpdateOne) AddWeight(i int) *PetUpdateOne {
 	puo.mutation.AddWeight(i)
 	return puo
 }
 
+// ClearWeight clears the value of the "weight" field.
+func (puo *PetUpdateOne) ClearWeight() *PetUpdateOne {
+	puo.mutation.ClearWeight()
+	return puo
+}
+
 // SetBirthday sets the "birthday" field.
 func (puo *PetUpdateOne) SetBirthday(t time.Time) *PetUpdateOne {
 	puo.mutation.SetBirthday(t)
+	return puo
+}
+
+// SetNillableBirthday sets the "birthday" field if the given value is not nil.
+func (puo *PetUpdateOne) SetNillableBirthday(t *time.Time) *PetUpdateOne {
+	if t != nil {
+		puo.SetBirthday(*t)
+	}
+	return puo
+}
+
+// ClearBirthday clears the value of the "birthday" field.
+func (puo *PetUpdateOne) ClearBirthday() *PetUpdateOne {
+	puo.mutation.ClearBirthday()
 	return puo
 }
 
@@ -462,14 +536,6 @@ func (puo *PetUpdateOne) AddCategories(c ...*Category) *PetUpdateOne {
 // SetOwnerID sets the "owner" edge to the User entity by ID.
 func (puo *PetUpdateOne) SetOwnerID(id int) *PetUpdateOne {
 	puo.mutation.SetOwnerID(id)
-	return puo
-}
-
-// SetNillableOwnerID sets the "owner" edge to the User entity by ID if the given value is not nil.
-func (puo *PetUpdateOne) SetNillableOwnerID(id *int) *PetUpdateOne {
-	if id != nil {
-		puo = puo.SetOwnerID(*id)
-	}
 	return puo
 }
 
@@ -560,12 +626,18 @@ func (puo *PetUpdateOne) Save(ctx context.Context) (*Pet, error) {
 		node *Pet
 	)
 	if len(puo.hooks) == 0 {
+		if err = puo.check(); err != nil {
+			return nil, err
+		}
 		node, err = puo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*PetMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
+			}
+			if err = puo.check(); err != nil {
+				return nil, err
 			}
 			puo.mutation = mutation
 			node, err = puo.sqlSave(ctx)
@@ -605,6 +677,14 @@ func (puo *PetUpdateOne) ExecX(ctx context.Context) {
 	if err := puo.Exec(ctx); err != nil {
 		panic(err)
 	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (puo *PetUpdateOne) check() error {
+	if _, ok := puo.mutation.OwnerID(); puo.mutation.OwnerCleared() && !ok {
+		return errors.New(`pets: clearing a required unique edge "Pet.owner"`)
+	}
+	return nil
 }
 
 func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
@@ -663,10 +743,22 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Column: pet.FieldWeight,
 		})
 	}
+	if puo.mutation.WeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Column: pet.FieldWeight,
+		})
+	}
 	if value, ok := puo.mutation.Birthday(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Value:  value,
+			Column: pet.FieldBirthday,
+		})
+	}
+	if puo.mutation.BirthdayCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
 			Column: pet.FieldBirthday,
 		})
 	}

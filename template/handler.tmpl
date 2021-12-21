@@ -1,31 +1,44 @@
 {{/* gotype: entgo.io/ent/entc/gen.Graph */}}
 
-{{ define "api/oas_server_impl_gen" }}
-{{- with extend $ "Package" "api" }}{{ template "header" . }}{{ end }}
+{{ define "ogent/ogent" }}
+{{- with extend $ "Package" "ogent" }}{{ template "header" . }}{{ end }}
+{{- $pkg := base $.Config.Package }}
 
 import (
 	"context"
+	"net/http"
+
+	"{{ $.Config.Package }}"
 )
 
 // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
-type OgentHandler struct {}
+type OgentHandler struct {
+	client {{ $pkg }}.Client
+}
+
+// NewOgentHandler returns a new OgentHandler.
+func NewOgentHandler(c {{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
 
 {{- range $n := $.Nodes }}
 	{{- $root := print "/" ($n.Name | plural | kebab) }}
 	{{- range $op := nodeOperations $n }}
 		{{- $opID := print ($op | toString | pascal) $n.Name }}
 		// {{ $opID }} handles {{ httpVerb $op }} {{ httpRoute $root $op }} requests.
-		func (OgentHandler) {{ $opID }}(ctx context.Context
+		func (h *OgentHandler) {{ $opID }}(ctx context.Context
 			{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}
 			{{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
-			panic("unimplemented")
+			{{- if isCreate $op }}
+				{{- template "ogent/ogent/helper/create" $n -}}
+			{{- else }}
+				panic("unimplemented")
+			{{- end }}
 		}
 	{{ end }}
 	{{- range $e := $n.Edges }}
 		{{- range $op := edgeOperations $e }}
 			{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal)}}
 			// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
-			func (OgentHandler) {{ $opID }}(ctx context.Context
+			func (h *OgentHandler) {{ $opID }}(ctx context.Context
 				{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}, params {{ $opID }}Params) ({{ $opID }}Res, error) {
 				panic("unimplemented")
 			}

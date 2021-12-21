@@ -23,8 +23,8 @@ var (
 	PetsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "weight", Type: field.TypeInt},
-		{Name: "birthday", Type: field.TypeTime},
+		{Name: "weight", Type: field.TypeInt, Nullable: true},
+		{Name: "birthday", Type: field.TypeTime, Nullable: true},
 		{Name: "user_pets", Type: field.TypeInt, Nullable: true},
 	}
 	// PetsTable holds the schema information for the "pets" table.
