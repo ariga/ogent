@@ -78,13 +78,13 @@ func (es Edges) entQuery() string {
 // EntQuery constructs the Go code to eager load all requested edges for the given one.
 func (e Edge) entQuery() string {
 	b := new(strings.Builder)
-	_, _ = fmt.Fprintf(b, ".%s(", strings.Title(e.EagerLoadField()))
+	fmt.Fprintf(b, ".%s(", strings.Title(e.EagerLoadField()))
 	if len(e.Edges) > 0 {
 		es := make(Edges, len(e.Edges))
 		for i, e := range e.Edges {
 			es[i] = (*Edge)(e)
 		}
-		_, _ = fmt.Fprintf(
+		fmt.Fprintf(
 			b,
 			"func (q *%s.%s) {\nq%s\n}",
 			filepath.Base(e.Type.Config.Package),
@@ -184,7 +184,7 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 		return "", err
 	}
 	buf := new(strings.Builder)
-	_, _ = fmt.Fprintf(buf, "%s: ", f.StructField())
+	fmt.Fprintf(buf, "%s: ", f.StructField())
 	switch t.Type {
 	case Integer:
 		switch t.Format {
@@ -239,6 +239,6 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 	default:
 		return "", fmt.Errorf("unexpected type: %q", t.Format)
 	}
-	_, _ = fmt.Fprintf(buf, "%s.%s)", ident, f.StructField())
+	fmt.Fprintf(buf, "%s.%s)", ident, f.StructField())
 	return buf.String(), nil
 }
