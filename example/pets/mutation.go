@@ -643,10 +643,24 @@ func (m *PetMutation) AddedWeight() (r int, exists bool) {
 	return *v, true
 }
 
+// ClearWeight clears the value of the "weight" field.
+func (m *PetMutation) ClearWeight() {
+	m.weight = nil
+	m.addweight = nil
+	m.clearedFields[pet.FieldWeight] = struct{}{}
+}
+
+// WeightCleared returns if the "weight" field was cleared in this mutation.
+func (m *PetMutation) WeightCleared() bool {
+	_, ok := m.clearedFields[pet.FieldWeight]
+	return ok
+}
+
 // ResetWeight resets all changes to the "weight" field.
 func (m *PetMutation) ResetWeight() {
 	m.weight = nil
 	m.addweight = nil
+	delete(m.clearedFields, pet.FieldWeight)
 }
 
 // SetBirthday sets the "birthday" field.
@@ -680,9 +694,22 @@ func (m *PetMutation) OldBirthday(ctx context.Context) (v time.Time, err error) 
 	return oldValue.Birthday, nil
 }
 
+// ClearBirthday clears the value of the "birthday" field.
+func (m *PetMutation) ClearBirthday() {
+	m.birthday = nil
+	m.clearedFields[pet.FieldBirthday] = struct{}{}
+}
+
+// BirthdayCleared returns if the "birthday" field was cleared in this mutation.
+func (m *PetMutation) BirthdayCleared() bool {
+	_, ok := m.clearedFields[pet.FieldBirthday]
+	return ok
+}
+
 // ResetBirthday resets all changes to the "birthday" field.
 func (m *PetMutation) ResetBirthday() {
 	m.birthday = nil
+	delete(m.clearedFields, pet.FieldBirthday)
 }
 
 // AddCategoryIDs adds the "categories" edge to the Category entity by ids.
@@ -964,7 +991,14 @@ func (m *PetMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *PetMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(pet.FieldWeight) {
+		fields = append(fields, pet.FieldWeight)
+	}
+	if m.FieldCleared(pet.FieldBirthday) {
+		fields = append(fields, pet.FieldBirthday)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -977,6 +1011,14 @@ func (m *PetMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *PetMutation) ClearField(name string) error {
+	switch name {
+	case pet.FieldWeight:
+		m.ClearWeight()
+		return nil
+	case pet.FieldBirthday:
+		m.ClearBirthday()
+		return nil
+	}
 	return fmt.Errorf("unknown Pet nullable field %s", name)
 }
 

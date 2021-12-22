@@ -1,0 +1,50 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "ogent/ogent/helper/create" }}
+b := h.client.{{ $.Name }}.Create()
+// Add all fields.
+{{- range $f := $.Fields }}
+	{{- if $f.Optional }}
+		if v, ok := req.{{ $f.StructField}}.Get(); ok {
+			b.Set{{ $f.StructField }}(v)
+		}
+	{{- else }}
+		b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+	{{- end }}
+{{- end }}
+// Add all edges.
+{{- range $e := $.Edges }}
+	{{- if not $e.Unique }}
+		b.{{ $e.MutationAdd }}(req.{{ $e.StructField }}...)
+	{{- else }}
+		{{- if $e.Optional }}
+			if v, ok := req.{{ $e.StructField }}.Get(); ok {
+				b.{{ $e.MutationSet }}(v)
+			}
+		{{- else }}
+				b.{{ $e.MutationSet }}(req.{{ $e.StructField }})
+		{{- end }}
+	{{- end }}
+{{- end }}
+// Persist to storage.
+e, err := b.Save(ctx)
+{{-
+	template "ogent/ogent/helper/error"
+	extend $
+	"Errors" (list "not-singular")
+-}}
+// Reload the entity to attach all eager-loaded edges.
+q := h.client.{{ $.Name }}.Query().Where({{ $.Name | lower }}.ID(e.{{ $.ID.StructField }}))
+{{- with eagerLoad $ "create" }}
+	// Eager load edges that are required on create operation.
+	q{{ . }}
+{{- end }}
+e, err = q.Only(ctx)
+{{-
+	template "ogent/ogent/helper/error"
+	extend $
+	"Errors" (list "not-found" "not-singular")
+-}}
+return New{{ viewName $ "create"  }}(e), nil
+{{- end }}
+

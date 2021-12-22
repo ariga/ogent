@@ -301,6 +301,20 @@ func WeightLTE(v int) predicate.Pet {
 	})
 }
 
+// WeightIsNil applies the IsNil predicate on the "weight" field.
+func WeightIsNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldWeight)))
+	})
+}
+
+// WeightNotNil applies the NotNil predicate on the "weight" field.
+func WeightNotNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldWeight)))
+	})
+}
+
 // BirthdayEQ applies the EQ predicate on the "birthday" field.
 func BirthdayEQ(v time.Time) predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
@@ -374,6 +388,20 @@ func BirthdayLT(v time.Time) predicate.Pet {
 func BirthdayLTE(v time.Time) predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldBirthday), v))
+	})
+}
+
+// BirthdayIsNil applies the IsNil predicate on the "birthday" field.
+func BirthdayIsNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldBirthday)))
+	})
+}
+
+// BirthdayNotNil applies the NotNil predicate on the "birthday" field.
+func BirthdayNotNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldBirthday)))
 	})
 }
 
