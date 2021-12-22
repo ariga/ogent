@@ -40,11 +40,10 @@ q := h.client.{{ $.Name }}.Query().Where({{ $.Name | lower }}.ID(e.{{ $.ID.Struc
 	q{{ . }}
 {{- end }}
 e, err = q.Only(ctx)
-{{-
-	template "ogent/ogent/helper/error"
-	extend $
-	"Errors" (list "not-found" "not-singular")
--}}
+if err != nil {
+	// This should never happen.
+	return nil, err
+}
 return New{{ viewName $ "create"  }}(e), nil
 {{- end }}
 

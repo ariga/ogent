@@ -15,6 +15,12 @@ entgo.io/contrib v0.2.1-0.20211222104811-54c2c3a90dae h1:SR5d+mxuTKwwNvmlG2Bx632
 entgo.io/contrib v0.2.1-0.20211222104811-54c2c3a90dae/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
 entgo.io/contrib v0.2.1-0.20220103140003-cd2861ab7b04 h1:jIRZ2qsftoaICBj8GCvIXa5GWc27Y5M8Ikf36Yyi6Wg=
 entgo.io/contrib v0.2.1-0.20220103140003-cd2861ab7b04/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
+entgo.io/contrib v0.2.1-0.20220103144106-4727bf99c031 h1:epnz2v028gNAI/cAKLqyVhOMXsJzzgRm0Ms2ayiFVdE=
+entgo.io/contrib v0.2.1-0.20220103144106-4727bf99c031/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
+entgo.io/contrib v0.2.1-0.20220103185646-a4bdf403c899 h1:3AMyCBMG72fzHfoIpSKmEq7h7QcyCw4S7sjT9G+kapU=
+entgo.io/contrib v0.2.1-0.20220103185646-a4bdf403c899/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
+entgo.io/contrib v0.2.1-0.20220103191918-a66b82b037a3 h1:+8OWpc/hPpKcm566EU+LKhX0NAszbTtLdREzAe1TDS8=
+entgo.io/contrib v0.2.1-0.20220103191918-a66b82b037a3/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
 entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7 h1:v5R9L5IE4fakNcs5OlNKFZ5Cn0Oa6ogs2o8qmHSWO4Y=
 entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7/go.mod h1:9jjnWS3pUqkDkRXYHkMU3nZlrj9enQJgIeImJyCm0sc=
 github.com/99designs/gqlgen v0.14.0/go.mod h1:S7z4boV+Nx4VvzMUpVrY/YuHjFX4n7rDyuTqvAkuoRE=

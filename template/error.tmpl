@@ -12,7 +12,7 @@ if err != nil {
 					}, nil
 		{{- else if eq $err "not-found" }}
 			case {{ $pkg }}.IsNotFound(err):
-				return &R400{
+				return &R404{
 					Code: http.StatusNotFound,
 					Status: http.StatusText(http.StatusNotFound),
 					Errors: NewOptString(err.Error()),
@@ -20,8 +20,8 @@ if err != nil {
 		{{- else if eq $err "not-singular" }}
 			case {{ $pkg }}.IsNotSingular(err):
 				return &R409{
-						Code: http.StatusNotFound,
-						Status: http.StatusText(http.StatusNotFound),
+						Code: http.StatusConflict,
+						Status: http.StatusText(http.StatusConflict),
 						Errors: NewOptString(err.Error()),
 					}, nil
 		{{- else if eq $err "privacy" }}

@@ -29,6 +29,8 @@ func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{
 			{{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
 			{{- if isCreate $op }}
 				{{- template "ogent/ogent/helper/create" $n -}}
+			{{- else if isRead $op }}
+				{{- template "ogent/ogent/helper/read" $n -}}
 			{{- else }}
 				panic("unimplemented")
 			{{- end }}

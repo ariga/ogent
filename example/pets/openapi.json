@@ -150,6 +150,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -559,6 +562,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -990,6 +996,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1245,6 +1254,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"

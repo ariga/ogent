@@ -2185,9 +2185,10 @@ func (s *R500) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s UpdateCategoryReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-
-	e.FieldStart("name")
-	e.Str(s.Name)
+	if s.Name.Set {
+		e.FieldStart("name")
+		s.Name.Encode(e)
+	}
 	if s.Pets != nil {
 		e.FieldStart("pets")
 		e.ArrStart()
@@ -2207,9 +2208,8 @@ func (s *UpdateCategoryReq) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "name":
-			v, err := d.Str()
-			s.Name = string(v)
-			if err != nil {
+			s.Name.Reset()
+			if err := s.Name.Decode(d); err != nil {
 				return err
 			}
 		case "pets":
@@ -2236,9 +2236,10 @@ func (s *UpdateCategoryReq) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s UpdatePetReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-
-	e.FieldStart("name")
-	e.Str(s.Name)
+	if s.Name.Set {
+		e.FieldStart("name")
+		s.Name.Encode(e)
+	}
 	if s.Weight.Set {
 		e.FieldStart("weight")
 		s.Weight.Encode(e)
@@ -2255,9 +2256,10 @@ func (s UpdatePetReq) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
-
-	e.FieldStart("owner")
-	e.Int(s.Owner)
+	if s.Owner.Set {
+		e.FieldStart("owner")
+		s.Owner.Encode(e)
+	}
 	if s.Friends != nil {
 		e.FieldStart("friends")
 		e.ArrStart()
@@ -2277,9 +2279,8 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "name":
-			v, err := d.Str()
-			s.Name = string(v)
-			if err != nil {
+			s.Name.Reset()
+			if err := s.Name.Decode(d); err != nil {
 				return err
 			}
 		case "weight":
@@ -2307,9 +2308,8 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 				return err
 			}
 		case "owner":
-			v, err := d.Int()
-			s.Owner = int(v)
-			if err != nil {
+			s.Owner.Reset()
+			if err := s.Owner.Decode(d); err != nil {
 				return err
 			}
 		case "friends":
@@ -2336,12 +2336,14 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s UpdateUserReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-
-	e.FieldStart("name")
-	e.Str(s.Name)
-
-	e.FieldStart("age")
-	e.Int(s.Age)
+	if s.Name.Set {
+		e.FieldStart("name")
+		s.Name.Encode(e)
+	}
+	if s.Age.Set {
+		e.FieldStart("age")
+		s.Age.Encode(e)
+	}
 	if s.Pets != nil {
 		e.FieldStart("pets")
 		e.ArrStart()
@@ -2361,15 +2363,13 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "name":
-			v, err := d.Str()
-			s.Name = string(v)
-			if err != nil {
+			s.Name.Reset()
+			if err := s.Name.Decode(d); err != nil {
 				return err
 			}
 		case "age":
-			v, err := d.Int()
-			s.Age = int(v)
-			if err != nil {
+			s.Age.Reset()
+			if err := s.Age.Decode(d); err != nil {
 				return err
 			}
 		case "pets":

@@ -1,0 +1,13 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "ogent/ogent/helper/read" }}
+q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ(params.{{ $.ID.StructField }}))
+{{- with eagerLoad $ "read" }}{{ . }}{{- end }}
+e, err := q.Only(ctx)
+{{-
+	template "ogent/ogent/helper/error"
+	extend $
+	"Errors" (list "not-found" "not-singular")
+-}}
+return New{{ viewName $ "read"  }}(e), nil
+{{- end }}
