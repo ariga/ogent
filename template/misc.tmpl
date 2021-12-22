@@ -1,16 +1,17 @@
 {{ define "ogent/ogent/helper/error" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
+{{- $pkg := base $.Type.Config.Package }}
 if err != nil {
 	switch {
 	{{- range $err := $.Scope.Errors }}
 		{{- if eq $err "not-found" }}
-			case {{ $.Type.Config.Package | base }}.IsNotFound(err):
+			case {{ $pkg }}.IsNotFound(err):
 				return &R400{
 					Code: http.StatusNotFound,
 					Status: http.StatusText(http.StatusNotFound),
 					Errors: NewOptString(err.Error()),
 				}, nil
 		{{- else if eq $err "not-singular" }}
-			case {{ $.Type.Config.Package | base }}.IsNotSingular(err):
+			case {{ $pkg }}.IsNotSingular(err):
 				return &R409{
 						Code: http.StatusNotFound,
 						Status: http.StatusText(http.StatusNotFound),

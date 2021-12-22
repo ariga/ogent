@@ -13,11 +13,11 @@ import (
 
 // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
 type OgentHandler struct {
-	client {{ $pkg }}.Client
+	client *{{ $pkg }}.Client
 }
 
 // NewOgentHandler returns a new OgentHandler.
-func NewOgentHandler(c {{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
+func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
 
 {{- range $n := $.Nodes }}
 	{{- $root := print "/" ($n.Name | plural | kebab) }}
