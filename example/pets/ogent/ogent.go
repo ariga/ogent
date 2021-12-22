@@ -31,6 +31,12 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 	e, err := b.Save(ctx)
 	if err != nil {
 		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -43,12 +49,16 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 		switch {
 		case pets.IsNotFound(err):
 			return &R400{
-				Code:   NewOptInt32(http.StatusNotFound),                   // TODO(masseelch): make required, make ogen.Int()
-				Status: NewOptString(http.StatusText(http.StatusNotFound)), // TODO(masseelch): make required
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
-			// case ent.IsNotFound(err): TODO(masseelch): Add 409 to entoas generator
-			//	return R409{}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -87,6 +97,16 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	panic("unimplemented")
 }
 
+// DeletePet handles DELETE /pets/{id} requests.
+func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
+	panic("unimplemented")
+}
+
+// ListPet handles GET /pets requests.
+func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
+	panic("unimplemented")
+}
+
 // CreatePet handles POST /pets requests.
 func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
@@ -106,6 +126,12 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	e, err := b.Save(ctx)
 	if err != nil {
 		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -118,12 +144,16 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 		switch {
 		case pets.IsNotFound(err):
 			return &R400{
-				Code:   NewOptInt32(http.StatusNotFound),                   // TODO(masseelch): make required, make ogen.Int()
-				Status: NewOptString(http.StatusText(http.StatusNotFound)), // TODO(masseelch): make required
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
-			// case ent.IsNotFound(err): TODO(masseelch): Add 409 to entoas generator
-			//	return R409{}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -139,16 +169,6 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 
 // UpdatePet handles PATCH /pets/{id} requests.
 func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
-	panic("unimplemented")
-}
-
-// DeletePet handles DELETE /pets/{id} requests.
-func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
-	panic("unimplemented")
-}
-
-// ListPet handles GET /pets requests.
-func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
 	panic("unimplemented")
 }
 
@@ -199,6 +219,12 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	e, err := b.Save(ctx)
 	if err != nil {
 		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -211,12 +237,16 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 		switch {
 		case pets.IsNotFound(err):
 			return &R400{
-				Code:   NewOptInt32(http.StatusNotFound),                   // TODO(masseelch): make required, make ogen.Int()
-				Status: NewOptString(http.StatusText(http.StatusNotFound)), // TODO(masseelch): make required
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
-			// case ent.IsNotFound(err): TODO(masseelch): Add 409 to entoas generator
-			//	return R409{}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err

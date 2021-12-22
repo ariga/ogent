@@ -182,6 +182,6 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 	default:
 		return "", fmt.Errorf("unexpected type: %q", t.Format)
 	}
-	buf.WriteString(fmt.Sprintf("%s.%s)", ident, f.StructField()))
+	_, _ = fmt.Fprintf(buf, "%s.%s)", ident, f.StructField())
 	return buf.String(), nil
 }

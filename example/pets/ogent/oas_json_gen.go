@@ -1997,14 +1997,12 @@ func (s *PetUpdate) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s R400) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	if s.Code.Set {
-		e.FieldStart("code")
-		s.Code.Encode(e)
-	}
-	if s.Status.Set {
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
+
+	e.FieldStart("code")
+	e.Int(s.Code)
+
+	e.FieldStart("status")
+	e.Str(s.Status)
 	if s.Errors.Set {
 		e.FieldStart("errors")
 		s.Errors.Encode(e)
@@ -2020,13 +2018,15 @@ func (s *R400) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "code":
-			s.Code.Reset()
-			if err := s.Code.Decode(d); err != nil {
+			v, err := d.Int()
+			s.Code = int(v)
+			if err != nil {
 				return err
 			}
 		case "status":
-			s.Status.Reset()
-			if err := s.Status.Decode(d); err != nil {
+			v, err := d.Str()
+			s.Status = string(v)
+			if err != nil {
 				return err
 			}
 		case "errors":
@@ -2044,14 +2044,12 @@ func (s *R400) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s R404) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	if s.Code.Set {
-		e.FieldStart("code")
-		s.Code.Encode(e)
-	}
-	if s.Status.Set {
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
+
+	e.FieldStart("code")
+	e.Int(s.Code)
+
+	e.FieldStart("status")
+	e.Str(s.Status)
 	if s.Errors.Set {
 		e.FieldStart("errors")
 		s.Errors.Encode(e)
@@ -2067,13 +2065,62 @@ func (s *R404) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "code":
-			s.Code.Reset()
-			if err := s.Code.Decode(d); err != nil {
+			v, err := d.Int()
+			s.Code = int(v)
+			if err != nil {
 				return err
 			}
 		case "status":
-			s.Status.Reset()
-			if err := s.Status.Decode(d); err != nil {
+			v, err := d.Str()
+			s.Status = string(v)
+			if err != nil {
+				return err
+			}
+		case "errors":
+			s.Errors.Reset()
+			if err := s.Errors.Decode(d); err != nil {
+				return err
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	})
+}
+
+// Encode implements json.Marshaler.
+func (s R409) Encode(e *jx.Encoder) {
+	e.ObjStart()
+
+	e.FieldStart("code")
+	e.Int(s.Code)
+
+	e.FieldStart("status")
+	e.Str(s.Status)
+	if s.Errors.Set {
+		e.FieldStart("errors")
+		s.Errors.Encode(e)
+	}
+	e.ObjEnd()
+}
+
+// Decode decodes R409 from json.
+func (s *R409) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New(`invalid: unable to decode R409 to nil`)
+	}
+	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			v, err := d.Int()
+			s.Code = int(v)
+			if err != nil {
+				return err
+			}
+		case "status":
+			v, err := d.Str()
+			s.Status = string(v)
+			if err != nil {
 				return err
 			}
 		case "errors":
@@ -2091,14 +2138,12 @@ func (s *R404) Decode(d *jx.Decoder) error {
 // Encode implements json.Marshaler.
 func (s R500) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	if s.Code.Set {
-		e.FieldStart("code")
-		s.Code.Encode(e)
-	}
-	if s.Status.Set {
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
+
+	e.FieldStart("code")
+	e.Int(s.Code)
+
+	e.FieldStart("status")
+	e.Str(s.Status)
 	if s.Errors.Set {
 		e.FieldStart("errors")
 		s.Errors.Encode(e)
@@ -2114,13 +2159,15 @@ func (s *R500) Decode(d *jx.Decoder) error {
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "code":
-			s.Code.Reset()
-			if err := s.Code.Decode(d); err != nil {
+			v, err := d.Int()
+			s.Code = int(v)
+			if err != nil {
 				return err
 			}
 		case "status":
-			s.Status.Reset()
-			if err := s.Status.Decode(d); err != nil {
+			v, err := d.Str()
+			s.Status = string(v)
+			if err != nil {
 				return err
 			}
 		case "errors":
