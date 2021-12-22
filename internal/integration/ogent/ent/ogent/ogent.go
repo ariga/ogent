@@ -37,6 +37,12 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -97,11 +103,6 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	panic("unimplemented")
 }
 
-// ListPet handles GET /pets requests.
-func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
-	panic("unimplemented")
-}
-
 // CreatePet handles POST /pets requests.
 func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
@@ -125,6 +126,12 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 			return &R409{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -159,6 +166,16 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	return NewPetCreate(e), nil
 }
 
+// DeletePet handles DELETE /pets/{id} requests.
+func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
+	panic("unimplemented")
+}
+
+// ListPet handles GET /pets requests.
+func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
+	panic("unimplemented")
+}
+
 // ReadPet handles GET /pets/{id} requests.
 func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error) {
 	panic("unimplemented")
@@ -166,11 +183,6 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 
 // UpdatePet handles PATCH /pets/{id} requests.
 func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
-	panic("unimplemented")
-}
-
-// DeletePet handles DELETE /pets/{id} requests.
-func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
 	panic("unimplemented")
 }
 
@@ -189,13 +201,13 @@ func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq
 	panic("unimplemented")
 }
 
-// ReadPetOwner handles GET /pets/{id}/owner requests.
-func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
+// DeletePetOwner handles DELETE /pets/{id}/owner requests.
+func (h *OgentHandler) DeletePetOwner(ctx context.Context, params DeletePetOwnerParams) (DeletePetOwnerRes, error) {
 	panic("unimplemented")
 }
 
-// DeletePetOwner handles DELETE /pets/{id}/owner requests.
-func (h *OgentHandler) DeletePetOwner(ctx context.Context, params DeletePetOwnerParams) (DeletePetOwnerRes, error) {
+// ReadPetOwner handles GET /pets/{id}/owner requests.
+func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
 	panic("unimplemented")
 }
 
@@ -225,6 +237,12 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 			return &R409{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:

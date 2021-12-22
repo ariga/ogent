@@ -3,7 +3,14 @@
 if err != nil {
 	switch {
 	{{- range $err := $.Scope.Errors }}
-		{{- if eq $err "not-found" }}
+		{{- if eq $err "constraint" }}
+			case {{ $pkg }}.IsConstraintError(err):
+				return &R409{
+						Code: http.StatusConflict,
+						Status: http.StatusText(http.StatusConflict),
+						Errors: NewOptString(err.Error()),
+					}, nil
+		{{- else if eq $err "not-found" }}
 			case {{ $pkg }}.IsNotFound(err):
 				return &R400{
 					Code: http.StatusNotFound,

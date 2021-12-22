@@ -254,6 +254,14 @@ func (o OptInt) Get() (v int, ok bool) {
 	return o.Value, true
 }
 
+// Or returns value if set, or given parameter if does not.
+func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt32 returns new OptInt32 with value set to v.
 func NewOptInt32(v int32) OptInt32 {
 	return OptInt32{
@@ -290,6 +298,14 @@ func (o OptInt32) Get() (v int32, ok bool) {
 		return v, false
 	}
 	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt32) Or(d int32) int32 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewOptString returns new OptString with value set to v.
@@ -330,6 +346,14 @@ func (o OptString) Get() (v string, ok bool) {
 	return o.Value, true
 }
 
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptTime returns new OptTime with value set to v.
 func NewOptTime(v time.Time) OptTime {
 	return OptTime{
@@ -366,6 +390,14 @@ func (o OptTime) Get() (v time.Time, ok bool) {
 		return v, false
 	}
 	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // Ref: #/components/schemas/Pet_CategoriesCreate
@@ -543,6 +575,10 @@ func (*R409) createPetOwnerRes()      {}
 func (*R409) createPetRes()           {}
 func (*R409) createUserPetsRes()      {}
 func (*R409) createUserRes()          {}
+func (*R409) readCategoryRes()        {}
+func (*R409) readPetOwnerRes()        {}
+func (*R409) readPetRes()             {}
+func (*R409) readUserRes()            {}
 
 type R500 struct {
 	Code   int       `json:"code"`

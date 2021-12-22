@@ -66,7 +66,7 @@ func (s *Server) notFound(w http.ResponseWriter, r *http.Request) {
 	http.NotFound(w, r)
 }
 
-func skipSlash(p []byte) []byte {
+func skipSlash(p string) string {
 	if len(p) > 0 && p[0] == '/' {
 		return p[1:]
 	}
@@ -74,9 +74,9 @@ func skipSlash(p []byte) []byte {
 }
 
 // nextElem return next path element from p and forwarded p.
-func nextElem(p []byte) (elem, next []byte) {
+func nextElem(p string) (elem, next string) {
 	p = skipSlash(p)
-	idx := bytes.IndexByte(p, '/')
+	idx := strings.IndexByte(p, '/')
 	if idx < 0 {
 		idx = len(p)
 	}
@@ -86,14 +86,14 @@ func nextElem(p []byte) (elem, next []byte) {
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
 // calling handler that matches the path or returning not found error.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	p := []byte(r.URL.Path)
+	p := r.URL.Path
 	if len(p) == 0 {
 		s.notFound(w, r)
 		return
 	}
 
 	var (
-		elem []byte            // current element, without slashes
+		elem string            // current element, without slashes
 		args map[string]string // lazily initialized
 	)
 
@@ -102,16 +102,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "DELETE":
 		// Root edge.
 		elem, p = nextElem(p)
-		switch string(elem) {
+		switch elem {
 		case "categories": // -> 1
 			// Edge: 1, path: "categories".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// DELETE /categories/{id}
 				s.handleDeleteCategoryRequest(args, w, r)
 				return
@@ -119,15 +119,20 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "pets": // -> 3
 			// Edge: 3, path: "pets".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 4, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				if len(elem) == 0 {
+					// DELETE /pets/{id}.
+					s.handleDeletePetRequest(args, w, r)
+					return
+				}
+				switch elem {
 				case "owner": // -> 5
 					// DELETE /pets/{id}/owner
 					s.handleDeletePetOwnerRequest(args, w, r)
@@ -141,12 +146,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "users": // -> 6
 			// Edge: 6, path: "users".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// DELETE /users/{id}
 				s.handleDeleteUserRequest(args, w, r)
 				return
@@ -158,19 +163,29 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		// Root edge.
 		elem, p = nextElem(p)
-		switch string(elem) {
+		switch elem {
 		case "categories": // -> 1
 			// Edge: 1, path: "categories".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// GET /categories.
+				s.handleListCategoryRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 2, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				if len(elem) == 0 {
+					// GET /categories/{id}.
+					s.handleReadCategoryRequest(args, w, r)
+					return
+				}
+				switch elem {
 				case "pets": // -> 3
 					// GET /categories/{id}/pets
 					s.handleListCategoryPetsRequest(args, w, r)
@@ -184,15 +199,25 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "pets": // -> 4
 			// Edge: 4, path: "pets".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// GET /pets.
+				s.handleListPetRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 5, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				if len(elem) == 0 {
+					// GET /pets/{id}.
+					s.handleReadPetRequest(args, w, r)
+					return
+				}
+				switch elem {
 				case "categories": // -> 6
 					// GET /pets/{id}/categories
 					s.handleListPetCategoriesRequest(args, w, r)
@@ -214,15 +239,25 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "users": // -> 8
 			// Edge: 8, path: "users".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// GET /users.
+				s.handleListUserRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 9, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				if len(elem) == 0 {
+					// GET /users/{id}.
+					s.handleReadUserRequest(args, w, r)
+					return
+				}
+				switch elem {
 				case "pets": // -> 10
 					// GET /users/{id}/pets
 					s.handleListUserPetsRequest(args, w, r)
@@ -240,16 +275,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "PATCH":
 		// Root edge.
 		elem, p = nextElem(p)
-		switch string(elem) {
+		switch elem {
 		case "categories": // -> 1
 			// Edge: 1, path: "categories".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// PATCH /categories/{id}
 				s.handleUpdateCategoryRequest(args, w, r)
 				return
@@ -257,12 +292,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "pets": // -> 3
 			// Edge: 3, path: "pets".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// PATCH /pets/{id}
 				s.handleUpdatePetRequest(args, w, r)
 				return
@@ -270,12 +305,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "users": // -> 5
 			// Edge: 5, path: "users".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// PATCH /users/{id}
 				s.handleUpdateUserRequest(args, w, r)
 				return
@@ -287,19 +322,24 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		// Root edge.
 		elem, p = nextElem(p)
-		switch string(elem) {
+		switch elem {
 		case "categories": // -> 1
 			// Edge: 1, path: "categories".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// POST /categories.
+				s.handleCreateCategoryRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 2, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				switch elem {
 				case "pets": // -> 3
 					// POST /categories/{id}/pets
 					s.handleCreateCategoryPetsRequest(args, w, r)
@@ -312,15 +352,20 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "pets": // -> 4
 			// Edge: 4, path: "pets".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// POST /pets.
+				s.handleCreatePetRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 5, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				switch elem {
 				case "categories": // -> 6
 					// POST /pets/{id}/categories
 					s.handleCreatePetCategoriesRequest(args, w, r)
@@ -341,15 +386,20 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		case "users": // -> 9
 			// Edge: 9, path: "users".
 			elem, p = nextElem(p)
-			switch string(elem) {
+			if len(elem) == 0 {
+				// POST /users.
+				s.handleCreateUserRequest(args, w, r)
+				return
+			}
+			switch elem {
 			default:
 				if args == nil {
 					args = make(map[string]string)
 				}
-				args["id"] = string(elem)
+				args["id"] = elem
 				// Edge: 10, path: "".
 				elem, p = nextElem(p)
-				switch string(elem) {
+				switch elem {
 				case "pets": // -> 11
 					// POST /users/{id}/pets
 					s.handleCreateUserPetsRequest(args, w, r)

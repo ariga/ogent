@@ -14,11 +14,11 @@ import (
 
 // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
 type OgentHandler struct {
-	client pets.Client
+	client *pets.Client
 }
 
 // NewOgentHandler returns a new OgentHandler.
-func NewOgentHandler(c pets.Client) *OgentHandler { return &OgentHandler{c} }
+func NewOgentHandler(c *pets.Client) *OgentHandler { return &OgentHandler{c} }
 
 // CreateCategory handles POST /categories requests.
 func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {
@@ -35,6 +35,12 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 			return &R409{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -122,6 +128,12 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
 		default:
 			// Let the server handle the error.
 			return nil, err
@@ -184,11 +196,6 @@ func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCat
 	panic("unimplemented")
 }
 
-// CreatePetOwner handles POST /pets/{id}/owner requests.
-func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq, params CreatePetOwnerParams) (CreatePetOwnerRes, error) {
-	panic("unimplemented")
-}
-
 // ReadPetOwner handles GET /pets/{id}/owner requests.
 func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
 	panic("unimplemented")
@@ -196,6 +203,11 @@ func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerPara
 
 // DeletePetOwner handles DELETE /pets/{id}/owner requests.
 func (h *OgentHandler) DeletePetOwner(ctx context.Context, params DeletePetOwnerParams) (DeletePetOwnerRes, error) {
+	panic("unimplemented")
+}
+
+// CreatePetOwner handles POST /pets/{id}/owner requests.
+func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq, params CreatePetOwnerParams) (CreatePetOwnerRes, error) {
 	panic("unimplemented")
 }
 
@@ -225,6 +237,12 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 			return &R409{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
