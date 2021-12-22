@@ -35,6 +35,10 @@ e, err := b.Save(ctx)
 -}}
 // Reload the entity to attach all eager-loaded edges.
 q := h.client.{{ $.Name }}.Query().Where({{ $.Name | lower }}.ID(e.{{ $.ID.StructField }}))
+{{- with eagerLoad $ "create" }}
+	// Eager load edges that are required on create operation.
+	q{{ . }}
+{{- end }}
 e, err = q.Only(ctx)
 {{-
 	template "ogent/ogent/helper/error"

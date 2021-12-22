@@ -21,6 +21,8 @@ entgo.io/contrib v0.2.1-0.20211222093004-fc82029b14a1 h1:k0VLWhYYE58ZPsqe5+OVn6V
 entgo.io/contrib v0.2.1-0.20211222093004-fc82029b14a1/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
 entgo.io/contrib v0.2.1-0.20211222103405-1cf4da8b6907 h1:c4fr8k0QXNVMna11uDGO3+7qWfhiIHcNHyF153wBTk8=
 entgo.io/contrib v0.2.1-0.20211222103405-1cf4da8b6907/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
+entgo.io/contrib v0.2.1-0.20211222104811-54c2c3a90dae h1:SR5d+mxuTKwwNvmlG2Bx632V+zPJDMXJLGkQsHNzAHM=
+entgo.io/contrib v0.2.1-0.20211222104811-54c2c3a90dae/go.mod h1:GHmU7qbKeth0bPkojXIJMottaQAkTQ7gntVv/syDH+Y=
 entgo.io/ent v0.9.2-0.20211125103743-6372263b990c/go.mod h1:Dugx2feSPxd7eFN/bnld6knmmg9LTX28cCvZqvhCDBY=
 entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7 h1:v5R9L5IE4fakNcs5OlNKFZ5Cn0Oa6ogs2o8qmHSWO4Y=
 entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7/go.mod h1:9jjnWS3pUqkDkRXYHkMU3nZlrj9enQJgIeImJyCm0sc=

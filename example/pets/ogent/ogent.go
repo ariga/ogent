@@ -97,16 +97,6 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	panic("unimplemented")
 }
 
-// DeletePet handles DELETE /pets/{id} requests.
-func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
-	panic("unimplemented")
-}
-
-// ListPet handles GET /pets requests.
-func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
-	panic("unimplemented")
-}
-
 // CreatePet handles POST /pets requests.
 func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
@@ -139,6 +129,8 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	}
 	// Reload the entity to attach all eager-loaded edges.
 	q := h.client.Pet.Query().Where(pet.ID(e.ID))
+	// Eager load edges that are required on create operation.
+	q.WithCategories().WithOwner()
 	e, err = q.Only(ctx)
 	if err != nil {
 		switch {
@@ -172,13 +164,23 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params U
 	panic("unimplemented")
 }
 
-// CreatePetCategories handles POST /pets/{id}/categories requests.
-func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error) {
+// DeletePet handles DELETE /pets/{id} requests.
+func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
+	panic("unimplemented")
+}
+
+// ListPet handles GET /pets requests.
+func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
 	panic("unimplemented")
 }
 
 // ListPetCategories handles GET /pets/{id}/categories requests.
 func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
+	panic("unimplemented")
+}
+
+// CreatePetCategories handles POST /pets/{id}/categories requests.
+func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error) {
 	panic("unimplemented")
 }
 

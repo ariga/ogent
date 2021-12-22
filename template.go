@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"path"
+	"path/filepath"
 	"strings"
 	"text/template"
 
@@ -18,6 +19,7 @@ var (
 	templateDir embed.FS
 	// FuncMap contains extra template functions used by ogent.
 	FuncMap = template.FuncMap{
+		"eagerLoad":      eagerLoad,
 		"edgeOperations": entoas.EdgeOperations,
 		"hasParams":      hasParams,
 		"hasRequestBody": hasRequestBody,
@@ -38,6 +40,61 @@ var (
 	// Templates holds all templates used by ogent.
 	Templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(FuncMap).ParseFS(templateDir, "template/*tmpl"))
 )
+
+// eagerLoad returns the Go expression to eager load the required edges on the node operation.
+func eagerLoad(n *gen.Type, op entoas.Operation) (string, error) {
+	gs, err := entoas.GroupsForOperation(n.Annotations, op)
+	if err != nil {
+		return "", err
+	}
+	t, err := entoas.EdgeTree(n, gs)
+	if err != nil {
+		return "", err
+	}
+	if len(t) > 0 {
+		es := make(Edges, len(t))
+		for i, e := range t {
+			es[i] = (*Edge)(e)
+		}
+		return es.entQuery(), nil
+	}
+	return "", nil
+}
+
+type (
+	Edges []*Edge
+	Edge  entoas.Edge
+)
+
+// entQuery runs entQuery on every Edge and appends them.
+func (es Edges) entQuery() string {
+	b := new(strings.Builder)
+	for _, e := range es {
+		b.WriteString(e.entQuery())
+	}
+	return b.String()
+}
+
+// EntQuery constructs the Go code to eager load all requested edges for the given one.
+func (e Edge) entQuery() string {
+	b := new(strings.Builder)
+	_, _ = fmt.Fprintf(b, ".%s(", strings.Title(e.EagerLoadField()))
+	if len(e.Edges) > 0 {
+		es := make(Edges, len(e.Edges))
+		for i, e := range e.Edges {
+			es[i] = (*Edge)(e)
+		}
+		_, _ = fmt.Fprintf(
+			b,
+			"func (q *%s.%s) {\nq%s\n}",
+			filepath.Base(e.Type.Config.Package),
+			e.Type.QueryName(),
+			es.entQuery(),
+		)
+	}
+	b.WriteString(")")
+	return b.String()
+}
 
 // hasParams returns if the given entoas.Operation has parameters.
 func hasParams(op entoas.Operation) bool {
@@ -127,7 +184,7 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 		return "", err
 	}
 	buf := new(strings.Builder)
-	buf.WriteString(fmt.Sprintf("%s: ", f.StructField()))
+	_, _ = fmt.Fprintf(buf, "%s: ", f.StructField())
 	switch t.Type {
 	case Integer:
 		switch t.Format {
