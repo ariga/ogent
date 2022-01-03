@@ -575,6 +575,10 @@ func (*R409) createPetOwnerRes()      {}
 func (*R409) createPetRes()           {}
 func (*R409) createUserPetsRes()      {}
 func (*R409) createUserRes()          {}
+func (*R409) readCategoryRes()        {}
+func (*R409) readPetOwnerRes()        {}
+func (*R409) readPetRes()             {}
+func (*R409) readUserRes()            {}
 
 type R500 struct {
 	Code   int       `json:"code"`
