@@ -66,6 +66,22 @@ func (t *testSuite) TestRead() {
 	t.Require().Equal(ogent.NewPetRead(pet), got)
 }
 
+func (t *testSuite) TestUpdate() {
+	// R404
+	got, err := t.handler.UpdatePet(context.Background(), ogent.UpdatePetReq{}, ogent.UpdatePetParams{ID: 2000})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// OK
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+	pet := t.client.Pet.Create().SetName("First Pet").SetOwner(owner).SaveX(context.Background())
+	pet.Edges.Owner = owner
+	got, err = t.handler.UpdatePet(context.Background(), ogent.UpdatePetReq{Name: ogent.NewOptString("The changed name")}, ogent.UpdatePetParams{ID: pet.ID})
+	pet.Name = "The changed name"
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.NewPetUpdate(pet), got)
+}
+
 func (t *testSuite) reqErr(c int, err interface{}) {
 	var (
 		ac int
