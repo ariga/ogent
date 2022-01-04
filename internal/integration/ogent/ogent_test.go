@@ -2,6 +2,7 @@ package ogent
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
@@ -26,12 +27,12 @@ type testSuite struct {
 }
 
 func (t *testSuite) SetupTest() {
-	t.client = enttest.Open(t.T(), dialect.SQLite, "file:ogent?mode=memory&cache=shared&_fk=1")
+	t.client = enttest.Open(t.T(), dialect.SQLite, fmt.Sprintf("file:ogent_%s?mode=memory&cache=shared&_fk=1", time.Now()))
 	t.handler = ogent.NewOgentHandler(t.client)
 }
 
 func (t *testSuite) TestCreate() {
-	// R400
+	// R409
 	got, err := t.handler.CreatePet(context.Background(), ogent.CreatePetReq{})
 	t.Require().NoError(err)
 	t.reqErr(http.StatusConflict, got)
@@ -47,7 +48,22 @@ func (t *testSuite) TestCreate() {
 		Friends:    nil,
 	})
 	t.Require().NoError(err)
-	t.Require().IsType(new(ogent.PetCreate), got)
+	t.Require().Equal(ogent.NewPetCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)
+}
+
+func (t *testSuite) TestRead() {
+	// R400
+	got, err := t.handler.ReadPet(context.Background(), ogent.ReadPetParams{ID: 2000})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// OK
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+	pet := t.client.Pet.Create().SetName("First Pet").SetOwner(owner).SaveX(context.Background())
+	pet.Edges.Owner = owner
+	got, err = t.handler.ReadPet(context.Background(), ogent.ReadPetParams{ID: 1})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.NewPetRead(pet), got)
 }
 
 func (t *testSuite) reqErr(c int, err interface{}) {
@@ -60,12 +76,16 @@ func (t *testSuite) reqErr(c int, err interface{}) {
 		t.Require().IsType(new(ogent.R400), err)
 		err := err.(*ogent.R400)
 		ac, at = err.Code, err.Status
+	case http.StatusNotFound:
+		t.Require().IsType(new(ogent.R404), err)
+		err := err.(*ogent.R404)
+		ac, at = err.Code, err.Status
 	case http.StatusConflict:
 		t.Require().IsType(new(ogent.R409), err)
 		err := err.(*ogent.R409)
 		ac, at = err.Code, err.Status
 	default:
-		panic("unimplemented")
+		t.Failf("panic reqErr", "unknown status code: %d", c)
 	}
 	t.Require().Equal(c, ac, err)
 	t.Require().Equal(http.StatusText(c), at, err)

@@ -575,10 +575,24 @@ func (*R409) createPetOwnerRes()      {}
 func (*R409) createPetRes()           {}
 func (*R409) createUserPetsRes()      {}
 func (*R409) createUserRes()          {}
+func (*R409) deleteCategoryRes()      {}
+func (*R409) deletePetOwnerRes()      {}
+func (*R409) deletePetRes()           {}
+func (*R409) deleteUserRes()          {}
+func (*R409) listCategoryPetsRes()    {}
+func (*R409) listCategoryRes()        {}
+func (*R409) listPetCategoriesRes()   {}
+func (*R409) listPetFriendsRes()      {}
+func (*R409) listPetRes()             {}
+func (*R409) listUserPetsRes()        {}
+func (*R409) listUserRes()            {}
 func (*R409) readCategoryRes()        {}
 func (*R409) readPetOwnerRes()        {}
 func (*R409) readPetRes()             {}
 func (*R409) readUserRes()            {}
+func (*R409) updateCategoryRes()      {}
+func (*R409) updatePetRes()           {}
+func (*R409) updateUserRes()          {}
 
 type R500 struct {
 	Code   int       `json:"code"`
@@ -614,23 +628,23 @@ func (*R500) updatePetRes()           {}
 func (*R500) updateUserRes()          {}
 
 type UpdateCategoryReq struct {
-	Name string `json:"name"`
-	Pets []int  `json:"pets"`
+	Name OptString `json:"name"`
+	Pets []int     `json:"pets"`
 }
 
 type UpdatePetReq struct {
-	Name       string  `json:"name"`
-	Weight     OptInt  `json:"weight"`
-	Birthday   OptTime `json:"birthday"`
-	Categories []int   `json:"categories"`
-	Owner      int     `json:"owner"`
-	Friends    []int   `json:"friends"`
+	Name       OptString `json:"name"`
+	Weight     OptInt    `json:"weight"`
+	Birthday   OptTime   `json:"birthday"`
+	Categories []int     `json:"categories"`
+	Owner      OptInt    `json:"owner"`
+	Friends    []int     `json:"friends"`
 }
 
 type UpdateUserReq struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-	Pets []int  `json:"pets"`
+	Name OptString `json:"name"`
+	Age  OptInt    `json:"age"`
+	Pets []int     `json:"pets"`
 }
 
 // Ref: #/components/schemas/UserCreate

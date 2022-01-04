@@ -33,8 +33,8 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 		switch {
 		case ent.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case ent.IsConstraintError(err):
@@ -52,17 +52,28 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 	q := h.client.Category.Query().Where(category.ID(e.ID))
 	e, err = q.Only(ctx)
 	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewCategoryCreate(e), nil
+}
+
+// ReadCategory handles GET /categories/{id} requests.
+func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error) {
+	q := h.client.Category.Query().Where(category.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
-			return &R400{
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -70,12 +81,7 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 			return nil, err
 		}
 	}
-	return NewCategoryCreate(e), nil
-}
-
-// ReadCategory handles GET /categories/{id} requests.
-func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error) {
-	panic("unimplemented")
+	return NewCategoryRead(e), nil
 }
 
 // UpdateCategory handles PATCH /categories/{id} requests.
@@ -124,8 +130,8 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 		switch {
 		case ent.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case ent.IsConstraintError(err):
@@ -145,23 +151,8 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	q.WithCategories().WithOwner()
 	e, err = q.Only(ctx)
 	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return &R400{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case ent.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
+		// This should never happen.
+		return nil, err
 	}
 	return NewPetCreate(e), nil
 }
@@ -178,7 +169,28 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 
 // ReadPet handles GET /pets/{id} requests.
 func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewPetRead(e), nil
 }
 
 // UpdatePet handles PATCH /pets/{id} requests.
@@ -235,8 +247,8 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 		switch {
 		case ent.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case ent.IsConstraintError(err):
@@ -254,17 +266,28 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	q := h.client.User.Query().Where(user.ID(e.ID))
 	e, err = q.Only(ctx)
 	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewUserCreate(e), nil
+}
+
+// ReadUser handles GET /users/{id} requests.
+func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error) {
+	q := h.client.User.Query().Where(user.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
-			return &R400{
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -272,12 +295,7 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 			return nil, err
 		}
 	}
-	return NewUserCreate(e), nil
-}
-
-// ReadUser handles GET /users/{id} requests.
-func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error) {
-	panic("unimplemented")
+	return NewUserRead(e), nil
 }
 
 // UpdateUser handles PATCH /users/{id} requests.

@@ -33,8 +33,8 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 		switch {
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case pets.IsConstraintError(err):
@@ -61,8 +61,8 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 			}, nil
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -75,7 +75,28 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 
 // ReadCategory handles GET /categories/{id} requests.
 func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error) {
-	panic("unimplemented")
+	q := h.client.Category.Query().Where(category.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R400{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewCategoryRead(e), nil
 }
 
 // UpdateCategory handles PATCH /categories/{id} requests.
@@ -124,8 +145,8 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 		switch {
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case pets.IsConstraintError(err):
@@ -154,8 +175,8 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 			}, nil
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -168,7 +189,28 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 
 // ReadPet handles GET /pets/{id} requests.
 func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R400{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewPetRead(e), nil
 }
 
 // UpdatePet handles PATCH /pets/{id} requests.
@@ -186,13 +228,13 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 	panic("unimplemented")
 }
 
-// ListPetCategories handles GET /pets/{id}/categories requests.
-func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
+// CreatePetCategories handles POST /pets/{id}/categories requests.
+func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error) {
 	panic("unimplemented")
 }
 
-// CreatePetCategories handles POST /pets/{id}/categories requests.
-func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error) {
+// ListPetCategories handles GET /pets/{id}/categories requests.
+func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
 	panic("unimplemented")
 }
 
@@ -235,8 +277,8 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 		switch {
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		case pets.IsConstraintError(err):
@@ -263,8 +305,8 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 			}, nil
 		case pets.IsNotSingular(err):
 			return &R409{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
 				Errors: NewOptString(err.Error()),
 			}, nil
 		default:
@@ -277,7 +319,28 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 
 // ReadUser handles GET /users/{id} requests.
 func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error) {
-	panic("unimplemented")
+	q := h.client.User.Query().Where(user.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R400{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewUserRead(e), nil
 }
 
 // UpdateUser handles PATCH /users/{id} requests.
