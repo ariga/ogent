@@ -82,6 +82,19 @@ func (t *testSuite) TestUpdate() {
 	t.Require().Equal(ogent.NewPetUpdate(pet), got)
 }
 
+func (t *testSuite) TestDelete() {
+	// R404
+	got, err := t.handler.DeleteUser(context.Background(), ogent.DeleteUserParams{ID: 2000})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// OK TODO(masseelch): This should fail with a foreign key exception once https://github.com/ent/ent/pull/1703 gets merged.
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+	got, err = t.handler.DeleteUser(context.Background(), ogent.DeleteUserParams{ID: owner.ID})
+	t.Require().NoError(err)
+	t.Require().Equal(new(ogent.DeleteUserNoContent), got)
+}
+
 func (t *testSuite) reqErr(c int, err interface{}) {
 	var (
 		ac int
