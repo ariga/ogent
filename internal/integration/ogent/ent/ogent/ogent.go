@@ -86,7 +86,42 @@ func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryPara
 
 // UpdateCategory handles PATCH /categories/{id} requests.
 func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
-	panic("unimplemented")
+	b := h.client.Category.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	// Add all edges.
+	b.ClearPets().AddPetIDs(req.Pets...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Category.Query().Where(category.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewCategoryUpdate(e), nil
 }
 
 // DeleteCategory handles DELETE /categories/{id} requests.
@@ -195,7 +230,52 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 
 // UpdatePet handles PATCH /pets/{id} requests.
 func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
-	panic("unimplemented")
+	b := h.client.Pet.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	if v, ok := req.Weight.Get(); ok {
+		b.SetWeight(v)
+	}
+	if v, ok := req.Birthday.Get(); ok {
+		b.SetBirthday(v)
+	}
+	// Add all edges.
+	b.ClearCategories().AddCategoryIDs(req.Categories...)
+	if v, ok := req.Owner.Get(); ok {
+		b.SetOwnerID(v)
+	}
+	b.ClearFriends().AddFriendIDs(req.Friends...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Pet.Query().Where(pet.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetUpdate(e), nil
 }
 
 // CreatePetCategories handles POST /pets/{id}/categories requests.
@@ -300,7 +380,45 @@ func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (Rea
 
 // UpdateUser handles PATCH /users/{id} requests.
 func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
-	panic("unimplemented")
+	b := h.client.User.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	if v, ok := req.Age.Get(); ok {
+		b.SetAge(v)
+	}
+	// Add all edges.
+	b.ClearPets().AddPetIDs(req.Pets...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.User.Query().Where(user.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewUserUpdate(e), nil
 }
 
 // DeleteUser handles DELETE /users/{id} requests.

@@ -31,6 +31,8 @@ func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{
 				{{- template "ogent/ogent/helper/create" $n -}}
 			{{- else if isRead $op }}
 				{{- template "ogent/ogent/helper/read" $n -}}
+			{{- else if isUpdate $op }}
+				{{- template "ogent/ogent/helper/update" $n -}}
 			{{- else }}
 				panic("unimplemented")
 			{{- end }}
