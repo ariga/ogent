@@ -542,24 +542,29 @@ type R404 struct {
 	Errors OptString `json:"errors"`
 }
 
-func (*R404) deleteCategoryRes()    {}
-func (*R404) deletePetOwnerRes()    {}
-func (*R404) deletePetRes()         {}
-func (*R404) deleteUserRes()        {}
-func (*R404) listCategoryPetsRes()  {}
-func (*R404) listCategoryRes()      {}
-func (*R404) listPetCategoriesRes() {}
-func (*R404) listPetFriendsRes()    {}
-func (*R404) listPetRes()           {}
-func (*R404) listUserPetsRes()      {}
-func (*R404) listUserRes()          {}
-func (*R404) readCategoryRes()      {}
-func (*R404) readPetOwnerRes()      {}
-func (*R404) readPetRes()           {}
-func (*R404) readUserRes()          {}
-func (*R404) updateCategoryRes()    {}
-func (*R404) updatePetRes()         {}
-func (*R404) updateUserRes()        {}
+func (*R404) createCategoryPetsRes()  {}
+func (*R404) createPetCategoriesRes() {}
+func (*R404) createPetFriendsRes()    {}
+func (*R404) createPetOwnerRes()      {}
+func (*R404) createUserPetsRes()      {}
+func (*R404) deleteCategoryRes()      {}
+func (*R404) deletePetOwnerRes()      {}
+func (*R404) deletePetRes()           {}
+func (*R404) deleteUserRes()          {}
+func (*R404) listCategoryPetsRes()    {}
+func (*R404) listCategoryRes()        {}
+func (*R404) listPetCategoriesRes()   {}
+func (*R404) listPetFriendsRes()      {}
+func (*R404) listPetRes()             {}
+func (*R404) listUserPetsRes()        {}
+func (*R404) listUserRes()            {}
+func (*R404) readCategoryRes()        {}
+func (*R404) readPetOwnerRes()        {}
+func (*R404) readPetRes()             {}
+func (*R404) readUserRes()            {}
+func (*R404) updateCategoryRes()      {}
+func (*R404) updatePetRes()           {}
+func (*R404) updateUserRes()          {}
 
 type R409 struct {
 	Code   int       `json:"code"`

@@ -1,6 +1,11 @@
 {{ define "ogent/ogent/helper/error" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
 {{- $pkg := base $.Type.Config.Package }}
 if err != nil {
+	{{- with $.Scope.Tx }}
+		if rErr := {{ . }}.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+	{{- end }}
 	switch {
 	{{- range $err := $.Scope.Errors }}
 		{{- if eq $err "constraint" }}

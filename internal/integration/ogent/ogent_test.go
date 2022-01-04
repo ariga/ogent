@@ -28,7 +28,7 @@ type testSuite struct {
 }
 
 func (t *testSuite) SetupTest() {
-	t.client = enttest.Open(t.T(), dialect.SQLite, fmt.Sprintf("file:ogent_%s?mode=memory&cache=shared&_fk=1", time.Now()))
+	t.client = enttest.Open(t.T(), dialect.SQLite, fmt.Sprintf("file:ogent_%d?mode=memory&cache=shared&_fk=1", time.Now().UnixNano()))
 	t.handler = ogent.NewOgentHandler(t.client)
 }
 
@@ -123,6 +123,33 @@ func (t *testSuite) TestList() {
 	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{Page: ogent.NewOptInt(2), ItemsPerPage: ogent.NewOptInt(10)})
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:40])), got)
+}
+
+func (t *testSuite) TestCreateSub() {
+
+	// R404
+	got, err := t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{}, ogent.CreateCategoryPetsParams{})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// R409
+	cat := t.client.Category.Create().SetName("category").SaveX(context.Background())
+	got, err = t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{}, ogent.CreateCategoryPetsParams{ID: cat.ID})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusConflict, got)
+
+	// OK
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+	got, err = t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{
+		Name:       "Ariels most loved Leopard",
+		Weight:     ogent.NewOptInt(10),
+		Birthday:   ogent.NewOptTime(time.Now()),
+		Categories: nil,
+		Owner:      owner.ID,
+		Friends:    nil,
+	}, ogent.CreateCategoryPetsParams{ID: cat.ID})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.NewCategoryPetsCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)
 }
 
 func (t *testSuite) reqErr(c int, err interface{}) {

@@ -28,7 +28,7 @@ e, err := b.Save(ctx)
 	"Errors" (list "not-found" "constraint")
 -}}
 // Reload the entity to attach all eager-loaded edges.
-q := h.client.{{ $.Name }}.Query().Where({{ $.Name | lower }}.ID(e.{{ $.ID.StructField }}))
+q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.ID(e.{{ $.ID.StructField }}))
 {{- with eagerLoad $ "update" }}
 	// Eager load edges that are required on update operation.
 	q{{ . }}
