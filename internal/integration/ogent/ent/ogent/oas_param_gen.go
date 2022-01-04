@@ -99,8 +99,8 @@ type DeleteUserParams struct {
 }
 
 type ListCategoryParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListCategoryPetsParams struct {
@@ -110,8 +110,8 @@ type ListCategoryPetsParams struct {
 }
 
 type ListPetParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetCategoriesParams struct {
@@ -127,8 +127,8 @@ type ListPetFriendsParams struct {
 }
 
 type ListUserParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListUserPetsParams struct {

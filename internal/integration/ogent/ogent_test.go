@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"testing"
 	"time"
 
@@ -93,6 +94,35 @@ func (t *testSuite) TestDelete() {
 	got, err = t.handler.DeleteUser(context.Background(), ogent.DeleteUserParams{ID: owner.ID})
 	t.Require().NoError(err)
 	t.Require().Equal(new(ogent.DeleteUserNoContent), got)
+}
+
+func (t *testSuite) TestList() {
+	// Add some entities.
+	b := make([]*ent.CategoryCreate, 50)
+	for i := range b {
+		b[i] = t.client.Category.Create().SetName("Category " + strconv.Itoa(i+1))
+	}
+	es := t.client.Category.CreateBulk(b...).SaveX(context.Background())
+
+	// Default page size.
+	got, err := t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[0:30])), got)
+
+	// Custom page size.
+	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{ItemsPerPage: ogent.NewOptInt(10)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[0:10])), got)
+
+	// Custom page.
+	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{Page: ogent.NewOptInt(2)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:50])), got)
+
+	// Custom page and page size.
+	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{Page: ogent.NewOptInt(2), ItemsPerPage: ogent.NewOptInt(10)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:40])), got)
 }
 
 func (t *testSuite) reqErr(c int, err interface{}) {

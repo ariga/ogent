@@ -849,7 +849,7 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -865,7 +865,7 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1014,7 +1014,7 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1030,7 +1030,7 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1269,7 +1269,7 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1285,7 +1285,7 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {

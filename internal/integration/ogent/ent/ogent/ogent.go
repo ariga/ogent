@@ -152,7 +152,36 @@ func (h *OgentHandler) DeleteCategory(ctx context.Context, params DeleteCategory
 
 // ListCategory handles GET /categories requests.
 func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error) {
-	panic("unimplemented")
+	q := h.client.Category.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListCategoryOKApplicationJSON(NewCategoryLists(es)), nil
 }
 
 // CreateCategoryPets handles POST /categories/{id}/pets requests.
@@ -241,7 +270,36 @@ func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (D
 
 // ListPet handles GET /pets requests.
 func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListPetOKApplicationJSON(NewPetLists(es)), nil
 }
 
 // ReadPet handles GET /pets/{id} requests.
@@ -491,7 +549,36 @@ func (h *OgentHandler) DeleteUser(ctx context.Context, params DeleteUserParams) 
 
 // ListUser handles GET /users requests.
 func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error) {
-	panic("unimplemented")
+	q := h.client.User.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListUserOKApplicationJSON(NewUserLists(es)), nil
 }
 
 // CreateUserPets handles POST /users/{id}/pets requests.

@@ -3,13 +3,13 @@ module github.com/ariga/ogent
 go 1.17
 
 require (
-	entgo.io/contrib v0.2.1-0.20220103191918-a66b82b037a3
+	entgo.io/contrib v0.2.1-0.20220104125732-5255cb0729b5
 	entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7
 	github.com/go-faster/errors v0.5.0
 	github.com/go-faster/jx v0.25.0
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.10
-	github.com/ogen-go/ogen v0.6.0
+	github.com/ogen-go/ogen v0.6.1-0.20220104102621-a1b424060221
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.7.0
 	go.opentelemetry.io/otel v1.3.0
