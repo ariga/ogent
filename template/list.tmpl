@@ -1,0 +1,21 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "ogent/ogent/helper/list" }}
+q := h.client.{{ $.Name }}.Query()
+{{- with eagerLoad $ "list" }}{{ . }}{{- end }}
+page := 1
+if v, ok := params.Page.Get(); ok {
+	page = v
+}
+itemsPerPage := 30
+if v, ok := params.ItemsPerPage.Get(); ok {
+	itemsPerPage = v
+}
+es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+{{-
+	template "ogent/ogent/helper/error"
+	extend $
+	"Errors" (list "not-found" "not-singular")
+-}}
+return List{{ $.Name }}OKApplicationJSON(New{{ viewName $ "list" | plural }}(es)), nil
+{{- end }}
