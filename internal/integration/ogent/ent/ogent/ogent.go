@@ -126,7 +126,28 @@ func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq
 
 // DeleteCategory handles DELETE /categories/{id} requests.
 func (h *OgentHandler) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error) {
-	panic("unimplemented")
+	err := h.client.Category.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteCategoryNoContent), nil
+
 }
 
 // ListCategory handles GET /categories requests.
@@ -194,7 +215,28 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 
 // DeletePet handles DELETE /pets/{id} requests.
 func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
-	panic("unimplemented")
+	err := h.client.Pet.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeletePetNoContent), nil
+
 }
 
 // ListPet handles GET /pets requests.
@@ -423,7 +465,28 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 
 // DeleteUser handles DELETE /users/{id} requests.
 func (h *OgentHandler) DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error) {
-	panic("unimplemented")
+	err := h.client.User.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteUserNoContent), nil
+
 }
 
 // ListUser handles GET /users requests.
