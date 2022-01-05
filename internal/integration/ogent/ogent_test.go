@@ -170,6 +170,48 @@ func (t *testSuite) TestReadSub() {
 	t.Require().Equal(ogent.NewUserBestFriendRead(elch), got)
 }
 
+func (t *testSuite) TestListSub() {
+	// OK - parent not found
+	got, err := t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(nil), got)
+
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+
+	// OK - no attached resource
+	loner := t.client.Pet.Create().SetName("Lonely Wolf").SetOwner(owner).SaveX(context.Background())
+	got, err = t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{ID: loner.ID})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(nil), got)
+
+	// Get the Lonely Wolf some friends.
+	b := make([]*ent.PetCreate, 50)
+	for i := range b {
+		b[i] = t.client.Pet.Create().SetName("Pet " + strconv.Itoa(i+1)).SetOwner(owner).AddFriends(loner)
+	}
+	es := t.client.Pet.CreateBulk(b...).SaveX(context.Background())
+
+	// Default page size.
+	got, err = t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{ID: loner.ID})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(ogent.NewPetFriendsLists(es[0:30])), got)
+
+	// Custom page size.
+	got, err = t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{ID: loner.ID, ItemsPerPage: ogent.NewOptInt(10)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(ogent.NewPetFriendsLists(es[0:10])), got)
+
+	// Custom page.
+	got, err = t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{ID: loner.ID, Page: ogent.NewOptInt(2)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(ogent.NewPetFriendsLists(es[30:50])), got)
+
+	// Custom page and page size.
+	got, err = t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{ID: loner.ID, Page: ogent.NewOptInt(2), ItemsPerPage: ogent.NewOptInt(10)})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(ogent.NewPetFriendsLists(es[30:40])), got)
+}
+
 func (t *testSuite) reqErr(c int, err interface{}) {
 	var (
 		ac int
