@@ -667,7 +667,29 @@ func (h *OgentHandler) DeletePetOwner(ctx context.Context, params DeletePetOwner
 
 // ReadPetOwner handles GET /pets/{id}/owner requests.
 func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryOwner()
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewPetOwnerRead(e), nil
+
 }
 
 // CreatePetFriends handles POST /pets/{id}/friends requests.
