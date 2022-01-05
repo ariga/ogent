@@ -289,6 +289,41 @@ func (s *Server) handleCreateUserRequest(args map[string]string, w http.Response
 	}
 }
 
+// HandleCreateUserBestFriendRequest handles createUserBestFriend operation.
+//
+// POST /users/{id}/best-friend
+func (s *Server) handleCreateUserBestFriendRequest(args map[string]string, w http.ResponseWriter, r *http.Request) {
+	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`createUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	defer span.End()
+	params, err := decodeCreateUserBestFriendParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+	request, err := decodeCreateUserBestFriendRequest(r, span)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.CreateUserBestFriend(ctx, request, params)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeCreateUserBestFriendResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		return
+	}
+}
+
 // HandleCreateUserPetsRequest handles createUserPets operation.
 //
 // POST /users/{id}/pets
@@ -435,6 +470,35 @@ func (s *Server) handleDeleteUserRequest(args map[string]string, w http.Response
 	}
 
 	if err := encodeDeleteUserResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		return
+	}
+}
+
+// HandleDeleteUserBestFriendRequest handles deleteUserBestFriend operation.
+//
+// DELETE /users/{id}/best-friend
+func (s *Server) handleDeleteUserBestFriendRequest(args map[string]string, w http.ResponseWriter, r *http.Request) {
+	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeleteUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`deleteUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	defer span.End()
+	params, err := decodeDeleteUserBestFriendParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.DeleteUserBestFriend(ctx, params)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeDeleteUserBestFriendResponse(response, w, span); err != nil {
 		span.RecordError(err)
 		return
 	}
@@ -754,6 +818,35 @@ func (s *Server) handleReadUserRequest(args map[string]string, w http.ResponseWr
 	}
 
 	if err := encodeReadUserResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		return
+	}
+}
+
+// HandleReadUserBestFriendRequest handles readUserBestFriend operation.
+//
+// GET /users/{id}/best-friend
+func (s *Server) handleReadUserBestFriendRequest(args map[string]string, w http.ResponseWriter, r *http.Request) {
+	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`readUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	defer span.End()
+	params, err := decodeReadUserBestFriendParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.ReadUserBestFriend(ctx, params)
+	if err != nil {
+		span.RecordError(err)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeReadUserBestFriendResponse(response, w, span); err != nil {
 		span.RecordError(err)
 		return
 	}

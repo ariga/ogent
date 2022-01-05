@@ -272,6 +272,36 @@ func decodeCreateUserRequest(r *http.Request, span trace.Span) (req CreateUserRe
 	}
 }
 
+func decodeCreateUserBestFriendRequest(r *http.Request, span trace.Span) (req CreateUserBestFriendReq, err error) {
+	switch r.Header.Get("Content-Type") {
+	case "application/json":
+		var request CreateUserBestFriendReq
+		buf := getBuf()
+		defer putBuf(buf)
+		written, err := io.Copy(buf, r.Body)
+		if err != nil {
+			return req, err
+		}
+		if written == 0 {
+			return req, nil
+		}
+		d := jx.GetDecoder()
+		defer jx.PutDecoder(d)
+		d.ResetBytes(buf.Bytes())
+		if err := func() error {
+			if err := request.Decode(d); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			return req, err
+		}
+		return request, nil
+	default:
+		return req, errors.Errorf("unexpected content-type: %s", r.Header.Get("Content-Type"))
+	}
+}
+
 func decodeCreateUserPetsRequest(r *http.Request, span trace.Span) (req CreateUserPetsReq, err error) {
 	switch r.Header.Get("Content-Type") {
 	case "application/json":

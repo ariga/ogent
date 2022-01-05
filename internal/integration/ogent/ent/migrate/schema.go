@@ -46,12 +46,21 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
+		{Name: "user_best_friend", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "users_users_best_friend",
+				Columns:    []*schema.Column{UsersColumns[3]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
 	}
 	// CategoryPetsColumns holds the columns for the "category_pets" table.
 	CategoryPetsColumns = []*schema.Column{
@@ -115,6 +124,7 @@ var (
 
 func init() {
 	PetsTable.ForeignKeys[0].RefTable = UsersTable
+	UsersTable.ForeignKeys[0].RefTable = UsersTable
 	CategoryPetsTable.ForeignKeys[0].RefTable = CategoriesTable
 	CategoryPetsTable.ForeignKeys[1].RefTable = PetsTable
 	PetFriendsTable.ForeignKeys[0].RefTable = PetsTable

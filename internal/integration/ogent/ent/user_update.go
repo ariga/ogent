@@ -62,6 +62,25 @@ func (uu *UserUpdate) AddPets(p ...*Pet) *UserUpdate {
 	return uu.AddPetIDs(ids...)
 }
 
+// SetBestFriendID sets the "best_friend" edge to the User entity by ID.
+func (uu *UserUpdate) SetBestFriendID(id int) *UserUpdate {
+	uu.mutation.SetBestFriendID(id)
+	return uu
+}
+
+// SetNillableBestFriendID sets the "best_friend" edge to the User entity by ID if the given value is not nil.
+func (uu *UserUpdate) SetNillableBestFriendID(id *int) *UserUpdate {
+	if id != nil {
+		uu = uu.SetBestFriendID(*id)
+	}
+	return uu
+}
+
+// SetBestFriend sets the "best_friend" edge to the User entity.
+func (uu *UserUpdate) SetBestFriend(u *User) *UserUpdate {
+	return uu.SetBestFriendID(u.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -86,6 +105,12 @@ func (uu *UserUpdate) RemovePets(p ...*Pet) *UserUpdate {
 		ids[i] = p[i].ID
 	}
 	return uu.RemovePetIDs(ids...)
+}
+
+// ClearBestFriend clears the "best_friend" edge to the User entity.
+func (uu *UserUpdate) ClearBestFriend() *UserUpdate {
+	uu.mutation.ClearBestFriend()
+	return uu
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -235,6 +260,41 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if uu.mutation.BestFriendCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.BestFriendTable,
+			Columns: []string{user.BestFriendColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.BestFriendIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.BestFriendTable,
+			Columns: []string{user.BestFriendColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{user.Label}
@@ -288,6 +348,25 @@ func (uuo *UserUpdateOne) AddPets(p ...*Pet) *UserUpdateOne {
 	return uuo.AddPetIDs(ids...)
 }
 
+// SetBestFriendID sets the "best_friend" edge to the User entity by ID.
+func (uuo *UserUpdateOne) SetBestFriendID(id int) *UserUpdateOne {
+	uuo.mutation.SetBestFriendID(id)
+	return uuo
+}
+
+// SetNillableBestFriendID sets the "best_friend" edge to the User entity by ID if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableBestFriendID(id *int) *UserUpdateOne {
+	if id != nil {
+		uuo = uuo.SetBestFriendID(*id)
+	}
+	return uuo
+}
+
+// SetBestFriend sets the "best_friend" edge to the User entity.
+func (uuo *UserUpdateOne) SetBestFriend(u *User) *UserUpdateOne {
+	return uuo.SetBestFriendID(u.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -312,6 +391,12 @@ func (uuo *UserUpdateOne) RemovePets(p ...*Pet) *UserUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return uuo.RemovePetIDs(ids...)
+}
+
+// ClearBestFriend clears the "best_friend" edge to the User entity.
+func (uuo *UserUpdateOne) ClearBestFriend() *UserUpdateOne {
+	uuo.mutation.ClearBestFriend()
+	return uuo
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -477,6 +562,41 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 				IDSpec: &sqlgraph.FieldSpec{
 					Type:   field.TypeInt,
 					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.BestFriendCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.BestFriendTable,
+			Columns: []string{user.BestFriendColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.BestFriendIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.BestFriendTable,
+			Columns: []string{user.BestFriendColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
 				},
 			},
 		}

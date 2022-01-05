@@ -160,6 +160,20 @@ func encodeCreateUserRequestJSON(req CreateUserReq, span trace.Span) (data *byte
 	return buf, nil
 }
 
+func encodeCreateUserBestFriendRequestJSON(req CreateUserBestFriendReq, span trace.Span) (data *bytes.Buffer, err error) {
+	buf := getBuf()
+	e := jx.GetEncoder()
+	defer jx.PutEncoder(e)
+
+	req.Encode(e)
+	if _, err := e.WriteTo(buf); err != nil {
+		putBuf(buf)
+		return nil, err
+	}
+
+	return buf, nil
+}
+
 func encodeCreateUserPetsRequestJSON(req CreateUserPetsReq, span trace.Span) (data *bytes.Buffer, err error) {
 	buf := getBuf()
 	e := jx.GetEncoder()

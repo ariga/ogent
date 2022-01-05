@@ -126,7 +126,6 @@ func (t *testSuite) TestList() {
 }
 
 func (t *testSuite) TestCreateSub() {
-
 	// R404
 	got, err := t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{}, ogent.CreateCategoryPetsParams{})
 	t.Require().NoError(err)
@@ -150,6 +149,25 @@ func (t *testSuite) TestCreateSub() {
 	}, ogent.CreateCategoryPetsParams{ID: cat.ID})
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewCategoryPetsCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)
+}
+
+func (t *testSuite) TestReadSub() {
+	// R404 - parent not found
+	got, err := t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// R404 - no attached resource
+	ariel := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
+	got, err = t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{ID: ariel.ID})
+	t.Require().NoError(err)
+	t.reqErr(http.StatusNotFound, got)
+
+	// OK
+	elch := t.client.User.Create().SetName("MasseElch").SetAge(31).SetBestFriend(ariel).SaveX(context.Background())
+	got, err = t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{ID: ariel.ID})
+	t.Require().NoError(err)
+	t.Require().Equal(ogent.NewUserBestFriendRead(elch), got)
 }
 
 func (t *testSuite) reqErr(c int, err interface{}) {

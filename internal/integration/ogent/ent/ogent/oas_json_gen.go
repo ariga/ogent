@@ -645,6 +645,10 @@ func (s CreatePetOwnerReq) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	if s.BestFriend.Set {
+		e.FieldStart("best_friend")
+		s.BestFriend.Encode(e)
+	}
 	e.ObjEnd()
 }
 
@@ -679,6 +683,11 @@ func (s *CreatePetOwnerReq) Decode(d *jx.Decoder) error {
 				s.Pets = append(s.Pets, elem)
 				return nil
 			}); err != nil {
+				return err
+			}
+		case "best_friend":
+			s.BestFriend.Reset()
+			if err := s.BestFriend.Decode(d); err != nil {
 				return err
 			}
 		default:
@@ -779,6 +788,75 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 				s.Friends = append(s.Friends, elem)
 				return nil
 			}); err != nil {
+				return err
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	})
+}
+
+// Encode implements json.Marshaler.
+func (s CreateUserBestFriendReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+
+	e.FieldStart("name")
+	e.Str(s.Name)
+
+	e.FieldStart("age")
+	e.Int(s.Age)
+	if s.Pets != nil {
+		e.FieldStart("pets")
+		e.ArrStart()
+		for _, elem := range s.Pets {
+			e.Int(elem)
+		}
+		e.ArrEnd()
+	}
+	if s.BestFriend.Set {
+		e.FieldStart("best_friend")
+		s.BestFriend.Encode(e)
+	}
+	e.ObjEnd()
+}
+
+// Decode decodes CreateUserBestFriendReq from json.
+func (s *CreateUserBestFriendReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New(`invalid: unable to decode CreateUserBestFriendReq to nil`)
+	}
+	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			v, err := d.Str()
+			s.Name = string(v)
+			if err != nil {
+				return err
+			}
+		case "age":
+			v, err := d.Int()
+			s.Age = int(v)
+			if err != nil {
+				return err
+			}
+		case "pets":
+			s.Pets = nil
+			if err := d.Arr(func(d *jx.Decoder) error {
+				var elem int
+				v, err := d.Int()
+				elem = int(v)
+				if err != nil {
+					return err
+				}
+				s.Pets = append(s.Pets, elem)
+				return nil
+			}); err != nil {
+				return err
+			}
+		case "best_friend":
+			s.BestFriend.Reset()
+			if err := s.BestFriend.Decode(d); err != nil {
 				return err
 			}
 		default:
@@ -905,6 +983,10 @@ func (s CreateUserReq) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	if s.BestFriend.Set {
+		e.FieldStart("best_friend")
+		s.BestFriend.Encode(e)
+	}
 	e.ObjEnd()
 }
 
@@ -939,6 +1021,11 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 				s.Pets = append(s.Pets, elem)
 				return nil
 			}); err != nil {
+				return err
+			}
+		case "best_friend":
+			s.BestFriend.Reset()
+			if err := s.BestFriend.Decode(d); err != nil {
 				return err
 			}
 		default:
@@ -998,6 +1085,26 @@ func (s DeletePetOwnerNoContent) Encode(e *jx.Encoder) {
 func (s *DeletePetOwnerNoContent) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New(`invalid: unable to decode DeletePetOwnerNoContent to nil`)
+	}
+	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		default:
+			return d.Skip()
+		}
+		return nil
+	})
+}
+
+// Encode implements json.Marshaler.
+func (s DeleteUserBestFriendNoContent) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	e.ObjEnd()
+}
+
+// Decode decodes DeleteUserBestFriendNoContent from json.
+func (s *DeleteUserBestFriendNoContent) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New(`invalid: unable to decode DeleteUserBestFriendNoContent to nil`)
 	}
 	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -2352,6 +2459,10 @@ func (s UpdateUserReq) Encode(e *jx.Encoder) {
 		}
 		e.ArrEnd()
 	}
+	if s.BestFriend.Set {
+		e.FieldStart("best_friend")
+		s.BestFriend.Encode(e)
+	}
 	e.ObjEnd()
 }
 
@@ -2384,6 +2495,105 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 				s.Pets = append(s.Pets, elem)
 				return nil
 			}); err != nil {
+				return err
+			}
+		case "best_friend":
+			s.BestFriend.Reset()
+			if err := s.BestFriend.Decode(d); err != nil {
+				return err
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	})
+}
+
+// Encode implements json.Marshaler.
+func (s UserBestFriendCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+
+	e.FieldStart("id")
+	e.Int(s.ID)
+
+	e.FieldStart("name")
+	e.Str(s.Name)
+
+	e.FieldStart("age")
+	e.Int(s.Age)
+	e.ObjEnd()
+}
+
+// Decode decodes UserBestFriendCreate from json.
+func (s *UserBestFriendCreate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New(`invalid: unable to decode UserBestFriendCreate to nil`)
+	}
+	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			v, err := d.Int()
+			s.ID = int(v)
+			if err != nil {
+				return err
+			}
+		case "name":
+			v, err := d.Str()
+			s.Name = string(v)
+			if err != nil {
+				return err
+			}
+		case "age":
+			v, err := d.Int()
+			s.Age = int(v)
+			if err != nil {
+				return err
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	})
+}
+
+// Encode implements json.Marshaler.
+func (s UserBestFriendRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+
+	e.FieldStart("id")
+	e.Int(s.ID)
+
+	e.FieldStart("name")
+	e.Str(s.Name)
+
+	e.FieldStart("age")
+	e.Int(s.Age)
+	e.ObjEnd()
+}
+
+// Decode decodes UserBestFriendRead from json.
+func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New(`invalid: unable to decode UserBestFriendRead to nil`)
+	}
+	return d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			v, err := d.Int()
+			s.ID = int(v)
+			if err != nil {
+				return err
+			}
+		case "name":
+			v, err := d.Str()
+			s.Name = string(v)
+			if err != nil {
+				return err
+			}
+		case "age":
+			v, err := d.Int()
+			s.Age = int(v)
+			if err != nil {
 				return err
 			}
 		default:

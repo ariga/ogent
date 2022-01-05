@@ -92,6 +92,10 @@ type Handler interface {
 	//
 	// POST /users
 	CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error)
+	// CreateUserBestFriend implements createUserBestFriend operation.
+	//
+	// POST /users/{id}/best-friend
+	CreateUserBestFriend(ctx context.Context, req CreateUserBestFriendReq, params CreateUserBestFriendParams) (CreateUserBestFriendRes, error)
 	// CreateUserPets implements createUserPets operation.
 	//
 	// POST /users/{id}/pets
@@ -112,6 +116,10 @@ type Handler interface {
 	//
 	// DELETE /users/{id}
 	DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error)
+	// DeleteUserBestFriend implements deleteUserBestFriend operation.
+	//
+	// DELETE /users/{id}/best-friend
+	DeleteUserBestFriend(ctx context.Context, params DeleteUserBestFriendParams) (DeleteUserBestFriendRes, error)
 	// ListCategory implements listCategory operation.
 	//
 	// GET /categories
@@ -156,6 +164,10 @@ type Handler interface {
 	//
 	// GET /users/{id}
 	ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error)
+	// ReadUserBestFriend implements readUserBestFriend operation.
+	//
+	// GET /users/{id}/best-friend
+	ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error)
 	// UpdateCategory implements updateCategory operation.
 	//
 	// PATCH /categories/{id}

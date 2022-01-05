@@ -78,6 +78,10 @@ type CreatePetOwnerParams struct {
 	ID int
 }
 
+type CreateUserBestFriendParams struct {
+	ID int
+}
+
 type CreateUserPetsParams struct {
 	ID int
 }
@@ -95,6 +99,10 @@ type DeletePetOwnerParams struct {
 }
 
 type DeleteUserParams struct {
+	ID int
+}
+
+type DeleteUserBestFriendParams struct {
 	ID int
 }
 
@@ -150,6 +158,10 @@ type ReadPetOwnerParams struct {
 }
 
 type ReadUserParams struct {
+	ID int
+}
+
+type ReadUserBestFriendParams struct {
 	ID int
 }
 

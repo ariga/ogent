@@ -1065,6 +1065,9 @@
                     "items": {
                       "type": "integer"
                     }
+                  },
+                  "best_friend": {
+                    "type": "integer"
                   }
                 },
                 "required": [
@@ -1217,6 +1220,9 @@
                     "items": {
                       "type": "integer"
                     }
+                  },
+                  "best_friend": {
+                    "type": "integer"
                   }
                 },
                 "required": [
@@ -1367,6 +1373,9 @@
                     "items": {
                       "type": "integer"
                     }
+                  },
+                  "best_friend": {
+                    "type": "integer"
                   }
                 }
               }
@@ -1384,6 +1393,162 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/{id}/best-friend": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Find the attached User",
+        "description": "Find the attached User of the User with the given ID",
+        "operationId": "readUserBestFriend",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User attached to User with requested ID was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User_BestFriendRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Create a new User and attach it to the User",
+        "description": "Creates a new User and attaches it to the User",
+        "operationId": "createUserBestFriend",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "User to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "age": {
+                    "type": "integer"
+                  },
+                  "pets": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "best_friend": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "name",
+                  "age"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User created and attached to the User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User_BestFriendCreate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete the attached BestFriend",
+        "description": "Delete the attached BestFriend of the User with the given ID",
+        "operationId": "deleteUserBestFriend",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "BestFriend with requested ID was deleted"
           },
           "400": {
             "$ref": "#/components/responses/400"
@@ -1978,6 +2143,9 @@
             "items": {
               "$ref": "#/components/schemas/Pet"
             }
+          },
+          "best_friend": {
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
@@ -2044,6 +2212,44 @@
         ]
       },
       "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "User_BestFriendCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age"
+        ]
+      },
+      "User_BestFriendRead": {
         "type": "object",
         "properties": {
           "id": {

@@ -214,6 +214,44 @@ func decodeCreatePetOwnerParams(args map[string]string, r *http.Request) (Create
 	return params, nil
 }
 
+func decodeCreateUserBestFriendParams(args map[string]string, r *http.Request) (CreateUserBestFriendParams, error) {
+	var (
+		params CreateUserBestFriendParams
+	)
+	// Decode path: id.
+	{
+		param := args["id"]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New(`path: id: not specified`)
+		}
+	}
+	return params, nil
+}
+
 func decodeCreateUserPetsParams(args map[string]string, r *http.Request) (CreateUserPetsParams, error) {
 	var (
 		params CreateUserPetsParams
@@ -369,6 +407,44 @@ func decodeDeletePetOwnerParams(args map[string]string, r *http.Request) (Delete
 func decodeDeleteUserParams(args map[string]string, r *http.Request) (DeleteUserParams, error) {
 	var (
 		params DeleteUserParams
+	)
+	// Decode path: id.
+	{
+		param := args["id"]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New(`path: id: not specified`)
+		}
+	}
+	return params, nil
+}
+
+func decodeDeleteUserBestFriendParams(args map[string]string, r *http.Request) (DeleteUserBestFriendParams, error) {
+	var (
+		params DeleteUserBestFriendParams
 	)
 	// Decode path: id.
 	{
@@ -1191,6 +1267,44 @@ func decodeReadPetOwnerParams(args map[string]string, r *http.Request) (ReadPetO
 func decodeReadUserParams(args map[string]string, r *http.Request) (ReadUserParams, error) {
 	var (
 		params ReadUserParams
+	)
+	// Decode path: id.
+	{
+		param := args["id"]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New(`path: id: not specified`)
+		}
+	}
+	return params, nil
+}
+
+func decodeReadUserBestFriendParams(args map[string]string, r *http.Request) (ReadUserBestFriendParams, error) {
+	var (
+		params ReadUserBestFriendParams
 	)
 	// Decode path: id.
 	{

@@ -1170,19 +1170,21 @@ func (m *PetMutation) ResetEdge(name string) error {
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	name          *string
-	age           *int
-	addage        *int
-	clearedFields map[string]struct{}
-	pets          map[int]struct{}
-	removedpets   map[int]struct{}
-	clearedpets   bool
-	done          bool
-	oldValue      func(context.Context) (*User, error)
-	predicates    []predicate.User
+	op                 Op
+	typ                string
+	id                 *int
+	name               *string
+	age                *int
+	addage             *int
+	clearedFields      map[string]struct{}
+	pets               map[int]struct{}
+	removedpets        map[int]struct{}
+	clearedpets        bool
+	best_friend        *int
+	clearedbest_friend bool
+	done               bool
+	oldValue           func(context.Context) (*User, error)
+	predicates         []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -1429,6 +1431,45 @@ func (m *UserMutation) ResetPets() {
 	m.removedpets = nil
 }
 
+// SetBestFriendID sets the "best_friend" edge to the User entity by id.
+func (m *UserMutation) SetBestFriendID(id int) {
+	m.best_friend = &id
+}
+
+// ClearBestFriend clears the "best_friend" edge to the User entity.
+func (m *UserMutation) ClearBestFriend() {
+	m.clearedbest_friend = true
+}
+
+// BestFriendCleared reports if the "best_friend" edge to the User entity was cleared.
+func (m *UserMutation) BestFriendCleared() bool {
+	return m.clearedbest_friend
+}
+
+// BestFriendID returns the "best_friend" edge ID in the mutation.
+func (m *UserMutation) BestFriendID() (id int, exists bool) {
+	if m.best_friend != nil {
+		return *m.best_friend, true
+	}
+	return
+}
+
+// BestFriendIDs returns the "best_friend" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// BestFriendID instead. It exists only for internal usage by the builders.
+func (m *UserMutation) BestFriendIDs() (ids []int) {
+	if id := m.best_friend; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetBestFriend resets all changes to the "best_friend" edge.
+func (m *UserMutation) ResetBestFriend() {
+	m.best_friend = nil
+	m.clearedbest_friend = false
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -1579,9 +1620,12 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.pets != nil {
 		edges = append(edges, user.EdgePets)
+	}
+	if m.best_friend != nil {
+		edges = append(edges, user.EdgeBestFriend)
 	}
 	return edges
 }
@@ -1596,13 +1640,17 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeBestFriend:
+		if id := m.best_friend; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedpets != nil {
 		edges = append(edges, user.EdgePets)
 	}
@@ -1625,9 +1673,12 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.clearedpets {
 		edges = append(edges, user.EdgePets)
+	}
+	if m.clearedbest_friend {
+		edges = append(edges, user.EdgeBestFriend)
 	}
 	return edges
 }
@@ -1638,6 +1689,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
 	case user.EdgePets:
 		return m.clearedpets
+	case user.EdgeBestFriend:
+		return m.clearedbest_friend
 	}
 	return false
 }
@@ -1646,6 +1699,9 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
+	case user.EdgeBestFriend:
+		m.ClearBestFriend()
+		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
 }
@@ -1656,6 +1712,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 	switch name {
 	case user.EdgePets:
 		m.ResetPets()
+		return nil
+	case user.EdgeBestFriend:
+		m.ResetBestFriend()
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)
