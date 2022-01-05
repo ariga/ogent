@@ -1,6 +1,6 @@
 {{ define "ogent/ogent/helper/create" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	b := h.client.{{ $.Name }}.Create()
-	{{- template  "ogent/ogent/helper/create/helper" $ -}}
+	{{- template  "ogent/ogent/helper/create/fields" $ -}}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	{{-
@@ -39,7 +39,7 @@
 	-}}
 	// Create the {{ $.Scope.Edge.Type.Name }} to attach.
 	b := tx.{{ $.Scope.Edge.Type.Name }}.Create()
-	{{- template  "ogent/ogent/helper/create/helper" $.Scope.Edge.Type -}}
+	{{- template  "ogent/ogent/helper/create/fields" $.Scope.Edge.Type -}}
 	e, err := b.Save(ctx)
 	{{-
 		template "ogent/ogent/helper/error"
@@ -71,7 +71,7 @@
 	return New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "create") "_" "" }}(e), nil
 {{- end }}
 
-{{ define "ogent/ogent/helper/create/helper" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+{{ define "ogent/ogent/helper/create/fields" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	// Add all fields.
 	{{- range $f := $.Fields }}
 		{{- if $f.Optional }}

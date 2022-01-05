@@ -605,14 +605,14 @@ func decodeListCategoryPetsParams(args map[string]string, r *http.Request) (List
 			})
 
 			if err := func() error {
-				var paramsPageVal int32
+				var paramsPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -640,14 +640,14 @@ func decodeListCategoryPetsParams(args map[string]string, r *http.Request) (List
 			})
 
 			if err := func() error {
-				var paramsItemsPerPageVal int32
+				var paramsItemsPerPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -792,14 +792,14 @@ func decodeListPetCategoriesParams(args map[string]string, r *http.Request) (Lis
 			})
 
 			if err := func() error {
-				var paramsPageVal int32
+				var paramsPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -827,14 +827,14 @@ func decodeListPetCategoriesParams(args map[string]string, r *http.Request) (Lis
 			})
 
 			if err := func() error {
-				var paramsItemsPerPageVal int32
+				var paramsItemsPerPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -901,14 +901,14 @@ func decodeListPetFriendsParams(args map[string]string, r *http.Request) (ListPe
 			})
 
 			if err := func() error {
-				var paramsPageVal int32
+				var paramsPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -936,14 +936,14 @@ func decodeListPetFriendsParams(args map[string]string, r *http.Request) (ListPe
 			})
 
 			if err := func() error {
-				var paramsItemsPerPageVal int32
+				var paramsItemsPerPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -1088,14 +1088,14 @@ func decodeListUserPetsParams(args map[string]string, r *http.Request) (ListUser
 			})
 
 			if err := func() error {
-				var paramsPageVal int32
+				var paramsPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}
@@ -1123,14 +1123,14 @@ func decodeListUserPetsParams(args map[string]string, r *http.Request) (ListUser
 			})
 
 			if err := func() error {
-				var paramsItemsPerPageVal int32
+				var paramsItemsPerPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToInt32(s)
+					c, err := conv.ToInt(s)
 					if err != nil {
 						return err
 					}

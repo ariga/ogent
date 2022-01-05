@@ -284,8 +284,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -293,8 +292,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -723,8 +721,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -732,8 +729,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -857,8 +853,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -866,8 +861,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1588,8 +1582,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1597,8 +1590,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],

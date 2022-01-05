@@ -52,10 +52,8 @@
 						{{- template "ogent/ogent/helper/create/sub" extend $n "Edge" $e -}}
 					{{- else if isRead $op }}
 						{{- template "ogent/ogent/helper/read/sub" extend $n "Edge" $e -}}
-						{{/*{{- else if isUpdate $op }}
-						{{- template "ogent/ogent/helper/update" $n -}}
-					{{- else if isDelete $op }}
-						{{- template "ogent/ogent/helper/delete" $n -}}*/}}
+					{{- else if isList $op }}
+						{{- template "ogent/ogent/helper/list/sub" extend $n "Edge" $e -}}
 					{{- else }}
 						panic("unimplemented")
 					{{- end }}
