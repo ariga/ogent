@@ -143,6 +143,18 @@ func encodeCreateCategoryPetsResponse(response CreateCategoryPetsRes, w http.Res
 		}
 
 		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetEncoder()
+		defer jx.PutEncoder(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
@@ -253,6 +265,18 @@ func encodeCreatePetCategoriesResponse(response CreatePetCategoriesRes, w http.R
 		}
 
 		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetEncoder()
+		defer jx.PutEncoder(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
@@ -308,6 +332,18 @@ func encodeCreatePetFriendsResponse(response CreatePetFriendsRes, w http.Respons
 		}
 
 		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetEncoder()
+		defer jx.PutEncoder(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
@@ -354,6 +390,18 @@ func encodeCreatePetOwnerResponse(response CreatePetOwnerRes, w http.ResponseWri
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
+		e := jx.GetEncoder()
+		defer jx.PutEncoder(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
 		e := jx.GetEncoder()
 		defer jx.PutEncoder(e)
 
@@ -464,6 +512,18 @@ func encodeCreateUserPetsResponse(response CreateUserPetsRes, w http.ResponseWri
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
+		e := jx.GetEncoder()
+		defer jx.PutEncoder(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
 		e := jx.GetEncoder()
 		defer jx.PutEncoder(e)
 

@@ -48,7 +48,17 @@ func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{
 			// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
 			func (h *OgentHandler) {{ $opID }}(ctx context.Context
 				{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}, params {{ $opID }}Params) ({{ $opID }}Res, error) {
-				panic("unimplemented")
+				{{- if isCreate $op }}
+					{{- template "ogent/ogent/helper/create/sub" extend $n "Edge" $e -}}
+				{{/*{{- else if isRead $op }}
+					{{- template "ogent/ogent/helper/read" $n -}}
+				{{- else if isUpdate $op }}
+					{{- template "ogent/ogent/helper/update" $n -}}
+				{{- else if isDelete $op }}
+					{{- template "ogent/ogent/helper/delete" $n -}}*/}}
+				{{- else }}
+					panic("unimplemented")
+				{{- end }}
 			}
 		{{ end }}
 	{{ end }}

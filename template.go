@@ -21,6 +21,7 @@ var (
 	FuncMap = template.FuncMap{
 		"eagerLoad":      eagerLoad,
 		"edgeOperations": entoas.EdgeOperations,
+		"edgeViewName":   entoas.EdgeViewName,
 		"hasParams":      hasParams,
 		"hasRequestBody": hasRequestBody,
 		"httpVerb":       httpVerb,
