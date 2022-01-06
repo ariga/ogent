@@ -113,8 +113,8 @@ type ListCategoryParams struct {
 
 type ListCategoryPetsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetParams struct {
@@ -124,14 +124,14 @@ type ListPetParams struct {
 
 type ListPetCategoriesParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetFriendsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListUserParams struct {
@@ -141,8 +141,8 @@ type ListUserParams struct {
 
 type ListUserPetsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ReadCategoryParams struct {

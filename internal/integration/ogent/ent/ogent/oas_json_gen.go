@@ -1411,30 +1411,6 @@ func (o *OptInt) Decode(d *jx.Decoder) error {
 	}
 }
 
-// Encode encodes int32 as json.
-func (o OptInt32) Encode(e *jx.Encoder) {
-	e.Int32(int32(o.Value))
-}
-
-// Decode decodes int32 from json.
-func (o *OptInt32) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New(`invalid: unable to decode OptInt32 to nil`)
-	}
-	switch d.Next() {
-	case jx.Number:
-		o.Set = true
-		v, err := d.Int32()
-		if err != nil {
-			return err
-		}
-		o.Value = int32(v)
-		return nil
-	default:
-		return errors.Errorf(`unexpected type %q while reading OptInt32`, d.Next())
-	}
-}
-
 // Encode encodes string as json.
 func (o OptString) Encode(e *jx.Encoder) {
 	e.Str(string(o.Value))

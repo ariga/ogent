@@ -287,7 +287,37 @@ func (h *OgentHandler) CreateCategoryPets(ctx context.Context, req CreateCategor
 
 // ListCategoryPets handles GET /categories/{id}/pets requests.
 func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error) {
-	panic("unimplemented")
+	q := h.client.Category.Query().Where(category.IDEQ(params.ID)).QueryPets()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListCategoryPetsOKApplicationJSON(NewCategoryPetsLists(es)), nil
+
 }
 
 // CreatePet handles POST /pets requests.
@@ -566,7 +596,37 @@ func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCat
 
 // ListPetCategories handles GET /pets/{id}/categories requests.
 func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryCategories()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListPetCategoriesOKApplicationJSON(NewPetCategoriesLists(es)), nil
+
 }
 
 // CreatePetOwner handles POST /pets/{id}/owner requests.
@@ -797,7 +857,37 @@ func (h *OgentHandler) CreatePetFriends(ctx context.Context, req CreatePetFriend
 
 // ListPetFriends handles GET /pets/{id}/friends requests.
 func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryFriends()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListPetFriendsOKApplicationJSON(NewPetFriendsLists(es)), nil
+
 }
 
 // CreateUser handles POST /users requests.
@@ -1076,7 +1166,37 @@ func (h *OgentHandler) CreateUserPets(ctx context.Context, req CreateUserPetsReq
 
 // ListUserPets handles GET /users/{id}/pets requests.
 func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error) {
-	panic("unimplemented")
+	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryPets()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListUserPetsOKApplicationJSON(NewUserPetsLists(es)), nil
+
 }
 
 // CreateUserBestFriend handles POST /users/{id}/best-friend requests.

@@ -1063,7 +1063,7 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1079,7 +1079,7 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1228,7 +1228,7 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1244,7 +1244,7 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1318,7 +1318,7 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1334,7 +1334,7 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1483,7 +1483,7 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1499,7 +1499,7 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
