@@ -25,6 +25,10 @@ type CreatePetRes interface {
 	createPetRes()
 }
 
+type CreateUserBestFriendRes interface {
+	createUserBestFriendRes()
+}
+
 type CreateUserPetsRes interface {
 	createUserPetsRes()
 }
@@ -43,6 +47,10 @@ type DeletePetOwnerRes interface {
 
 type DeletePetRes interface {
 	deletePetRes()
+}
+
+type DeleteUserBestFriendRes interface {
+	deleteUserBestFriendRes()
 }
 
 type DeleteUserRes interface {
@@ -87,6 +95,10 @@ type ReadPetOwnerRes interface {
 
 type ReadPetRes interface {
 	readPetRes()
+}
+
+type ReadUserBestFriendRes interface {
+	readUserBestFriendRes()
 }
 
 type ReadUserRes interface {

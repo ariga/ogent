@@ -47,6 +47,25 @@ func (uc *UserCreate) AddPets(p ...*Pet) *UserCreate {
 	return uc.AddPetIDs(ids...)
 }
 
+// SetBestFriendID sets the "best_friend" edge to the User entity by ID.
+func (uc *UserCreate) SetBestFriendID(id int) *UserCreate {
+	uc.mutation.SetBestFriendID(id)
+	return uc
+}
+
+// SetNillableBestFriendID sets the "best_friend" edge to the User entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableBestFriendID(id *int) *UserCreate {
+	if id != nil {
+		uc = uc.SetBestFriendID(*id)
+	}
+	return uc
+}
+
+// SetBestFriend sets the "best_friend" edge to the User entity.
+func (uc *UserCreate) SetBestFriend(u *User) *UserCreate {
+	return uc.SetBestFriendID(u.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -183,6 +202,26 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.BestFriendIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.BestFriendTable,
+			Columns: []string{user.BestFriendColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.user_best_friend = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -531,6 +531,75 @@ func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res Cre
 	return result, nil
 }
 
+// CreateUserBestFriend invokes createUserBestFriend operation.
+//
+// POST /users/{id}/best-friend
+func (c *Client) CreateUserBestFriend(ctx context.Context, request CreateUserBestFriendReq, params CreateUserBestFriendParams) (res CreateUserBestFriendRes, err error) {
+	startTime := time.Now()
+	ctx, span := c.cfg.Tracer.Start(ctx, `CreateUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`createUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindClient),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			c.errors.Add(ctx, 1)
+		} else {
+			elapsedDuration := time.Since(startTime)
+			c.duration.Record(ctx, elapsedDuration.Microseconds())
+		}
+		span.End()
+	}()
+	c.requests.Add(ctx, 1)
+	var (
+		contentType string
+		reqBody     io.Reader
+	)
+	contentType = "application/json"
+	buf, err := encodeCreateUserBestFriendRequestJSON(request, span)
+	if err != nil {
+		return res, err
+	}
+	defer putBuf(buf)
+	reqBody = buf
+
+	u := uri.Clone(c.serverURL)
+	u.Path += "/users/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		u.Path += e.Result()
+	}
+	u.Path += "/best-friend"
+
+	r := ht.NewRequest(ctx, "POST", u, reqBody)
+	defer ht.PutRequest(r)
+
+	r.Header.Set("Content-Type", contentType)
+
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	result, err := decodeCreateUserBestFriendResponse(resp, span)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // CreateUserPets invokes createUserPets operation.
 //
 // POST /users/{id}/pets
@@ -810,6 +879,61 @@ func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res D
 	defer resp.Body.Close()
 
 	result, err := decodeDeleteUserResponse(resp, span)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// DeleteUserBestFriend invokes deleteUserBestFriend operation.
+//
+// DELETE /users/{id}/best-friend
+func (c *Client) DeleteUserBestFriend(ctx context.Context, params DeleteUserBestFriendParams) (res DeleteUserBestFriendRes, err error) {
+	startTime := time.Now()
+	ctx, span := c.cfg.Tracer.Start(ctx, `DeleteUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`deleteUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindClient),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			c.errors.Add(ctx, 1)
+		} else {
+			elapsedDuration := time.Since(startTime)
+			c.duration.Record(ctx, elapsedDuration.Microseconds())
+		}
+		span.End()
+	}()
+	c.requests.Add(ctx, 1)
+	u := uri.Clone(c.serverURL)
+	u.Path += "/users/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		u.Path += e.Result()
+	}
+	u.Path += "/best-friend"
+
+	r := ht.NewRequest(ctx, "DELETE", u, nil)
+	defer ht.PutRequest(r)
+
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	result, err := decodeDeleteUserBestFriendResponse(resp, span)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -1612,6 +1736,61 @@ func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadU
 	defer resp.Body.Close()
 
 	result, err := decodeReadUserResponse(resp, span)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// ReadUserBestFriend invokes readUserBestFriend operation.
+//
+// GET /users/{id}/best-friend
+func (c *Client) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (res ReadUserBestFriendRes, err error) {
+	startTime := time.Now()
+	ctx, span := c.cfg.Tracer.Start(ctx, `ReadUserBestFriend`,
+		trace.WithAttributes(otelogen.OperationID(`readUserBestFriend`)),
+		trace.WithSpanKind(trace.SpanKindClient),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			c.errors.Add(ctx, 1)
+		} else {
+			elapsedDuration := time.Since(startTime)
+			c.duration.Record(ctx, elapsedDuration.Microseconds())
+		}
+		span.End()
+	}()
+	c.requests.Add(ctx, 1)
+	u := uri.Clone(c.serverURL)
+	u.Path += "/users/"
+	{
+		// Encode "id" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "id",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.ID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		u.Path += e.Result()
+	}
+	u.Path += "/best-friend"
+
+	r := ht.NewRequest(ctx, "GET", u, nil)
+	defer ht.PutRequest(r)
+
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	result, err := decodeReadUserBestFriendResponse(resp, span)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

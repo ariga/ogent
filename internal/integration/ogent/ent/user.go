@@ -21,16 +21,19 @@ type User struct {
 	Age int `json:"age,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
-	Edges UserEdges `json:"edges"`
+	Edges            UserEdges `json:"edges"`
+	user_best_friend *int
 }
 
 // UserEdges holds the relations/edges for other nodes in the graph.
 type UserEdges struct {
 	// Pets holds the value of the pets edge.
 	Pets []*Pet `json:"pets,omitempty"`
+	// BestFriend holds the value of the best_friend edge.
+	BestFriend *User `json:"best_friend,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
 }
 
 // PetsOrErr returns the Pets value or an error if the edge
@@ -42,6 +45,20 @@ func (e UserEdges) PetsOrErr() ([]*Pet, error) {
 	return nil, &NotLoadedError{edge: "pets"}
 }
 
+// BestFriendOrErr returns the BestFriend value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserEdges) BestFriendOrErr() (*User, error) {
+	if e.loadedTypes[1] {
+		if e.BestFriend == nil {
+			// The edge best_friend was loaded in eager-loading,
+			// but was not found.
+			return nil, &NotFoundError{label: user.Label}
+		}
+		return e.BestFriend, nil
+	}
+	return nil, &NotLoadedError{edge: "best_friend"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
@@ -51,6 +68,8 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case user.FieldName:
 			values[i] = new(sql.NullString)
+		case user.ForeignKeys[0]: // user_best_friend
+			values[i] = new(sql.NullInt64)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type User", columns[i])
 		}
@@ -84,6 +103,13 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				u.Age = int(value.Int64)
 			}
+		case user.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for edge-field user_best_friend", value)
+			} else if value.Valid {
+				u.user_best_friend = new(int)
+				*u.user_best_friend = int(value.Int64)
+			}
 		}
 	}
 	return nil
@@ -92,6 +118,11 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 // QueryPets queries the "pets" edge of the User entity.
 func (u *User) QueryPets() *PetQuery {
 	return (&UserClient{config: u.config}).QueryPets(u)
+}
+
+// QueryBestFriend queries the "best_friend" edge of the User entity.
+func (u *User) QueryBestFriend() *UserQuery {
+	return (&UserClient{config: u.config}).QueryBestFriend(u)
 }
 
 // Update returns a builder for updating this User.

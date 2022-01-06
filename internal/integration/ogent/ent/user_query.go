@@ -27,7 +27,9 @@ type UserQuery struct {
 	fields     []string
 	predicates []predicate.User
 	// eager-loading edges.
-	withPets *PetQuery
+	withPets       *PetQuery
+	withBestFriend *UserQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -79,6 +81,28 @@ func (uq *UserQuery) QueryPets() *PetQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(pet.Table, pet.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.PetsTable, user.PetsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBestFriend chains the current query on the "best_friend" edge.
+func (uq *UserQuery) QueryBestFriend() *UserQuery {
+	query := &UserQuery{config: uq.config}
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.BestFriendTable, user.BestFriendColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -262,12 +286,13 @@ func (uq *UserQuery) Clone() *UserQuery {
 		return nil
 	}
 	return &UserQuery{
-		config:     uq.config,
-		limit:      uq.limit,
-		offset:     uq.offset,
-		order:      append([]OrderFunc{}, uq.order...),
-		predicates: append([]predicate.User{}, uq.predicates...),
-		withPets:   uq.withPets.Clone(),
+		config:         uq.config,
+		limit:          uq.limit,
+		offset:         uq.offset,
+		order:          append([]OrderFunc{}, uq.order...),
+		predicates:     append([]predicate.User{}, uq.predicates...),
+		withPets:       uq.withPets.Clone(),
+		withBestFriend: uq.withBestFriend.Clone(),
 		// clone intermediate query.
 		sql:  uq.sql.Clone(),
 		path: uq.path,
@@ -282,6 +307,17 @@ func (uq *UserQuery) WithPets(opts ...func(*PetQuery)) *UserQuery {
 		opt(query)
 	}
 	uq.withPets = query
+	return uq
+}
+
+// WithBestFriend tells the query-builder to eager-load the nodes that are connected to
+// the "best_friend" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithBestFriend(opts ...func(*UserQuery)) *UserQuery {
+	query := &UserQuery{config: uq.config}
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withBestFriend = query
 	return uq
 }
 
@@ -349,11 +385,19 @@ func (uq *UserQuery) prepareQuery(ctx context.Context) error {
 func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 	var (
 		nodes       = []*User{}
+		withFKs     = uq.withFKs
 		_spec       = uq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
 			uq.withPets != nil,
+			uq.withBestFriend != nil,
 		}
 	)
+	if uq.withBestFriend != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, user.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]interface{}, error) {
 		node := &User{config: uq.config}
 		nodes = append(nodes, node)
@@ -400,6 +444,35 @@ func (uq *UserQuery) sqlAll(ctx context.Context) ([]*User, error) {
 				return nil, fmt.Errorf(`unexpected foreign-key "user_pets" returned %v for node %v`, *fk, n.ID)
 			}
 			node.Edges.Pets = append(node.Edges.Pets, n)
+		}
+	}
+
+	if query := uq.withBestFriend; query != nil {
+		ids := make([]int, 0, len(nodes))
+		nodeids := make(map[int][]*User)
+		for i := range nodes {
+			if nodes[i].user_best_friend == nil {
+				continue
+			}
+			fk := *nodes[i].user_best_friend
+			if _, ok := nodeids[fk]; !ok {
+				ids = append(ids, fk)
+			}
+			nodeids[fk] = append(nodeids[fk], nodes[i])
+		}
+		query.Where(user.IDIn(ids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, n := range neighbors {
+			nodes, ok := nodeids[n.ID]
+			if !ok {
+				return nil, fmt.Errorf(`unexpected foreign-key "user_best_friend" returned %v`, n.ID)
+			}
+			for i := range nodes {
+				nodes[i].Edges.BestFriend = n
+			}
 		}
 	}
 

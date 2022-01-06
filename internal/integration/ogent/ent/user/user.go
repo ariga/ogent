@@ -13,6 +13,8 @@ const (
 	FieldAge = "age"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
+	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
+	EdgeBestFriend = "best_friend"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// PetsTable is the table that holds the pets relation/edge.
@@ -22,6 +24,10 @@ const (
 	PetsInverseTable = "pets"
 	// PetsColumn is the table column denoting the pets relation/edge.
 	PetsColumn = "user_pets"
+	// BestFriendTable is the table that holds the best_friend relation/edge.
+	BestFriendTable = "users"
+	// BestFriendColumn is the table column denoting the best_friend relation/edge.
+	BestFriendColumn = "user_best_friend"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -31,10 +37,21 @@ var Columns = []string{
 	FieldAge,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "users"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"user_best_friend",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}

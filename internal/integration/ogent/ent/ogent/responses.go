@@ -645,6 +645,64 @@ func (u *UserUpdate) Elem() UserUpdate {
 	return *u
 }
 
+func NewUserBestFriendCreate(e *ent.User) *UserBestFriendCreate {
+	if e == nil {
+		return nil
+	}
+	return &UserBestFriendCreate{
+		ID:   e.ID,
+		Name: e.Name,
+		Age:  e.Age,
+	}
+}
+
+func NewUserBestFriendCreates(es []*ent.User) []UserBestFriendCreate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]UserBestFriendCreate, len(es))
+	for i, e := range es {
+		r[i] = NewUserBestFriendCreate(e).Elem()
+	}
+	return r
+}
+
+func (u *UserBestFriendCreate) Elem() UserBestFriendCreate {
+	if u != nil {
+		return UserBestFriendCreate{}
+	}
+	return *u
+}
+
+func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
+	if e == nil {
+		return nil
+	}
+	return &UserBestFriendRead{
+		ID:   e.ID,
+		Name: e.Name,
+		Age:  e.Age,
+	}
+}
+
+func NewUserBestFriendReads(es []*ent.User) []UserBestFriendRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]UserBestFriendRead, len(es))
+	for i, e := range es {
+		r[i] = NewUserBestFriendRead(e).Elem()
+	}
+	return r
+}
+
+func (u *UserBestFriendRead) Elem() UserBestFriendRead {
+	if u != nil {
+		return UserBestFriendRead{}
+	}
+	return *u
+}
+
 func NewUserPetsCreate(e *ent.Pet) *UserPetsCreate {
 	if e == nil {
 		return nil

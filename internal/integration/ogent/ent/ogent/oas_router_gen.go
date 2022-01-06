@@ -152,9 +152,23 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					args = make(map[string]string)
 				}
 				args["id"] = elem
-				// DELETE /users/{id}
-				s.handleDeleteUserRequest(args, w, r)
-				return
+				// Edge: 7, path: "".
+				elem, p = nextElem(p)
+				if len(elem) == 0 {
+					// DELETE /users/{id}.
+					s.handleDeleteUserRequest(args, w, r)
+					return
+				}
+				switch elem {
+				case "best-friend": // -> 8
+					// DELETE /users/{id}/best-friend
+					s.handleDeleteUserBestFriendRequest(args, w, r)
+					return
+				default:
+					// DELETE /users/{id}.
+					s.handleDeleteUserRequest(args, w, r)
+					return
+				}
 			}
 		default:
 			s.notFound(w, r)
@@ -261,6 +275,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				case "pets": // -> 10
 					// GET /users/{id}/pets
 					s.handleListUserPetsRequest(args, w, r)
+					return
+				case "best-friend": // -> 12
+					// GET /users/{id}/best-friend
+					s.handleReadUserBestFriendRequest(args, w, r)
 					return
 				default:
 					// GET /users/{id}.
@@ -400,7 +418,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				// Edge: 10, path: "".
 				elem, p = nextElem(p)
 				switch elem {
-				case "pets": // -> 11
+				case "best-friend": // -> 11
+					// POST /users/{id}/best-friend
+					s.handleCreateUserBestFriendRequest(args, w, r)
+					return
+				case "pets": // -> 12
 					// POST /users/{id}/pets
 					s.handleCreateUserPetsRequest(args, w, r)
 					return
