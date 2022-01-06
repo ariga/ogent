@@ -44,7 +44,7 @@
 		{{ end }}
 		{{- range $e := $n.Edges }}
 			{{- range $op := edgeOperations $e }}
-				{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal)}}
+				{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
 				// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
 				func (h *OgentHandler) {{ $opID }}(ctx context.Context
 					{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}, params {{ $opID }}Params) ({{ $opID }}Res, error) {
