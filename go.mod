@@ -6,7 +6,7 @@ require (
 	entgo.io/contrib v0.2.1-0.20220105154728-b9cf80fd0b75
 	entgo.io/ent v0.9.2-0.20211220092907-4d01a56b8de7
 	github.com/go-faster/errors v0.5.0
-	github.com/go-faster/jx v0.25.0
+	github.com/go-faster/jx v0.32.0
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.10
 	github.com/ogen-go/ogen v0.6.1-0.20220104102621-a1b424060221
@@ -27,6 +27,7 @@ require (
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/segmentio/asm v1.1.3 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
