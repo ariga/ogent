@@ -8,7 +8,7 @@ require (
 	github.com/go-faster/errors v0.5.0
 	github.com/go-faster/jx v0.32.1
 	github.com/google/uuid v1.3.0
-	github.com/mattn/go-sqlite3 v1.14.10
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/ogen-go/ogen v0.6.1-0.20220104102621-a1b424060221
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.7.0
