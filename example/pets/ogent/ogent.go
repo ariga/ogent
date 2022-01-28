@@ -4,6 +4,7 @@ package ogent
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/ariga/ogent/example/pets"
@@ -52,23 +53,8 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 	q := h.client.Category.Query().Where(category.ID(e.ID))
 	e, err = q.Only(ctx)
 	if err != nil {
-		switch {
-		case pets.IsNotFound(err):
-			return &R400{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case pets.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
+		// This should never happen.
+		return nil, err
 	}
 	return NewCategoryCreate(e), nil
 }
@@ -80,7 +66,7 @@ func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryPara
 	if err != nil {
 		switch {
 		case pets.IsNotFound(err):
-			return &R400{
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
@@ -101,27 +87,237 @@ func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryPara
 
 // UpdateCategory handles PATCH /categories/{id} requests.
 func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
-	panic("unimplemented")
+	b := h.client.Category.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	// Add all edges.
+	b.ClearPets().AddPetIDs(req.Pets...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Category.Query().Where(category.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewCategoryUpdate(e), nil
 }
 
 // DeleteCategory handles DELETE /categories/{id} requests.
 func (h *OgentHandler) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error) {
-	panic("unimplemented")
+	err := h.client.Category.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteCategoryNoContent), nil
+
 }
 
 // ListCategory handles GET /categories requests.
 func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error) {
-	panic("unimplemented")
+	q := h.client.Category.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListCategoryOKApplicationJSON(NewCategoryLists(es)), nil
 }
 
 // CreateCategoryPets handles POST /categories/{id}/pets requests.
 func (h *OgentHandler) CreateCategoryPets(ctx context.Context, req CreateCategoryPetsReq, params CreateCategoryPetsParams) (CreateCategoryPetsRes, error) {
-	panic("unimplemented")
+	// Start a transaction since we do multiple operations on the DB.
+	tx, err := h.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Fetch the Category to attach the Pet to.
+	p, err := tx.Category.Get(ctx, params.ID)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Create the Pet to attach.
+	b := tx.Pet.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	if v, ok := req.Weight.Get(); ok {
+		b.SetWeight(v)
+	}
+	if v, ok := req.Birthday.Get(); ok {
+		b.SetBirthday(v)
+	}
+	// Add all edges.
+	b.AddCategoryIDs(req.Categories...)
+	b.SetOwnerID(req.Owner)
+	b.AddFriendIDs(req.Friends...)
+	e, err := b.Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	_, err = p.Update().AddPetIDs(e.ID).Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Pet.Query().Where(pet.ID(params.ID))
+	// Eager load edges that are required on create operation.
+	q.WithCategories().WithOwner()
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewCategoryPetsCreate(e), nil
 }
 
 // ListCategoryPets handles GET /categories/{id}/pets requests.
 func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error) {
-	panic("unimplemented")
+	q := h.client.Category.Query().Where(category.IDEQ(params.ID)).QueryPets()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListCategoryPetsOKApplicationJSON(NewCategoryPetsLists(es)), nil
+
 }
 
 // CreatePet handles POST /pets requests.
@@ -166,9 +362,54 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	q.WithCategories().WithOwner()
 	e, err = q.Only(ctx)
 	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetCreate(e), nil
+}
+
+// DeletePet handles DELETE /pets/{id} requests.
+func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
+	err := h.client.Pet.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
 		switch {
 		case pets.IsNotFound(err):
-			return &R400{
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeletePetNoContent), nil
+
+}
+
+// ListPet handles GET /pets requests.
+func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
+	q := h.client.Pet.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
@@ -184,7 +425,7 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 			return nil, err
 		}
 	}
-	return NewPetCreate(e), nil
+	return ListPetOKApplicationJSON(NewPetLists(es)), nil
 }
 
 // ReadPet handles GET /pets/{id} requests.
@@ -194,7 +435,7 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 	if err != nil {
 		switch {
 		case pets.IsNotFound(err):
-			return &R400{
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
@@ -215,32 +456,268 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 
 // UpdatePet handles PATCH /pets/{id} requests.
 func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
-	panic("unimplemented")
-}
-
-// DeletePet handles DELETE /pets/{id} requests.
-func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
-	panic("unimplemented")
-}
-
-// ListPet handles GET /pets requests.
-func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
-	panic("unimplemented")
+	b := h.client.Pet.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	if v, ok := req.Weight.Get(); ok {
+		b.SetWeight(v)
+	}
+	if v, ok := req.Birthday.Get(); ok {
+		b.SetBirthday(v)
+	}
+	// Add all edges.
+	b.ClearCategories().AddCategoryIDs(req.Categories...)
+	if v, ok := req.Owner.Get(); ok {
+		b.SetOwnerID(v)
+	}
+	b.ClearFriends().AddFriendIDs(req.Friends...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Pet.Query().Where(pet.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetUpdate(e), nil
 }
 
 // CreatePetCategories handles POST /pets/{id}/categories requests.
 func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error) {
-	panic("unimplemented")
+	// Start a transaction since we do multiple operations on the DB.
+	tx, err := h.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Fetch the Pet to attach the Category to.
+	p, err := tx.Pet.Get(ctx, params.ID)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Create the Category to attach.
+	b := tx.Category.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	// Add all edges.
+	b.AddPetIDs(req.Pets...)
+	e, err := b.Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	_, err = p.Update().AddCategoryIDs(e.ID).Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Category.Query().Where(category.ID(params.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetCategoriesCreate(e), nil
 }
 
 // ListPetCategories handles GET /pets/{id}/categories requests.
 func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryCategories()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListPetCategoriesOKApplicationJSON(NewPetCategoriesLists(es)), nil
+
 }
 
-// ReadPetOwner handles GET /pets/{id}/owner requests.
-func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
-	panic("unimplemented")
+// CreatePetOwner handles POST /pets/{id}/owner requests.
+func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq, params CreatePetOwnerParams) (CreatePetOwnerRes, error) {
+	// Start a transaction since we do multiple operations on the DB.
+	tx, err := h.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Fetch the Pet to attach the User to.
+	p, err := tx.Pet.Get(ctx, params.ID)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Create the User to attach.
+	b := tx.User.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	b.SetAge(req.Age)
+	// Add all edges.
+	b.AddPetIDs(req.Pets...)
+	e, err := b.Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	_, err = p.Update().SetOwnerID(e.ID).Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.User.Query().Where(user.ID(params.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetOwnerCreate(e), nil
 }
 
 // DeletePetOwner handles DELETE /pets/{id}/owner requests.
@@ -248,19 +725,166 @@ func (h *OgentHandler) DeletePetOwner(ctx context.Context, params DeletePetOwner
 	panic("unimplemented")
 }
 
-// CreatePetOwner handles POST /pets/{id}/owner requests.
-func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq, params CreatePetOwnerParams) (CreatePetOwnerRes, error) {
-	panic("unimplemented")
+// ReadPetOwner handles GET /pets/{id}/owner requests.
+func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryOwner()
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewPetOwnerRead(e), nil
+
 }
 
 // CreatePetFriends handles POST /pets/{id}/friends requests.
 func (h *OgentHandler) CreatePetFriends(ctx context.Context, req CreatePetFriendsReq, params CreatePetFriendsParams) (CreatePetFriendsRes, error) {
-	panic("unimplemented")
+	// Start a transaction since we do multiple operations on the DB.
+	tx, err := h.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Fetch the Pet to attach the Pet to.
+	p, err := tx.Pet.Get(ctx, params.ID)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Create the Pet to attach.
+	b := tx.Pet.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	if v, ok := req.Weight.Get(); ok {
+		b.SetWeight(v)
+	}
+	if v, ok := req.Birthday.Get(); ok {
+		b.SetBirthday(v)
+	}
+	// Add all edges.
+	b.AddCategoryIDs(req.Categories...)
+	b.SetOwnerID(req.Owner)
+	b.AddFriendIDs(req.Friends...)
+	e, err := b.Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	_, err = p.Update().AddFriendIDs(e.ID).Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Pet.Query().Where(pet.ID(params.ID))
+	// Eager load edges that are required on create operation.
+	q.WithCategories().WithOwner()
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewPetFriendsCreate(e), nil
 }
 
 // ListPetFriends handles GET /pets/{id}/friends requests.
 func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error) {
-	panic("unimplemented")
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryFriends()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListPetFriendsOKApplicationJSON(NewPetFriendsLists(es)), nil
+
 }
 
 // CreateUser handles POST /users requests.
@@ -296,23 +920,8 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	q := h.client.User.Query().Where(user.ID(e.ID))
 	e, err = q.Only(ctx)
 	if err != nil {
-		switch {
-		case pets.IsNotFound(err):
-			return &R400{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case pets.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
+		// This should never happen.
+		return nil, err
 	}
 	return NewUserCreate(e), nil
 }
@@ -324,7 +933,7 @@ func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (Rea
 	if err != nil {
 		switch {
 		case pets.IsNotFound(err):
-			return &R400{
+			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
 				Errors: NewOptString(err.Error()),
@@ -345,27 +954,240 @@ func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (Rea
 
 // UpdateUser handles PATCH /users/{id} requests.
 func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
-	panic("unimplemented")
+	b := h.client.User.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	if v, ok := req.Age.Get(); ok {
+		b.SetAge(v)
+	}
+	// Add all edges.
+	b.ClearPets().AddPetIDs(req.Pets...)
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.User.Query().Where(user.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewUserUpdate(e), nil
 }
 
 // DeleteUser handles DELETE /users/{id} requests.
 func (h *OgentHandler) DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error) {
-	panic("unimplemented")
+	err := h.client.User.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteUserNoContent), nil
+
 }
 
 // ListUser handles GET /users requests.
 func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error) {
-	panic("unimplemented")
+	q := h.client.User.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListUserOKApplicationJSON(NewUserLists(es)), nil
 }
 
 // CreateUserPets handles POST /users/{id}/pets requests.
 func (h *OgentHandler) CreateUserPets(ctx context.Context, req CreateUserPetsReq, params CreateUserPetsParams) (CreateUserPetsRes, error) {
-	panic("unimplemented")
+	// Start a transaction since we do multiple operations on the DB.
+	tx, err := h.client.Tx(ctx)
+	if err != nil {
+		return nil, err
+	}
+	// Fetch the User to attach the Pet to.
+	p, err := tx.User.Get(ctx, params.ID)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Create the Pet to attach.
+	b := tx.Pet.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	if v, ok := req.Weight.Get(); ok {
+		b.SetWeight(v)
+	}
+	if v, ok := req.Birthday.Get(); ok {
+		b.SetBirthday(v)
+	}
+	// Add all edges.
+	b.AddCategoryIDs(req.Categories...)
+	b.SetOwnerID(req.Owner)
+	b.AddFriendIDs(req.Friends...)
+	e, err := b.Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	_, err = p.Update().AddPetIDs(e.ID).Save(ctx)
+	if err != nil {
+		if rErr := tx.Rollback(); rErr != nil {
+			return nil, fmt.Errorf("%w: %v", err, rErr)
+		}
+		switch {
+		case pets.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		return nil, err
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Pet.Query().Where(pet.ID(params.ID))
+	// Eager load edges that are required on create operation.
+	q.WithCategories().WithOwner()
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewUserPetsCreate(e), nil
 }
 
 // ListUserPets handles GET /users/{id}/pets requests.
 func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error) {
-	panic("unimplemented")
+	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryPets()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	if err != nil {
+		switch {
+		case pets.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		case pets.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: NewOptString(err.Error()),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return ListUserPetsOKApplicationJSON(NewUserPetsLists(es)), nil
+
 }
 
 var _ Handler = (*OgentHandler)(nil)

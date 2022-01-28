@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/bits"
 	"net"
 	"net/http"
 	"net/url"
@@ -50,6 +51,7 @@ var (
 	_ = uri.PathEncoder{}
 	_ = url.URL{}
 	_ = math.Mod
+	_ = bits.LeadingZeros64
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
@@ -190,31 +192,31 @@ func (*DeleteUserNoContent) deleteUserRes() {}
 
 type ListCategoryOKApplicationJSON []CategoryList
 
-func (*ListCategoryOKApplicationJSON) listCategoryRes() {}
+func (ListCategoryOKApplicationJSON) listCategoryRes() {}
 
 type ListCategoryPetsOKApplicationJSON []CategoryPetsList
 
-func (*ListCategoryPetsOKApplicationJSON) listCategoryPetsRes() {}
+func (ListCategoryPetsOKApplicationJSON) listCategoryPetsRes() {}
 
 type ListPetCategoriesOKApplicationJSON []PetCategoriesList
 
-func (*ListPetCategoriesOKApplicationJSON) listPetCategoriesRes() {}
+func (ListPetCategoriesOKApplicationJSON) listPetCategoriesRes() {}
 
 type ListPetFriendsOKApplicationJSON []PetFriendsList
 
-func (*ListPetFriendsOKApplicationJSON) listPetFriendsRes() {}
+func (ListPetFriendsOKApplicationJSON) listPetFriendsRes() {}
 
 type ListPetOKApplicationJSON []PetList
 
-func (*ListPetOKApplicationJSON) listPetRes() {}
+func (ListPetOKApplicationJSON) listPetRes() {}
 
 type ListUserOKApplicationJSON []UserList
 
-func (*ListUserOKApplicationJSON) listUserRes() {}
+func (ListUserOKApplicationJSON) listUserRes() {}
 
 type ListUserPetsOKApplicationJSON []UserPetsList
 
-func (*ListUserPetsOKApplicationJSON) listUserPetsRes() {}
+func (ListUserPetsOKApplicationJSON) listUserPetsRes() {}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -256,52 +258,6 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptInt32 returns new OptInt32 with value set to v.
-func NewOptInt32(v int32) OptInt32 {
-	return OptInt32{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptInt32 is optional int32.
-type OptInt32 struct {
-	Value int32
-	Set   bool
-}
-
-// IsSet returns true if OptInt32 was set.
-func (o OptInt32) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptInt32) Reset() {
-	var v int32
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptInt32) SetTo(v int32) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptInt32) Get() (v int32, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptInt32) Or(d int32) int32 {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -542,24 +498,29 @@ type R404 struct {
 	Errors OptString `json:"errors"`
 }
 
-func (*R404) deleteCategoryRes()    {}
-func (*R404) deletePetOwnerRes()    {}
-func (*R404) deletePetRes()         {}
-func (*R404) deleteUserRes()        {}
-func (*R404) listCategoryPetsRes()  {}
-func (*R404) listCategoryRes()      {}
-func (*R404) listPetCategoriesRes() {}
-func (*R404) listPetFriendsRes()    {}
-func (*R404) listPetRes()           {}
-func (*R404) listUserPetsRes()      {}
-func (*R404) listUserRes()          {}
-func (*R404) readCategoryRes()      {}
-func (*R404) readPetOwnerRes()      {}
-func (*R404) readPetRes()           {}
-func (*R404) readUserRes()          {}
-func (*R404) updateCategoryRes()    {}
-func (*R404) updatePetRes()         {}
-func (*R404) updateUserRes()        {}
+func (*R404) createCategoryPetsRes()  {}
+func (*R404) createPetCategoriesRes() {}
+func (*R404) createPetFriendsRes()    {}
+func (*R404) createPetOwnerRes()      {}
+func (*R404) createUserPetsRes()      {}
+func (*R404) deleteCategoryRes()      {}
+func (*R404) deletePetOwnerRes()      {}
+func (*R404) deletePetRes()           {}
+func (*R404) deleteUserRes()          {}
+func (*R404) listCategoryPetsRes()    {}
+func (*R404) listCategoryRes()        {}
+func (*R404) listPetCategoriesRes()   {}
+func (*R404) listPetFriendsRes()      {}
+func (*R404) listPetRes()             {}
+func (*R404) listUserPetsRes()        {}
+func (*R404) listUserRes()            {}
+func (*R404) readCategoryRes()        {}
+func (*R404) readPetOwnerRes()        {}
+func (*R404) readPetRes()             {}
+func (*R404) readUserRes()            {}
+func (*R404) updateCategoryRes()      {}
+func (*R404) updatePetRes()           {}
+func (*R404) updateUserRes()          {}
 
 type R409 struct {
 	Code   int       `json:"code"`
@@ -575,10 +536,24 @@ func (*R409) createPetOwnerRes()      {}
 func (*R409) createPetRes()           {}
 func (*R409) createUserPetsRes()      {}
 func (*R409) createUserRes()          {}
+func (*R409) deleteCategoryRes()      {}
+func (*R409) deletePetOwnerRes()      {}
+func (*R409) deletePetRes()           {}
+func (*R409) deleteUserRes()          {}
+func (*R409) listCategoryPetsRes()    {}
+func (*R409) listCategoryRes()        {}
+func (*R409) listPetCategoriesRes()   {}
+func (*R409) listPetFriendsRes()      {}
+func (*R409) listPetRes()             {}
+func (*R409) listUserPetsRes()        {}
+func (*R409) listUserRes()            {}
 func (*R409) readCategoryRes()        {}
 func (*R409) readPetOwnerRes()        {}
 func (*R409) readPetRes()             {}
 func (*R409) readUserRes()            {}
+func (*R409) updateCategoryRes()      {}
+func (*R409) updatePetRes()           {}
+func (*R409) updateUserRes()          {}
 
 type R500 struct {
 	Code   int       `json:"code"`
@@ -614,23 +589,23 @@ func (*R500) updatePetRes()           {}
 func (*R500) updateUserRes()          {}
 
 type UpdateCategoryReq struct {
-	Name string `json:"name"`
-	Pets []int  `json:"pets"`
+	Name OptString `json:"name"`
+	Pets []int     `json:"pets"`
 }
 
 type UpdatePetReq struct {
-	Name       string  `json:"name"`
-	Weight     OptInt  `json:"weight"`
-	Birthday   OptTime `json:"birthday"`
-	Categories []int   `json:"categories"`
-	Owner      int     `json:"owner"`
-	Friends    []int   `json:"friends"`
+	Name       OptString `json:"name"`
+	Weight     OptInt    `json:"weight"`
+	Birthday   OptTime   `json:"birthday"`
+	Categories []int     `json:"categories"`
+	Owner      OptInt    `json:"owner"`
+	Friends    []int     `json:"friends"`
 }
 
 type UpdateUserReq struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-	Pets []int  `json:"pets"`
+	Name OptString `json:"name"`
+	Age  OptInt    `json:"age"`
+	Pets []int     `json:"pets"`
 }
 
 // Ref: #/components/schemas/UserCreate

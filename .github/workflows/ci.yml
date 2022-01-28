@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goversion: [1.17]
+        goversion: [1.17, 1.18]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -19,13 +19,13 @@ jobs:
       - name: Run linters
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.43.0
+          version: v1.44.0
           args: --timeout 3m
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goversion: [1.17]
+        goversion: [1.17, 1.18]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
