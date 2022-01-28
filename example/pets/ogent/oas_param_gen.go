@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/bits"
 	"net"
 	"net/http"
 	"net/url"
@@ -50,6 +51,7 @@ var (
 	_ = uri.PathEncoder{}
 	_ = url.URL{}
 	_ = math.Mod
+	_ = bits.LeadingZeros64
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
@@ -99,42 +101,42 @@ type DeleteUserParams struct {
 }
 
 type ListCategoryParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListCategoryPetsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetCategoriesParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListPetFriendsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListUserParams struct {
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ListUserPetsParams struct {
 	ID           int
-	Page         OptInt32
-	ItemsPerPage OptInt32
+	Page         OptInt
+	ItemsPerPage OptInt
 }
 
 type ReadCategoryParams struct {

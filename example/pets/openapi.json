@@ -20,8 +20,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -29,8 +28,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -53,6 +51,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -186,6 +187,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -225,10 +229,7 @@
                       "type": "integer"
                     }
                   }
-                },
-                "required": [
-                  "name"
-                ]
+                }
               }
             }
           },
@@ -250,6 +251,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -280,8 +284,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -289,8 +292,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -313,6 +315,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -393,6 +398,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
           "409": {
             "$ref": "#/components/responses/409"
           },
@@ -416,8 +424,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -425,8 +432,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -449,6 +455,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -599,6 +608,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -654,11 +666,7 @@
                       "type": "integer"
                     }
                   }
-                },
-                "required": [
-                  "name",
-                  "owner"
-                ]
+                }
               }
             }
           },
@@ -680,6 +688,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -710,8 +721,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -719,8 +729,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -743,6 +752,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -806,6 +818,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
           "409": {
             "$ref": "#/components/responses/409"
           },
@@ -838,8 +853,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -847,8 +861,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -871,6 +884,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -950,6 +966,9 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "409": {
             "$ref": "#/components/responses/409"
@@ -1065,6 +1084,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
           "409": {
             "$ref": "#/components/responses/409"
           },
@@ -1101,6 +1123,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1121,8 +1146,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1130,8 +1154,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1154,6 +1177,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1291,6 +1317,9 @@
           "404": {
             "$ref": "#/components/responses/404"
           },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1333,11 +1362,7 @@
                       "type": "integer"
                     }
                   }
-                },
-                "required": [
-                  "name",
-                  "age"
-                ]
+                }
               }
             }
           },
@@ -1359,6 +1384,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1389,8 +1417,7 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           },
           {
@@ -1398,8 +1425,7 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "integer"
             }
           }
         ],
@@ -1422,6 +1448,9 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1501,6 +1530,9 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "409": {
             "$ref": "#/components/responses/409"

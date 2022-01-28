@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/bits"
 	"net"
 	"net/http"
 	"net/url"
@@ -50,6 +51,7 @@ var (
 	_ = uri.PathEncoder{}
 	_ = url.URL{}
 	_ = math.Mod
+	_ = bits.LeadingZeros64
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
@@ -62,170 +64,98 @@ var (
 	_ = sync.Pool{}
 )
 
-func encodeCreateCategoryRequestJSON(req CreateCategoryReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreateCategoryRequestJSON(req CreateCategoryReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreateCategoryPetsRequestJSON(req CreateCategoryPetsReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreateCategoryPetsRequestJSON(req CreateCategoryPetsReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreatePetRequestJSON(req CreatePetReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreatePetRequestJSON(req CreatePetReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreatePetCategoriesRequestJSON(req CreatePetCategoriesReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreatePetCategoriesRequestJSON(req CreatePetCategoriesReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreatePetFriendsRequestJSON(req CreatePetFriendsReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreatePetFriendsRequestJSON(req CreatePetFriendsReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreatePetOwnerRequestJSON(req CreatePetOwnerReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreatePetOwnerRequestJSON(req CreatePetOwnerReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreateUserRequestJSON(req CreateUserReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreateUserRequestJSON(req CreateUserReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreateUserBestFriendRequestJSON(req CreateUserBestFriendReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreateUserBestFriendRequestJSON(req CreateUserBestFriendReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeCreateUserPetsRequestJSON(req CreateUserPetsReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeCreateUserPetsRequestJSON(req CreateUserPetsReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeUpdateCategoryRequestJSON(req UpdateCategoryReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeUpdateCategoryRequestJSON(req UpdateCategoryReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeUpdatePetRequestJSON(req UpdatePetReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeUpdatePetRequestJSON(req UpdatePetReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }
 
-func encodeUpdateUserRequestJSON(req UpdateUserReq, span trace.Span) (data *bytes.Buffer, err error) {
-	buf := getBuf()
-	e := jx.GetEncoder()
-	defer jx.PutEncoder(e)
+func encodeUpdateUserRequestJSON(req UpdateUserReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
 
 	req.Encode(e)
-	if _, err := e.WriteTo(buf); err != nil {
-		putBuf(buf)
-		return nil, err
-	}
 
-	return buf, nil
+	return e, nil
 }

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/bits"
 	"net"
 	"net/http"
 	"net/url"
@@ -50,6 +51,7 @@ var (
 	_ = uri.PathEncoder{}
 	_ = url.URL{}
 	_ = math.Mod
+	_ = bits.LeadingZeros64
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
@@ -122,8 +124,8 @@ func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) 
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories"
@@ -176,8 +178,8 @@ func (c *Client) CreateCategoryPets(ctx context.Context, request CreateCategoryP
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories/"
@@ -245,8 +247,8 @@ func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res Creat
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets"
@@ -299,8 +301,8 @@ func (c *Client) CreatePetCategories(ctx context.Context, request CreatePetCateg
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
@@ -368,8 +370,8 @@ func (c *Client) CreatePetFriends(ctx context.Context, request CreatePetFriendsR
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
@@ -437,8 +439,8 @@ func (c *Client) CreatePetOwner(ctx context.Context, request CreatePetOwnerReq, 
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
@@ -506,8 +508,8 @@ func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res Cre
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users"
@@ -560,8 +562,8 @@ func (c *Client) CreateUserPets(ctx context.Context, request CreateUserPetsReq, 
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users/"
@@ -849,7 +851,7 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -865,7 +867,7 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -939,7 +941,7 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -955,7 +957,7 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1014,7 +1016,7 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1030,7 +1032,7 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1104,7 +1106,7 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1120,7 +1122,7 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1194,7 +1196,7 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1210,7 +1212,7 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1269,7 +1271,7 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1285,7 +1287,7 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1359,7 +1361,7 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1375,7 +1377,7 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 		})
 		if err := func() error {
 			if val, ok := params.ItemsPerPage.Get(); ok {
-				return e.EncodeValue(conv.Int32ToString(val))
+				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
 		}(); err != nil {
@@ -1648,8 +1650,8 @@ func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, 
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories/"
@@ -1716,8 +1718,8 @@ func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params Upd
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
@@ -1784,8 +1786,8 @@ func (c *Client) UpdateUser(ctx context.Context, request UpdateUserReq, params U
 	if err != nil {
 		return res, err
 	}
-	defer putBuf(buf)
-	reqBody = buf
+	defer jx.PutWriter(buf)
+	reqBody = bytes.NewReader(buf.Buf)
 
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users/"
