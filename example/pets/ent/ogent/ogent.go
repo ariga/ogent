@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
+	"github.com/ariga/ogent/example/pets/ent"
+	"github.com/ariga/ogent/example/pets/ent/category"
+	"github.com/ariga/ogent/example/pets/ent/pet"
+	"github.com/ariga/ogent/example/pets/ent/user"
 )
 
 // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
@@ -667,9 +667,6 @@ func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq
 	b.SetAge(req.Age)
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
-	if v, ok := req.BestFriend.Get(); ok {
-		b.SetBestFriendID(v)
-	}
 	e, err := b.Save(ctx)
 	if err != nil {
 		if rErr := tx.Rollback(); rErr != nil {
@@ -898,9 +895,6 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	b.SetAge(req.Age)
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
-	if v, ok := req.BestFriend.Get(); ok {
-		b.SetBestFriendID(v)
-	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -970,9 +964,6 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 	}
 	// Add all edges.
 	b.ClearPets().AddPetIDs(req.Pets...)
-	if v, ok := req.BestFriend.Get(); ok {
-		b.SetBestFriendID(v)
-	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -1197,130 +1188,4 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 	}
 	return ListUserPetsOKApplicationJSON(NewUserPetsLists(es)), nil
 
-}
-
-// CreateUserBestFriend handles POST /users/{id}/best-friend requests.
-func (h *OgentHandler) CreateUserBestFriend(ctx context.Context, req CreateUserBestFriendReq, params CreateUserBestFriendParams) (CreateUserBestFriendRes, error) {
-	// Start a transaction since we do multiple operations on the DB.
-	tx, err := h.client.Tx(ctx)
-	if err != nil {
-		return nil, err
-	}
-	// Fetch the User to attach the User to.
-	p, err := tx.User.Get(ctx, params.ID)
-	if err != nil {
-		if rErr := tx.Rollback(); rErr != nil {
-			return nil, fmt.Errorf("%w: %v", err, rErr)
-		}
-		switch {
-		case ent.IsNotFound(err):
-			return &R404{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case ent.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
-	// Create the User to attach.
-	b := tx.User.Create()
-	// Add all fields.
-	b.SetName(req.Name)
-	b.SetAge(req.Age)
-	// Add all edges.
-	b.AddPetIDs(req.Pets...)
-	if v, ok := req.BestFriend.Get(); ok {
-		b.SetBestFriendID(v)
-	}
-	e, err := b.Save(ctx)
-	if err != nil {
-		if rErr := tx.Rollback(); rErr != nil {
-			return nil, fmt.Errorf("%w: %v", err, rErr)
-		}
-		switch {
-		case ent.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case ent.IsConstraintError(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
-	_, err = p.Update().SetBestFriendID(e.ID).Save(ctx)
-	if err != nil {
-		if rErr := tx.Rollback(); rErr != nil {
-			return nil, fmt.Errorf("%w: %v", err, rErr)
-		}
-		switch {
-		case ent.IsConstraintError(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-	// Reload the entity to attach all eager-loaded edges.
-	q := h.client.User.Query().Where(user.ID(params.ID))
-	e, err = q.Only(ctx)
-	if err != nil {
-		// This should never happen.
-		return nil, err
-	}
-	return NewUserBestFriendCreate(e), nil
-}
-
-// ReadUserBestFriend handles GET /users/{id}/best-friend requests.
-func (h *OgentHandler) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error) {
-	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryBestFriend()
-	e, err := q.Only(ctx)
-	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return &R404{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		case ent.IsNotSingular(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
-	return NewUserBestFriendRead(e), nil
-
-}
-
-// DeleteUserBestFriend handles DELETE /users/{id}/best-friend requests.
-func (h *OgentHandler) DeleteUserBestFriend(ctx context.Context, params DeleteUserBestFriendParams) (DeleteUserBestFriendRes, error) {
-	panic("unimplemented")
 }
