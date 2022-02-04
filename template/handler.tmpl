@@ -19,6 +19,13 @@
 	// NewOgentHandler returns a new OgentHandler.
 	func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
 
+	// rawError renders err as json string.
+	func rawError(err error) jx.Raw {
+		var e jx.Encoder
+		e.Str(err.Error())
+		return e.Bytes()
+	}
+
 	{{- range $n := $.Nodes }}
 		{{- $root := print "/" ($n.Name | plural | kebab) }}
 		{{- range $op := nodeOperations $n }}
