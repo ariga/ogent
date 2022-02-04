@@ -65,116 +65,153 @@ var (
 )
 
 type CreateCategoryPetsParams struct {
+	// ID of the Category.
 	ID int
 }
 
 type CreatePetCategoriesParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type CreatePetFriendsParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type CreatePetOwnerParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type CreateUserBestFriendParams struct {
+	// ID of the User.
 	ID int
 }
 
 type CreateUserPetsParams struct {
+	// ID of the User.
 	ID int
 }
 
 type DeleteCategoryParams struct {
+	// ID of the Category.
 	ID int
 }
 
 type DeletePetParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type DeletePetOwnerParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type DeleteUserParams struct {
+	// ID of the User.
 	ID int
 }
 
 type DeleteUserBestFriendParams struct {
+	// ID of the User.
 	ID int
 }
 
 type ListCategoryParams struct {
-	Page         OptInt
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListCategoryPetsParams struct {
-	ID           int
-	Page         OptInt
+	// ID of the Category.
+	ID int
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListPetParams struct {
-	Page         OptInt
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListPetCategoriesParams struct {
-	ID           int
-	Page         OptInt
+	// ID of the Pet.
+	ID int
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListPetFriendsParams struct {
-	ID           int
-	Page         OptInt
+	// ID of the Pet.
+	ID int
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListUserParams struct {
-	Page         OptInt
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ListUserPetsParams struct {
-	ID           int
-	Page         OptInt
+	// ID of the User.
+	ID int
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
 	ItemsPerPage OptInt
 }
 
 type ReadCategoryParams struct {
+	// ID of the Category.
 	ID int
 }
 
 type ReadPetParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type ReadPetOwnerParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type ReadUserParams struct {
+	// ID of the User.
 	ID int
 }
 
 type ReadUserBestFriendParams struct {
+	// ID of the User.
 	ID int
 }
 
 type UpdateCategoryParams struct {
+	// ID of the Category.
 	ID int
 }
 
 type UpdatePetParams struct {
+	// ID of the Pet.
 	ID int
 }
 
 type UpdateUserParams struct {
+	// ID of the User.
 	ID int
 }

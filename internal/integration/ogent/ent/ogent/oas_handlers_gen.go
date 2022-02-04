@@ -68,8 +68,8 @@ var (
 //
 // POST /categories
 func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateCategory`,
-		trace.WithAttributes(otelogen.OperationID(`createCategory`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateCategory",
+		trace.WithAttributes(otelogen.OperationID("createCategory")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -97,8 +97,8 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 //
 // POST /categories/{id}/pets
 func (s *Server) handleCreateCategoryPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateCategoryPets`,
-		trace.WithAttributes(otelogen.OperationID(`createCategoryPets`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateCategoryPets",
+		trace.WithAttributes(otelogen.OperationID("createCategoryPets")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -132,8 +132,8 @@ func (s *Server) handleCreateCategoryPetsRequest(args [1]string, w http.Response
 //
 // POST /pets
 func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreatePet`,
-		trace.WithAttributes(otelogen.OperationID(`createPet`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePet",
+		trace.WithAttributes(otelogen.OperationID("createPet")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -161,8 +161,8 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 //
 // POST /pets/{id}/categories
 func (s *Server) handleCreatePetCategoriesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreatePetCategories`,
-		trace.WithAttributes(otelogen.OperationID(`createPetCategories`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetCategories",
+		trace.WithAttributes(otelogen.OperationID("createPetCategories")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -196,8 +196,8 @@ func (s *Server) handleCreatePetCategoriesRequest(args [1]string, w http.Respons
 //
 // POST /pets/{id}/friends
 func (s *Server) handleCreatePetFriendsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreatePetFriends`,
-		trace.WithAttributes(otelogen.OperationID(`createPetFriends`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetFriends",
+		trace.WithAttributes(otelogen.OperationID("createPetFriends")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -231,8 +231,8 @@ func (s *Server) handleCreatePetFriendsRequest(args [1]string, w http.ResponseWr
 //
 // POST /pets/{id}/owner
 func (s *Server) handleCreatePetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreatePetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`createPetOwner`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetOwner",
+		trace.WithAttributes(otelogen.OperationID("createPetOwner")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -266,8 +266,8 @@ func (s *Server) handleCreatePetOwnerRequest(args [1]string, w http.ResponseWrit
 //
 // POST /users
 func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateUser`,
-		trace.WithAttributes(otelogen.OperationID(`createUser`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateUser",
+		trace.WithAttributes(otelogen.OperationID("createUser")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -295,8 +295,8 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 //
 // POST /users/{id}/best-friend
 func (s *Server) handleCreateUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateUserBestFriend`,
-		trace.WithAttributes(otelogen.OperationID(`createUserBestFriend`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateUserBestFriend",
+		trace.WithAttributes(otelogen.OperationID("createUserBestFriend")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -330,8 +330,8 @@ func (s *Server) handleCreateUserBestFriendRequest(args [1]string, w http.Respon
 //
 // POST /users/{id}/pets
 func (s *Server) handleCreateUserPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `CreateUserPets`,
-		trace.WithAttributes(otelogen.OperationID(`createUserPets`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateUserPets",
+		trace.WithAttributes(otelogen.OperationID("createUserPets")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -365,8 +365,8 @@ func (s *Server) handleCreateUserPetsRequest(args [1]string, w http.ResponseWrit
 //
 // DELETE /categories/{id}
 func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeleteCategory`,
-		trace.WithAttributes(otelogen.OperationID(`deleteCategory`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeleteCategory",
+		trace.WithAttributes(otelogen.OperationID("deleteCategory")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -394,8 +394,8 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 //
 // DELETE /pets/{id}
 func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeletePet`,
-		trace.WithAttributes(otelogen.OperationID(`deletePet`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeletePet",
+		trace.WithAttributes(otelogen.OperationID("deletePet")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -423,8 +423,8 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 //
 // DELETE /pets/{id}/owner
 func (s *Server) handleDeletePetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeletePetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`deletePetOwner`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeletePetOwner",
+		trace.WithAttributes(otelogen.OperationID("deletePetOwner")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -452,8 +452,8 @@ func (s *Server) handleDeletePetOwnerRequest(args [1]string, w http.ResponseWrit
 //
 // DELETE /users/{id}
 func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeleteUser`,
-		trace.WithAttributes(otelogen.OperationID(`deleteUser`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeleteUser",
+		trace.WithAttributes(otelogen.OperationID("deleteUser")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -481,8 +481,8 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 //
 // DELETE /users/{id}/best-friend
 func (s *Server) handleDeleteUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `DeleteUserBestFriend`,
-		trace.WithAttributes(otelogen.OperationID(`deleteUserBestFriend`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeleteUserBestFriend",
+		trace.WithAttributes(otelogen.OperationID("deleteUserBestFriend")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -510,8 +510,8 @@ func (s *Server) handleDeleteUserBestFriendRequest(args [1]string, w http.Respon
 //
 // GET /categories
 func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListCategory`,
-		trace.WithAttributes(otelogen.OperationID(`listCategory`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListCategory",
+		trace.WithAttributes(otelogen.OperationID("listCategory")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -539,8 +539,8 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 //
 // GET /categories/{id}/pets
 func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListCategoryPets`,
-		trace.WithAttributes(otelogen.OperationID(`listCategoryPets`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListCategoryPets",
+		trace.WithAttributes(otelogen.OperationID("listCategoryPets")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -568,8 +568,8 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 //
 // GET /pets
 func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListPet`,
-		trace.WithAttributes(otelogen.OperationID(`listPet`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListPet",
+		trace.WithAttributes(otelogen.OperationID("listPet")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -597,8 +597,8 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 //
 // GET /pets/{id}/categories
 func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListPetCategories`,
-		trace.WithAttributes(otelogen.OperationID(`listPetCategories`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListPetCategories",
+		trace.WithAttributes(otelogen.OperationID("listPetCategories")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -626,8 +626,8 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 //
 // GET /pets/{id}/friends
 func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListPetFriends`,
-		trace.WithAttributes(otelogen.OperationID(`listPetFriends`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListPetFriends",
+		trace.WithAttributes(otelogen.OperationID("listPetFriends")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -655,8 +655,8 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 //
 // GET /users
 func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListUser`,
-		trace.WithAttributes(otelogen.OperationID(`listUser`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListUser",
+		trace.WithAttributes(otelogen.OperationID("listUser")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -684,8 +684,8 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 //
 // GET /users/{id}/pets
 func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ListUserPets`,
-		trace.WithAttributes(otelogen.OperationID(`listUserPets`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListUserPets",
+		trace.WithAttributes(otelogen.OperationID("listUserPets")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -713,8 +713,8 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 //
 // GET /categories/{id}
 func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadCategory`,
-		trace.WithAttributes(otelogen.OperationID(`readCategory`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadCategory",
+		trace.WithAttributes(otelogen.OperationID("readCategory")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -742,8 +742,8 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 //
 // GET /pets/{id}
 func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadPet`,
-		trace.WithAttributes(otelogen.OperationID(`readPet`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadPet",
+		trace.WithAttributes(otelogen.OperationID("readPet")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -771,8 +771,8 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 //
 // GET /pets/{id}/owner
 func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadPetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`readPetOwner`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadPetOwner",
+		trace.WithAttributes(otelogen.OperationID("readPetOwner")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -800,8 +800,8 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 //
 // GET /users/{id}
 func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadUser`,
-		trace.WithAttributes(otelogen.OperationID(`readUser`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadUser",
+		trace.WithAttributes(otelogen.OperationID("readUser")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -829,8 +829,8 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 //
 // GET /users/{id}/best-friend
 func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `ReadUserBestFriend`,
-		trace.WithAttributes(otelogen.OperationID(`readUserBestFriend`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadUserBestFriend",
+		trace.WithAttributes(otelogen.OperationID("readUserBestFriend")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -858,8 +858,8 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 //
 // PATCH /categories/{id}
 func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `UpdateCategory`,
-		trace.WithAttributes(otelogen.OperationID(`updateCategory`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UpdateCategory",
+		trace.WithAttributes(otelogen.OperationID("updateCategory")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -893,8 +893,8 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 //
 // PATCH /pets/{id}
 func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `UpdatePet`,
-		trace.WithAttributes(otelogen.OperationID(`updatePet`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UpdatePet",
+		trace.WithAttributes(otelogen.OperationID("updatePet")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
@@ -928,8 +928,8 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 //
 // PATCH /users/{id}
 func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), `UpdateUser`,
-		trace.WithAttributes(otelogen.OperationID(`updateUser`)),
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UpdateUser",
+		trace.WithAttributes(otelogen.OperationID("updateUser")),
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()

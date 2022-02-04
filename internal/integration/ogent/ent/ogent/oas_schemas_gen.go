@@ -474,9 +474,9 @@ type PetUpdate struct {
 func (*PetUpdate) updatePetRes() {}
 
 type R400 struct {
-	Code   int       `json:"code"`
-	Status string    `json:"status"`
-	Errors OptString `json:"errors"`
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
 }
 
 func (*R400) createCategoryPetsRes()   {}
@@ -510,9 +510,9 @@ func (*R400) updatePetRes()            {}
 func (*R400) updateUserRes()           {}
 
 type R404 struct {
-	Code   int       `json:"code"`
-	Status string    `json:"status"`
-	Errors OptString `json:"errors"`
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
 }
 
 func (*R404) createCategoryPetsRes()   {}
@@ -543,9 +543,9 @@ func (*R404) updatePetRes()            {}
 func (*R404) updateUserRes()           {}
 
 type R409 struct {
-	Code   int       `json:"code"`
-	Status string    `json:"status"`
-	Errors OptString `json:"errors"`
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
 }
 
 func (*R409) createCategoryPetsRes()   {}
@@ -579,9 +579,9 @@ func (*R409) updatePetRes()            {}
 func (*R409) updateUserRes()           {}
 
 type R500 struct {
-	Code   int       `json:"code"`
-	Status string    `json:"status"`
-	Errors OptString `json:"errors"`
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
 }
 
 func (*R500) createCategoryPetsRes()   {}
