@@ -68,117 +68,175 @@ var (
 type Handler interface {
 	// CreateCategory implements createCategory operation.
 	//
+	// Creates a new Category and persists it to storage.
+	//
 	// POST /categories
 	CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error)
 	// CreateCategoryPets implements createCategoryPets operation.
+	//
+	// Creates a new Pet and attaches it to the Category.
 	//
 	// POST /categories/{id}/pets
 	CreateCategoryPets(ctx context.Context, req CreateCategoryPetsReq, params CreateCategoryPetsParams) (CreateCategoryPetsRes, error)
 	// CreatePet implements createPet operation.
 	//
+	// Creates a new Pet and persists it to storage.
+	//
 	// POST /pets
 	CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error)
 	// CreatePetCategories implements createPetCategories operation.
+	//
+	// Creates a new Category and attaches it to the Pet.
 	//
 	// POST /pets/{id}/categories
 	CreatePetCategories(ctx context.Context, req CreatePetCategoriesReq, params CreatePetCategoriesParams) (CreatePetCategoriesRes, error)
 	// CreatePetFriends implements createPetFriends operation.
 	//
+	// Creates a new Pet and attaches it to the Pet.
+	//
 	// POST /pets/{id}/friends
 	CreatePetFriends(ctx context.Context, req CreatePetFriendsReq, params CreatePetFriendsParams) (CreatePetFriendsRes, error)
 	// CreatePetOwner implements createPetOwner operation.
+	//
+	// Creates a new User and attaches it to the Pet.
 	//
 	// POST /pets/{id}/owner
 	CreatePetOwner(ctx context.Context, req CreatePetOwnerReq, params CreatePetOwnerParams) (CreatePetOwnerRes, error)
 	// CreateUser implements createUser operation.
 	//
+	// Creates a new User and persists it to storage.
+	//
 	// POST /users
 	CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error)
 	// CreateUserBestFriend implements createUserBestFriend operation.
+	//
+	// Creates a new User and attaches it to the User.
 	//
 	// POST /users/{id}/best-friend
 	CreateUserBestFriend(ctx context.Context, req CreateUserBestFriendReq, params CreateUserBestFriendParams) (CreateUserBestFriendRes, error)
 	// CreateUserPets implements createUserPets operation.
 	//
+	// Creates a new Pet and attaches it to the User.
+	//
 	// POST /users/{id}/pets
 	CreateUserPets(ctx context.Context, req CreateUserPetsReq, params CreateUserPetsParams) (CreateUserPetsRes, error)
 	// DeleteCategory implements deleteCategory operation.
+	//
+	// Deletes the Category with the requested ID.
 	//
 	// DELETE /categories/{id}
 	DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error)
 	// DeletePet implements deletePet operation.
 	//
+	// Deletes the Pet with the requested ID.
+	//
 	// DELETE /pets/{id}
 	DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error)
 	// DeletePetOwner implements deletePetOwner operation.
+	//
+	// Delete the attached Owner of the Pet with the given ID.
 	//
 	// DELETE /pets/{id}/owner
 	DeletePetOwner(ctx context.Context, params DeletePetOwnerParams) (DeletePetOwnerRes, error)
 	// DeleteUser implements deleteUser operation.
 	//
+	// Deletes the User with the requested ID.
+	//
 	// DELETE /users/{id}
 	DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error)
 	// DeleteUserBestFriend implements deleteUserBestFriend operation.
+	//
+	// Delete the attached BestFriend of the User with the given ID.
 	//
 	// DELETE /users/{id}/best-friend
 	DeleteUserBestFriend(ctx context.Context, params DeleteUserBestFriendParams) (DeleteUserBestFriendRes, error)
 	// ListCategory implements listCategory operation.
 	//
+	// List Categories.
+	//
 	// GET /categories
 	ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error)
 	// ListCategoryPets implements listCategoryPets operation.
+	//
+	// List attached Pets.
 	//
 	// GET /categories/{id}/pets
 	ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error)
 	// ListPet implements listPet operation.
 	//
+	// List Pets.
+	//
 	// GET /pets
 	ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error)
 	// ListPetCategories implements listPetCategories operation.
+	//
+	// List attached Categories.
 	//
 	// GET /pets/{id}/categories
 	ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error)
 	// ListPetFriends implements listPetFriends operation.
 	//
+	// List attached Friends.
+	//
 	// GET /pets/{id}/friends
 	ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error)
 	// ListUser implements listUser operation.
+	//
+	// List Users.
 	//
 	// GET /users
 	ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error)
 	// ListUserPets implements listUserPets operation.
 	//
+	// List attached Pets.
+	//
 	// GET /users/{id}/pets
 	ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error)
 	// ReadCategory implements readCategory operation.
+	//
+	// Finds the Category with the requested ID and returns it.
 	//
 	// GET /categories/{id}
 	ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error)
 	// ReadPet implements readPet operation.
 	//
+	// Finds the Pet with the requested ID and returns it.
+	//
 	// GET /pets/{id}
 	ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error)
 	// ReadPetOwner implements readPetOwner operation.
+	//
+	// Find the attached User of the Pet with the given ID.
 	//
 	// GET /pets/{id}/owner
 	ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error)
 	// ReadUser implements readUser operation.
 	//
+	// Finds the User with the requested ID and returns it.
+	//
 	// GET /users/{id}
 	ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error)
 	// ReadUserBestFriend implements readUserBestFriend operation.
+	//
+	// Find the attached User of the User with the given ID.
 	//
 	// GET /users/{id}/best-friend
 	ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error)
 	// UpdateCategory implements updateCategory operation.
 	//
+	// Updates a Category and persists changes to storage.
+	//
 	// PATCH /categories/{id}
 	UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
 	// UpdatePet implements updatePet operation.
 	//
+	// Updates a Pet and persists changes to storage.
+	//
 	// PATCH /pets/{id}
 	UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
 	// UpdateUser implements updateUser operation.
+	//
+	// Updates a User and persists changes to storage.
 	//
 	// PATCH /users/{id}
 	UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)

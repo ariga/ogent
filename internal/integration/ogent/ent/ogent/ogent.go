@@ -11,6 +11,7 @@ import (
 	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
 	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
 	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
+	"github.com/go-faster/jx"
 )
 
 // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
@@ -20,6 +21,13 @@ type OgentHandler struct {
 
 // NewOgentHandler returns a new OgentHandler.
 func NewOgentHandler(c *ent.Client) *OgentHandler { return &OgentHandler{c} }
+
+// rawError renders err as json string.
+func rawError(err error) jx.Raw {
+	var e jx.Encoder
+	e.Str(err.Error())
+	return e.Bytes()
+}
 
 // CreateCategory handles POST /categories requests.
 func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {
@@ -36,13 +44,13 @@ func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -69,13 +77,13 @@ func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryPara
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -102,13 +110,13 @@ func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -134,13 +142,13 @@ func (h *OgentHandler) DeleteCategory(ctx context.Context, params DeleteCategory
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -169,13 +177,13 @@ func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryPara
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -203,13 +211,13 @@ func (h *OgentHandler) CreateCategoryPets(ctx context.Context, req CreateCategor
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -240,13 +248,13 @@ func (h *OgentHandler) CreateCategoryPets(ctx context.Context, req CreateCategor
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -263,7 +271,7 @@ func (h *OgentHandler) CreateCategoryPets(ctx context.Context, req CreateCategor
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -303,13 +311,13 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -343,13 +351,13 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -377,13 +385,13 @@ func (h *OgentHandler) DeletePet(ctx context.Context, params DeletePetParams) (D
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -412,13 +420,13 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -438,13 +446,13 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -481,13 +489,13 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params U
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -522,13 +530,13 @@ func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCat
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -551,13 +559,13 @@ func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCat
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -574,7 +582,7 @@ func (h *OgentHandler) CreatePetCategories(ctx context.Context, req CreatePetCat
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -612,13 +620,13 @@ func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCate
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -647,13 +655,13 @@ func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -680,13 +688,13 @@ func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -703,7 +711,7 @@ func (h *OgentHandler) CreatePetOwner(ctx context.Context, req CreatePetOwnerReq
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -738,13 +746,13 @@ func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerPara
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -773,13 +781,13 @@ func (h *OgentHandler) CreatePetFriends(ctx context.Context, req CreatePetFriend
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -810,13 +818,13 @@ func (h *OgentHandler) CreatePetFriends(ctx context.Context, req CreatePetFriend
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -833,7 +841,7 @@ func (h *OgentHandler) CreatePetFriends(ctx context.Context, req CreatePetFriend
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -873,13 +881,13 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -909,13 +917,13 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -942,13 +950,13 @@ func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (Rea
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -981,13 +989,13 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1013,13 +1021,13 @@ func (h *OgentHandler) DeleteUser(ctx context.Context, params DeleteUserParams) 
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1048,13 +1056,13 @@ func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (Lis
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1082,13 +1090,13 @@ func (h *OgentHandler) CreateUserPets(ctx context.Context, req CreateUserPetsReq
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1119,13 +1127,13 @@ func (h *OgentHandler) CreateUserPets(ctx context.Context, req CreateUserPetsReq
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1142,7 +1150,7 @@ func (h *OgentHandler) CreateUserPets(ctx context.Context, req CreateUserPetsReq
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1182,13 +1190,13 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1217,13 +1225,13 @@ func (h *OgentHandler) CreateUserBestFriend(ctx context.Context, req CreateUserB
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1250,13 +1258,13 @@ func (h *OgentHandler) CreateUserBestFriend(ctx context.Context, req CreateUserB
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1273,7 +1281,7 @@ func (h *OgentHandler) CreateUserBestFriend(ctx context.Context, req CreateUserB
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.
@@ -1303,13 +1311,13 @@ func (h *OgentHandler) ReadUserBestFriend(ctx context.Context, params ReadUserBe
 			return &R404{
 				Code:   http.StatusNotFound,
 				Status: http.StatusText(http.StatusNotFound),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		case ent.IsNotSingular(err):
 			return &R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: NewOptString(err.Error()),
+				Errors: rawError(err),
 			}, nil
 		default:
 			// Let the server handle the error.

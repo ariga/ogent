@@ -13,21 +13,21 @@
 					return &R409{
 							Code: http.StatusConflict,
 							Status: http.StatusText(http.StatusConflict),
-							Errors: NewOptString(err.Error()),
+							Errors: rawError(err),
 						}, nil
 			{{- else if eq $err "not-found" }}
 				case {{ $pkg }}.IsNotFound(err):
 					return &R404{
 						Code: http.StatusNotFound,
 						Status: http.StatusText(http.StatusNotFound),
-						Errors: NewOptString(err.Error()),
+						Errors: rawError(err),
 					}, nil
 			{{- else if eq $err "not-singular" }}
 				case {{ $pkg }}.IsNotSingular(err):
 					return &R409{
 							Code: http.StatusConflict,
 							Status: http.StatusText(http.StatusConflict),
-							Errors: NewOptString(err.Error()),
+							Errors: rawError(err),
 						}, nil
 			{{- else if eq $err "privacy" }}
 				// Privacy error
