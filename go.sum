@@ -409,8 +409,8 @@ github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjY
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/nishanths/predeclared v0.0.0-20200524104333-86fad755b4d3/go.mod h1:nt3d53pc1VYcphSCIaYAJtnPYnr3Zyn8fMq2wvPGPso=
 github.com/ogen-go/ogen v0.1.1-0.20211220145210-5927cf47f01a/go.mod h1:aYpDkiiI7LJ5ZIpRPWv7Z+mFq/4dMQugg4fbQEWQgXU=
-github.com/ogen-go/ogen v0.12.0 h1:/7z5uLtrZk7Y8Kecrd9sDutBLE19njAzZPfeFp5hV3I=
-github.com/ogen-go/ogen v0.12.0/go.mod h1:pl6rq1AwAPae7jMX/jznqRvEqq671wdJTkJo+D9rTgg=
+github.com/ogen-go/ogen v0.13.0 h1:EnB+NpAnFOADEHXEeJlL8I7qmi3r007j1z/B4iVKy7A=
+github.com/ogen-go/ogen v0.13.0/go.mod h1:pl6rq1AwAPae7jMX/jznqRvEqq671wdJTkJo+D9rTgg=
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/oklog/ulid/v2 v2.0.2/go.mod h1:mtBL0Qe/0HAx6/a4Z30qxVIAL1eQDweXq5lxOEiwQ68=
 github.com/olekukonko/tablewriter v0.0.5/go.mod h1:hPp6KlRPjbx+hW8ykQs1w3UBbZlj6HuIJcUGPhkA7kY=
