@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,6 +63,7 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 // HandleCreateCategoryRequest handles createCategory operation.
@@ -76,6 +78,7 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 	request, err := decodeCreateCategoryRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -83,49 +86,17 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 	response, err := s.h.CreateCategory(ctx, request)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeCreateCategoryResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
-}
-
-// HandleCreateCategoryPetsRequest handles createCategoryPets operation.
-//
-// POST /categories/{id}/pets
-func (s *Server) handleCreateCategoryPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateCategoryPets",
-		trace.WithAttributes(otelogen.OperationID("createCategoryPets")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreateCategoryPetsParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreateCategoryPetsRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreateCategoryPets(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreateCategoryPetsResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleCreatePetRequest handles createPet operation.
@@ -140,6 +111,7 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 	request, err := decodeCreatePetRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -147,119 +119,17 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 	response, err := s.h.CreatePet(ctx, request)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeCreatePetResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
-}
-
-// HandleCreatePetCategoriesRequest handles createPetCategories operation.
-//
-// POST /pets/{id}/categories
-func (s *Server) handleCreatePetCategoriesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetCategories",
-		trace.WithAttributes(otelogen.OperationID("createPetCategories")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreatePetCategoriesParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreatePetCategoriesRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreatePetCategories(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreatePetCategoriesResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
-}
-
-// HandleCreatePetFriendsRequest handles createPetFriends operation.
-//
-// POST /pets/{id}/friends
-func (s *Server) handleCreatePetFriendsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetFriends",
-		trace.WithAttributes(otelogen.OperationID("createPetFriends")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreatePetFriendsParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreatePetFriendsRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreatePetFriends(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreatePetFriendsResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
-}
-
-// HandleCreatePetOwnerRequest handles createPetOwner operation.
-//
-// POST /pets/{id}/owner
-func (s *Server) handleCreatePetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreatePetOwner",
-		trace.WithAttributes(otelogen.OperationID("createPetOwner")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreatePetOwnerParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreatePetOwnerRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreatePetOwner(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreatePetOwnerResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleCreateUserRequest handles createUser operation.
@@ -274,6 +144,7 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 	request, err := decodeCreateUserRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -281,84 +152,17 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 	response, err := s.h.CreateUser(ctx, request)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeCreateUserResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
-}
-
-// HandleCreateUserBestFriendRequest handles createUserBestFriend operation.
-//
-// POST /users/{id}/best-friend
-func (s *Server) handleCreateUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateUserBestFriend",
-		trace.WithAttributes(otelogen.OperationID("createUserBestFriend")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreateUserBestFriendParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreateUserBestFriendRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreateUserBestFriend(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreateUserBestFriendResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
-}
-
-// HandleCreateUserPetsRequest handles createUserPets operation.
-//
-// POST /users/{id}/pets
-func (s *Server) handleCreateUserPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateUserPets",
-		trace.WithAttributes(otelogen.OperationID("createUserPets")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeCreateUserPetsParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-	request, err := decodeCreateUserPetsRequest(r, span)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.CreateUserPets(ctx, request, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeCreateUserPetsResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleDeleteCategoryRequest handles deleteCategory operation.
@@ -373,6 +177,7 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 	params, err := decodeDeleteCategoryParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -380,14 +185,17 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 	response, err := s.h.DeleteCategory(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeDeleteCategoryResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleDeletePetRequest handles deletePet operation.
@@ -402,6 +210,7 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 	params, err := decodeDeletePetParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -409,43 +218,17 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 	response, err := s.h.DeletePet(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeDeletePetResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
-}
-
-// HandleDeletePetOwnerRequest handles deletePetOwner operation.
-//
-// DELETE /pets/{id}/owner
-func (s *Server) handleDeletePetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeletePetOwner",
-		trace.WithAttributes(otelogen.OperationID("deletePetOwner")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeDeletePetOwnerParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.DeletePetOwner(ctx, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeDeletePetOwnerResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleDeleteUserRequest handles deleteUser operation.
@@ -460,6 +243,7 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 	params, err := decodeDeleteUserParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -467,43 +251,17 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 	response, err := s.h.DeleteUser(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeDeleteUserResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
-}
-
-// HandleDeleteUserBestFriendRequest handles deleteUserBestFriend operation.
-//
-// DELETE /users/{id}/best-friend
-func (s *Server) handleDeleteUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeleteUserBestFriend",
-		trace.WithAttributes(otelogen.OperationID("deleteUserBestFriend")),
-		trace.WithSpanKind(trace.SpanKindServer),
-	)
-	defer span.End()
-	params, err := decodeDeleteUserBestFriendParams(args, r)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusBadRequest, err)
-		return
-	}
-
-	response, err := s.h.DeleteUserBestFriend(ctx, params)
-	if err != nil {
-		span.RecordError(err)
-		respondError(w, http.StatusInternalServerError, err)
-		return
-	}
-
-	if err := encodeDeleteUserBestFriendResponse(response, w, span); err != nil {
-		span.RecordError(err)
-		return
-	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListCategoryRequest handles listCategory operation.
@@ -518,6 +276,7 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 	params, err := decodeListCategoryParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -525,14 +284,17 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 	response, err := s.h.ListCategory(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListCategoryResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListCategoryPetsRequest handles listCategoryPets operation.
@@ -547,6 +309,7 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 	params, err := decodeListCategoryPetsParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -554,14 +317,17 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 	response, err := s.h.ListCategoryPets(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListCategoryPetsResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListPetRequest handles listPet operation.
@@ -576,6 +342,7 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 	params, err := decodeListPetParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -583,14 +350,17 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 	response, err := s.h.ListPet(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListPetResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListPetCategoriesRequest handles listPetCategories operation.
@@ -605,6 +375,7 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 	params, err := decodeListPetCategoriesParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -612,14 +383,17 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 	response, err := s.h.ListPetCategories(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListPetCategoriesResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListPetFriendsRequest handles listPetFriends operation.
@@ -634,6 +408,7 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 	params, err := decodeListPetFriendsParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -641,14 +416,17 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 	response, err := s.h.ListPetFriends(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListPetFriendsResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListUserRequest handles listUser operation.
@@ -663,6 +441,7 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 	params, err := decodeListUserParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -670,14 +449,17 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 	response, err := s.h.ListUser(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListUserResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleListUserPetsRequest handles listUserPets operation.
@@ -692,6 +474,7 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 	params, err := decodeListUserPetsParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -699,14 +482,17 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 	response, err := s.h.ListUserPets(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeListUserPetsResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleReadCategoryRequest handles readCategory operation.
@@ -721,6 +507,7 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 	params, err := decodeReadCategoryParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -728,14 +515,17 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 	response, err := s.h.ReadCategory(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeReadCategoryResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleReadPetRequest handles readPet operation.
@@ -750,6 +540,7 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 	params, err := decodeReadPetParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -757,14 +548,17 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 	response, err := s.h.ReadPet(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeReadPetResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleReadPetOwnerRequest handles readPetOwner operation.
@@ -779,6 +573,7 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 	params, err := decodeReadPetOwnerParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -786,14 +581,17 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 	response, err := s.h.ReadPetOwner(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeReadPetOwnerResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleReadUserRequest handles readUser operation.
@@ -808,6 +606,7 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 	params, err := decodeReadUserParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -815,14 +614,17 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 	response, err := s.h.ReadUser(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeReadUserResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleReadUserBestFriendRequest handles readUserBestFriend operation.
@@ -837,6 +639,7 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 	params, err := decodeReadUserBestFriendParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -844,14 +647,17 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 	response, err := s.h.ReadUserBestFriend(ctx, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeReadUserBestFriendResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleUpdateCategoryRequest handles updateCategory operation.
@@ -866,12 +672,14 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 	params, err := decodeUpdateCategoryParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 	request, err := decodeUpdateCategoryRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -879,14 +687,17 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 	response, err := s.h.UpdateCategory(ctx, request, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeUpdateCategoryResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleUpdatePetRequest handles updatePet operation.
@@ -901,12 +712,14 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 	params, err := decodeUpdatePetParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 	request, err := decodeUpdatePetRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -914,14 +727,17 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 	response, err := s.h.UpdatePet(ctx, request, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeUpdatePetResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 // HandleUpdateUserRequest handles updateUser operation.
@@ -936,12 +752,14 @@ func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, 
 	params, err := decodeUpdateUserParams(args, r)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
 	request, err := decodeUpdateUserRequest(r, span)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
 		respondError(w, http.StatusBadRequest, err)
 		return
 	}
@@ -949,14 +767,17 @@ func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, 
 	response, err := s.h.UpdateUser(ctx, request, params)
 	if err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
 		respondError(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	if err := encodeUpdateUserResponse(response, w, span); err != nil {
 		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
 		return
 	}
+	span.SetStatus(codes.Ok, "Ok")
 }
 
 func respondError(w http.ResponseWriter, code int, err error) {

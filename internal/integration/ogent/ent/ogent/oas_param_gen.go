@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,37 +63,8 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
-
-type CreateCategoryPetsParams struct {
-	// ID of the Category.
-	ID int
-}
-
-type CreatePetCategoriesParams struct {
-	// ID of the Pet.
-	ID int
-}
-
-type CreatePetFriendsParams struct {
-	// ID of the Pet.
-	ID int
-}
-
-type CreatePetOwnerParams struct {
-	// ID of the Pet.
-	ID int
-}
-
-type CreateUserBestFriendParams struct {
-	// ID of the User.
-	ID int
-}
-
-type CreateUserPetsParams struct {
-	// ID of the User.
-	ID int
-}
 
 type DeleteCategoryParams struct {
 	// ID of the Category.
@@ -104,17 +76,7 @@ type DeletePetParams struct {
 	ID int
 }
 
-type DeletePetOwnerParams struct {
-	// ID of the Pet.
-	ID int
-}
-
 type DeleteUserParams struct {
-	// ID of the User.
-	ID int
-}
-
-type DeleteUserBestFriendParams struct {
 	// ID of the User.
 	ID int
 }

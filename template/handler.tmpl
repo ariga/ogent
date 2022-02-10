@@ -51,20 +51,13 @@
 		{{ end }}
 		{{- range $e := $n.Edges }}
 			{{- range $op := edgeOperations $e }}
-				{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
-				// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
-				func (h *OgentHandler) {{ $opID }}(ctx context.Context
-					{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}, params {{ $opID }}Params) ({{ $opID }}Res, error) {
-					{{- if isCreate $op }}
-						{{- template "ogent/ogent/helper/create/sub" extend $n "Edge" $e -}}
-					{{- else if isRead $op }}
-						{{- template "ogent/ogent/helper/read/sub" extend $n "Edge" $e -}}
-					{{- else if isList $op }}
-						{{- template "ogent/ogent/helper/list/sub" extend $n "Edge" $e -}}
-					{{- else }}
-						panic("unimplemented")
-					{{- end }}
-				}
+				{{- if or (isRead $op) (isList $op) }}
+					{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
+					// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
+					func (h *OgentHandler) {{ $opID }}(ctx context.Context, params {{ $opID }}Params) ({{ $opID }}Res, error) {
+						{{- xtemplate (printf "ogent/ogent/helper/%s/sub" $op) (extend $n "Edge" $e) -}}
+					}
+				{{ end }}
 			{{ end }}
 		{{ end }}
 	{{ end }}

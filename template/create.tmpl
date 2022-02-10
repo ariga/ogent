@@ -1,77 +1,5 @@
 {{ define "ogent/ogent/helper/create" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	b := h.client.{{ $.Name }}.Create()
-	{{- template  "ogent/ogent/helper/create/fields" $ -}}
-	// Persist to storage.
-	e, err := b.Save(ctx)
-	{{-
-		template "ogent/ogent/helper/error"
-		extend $
-		"Errors" (list "not-singular" "constraint")
-	-}}
-	// Reload the entity to attach all eager-loaded edges.
-	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.ID(e.{{ $.ID.StructField }}))
-	{{- with eagerLoad $ "create" }}
-		// Eager load edges that are required on create operation.
-		q{{ . }}
-	{{- end }}
-	e, err = q.Only(ctx)
-	if err != nil {
-		// This should never happen.
-		return nil, err
-	}
-	return New{{ viewName $ "create"  }}(e), nil
-{{- end }}
-
-
-{{ define "ogent/ogent/helper/create/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
-	// Start a transaction since we do multiple operations on the DB.
-	tx, err := h.client.Tx(ctx)
-	if err != nil {
-		return nil, err
-	}
-	// Fetch the {{ $.Type.Name }} to attach the {{ $.Scope.Edge.Type.Name }} to.
-	p, err := tx.{{ $.Type.Name }}.Get(ctx, params.{{ $.Type.ID.StructField }})
-	{{-
-		template "ogent/ogent/helper/error"
-		extend $
-		"Errors" (list "not-found" "not-singular")
-		"Tx" "tx"
-	-}}
-	// Create the {{ $.Scope.Edge.Type.Name }} to attach.
-	b := tx.{{ $.Scope.Edge.Type.Name }}.Create()
-	{{- template  "ogent/ogent/helper/create/fields" $.Scope.Edge.Type -}}
-	e, err := b.Save(ctx)
-	{{-
-		template "ogent/ogent/helper/error"
-		extend $
-		"Errors" (list "not-singular" "constraint")
-		"Tx" "tx"
-	-}}
-	_, err = p.Update().{{ if $.Scope.Edge.Unique }}{{ $.Scope.Edge.MutationSet }}{{ else }}{{ $.Scope.Edge.MutationAdd }}{{ end }}(e.{{ $.Scope.Edge.Type.ID.StructField}}).Save(ctx)
-	{{-
-		template "ogent/ogent/helper/error"
-		extend $
-		"Errors" (list "constraint")
-		"Tx" "tx"
-	-}}
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-	// Reload the entity to attach all eager-loaded edges.
-	q := h.client.{{ $.Scope.Edge.Type.Name }}.Query().Where({{ $.Scope.Edge.Type.Package }}.ID(params.{{ $.Type.ID.StructField }}))
-	{{- with eagerLoad $.Scope.Edge.Type "create" }}
-		// Eager load edges that are required on create operation.
-		q{{ . }}
-	{{- end }}
-	e, err = q.Only(ctx)
-	if err != nil {
-		// This should never happen.
-		return nil, err
-	}
-	return New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "create") "_" "" }}(e), nil
-{{- end }}
-
-{{ define "ogent/ogent/helper/create/fields" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	// Add all fields.
 	{{- range $f := $.Fields }}
 		{{- if $f.Optional }}
@@ -96,4 +24,23 @@
 			{{- end }}
 		{{- end }}
 	{{- end }}
-{{ end }}
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	{{-
+		template "ogent/ogent/helper/error"
+		extend $
+		"Errors" (list "not-singular" "constraint")
+	-}}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.ID(e.{{ $.ID.StructField }}))
+	{{- with eagerLoad $ "create" }}
+		// Eager load edges that are required on create operation.
+		q{{ . }}
+	{{- end }}
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return New{{ viewName $ "create"  }}(e), nil
+{{- end }}

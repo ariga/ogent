@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,6 +63,7 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 // bufPool is pool of bytes.Buffer for encoding and decoding.
@@ -117,11 +119,23 @@ func (o optionFunc) apply(c *config) {
 }
 
 // WithTracerProvider specifies a tracer provider to use for creating a tracer.
+//
 // If none is specified, the global provider is used.
 func WithTracerProvider(provider trace.TracerProvider) Option {
 	return optionFunc(func(cfg *config) {
 		if provider != nil {
 			cfg.TracerProvider = provider
+		}
+	})
+}
+
+// WithMeterProvider specifies a meter provider to use for creating a meter.
+//
+// If none is specified, the metric.NewNoopMeterProvider is used.
+func WithMeterProvider(provider metric.MeterProvider) Option {
+	return optionFunc(func(cfg *config) {
+		if provider != nil {
+			cfg.MeterProvider = provider
 		}
 	})
 }

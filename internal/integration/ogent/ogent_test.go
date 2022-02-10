@@ -125,32 +125,6 @@ func (t *testSuite) TestList() {
 	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:40])), got)
 }
 
-func (t *testSuite) TestCreateSub() {
-	// R404
-	got, err := t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{}, ogent.CreateCategoryPetsParams{})
-	t.Require().NoError(err)
-	t.reqErr(http.StatusNotFound, got)
-
-	// R409
-	cat := t.client.Category.Create().SetName("category").SaveX(context.Background())
-	got, err = t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{}, ogent.CreateCategoryPetsParams{ID: cat.ID})
-	t.Require().NoError(err)
-	t.reqErr(http.StatusConflict, got)
-
-	// OK
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SaveX(context.Background())
-	got, err = t.handler.CreateCategoryPets(context.Background(), ogent.CreateCategoryPetsReq{
-		Name:       "Ariels most loved Leopard",
-		Weight:     ogent.NewOptInt(10),
-		Birthday:   ogent.NewOptTime(time.Now()),
-		Categories: nil,
-		Owner:      owner.ID,
-		Friends:    nil,
-	}, ogent.CreateCategoryPetsParams{ID: cat.ID})
-	t.Require().NoError(err)
-	t.Require().Equal(ogent.NewCategoryPetsCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)
-}
-
 func (t *testSuite) TestReadSub() {
 	// R404 - parent not found
 	got, err := t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{})

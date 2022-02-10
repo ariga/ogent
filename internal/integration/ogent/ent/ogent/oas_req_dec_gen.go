@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,6 +63,7 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 func decodeCreateCategoryRequest(r *http.Request, span trace.Span) (req CreateCategoryReq, err error) {
@@ -93,42 +95,6 @@ func decodeCreateCategoryRequest(r *http.Request, span trace.Span) (req CreateCa
 			return nil
 		}(); err != nil {
 			return req, errors.Wrap(err, "decode CreateCategory:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
-func decodeCreateCategoryPetsRequest(r *http.Request, span trace.Span) (req CreateCategoryPetsReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreateCategoryPetsReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreateCategoryPets:application/json request")
 		}
 		return request, nil
 	default:
@@ -172,114 +138,6 @@ func decodeCreatePetRequest(r *http.Request, span trace.Span) (req CreatePetReq,
 	}
 }
 
-func decodeCreatePetCategoriesRequest(r *http.Request, span trace.Span) (req CreatePetCategoriesReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreatePetCategoriesReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreatePetCategories:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
-func decodeCreatePetFriendsRequest(r *http.Request, span trace.Span) (req CreatePetFriendsReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreatePetFriendsReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreatePetFriends:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
-func decodeCreatePetOwnerRequest(r *http.Request, span trace.Span) (req CreatePetOwnerReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreatePetOwnerReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreatePetOwner:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
 func decodeCreateUserRequest(r *http.Request, span trace.Span) (req CreateUserReq, err error) {
 	switch ct := r.Header.Get("Content-Type"); ct {
 	case "application/json":
@@ -309,78 +167,6 @@ func decodeCreateUserRequest(r *http.Request, span trace.Span) (req CreateUserRe
 			return nil
 		}(); err != nil {
 			return req, errors.Wrap(err, "decode CreateUser:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
-func decodeCreateUserBestFriendRequest(r *http.Request, span trace.Span) (req CreateUserBestFriendReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreateUserBestFriendReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreateUserBestFriend:application/json request")
-		}
-		return request, nil
-	default:
-		return req, validate.InvalidContentType(ct)
-	}
-}
-
-func decodeCreateUserPetsRequest(r *http.Request, span trace.Span) (req CreateUserPetsReq, err error) {
-	switch ct := r.Header.Get("Content-Type"); ct {
-	case "application/json":
-		if r.ContentLength == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		var request CreateUserPetsReq
-		buf := getBuf()
-		defer putBuf(buf)
-		written, err := io.Copy(buf, r.Body)
-		if err != nil {
-			return req, err
-		}
-
-		if written == 0 {
-			return req, validate.ErrBodyRequired
-		}
-
-		d := jx.GetDecoder()
-		defer jx.PutDecoder(d)
-		d.ResetBytes(buf.Bytes())
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, errors.Wrap(err, "decode CreateUserPets:application/json request")
 		}
 		return request, nil
 	default:

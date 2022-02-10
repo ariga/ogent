@@ -116,36 +116,6 @@ func (c *CategoryUpdate) Elem() CategoryUpdate {
 	return *c
 }
 
-func NewCategoryPetsCreate(e *ent.Pet) *CategoryPetsCreate {
-	if e == nil {
-		return nil
-	}
-	return &CategoryPetsCreate{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
-	}
-}
-
-func NewCategoryPetsCreates(es []*ent.Pet) []CategoryPetsCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]CategoryPetsCreate, len(es))
-	for i, e := range es {
-		r[i] = NewCategoryPetsCreate(e).Elem()
-	}
-	return r
-}
-
-func (pe *CategoryPetsCreate) Elem() CategoryPetsCreate {
-	if pe != nil {
-		return CategoryPetsCreate{}
-	}
-	return *pe
-}
-
 func NewCategoryPetsList(e *ent.Pet) *CategoryPetsList {
 	if e == nil {
 		return nil
@@ -355,34 +325,6 @@ func (pe *PetUpdate) Elem() PetUpdate {
 	return *pe
 }
 
-func NewPetCategoriesCreate(e *ent.Category) *PetCategoriesCreate {
-	if e == nil {
-		return nil
-	}
-	return &PetCategoriesCreate{
-		ID:   e.ID,
-		Name: e.Name,
-	}
-}
-
-func NewPetCategoriesCreates(es []*ent.Category) []PetCategoriesCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]PetCategoriesCreate, len(es))
-	for i, e := range es {
-		r[i] = NewPetCategoriesCreate(e).Elem()
-	}
-	return r
-}
-
-func (c *PetCategoriesCreate) Elem() PetCategoriesCreate {
-	if c != nil {
-		return PetCategoriesCreate{}
-	}
-	return *c
-}
-
 func NewPetCategoriesList(e *ent.Category) *PetCategoriesList {
 	if e == nil {
 		return nil
@@ -409,36 +351,6 @@ func (c *PetCategoriesList) Elem() PetCategoriesList {
 		return PetCategoriesList{}
 	}
 	return *c
-}
-
-func NewPetFriendsCreate(e *ent.Pet) *PetFriendsCreate {
-	if e == nil {
-		return nil
-	}
-	return &PetFriendsCreate{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
-	}
-}
-
-func NewPetFriendsCreates(es []*ent.Pet) []PetFriendsCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]PetFriendsCreate, len(es))
-	for i, e := range es {
-		r[i] = NewPetFriendsCreate(e).Elem()
-	}
-	return r
-}
-
-func (pe *PetFriendsCreate) Elem() PetFriendsCreate {
-	if pe != nil {
-		return PetFriendsCreate{}
-	}
-	return *pe
 }
 
 func NewPetFriendsList(e *ent.Pet) *PetFriendsList {
@@ -469,35 +381,6 @@ func (pe *PetFriendsList) Elem() PetFriendsList {
 		return PetFriendsList{}
 	}
 	return *pe
-}
-
-func NewPetOwnerCreate(e *ent.User) *PetOwnerCreate {
-	if e == nil {
-		return nil
-	}
-	return &PetOwnerCreate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
-}
-
-func NewPetOwnerCreates(es []*ent.User) []PetOwnerCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]PetOwnerCreate, len(es))
-	for i, e := range es {
-		r[i] = NewPetOwnerCreate(e).Elem()
-	}
-	return r
-}
-
-func (u *PetOwnerCreate) Elem() PetOwnerCreate {
-	if u != nil {
-		return PetOwnerCreate{}
-	}
-	return *u
 }
 
 func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
@@ -645,35 +528,6 @@ func (u *UserUpdate) Elem() UserUpdate {
 	return *u
 }
 
-func NewUserBestFriendCreate(e *ent.User) *UserBestFriendCreate {
-	if e == nil {
-		return nil
-	}
-	return &UserBestFriendCreate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
-}
-
-func NewUserBestFriendCreates(es []*ent.User) []UserBestFriendCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]UserBestFriendCreate, len(es))
-	for i, e := range es {
-		r[i] = NewUserBestFriendCreate(e).Elem()
-	}
-	return r
-}
-
-func (u *UserBestFriendCreate) Elem() UserBestFriendCreate {
-	if u != nil {
-		return UserBestFriendCreate{}
-	}
-	return *u
-}
-
 func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 	if e == nil {
 		return nil
@@ -701,36 +555,6 @@ func (u *UserBestFriendRead) Elem() UserBestFriendRead {
 		return UserBestFriendRead{}
 	}
 	return *u
-}
-
-func NewUserPetsCreate(e *ent.Pet) *UserPetsCreate {
-	if e == nil {
-		return nil
-	}
-	return &UserPetsCreate{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
-	}
-}
-
-func NewUserPetsCreates(es []*ent.Pet) []UserPetsCreate {
-	if len(es) == 0 {
-		return nil
-	}
-	r := make([]UserPetsCreate, len(es))
-	for i, e := range es {
-		r[i] = NewUserPetsCreate(e).Elem()
-	}
-	return r
-}
-
-func (pe *UserPetsCreate) Elem() UserPetsCreate {
-	if pe != nil {
-		return UserPetsCreate{}
-	}
-	return *pe
 }
 
 func NewUserPetsList(e *ent.Pet) *UserPetsList {

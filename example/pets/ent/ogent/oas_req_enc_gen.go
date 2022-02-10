@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,17 +63,10 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 func encodeCreateCategoryRequestJSON(req CreateCategoryReq, span trace.Span) (data *jx.Writer, err error) {
-	e := jx.GetWriter()
-
-	req.Encode(e)
-
-	return e, nil
-}
-
-func encodeCreateCategoryPetsRequestJSON(req CreateCategoryPetsReq, span trace.Span) (data *jx.Writer, err error) {
 	e := jx.GetWriter()
 
 	req.Encode(e)
@@ -88,39 +82,7 @@ func encodeCreatePetRequestJSON(req CreatePetReq, span trace.Span) (data *jx.Wri
 	return e, nil
 }
 
-func encodeCreatePetCategoriesRequestJSON(req CreatePetCategoriesReq, span trace.Span) (data *jx.Writer, err error) {
-	e := jx.GetWriter()
-
-	req.Encode(e)
-
-	return e, nil
-}
-
-func encodeCreatePetFriendsRequestJSON(req CreatePetFriendsReq, span trace.Span) (data *jx.Writer, err error) {
-	e := jx.GetWriter()
-
-	req.Encode(e)
-
-	return e, nil
-}
-
-func encodeCreatePetOwnerRequestJSON(req CreatePetOwnerReq, span trace.Span) (data *jx.Writer, err error) {
-	e := jx.GetWriter()
-
-	req.Encode(e)
-
-	return e, nil
-}
-
 func encodeCreateUserRequestJSON(req CreateUserReq, span trace.Span) (data *jx.Writer, err error) {
-	e := jx.GetWriter()
-
-	req.Encode(e)
-
-	return e, nil
-}
-
-func encodeCreateUserPetsRequestJSON(req CreateUserPetsReq, span trace.Span) (data *jx.Writer, err error) {
 	e := jx.GetWriter()
 
 	req.Encode(e)
