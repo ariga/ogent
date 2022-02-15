@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,6 +63,7 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWriter, span trace.Span) error {
@@ -115,74 +117,7 @@ func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWri
 
 		return nil
 	default:
-		return errors.Errorf(`/categories: unexpected response type: %T`, response)
-	}
-}
-
-func encodeCreateCategoryPetsResponse(response CreateCategoryPetsRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *CategoryPetsCreate:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/categories/{id}/pets: unexpected response type: %T`, response)
+		return errors.Errorf("/categories"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -237,208 +172,7 @@ func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span 
 
 		return nil
 	default:
-		return errors.Errorf(`/pets: unexpected response type: %T`, response)
-	}
-}
-
-func encodeCreatePetCategoriesResponse(response CreatePetCategoriesRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *PetCategoriesCreate:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/pets/{id}/categories: unexpected response type: %T`, response)
-	}
-}
-
-func encodeCreatePetFriendsResponse(response CreatePetFriendsRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *PetFriendsCreate:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/pets/{id}/friends: unexpected response type: %T`, response)
-	}
-}
-
-func encodeCreatePetOwnerResponse(response CreatePetOwnerRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *PetOwnerCreate:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/pets/{id}/owner: unexpected response type: %T`, response)
+		return errors.Errorf("/pets"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -493,74 +227,7 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 
 		return nil
 	default:
-		return errors.Errorf(`/users: unexpected response type: %T`, response)
-	}
-}
-
-func encodeCreateUserPetsResponse(response CreateUserPetsRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *UserPetsCreate:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/users/{id}/pets: unexpected response type: %T`, response)
+		return errors.Errorf("/users"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -573,7 +240,7 @@ func encodeDBHealthResponse(response DBHealthRes, w http.ResponseWriter, span tr
 		w.WriteHeader(503)
 		return nil
 	default:
-		return errors.Errorf(`/db-health: unexpected response type: %T`, response)
+		return errors.Errorf("/db-health"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -631,7 +298,7 @@ func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWri
 
 		return nil
 	default:
-		return errors.Errorf(`/categories/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/categories/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -689,65 +356,7 @@ func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span 
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}: unexpected response type: %T`, response)
-	}
-}
-
-func encodeDeletePetOwnerResponse(response DeletePetOwnerRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *DeletePetOwnerNoContent:
-		w.WriteHeader(204)
-		return nil
-	case *R400:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R404:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R409:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	case *R500:
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
-
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-	default:
-		return errors.Errorf(`/pets/{id}/owner: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -805,7 +414,7 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 
 		return nil
 	default:
-		return errors.Errorf(`/users/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/users/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -872,7 +481,7 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 
 		return nil
 	default:
-		return errors.Errorf(`/categories: unexpected response type: %T`, response)
+		return errors.Errorf("/categories"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -939,7 +548,7 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 
 		return nil
 	default:
-		return errors.Errorf(`/categories/{id}/pets: unexpected response type: %T`, response)
+		return errors.Errorf("/categories/{id}/pets"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1006,7 +615,7 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 
 		return nil
 	default:
-		return errors.Errorf(`/pets: unexpected response type: %T`, response)
+		return errors.Errorf("/pets"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1073,7 +682,7 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}/categories: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}/categories"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1140,7 +749,7 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}/friends: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}/friends"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1207,7 +816,7 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 
 		return nil
 	default:
-		return errors.Errorf(`/users: unexpected response type: %T`, response)
+		return errors.Errorf("/users"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1274,7 +883,7 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 
 		return nil
 	default:
-		return errors.Errorf(`/users/{id}/pets: unexpected response type: %T`, response)
+		return errors.Errorf("/users/{id}/pets"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1341,7 +950,7 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 
 		return nil
 	default:
-		return errors.Errorf(`/categories/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/categories/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1408,7 +1017,7 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1475,7 +1084,7 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}/owner: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}/owner"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1542,7 +1151,7 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 
 		return nil
 	default:
-		return errors.Errorf(`/users/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/users/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1609,7 +1218,7 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 
 		return nil
 	default:
-		return errors.Errorf(`/categories/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/categories/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1676,7 +1285,7 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 
 		return nil
 	default:
-		return errors.Errorf(`/pets/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/pets/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -1743,6 +1352,6 @@ func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, spa
 
 		return nil
 	default:
-		return errors.Errorf(`/users/{id}: unexpected response type: %T`, response)
+		return errors.Errorf("/users/{id}"+`: unexpected response type: %T`, response)
 	}
 }

@@ -29,6 +29,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -62,6 +63,7 @@ var (
 	_ = regexp.MustCompile
 	_ = jx.Null
 	_ = sync.Pool{}
+	_ = codes.Unset
 )
 
 // Client implements OAS client.
@@ -102,8 +104,8 @@ func NewClient(serverURL string, opts ...Option) (*Client, error) {
 // POST /categories
 func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) (res CreateCategoryRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreateCategory`,
-		trace.WithAttributes(otelogen.OperationID(`createCategory`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "CreateCategory",
+		trace.WithAttributes(otelogen.OperationID("createCategory")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -151,77 +153,6 @@ func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) 
 	return result, nil
 }
 
-// CreateCategoryPets invokes createCategoryPets operation.
-//
-// Creates a new Pet and attaches it to the Category.
-//
-// POST /categories/{id}/pets
-func (c *Client) CreateCategoryPets(ctx context.Context, request CreateCategoryPetsReq, params CreateCategoryPetsParams) (res CreateCategoryPetsRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreateCategoryPets`,
-		trace.WithAttributes(otelogen.OperationID(`createCategoryPets`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	var (
-		contentType string
-		reqBody     io.Reader
-	)
-	contentType = "application/json"
-	buf, err := encodeCreateCategoryPetsRequestJSON(request, span)
-	if err != nil {
-		return res, err
-	}
-	defer jx.PutWriter(buf)
-	reqBody = bytes.NewReader(buf.Buf)
-
-	u := uri.Clone(c.serverURL)
-	u.Path += "/categories/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/pets"
-
-	r := ht.NewRequest(ctx, "POST", u, reqBody)
-	defer ht.PutRequest(r)
-
-	r.Header.Set("Content-Type", contentType)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCreateCategoryPetsResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // CreatePet invokes createPet operation.
 //
 // Creates a new Pet and persists it to storage.
@@ -229,8 +160,8 @@ func (c *Client) CreateCategoryPets(ctx context.Context, request CreateCategoryP
 // POST /pets
 func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res CreatePetRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreatePet`,
-		trace.WithAttributes(otelogen.OperationID(`createPet`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "CreatePet",
+		trace.WithAttributes(otelogen.OperationID("createPet")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -278,219 +209,6 @@ func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res Creat
 	return result, nil
 }
 
-// CreatePetCategories invokes createPetCategories operation.
-//
-// Creates a new Category and attaches it to the Pet.
-//
-// POST /pets/{id}/categories
-func (c *Client) CreatePetCategories(ctx context.Context, request CreatePetCategoriesReq, params CreatePetCategoriesParams) (res CreatePetCategoriesRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreatePetCategories`,
-		trace.WithAttributes(otelogen.OperationID(`createPetCategories`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	var (
-		contentType string
-		reqBody     io.Reader
-	)
-	contentType = "application/json"
-	buf, err := encodeCreatePetCategoriesRequestJSON(request, span)
-	if err != nil {
-		return res, err
-	}
-	defer jx.PutWriter(buf)
-	reqBody = bytes.NewReader(buf.Buf)
-
-	u := uri.Clone(c.serverURL)
-	u.Path += "/pets/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/categories"
-
-	r := ht.NewRequest(ctx, "POST", u, reqBody)
-	defer ht.PutRequest(r)
-
-	r.Header.Set("Content-Type", contentType)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCreatePetCategoriesResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// CreatePetFriends invokes createPetFriends operation.
-//
-// Creates a new Pet and attaches it to the Pet.
-//
-// POST /pets/{id}/friends
-func (c *Client) CreatePetFriends(ctx context.Context, request CreatePetFriendsReq, params CreatePetFriendsParams) (res CreatePetFriendsRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreatePetFriends`,
-		trace.WithAttributes(otelogen.OperationID(`createPetFriends`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	var (
-		contentType string
-		reqBody     io.Reader
-	)
-	contentType = "application/json"
-	buf, err := encodeCreatePetFriendsRequestJSON(request, span)
-	if err != nil {
-		return res, err
-	}
-	defer jx.PutWriter(buf)
-	reqBody = bytes.NewReader(buf.Buf)
-
-	u := uri.Clone(c.serverURL)
-	u.Path += "/pets/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/friends"
-
-	r := ht.NewRequest(ctx, "POST", u, reqBody)
-	defer ht.PutRequest(r)
-
-	r.Header.Set("Content-Type", contentType)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCreatePetFriendsResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// CreatePetOwner invokes createPetOwner operation.
-//
-// Creates a new User and attaches it to the Pet.
-//
-// POST /pets/{id}/owner
-func (c *Client) CreatePetOwner(ctx context.Context, request CreatePetOwnerReq, params CreatePetOwnerParams) (res CreatePetOwnerRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreatePetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`createPetOwner`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	var (
-		contentType string
-		reqBody     io.Reader
-	)
-	contentType = "application/json"
-	buf, err := encodeCreatePetOwnerRequestJSON(request, span)
-	if err != nil {
-		return res, err
-	}
-	defer jx.PutWriter(buf)
-	reqBody = bytes.NewReader(buf.Buf)
-
-	u := uri.Clone(c.serverURL)
-	u.Path += "/pets/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/owner"
-
-	r := ht.NewRequest(ctx, "POST", u, reqBody)
-	defer ht.PutRequest(r)
-
-	r.Header.Set("Content-Type", contentType)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCreatePetOwnerResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // CreateUser invokes createUser operation.
 //
 // Creates a new User and persists it to storage.
@@ -498,8 +216,8 @@ func (c *Client) CreatePetOwner(ctx context.Context, request CreatePetOwnerReq, 
 // POST /users
 func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res CreateUserRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreateUser`,
-		trace.WithAttributes(otelogen.OperationID(`createUser`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "CreateUser",
+		trace.WithAttributes(otelogen.OperationID("createUser")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -547,84 +265,13 @@ func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res Cre
 	return result, nil
 }
 
-// CreateUserPets invokes createUserPets operation.
-//
-// Creates a new Pet and attaches it to the User.
-//
-// POST /users/{id}/pets
-func (c *Client) CreateUserPets(ctx context.Context, request CreateUserPetsReq, params CreateUserPetsParams) (res CreateUserPetsRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `CreateUserPets`,
-		trace.WithAttributes(otelogen.OperationID(`createUserPets`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	var (
-		contentType string
-		reqBody     io.Reader
-	)
-	contentType = "application/json"
-	buf, err := encodeCreateUserPetsRequestJSON(request, span)
-	if err != nil {
-		return res, err
-	}
-	defer jx.PutWriter(buf)
-	reqBody = bytes.NewReader(buf.Buf)
-
-	u := uri.Clone(c.serverURL)
-	u.Path += "/users/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/pets"
-
-	r := ht.NewRequest(ctx, "POST", u, reqBody)
-	defer ht.PutRequest(r)
-
-	r.Header.Set("Content-Type", contentType)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCreateUserPetsResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // DBHealth invokes DBHealth operation.
 //
 // GET /db-health
 func (c *Client) DBHealth(ctx context.Context) (res DBHealthRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `DBHealth`,
-		trace.WithAttributes(otelogen.OperationID(`DBHealth`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "DBHealth",
+		trace.WithAttributes(otelogen.OperationID("DBHealth")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -665,8 +312,8 @@ func (c *Client) DBHealth(ctx context.Context) (res DBHealthRes, err error) {
 // DELETE /categories/{id}
 func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (res DeleteCategoryRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `DeleteCategory`,
-		trace.WithAttributes(otelogen.OperationID(`deleteCategory`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteCategory",
+		trace.WithAttributes(otelogen.OperationID("deleteCategory")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -721,8 +368,8 @@ func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams
 // DELETE /pets/{id}
 func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res DeletePetRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `DeletePet`,
-		trace.WithAttributes(otelogen.OperationID(`deletePet`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "DeletePet",
+		trace.WithAttributes(otelogen.OperationID("deletePet")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -770,63 +417,6 @@ func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res Del
 	return result, nil
 }
 
-// DeletePetOwner invokes deletePetOwner operation.
-//
-// Delete the attached Owner of the Pet with the given ID.
-//
-// DELETE /pets/{id}/owner
-func (c *Client) DeletePetOwner(ctx context.Context, params DeletePetOwnerParams) (res DeletePetOwnerRes, err error) {
-	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `DeletePetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`deletePetOwner`)),
-		trace.WithSpanKind(trace.SpanKindClient),
-	)
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			c.errors.Add(ctx, 1)
-		} else {
-			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
-		}
-		span.End()
-	}()
-	c.requests.Add(ctx, 1)
-	u := uri.Clone(c.serverURL)
-	u.Path += "/pets/"
-	{
-		// Encode "id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		u.Path += e.Result()
-	}
-	u.Path += "/owner"
-
-	r := ht.NewRequest(ctx, "DELETE", u, nil)
-	defer ht.PutRequest(r)
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeDeletePetOwnerResponse(resp, span)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // DeleteUser invokes deleteUser operation.
 //
 // Deletes the User with the requested ID.
@@ -834,8 +424,8 @@ func (c *Client) DeletePetOwner(ctx context.Context, params DeletePetOwnerParams
 // DELETE /users/{id}
 func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res DeleteUserRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `DeleteUser`,
-		trace.WithAttributes(otelogen.OperationID(`deleteUser`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteUser",
+		trace.WithAttributes(otelogen.OperationID("deleteUser")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -890,8 +480,8 @@ func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res D
 // GET /categories
 func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (res ListCategoryRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListCategory`,
-		trace.WithAttributes(otelogen.OperationID(`listCategory`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategory",
+		trace.WithAttributes(otelogen.OperationID("listCategory")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -967,8 +557,8 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 // GET /categories/{id}/pets
 func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (res ListCategoryPetsRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListCategoryPets`,
-		trace.WithAttributes(otelogen.OperationID(`listCategoryPets`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategoryPets",
+		trace.WithAttributes(otelogen.OperationID("listCategoryPets")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1059,8 +649,8 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 // GET /pets
 func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPetRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListPet`,
-		trace.WithAttributes(otelogen.OperationID(`listPet`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListPet",
+		trace.WithAttributes(otelogen.OperationID("listPet")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1136,8 +726,8 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 // GET /pets/{id}/categories
 func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (res ListPetCategoriesRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListPetCategories`,
-		trace.WithAttributes(otelogen.OperationID(`listPetCategories`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetCategories",
+		trace.WithAttributes(otelogen.OperationID("listPetCategories")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1228,8 +818,8 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 // GET /pets/{id}/friends
 func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (res ListPetFriendsRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListPetFriends`,
-		trace.WithAttributes(otelogen.OperationID(`listPetFriends`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetFriends",
+		trace.WithAttributes(otelogen.OperationID("listPetFriends")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1320,8 +910,8 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 // GET /users
 func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListUserRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListUser`,
-		trace.WithAttributes(otelogen.OperationID(`listUser`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListUser",
+		trace.WithAttributes(otelogen.OperationID("listUser")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1397,8 +987,8 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 // GET /users/{id}/pets
 func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (res ListUserPetsRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ListUserPets`,
-		trace.WithAttributes(otelogen.OperationID(`listUserPets`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ListUserPets",
+		trace.WithAttributes(otelogen.OperationID("listUserPets")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1489,8 +1079,8 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 // GET /categories/{id}
 func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (res ReadCategoryRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ReadCategory`,
-		trace.WithAttributes(otelogen.OperationID(`readCategory`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ReadCategory",
+		trace.WithAttributes(otelogen.OperationID("readCategory")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1545,8 +1135,8 @@ func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (r
 // GET /pets/{id}
 func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPetRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ReadPet`,
-		trace.WithAttributes(otelogen.OperationID(`readPet`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPet",
+		trace.WithAttributes(otelogen.OperationID("readPet")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1601,8 +1191,8 @@ func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPet
 // GET /pets/{id}/owner
 func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (res ReadPetOwnerRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ReadPetOwner`,
-		trace.WithAttributes(otelogen.OperationID(`readPetOwner`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPetOwner",
+		trace.WithAttributes(otelogen.OperationID("readPetOwner")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1658,8 +1248,8 @@ func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (r
 // GET /users/{id}
 func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadUserRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `ReadUser`,
-		trace.WithAttributes(otelogen.OperationID(`readUser`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "ReadUser",
+		trace.WithAttributes(otelogen.OperationID("readUser")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1714,8 +1304,8 @@ func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadU
 // PATCH /categories/{id}
 func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, params UpdateCategoryParams) (res UpdateCategoryRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `UpdateCategory`,
-		trace.WithAttributes(otelogen.OperationID(`updateCategory`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateCategory",
+		trace.WithAttributes(otelogen.OperationID("updateCategory")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1784,8 +1374,8 @@ func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, 
 // PATCH /pets/{id}
 func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params UpdatePetParams) (res UpdatePetRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `UpdatePet`,
-		trace.WithAttributes(otelogen.OperationID(`updatePet`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "UpdatePet",
+		trace.WithAttributes(otelogen.OperationID("updatePet")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
@@ -1854,8 +1444,8 @@ func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params Upd
 // PATCH /users/{id}
 func (c *Client) UpdateUser(ctx context.Context, request UpdateUserReq, params UpdateUserParams) (res UpdateUserRes, err error) {
 	startTime := time.Now()
-	ctx, span := c.cfg.Tracer.Start(ctx, `UpdateUser`,
-		trace.WithAttributes(otelogen.OperationID(`updateUser`)),
+	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateUser",
+		trace.WithAttributes(otelogen.OperationID("updateUser")),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/ariga/ogent/example/pets/ent"
 	"github.com/ariga/ogent/example/pets/ent/ogent"
+	"github.com/go-faster/jx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -40,18 +41,20 @@ func (h handler) CreateCategory(ctx context.Context, req ogent.CreateCategoryReq
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
+		var e jx.Encoder
+		e.Str(err.Error())
 		switch {
 		case ent.IsNotSingular(err):
 			return &ogent.R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: ogent.NewOptString(err.Error()),
+				Errors: e.Bytes(),
 			}, nil
 		case ent.IsConstraintError(err):
 			return &ogent.R409{
 				Code:   http.StatusConflict,
 				Status: http.StatusText(http.StatusConflict),
-				Errors: ogent.NewOptString(err.Error()),
+				Errors: e.Bytes(),
 			}, nil
 		default:
 			// Let the server handle the error.
