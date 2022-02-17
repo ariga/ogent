@@ -12,9 +12,9 @@ require (
 	github.com/ogen-go/ogen v0.14.1
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
-	go.opentelemetry.io/otel v1.3.0
+	go.opentelemetry.io/otel v1.4.1
 	go.opentelemetry.io/otel/metric v0.26.0
-	go.opentelemetry.io/otel/trace v1.3.0
+	go.opentelemetry.io/otel/trace v1.4.1
 )
 
 require (
@@ -23,8 +23,8 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/go-logr/logr v1.2.1 // indirect
-	github.com/go-logr/stdr v1.2.0 // indirect
+	github.com/go-logr/logr v1.2.2 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/goccy/go-yaml v1.9.5 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
