@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -779,20 +783,8 @@ func decodeListCategoryResponse(resp *http.Response, span trace.Span) (res ListC
 
 			var response ListCategoryOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []CategoryList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem CategoryList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListCategoryOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -933,20 +925,8 @@ func decodeListCategoryPetsResponse(resp *http.Response, span trace.Span) (res L
 
 			var response ListCategoryPetsOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []CategoryPetsList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem CategoryPetsList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListCategoryPetsOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -1087,20 +1067,8 @@ func decodeListPetResponse(resp *http.Response, span trace.Span) (res ListPetRes
 
 			var response ListPetOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []PetList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem PetList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListPetOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -1241,20 +1209,8 @@ func decodeListPetCategoriesResponse(resp *http.Response, span trace.Span) (res 
 
 			var response ListPetCategoriesOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []PetCategoriesList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem PetCategoriesList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListPetCategoriesOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -1395,20 +1351,8 @@ func decodeListPetFriendsResponse(resp *http.Response, span trace.Span) (res Lis
 
 			var response ListPetFriendsOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []PetFriendsList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem PetFriendsList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListPetFriendsOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -1549,20 +1493,8 @@ func decodeListUserResponse(resp *http.Response, span trace.Span) (res ListUserR
 
 			var response ListUserOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []UserList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem UserList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListUserOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -1703,20 +1635,8 @@ func decodeListUserPetsResponse(resp *http.Response, span trace.Span) (res ListU
 
 			var response ListUserPetsOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []UserPetsList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem UserPetsList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListUserPetsOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
