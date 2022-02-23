@@ -124,7 +124,7 @@ func NewCategoryPetsList(e *ent.Pet) *CategoryPetsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -154,7 +154,7 @@ func NewPetCreate(e *ent.Pet) *PetCreate {
 		ID:         e.ID,
 		Name:       e.Name,
 		Weight:     NewOptInt(e.Weight),
-		Birthday:   NewOptTime(e.Birthday),
+		Birthday:   NewOptDateTime(e.Birthday),
 		Categories: NewPetCreateCategoriesSlice(e.Edges.Categories),
 		Owner:      NewPetCreateOwner(e.Edges.Owner).Elem(),
 	}
@@ -243,7 +243,7 @@ func NewPetList(e *ent.Pet) *PetList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -273,7 +273,7 @@ func NewPetRead(e *ent.Pet) *PetRead {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -303,7 +303,7 @@ func NewPetUpdate(e *ent.Pet) *PetUpdate {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -361,7 +361,7 @@ func NewPetFriendsList(e *ent.Pet) *PetFriendsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -565,7 +565,7 @@ func NewUserPetsList(e *ent.Pet) *UserPetsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 

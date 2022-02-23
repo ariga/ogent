@@ -43,7 +43,7 @@ func (t *testSuite) TestCreate() {
 	got, err = t.handler.CreatePet(context.Background(), ogent.CreatePetReq{
 		Name:       "Ariels most loved Leopard",
 		Weight:     ogent.NewOptInt(10),
-		Birthday:   ogent.NewOptTime(time.Now()),
+		Birthday:   ogent.NewOptDateTime(time.Now()),
 		Categories: nil,
 		Owner:      owner.ID,
 		Friends:    nil,

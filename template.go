@@ -216,7 +216,7 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 		case Byte:
 			buf.WriteString("NewOptByteSlice(")
 		case DateTime, Date, Time:
-			buf.WriteString("NewOptTime(")
+			buf.WriteString("NewOptDateTime(")
 		case Duration:
 			buf.WriteString("NewOptDuration(")
 		case UUID:
