@@ -20,7 +20,7 @@ of the `ogent` code.
 The first step is to add the `ogent` package to your Ent project.
 
 ```shell
-go get github.com/ariga/ogent
+go get ariga.io/ogent
 ```
 
 `ogent` uses the Ent [Extension API](https://entgo.io/docs/extensions) to integrate with Ent’s code-generation. This
