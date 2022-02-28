@@ -69,10 +69,3 @@ var (
 	_ = sync.Pool{}
 	_ = codes.Unset
 )
-
-func (s ListTodoOKApplicationJSON) Validate() error {
-	if s == nil {
-		return errors.New("nil is invalid value")
-	}
-	return nil
-}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -315,20 +319,8 @@ func decodeListTodoResponse(resp *http.Response, span trace.Span) (res ListTodoR
 
 			var response ListTodoOKApplicationJSON
 			if err := func() error {
-				{
-					var unwrapped []TodoList
-					unwrapped = nil
-					if err := d.Arr(func(d *jx.Decoder) error {
-						var elem TodoList
-						if err := elem.Decode(d); err != nil {
-							return err
-						}
-						unwrapped = append(unwrapped, elem)
-						return nil
-					}); err != nil {
-						return err
-					}
-					response = ListTodoOKApplicationJSON(unwrapped)
+				if err := response.Decode(d); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {

@@ -37,7 +37,10 @@ func main() {
 		client:       client,
 	}
 	// Start listening.
-	srv := ogent.NewServer(h)
+	srv, err := ogent.NewServer(h)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if err := http.ListenAndServe(":8180", srv); err != nil {
 		log.Fatal(err)
 	}

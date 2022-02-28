@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.3.5 // indirect
+	ariga.io/atlas v0.3.6 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/go-logr/logr v1.2.2 // indirect
@@ -28,7 +28,7 @@ require (
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/zclconf/go-cty v1.10.0 // indirect
 	golang.org/x/mod v0.5.1 // indirect
-	golang.org/x/sys v0.0.0-20220222200937-f2425489ef4c // indirect
+	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
 

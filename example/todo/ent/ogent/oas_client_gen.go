@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -104,21 +108,24 @@ func NewClient(serverURL string, opts ...Option) (*Client, error) {
 // POST /todos
 func (c *Client) CreateTodo(ctx context.Context, request CreateTodoReq) (res CreateTodoRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("createTodo"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateTodo",
-		trace.WithAttributes(otelogen.OperationID("createTodo")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -160,21 +167,24 @@ func (c *Client) CreateTodo(ctx context.Context, request CreateTodoReq) (res Cre
 // DELETE /todos/{id}
 func (c *Client) DeleteTodo(ctx context.Context, params DeleteTodoParams) (res DeleteTodoRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deleteTodo"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteTodo",
-		trace.WithAttributes(otelogen.OperationID("deleteTodo")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/todos/"
 	{
@@ -216,21 +226,24 @@ func (c *Client) DeleteTodo(ctx context.Context, params DeleteTodoParams) (res D
 // GET /todos
 func (c *Client) ListTodo(ctx context.Context, params ListTodoParams) (res ListTodoRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listTodo"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListTodo",
-		trace.WithAttributes(otelogen.OperationID("listTodo")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/todos"
 
@@ -291,21 +304,24 @@ func (c *Client) ListTodo(ctx context.Context, params ListTodoParams) (res ListT
 // PATCH /todos/{id}/done
 func (c *Client) MarkDone(ctx context.Context, params MarkDoneParams) (res MarkDoneNoContent, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("markDone"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "MarkDone",
-		trace.WithAttributes(otelogen.OperationID("markDone")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/todos/"
 	{
@@ -348,21 +364,24 @@ func (c *Client) MarkDone(ctx context.Context, params MarkDoneParams) (res MarkD
 // GET /todos/{id}
 func (c *Client) ReadTodo(ctx context.Context, params ReadTodoParams) (res ReadTodoRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readTodo"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadTodo",
-		trace.WithAttributes(otelogen.OperationID("readTodo")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/todos/"
 	{
@@ -404,21 +423,24 @@ func (c *Client) ReadTodo(ctx context.Context, params ReadTodoParams) (res ReadT
 // PATCH /todos/{id}
 func (c *Client) UpdateTodo(ctx context.Context, request UpdateTodoReq, params UpdateTodoParams) (res UpdateTodoRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateTodo"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateTodo",
-		trace.WithAttributes(otelogen.OperationID("updateTodo")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
