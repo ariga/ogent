@@ -1,25 +1,25 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/read" }}
-    q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ(params.{{ $.ID.StructField }}))
-    {{- with eagerLoad $ "read" }}{{ . }}{{- end }}
-    e, err := q.Only(ctx)
-    {{-
-    template "ogent/ogent/helper/error"
-    extend $
-    "Errors" (list "not-found" "not-singular")
-    -}}
-    return New{{ viewName $ "read"  }}(e), nil
+	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ(params.{{ $.ID.StructField }}))
+	{{- with eagerLoad $ "read" }}{{ . }}{{- end }}
+	e, err := q.Only(ctx)
+	{{-
+		template "ogent/ogent/helper/error"
+		extend $
+		"Errors" (list "not-found" "not-singular")
+	-}}
+	return New{{ viewName $ "read"  }}(e), nil
 {{- end }}
 
 {{ define "ogent/ogent/helper/read/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
-q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ(params.{{ $.Type.ID.StructField }})).Query{{ $.Scope.Edge.Name | pascal }}()
-{{- with eagerLoad $.Scope.Edge.Type "read" }}{{ . }}{{- end }}
-e, err := q.Only(ctx)
-{{-
-template "ogent/ogent/helper/error"
-extend $
-"Errors" (list "not-found" "not-singular")
--}}
-return New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "read") "_" "" }}(e), nil
+	q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ(params.{{ $.Type.ID.StructField }})).Query{{ $.Scope.Edge.Name | pascal }}()
+	{{- with eagerLoad $.Scope.Edge.Type "read" }}{{ . }}{{- end }}
+	e, err := q.Only(ctx)
+	{{-
+		template "ogent/ogent/helper/error"
+		extend $
+		"Errors" (list "not-found" "not-singular")
+	-}}
+	return New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "read") "_" "" }}(e), nil
 {{ end }}
