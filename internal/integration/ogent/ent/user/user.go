@@ -2,6 +2,10 @@
 
 package user
 
+import (
+	"fmt"
+)
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
@@ -11,6 +15,10 @@ const (
 	FieldName = "name"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
+	// FieldSex holds the string denoting the sex field in the database.
+	FieldSex = "sex"
+	// FieldGender holds the string denoting the gender field in the database.
+	FieldGender = "gender"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
 	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
@@ -35,6 +43,8 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldAge,
+	FieldSex,
+	FieldGender,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "users"
@@ -56,4 +66,51 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
+}
+
+// Sex defines the type for the "sex" enum field.
+type Sex string
+
+// Sex values.
+const (
+	SexMale   Sex = "male"
+	SexFemale Sex = "female"
+)
+
+func (s Sex) String() string {
+	return string(s)
+}
+
+// SexValidator is a validator for the "sex" field enum values. It is called by the builders before save.
+func SexValidator(s Sex) error {
+	switch s {
+	case SexMale, SexFemale:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for sex field: %q", s)
+	}
+}
+
+// Gender defines the type for the "gender" enum field.
+type Gender string
+
+// Gender values.
+const (
+	GenderMale    Gender = "male"
+	GenderFemale  Gender = "female"
+	GenderDiverse Gender = "diverse"
+)
+
+func (ge Gender) String() string {
+	return string(ge)
+}
+
+// GenderValidator is a validator for the "gender" field enum values. It is called by the builders before save.
+func GenderValidator(ge Gender) error {
+	switch ge {
+	case GenderMale, GenderFemale, GenderDiverse:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for gender field: %q", ge)
+	}
 }

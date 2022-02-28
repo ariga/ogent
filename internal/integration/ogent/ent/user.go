@@ -19,6 +19,10 @@ type User struct {
 	Name string `json:"name,omitempty"`
 	// Age holds the value of the "age" field.
 	Age int `json:"age,omitempty"`
+	// Sex holds the value of the "sex" field.
+	Sex user.Sex `json:"sex,omitempty"`
+	// Gender holds the value of the "gender" field.
+	Gender user.Gender `json:"gender,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges            UserEdges `json:"edges"`
@@ -66,7 +70,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case user.FieldName:
+		case user.FieldName, user.FieldSex, user.FieldGender:
 			values[i] = new(sql.NullString)
 		case user.ForeignKeys[0]: // user_best_friend
 			values[i] = new(sql.NullInt64)
@@ -102,6 +106,18 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
 				u.Age = int(value.Int64)
+			}
+		case user.FieldSex:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field sex", values[i])
+			} else if value.Valid {
+				u.Sex = user.Sex(value.String)
+			}
+		case user.FieldGender:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field gender", values[i])
+			} else if value.Valid {
+				u.Gender = user.Gender(value.String)
 			}
 		case user.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -152,6 +168,10 @@ func (u *User) String() string {
 	builder.WriteString(u.Name)
 	builder.WriteString(", age=")
 	builder.WriteString(fmt.Sprintf("%v", u.Age))
+	builder.WriteString(", sex=")
+	builder.WriteString(fmt.Sprintf("%v", u.Sex))
+	builder.WriteString(", gender=")
+	builder.WriteString(fmt.Sprintf("%v", u.Gender))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -1019,6 +1019,21 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
+	{
 		if s.Pets != nil {
 			e.Comma()
 		}
@@ -1051,11 +1066,13 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCreateUserReq = [4]string{
+var jsonFieldsNameOfCreateUserReq = [6]string{
 	0: "name",
 	1: "age",
-	2: "pets",
-	3: "best_friend",
+	2: "sex",
+	3: "gender",
+	4: "pets",
+	5: "best_friend",
 }
 
 // Decode decodes CreateUserReq from json.
@@ -1090,6 +1107,26 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
+			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
 			}
 		case "pets":
 			if err := func() error {
@@ -1130,7 +1167,7 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1158,6 +1195,62 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes CreateUserReqGender as json.
+func (s CreateUserReqGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes CreateUserReqGender from json.
+func (s *CreateUserReqGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateUserReqGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CreateUserReqGender(v) {
+	case CreateUserReqGenderMale:
+		*s = CreateUserReqGenderMale
+	case CreateUserReqGenderFemale:
+		*s = CreateUserReqGenderFemale
+	case CreateUserReqGenderDiverse:
+		*s = CreateUserReqGenderDiverse
+	default:
+		*s = CreateUserReqGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes CreateUserReqSex as json.
+func (s CreateUserReqSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes CreateUserReqSex from json.
+func (s *CreateUserReqSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateUserReqSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CreateUserReqSex(v) {
+	case CreateUserReqSexMale:
+		*s = CreateUserReqSexMale
+	case CreateUserReqSexFemale:
+		*s = CreateUserReqSexFemale
+	default:
+		*s = CreateUserReqSex(v)
 	}
 
 	return nil
@@ -1471,6 +1564,26 @@ func (s *ListUserPetsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// Encode encodes CreateUserReqGender as json.
+func (o OptCreateUserReqGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes CreateUserReqGender from json.
+func (o *OptCreateUserReqGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptCreateUserReqGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Encode encodes time.Time as json.
 func (o OptDateTime) Encode(e *jx.Writer, format func(*jx.Writer, time.Time)) {
 	if !o.Set {
@@ -1515,6 +1628,46 @@ func (o *OptInt) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// Encode encodes PetCreateOwnerGender as json.
+func (o OptPetCreateOwnerGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes PetCreateOwnerGender from json.
+func (o *OptPetCreateOwnerGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPetCreateOwnerGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes PetOwnerReadGender as json.
+func (o OptPetOwnerReadGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes PetOwnerReadGender from json.
+func (o *OptPetOwnerReadGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPetOwnerReadGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Encode encodes string as json.
 func (o OptString) Encode(e *jx.Writer) {
 	if !o.Set {
@@ -1534,6 +1687,146 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 		return err
 	}
 	o.Value = string(v)
+	return nil
+}
+
+// Encode encodes UpdateUserReqGender as json.
+func (o OptUpdateUserReqGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UpdateUserReqGender from json.
+func (o *OptUpdateUserReqGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUpdateUserReqGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UpdateUserReqSex as json.
+func (o OptUpdateUserReqSex) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UpdateUserReqSex from json.
+func (o *OptUpdateUserReqSex) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUpdateUserReqSex to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UserBestFriendReadGender as json.
+func (o OptUserBestFriendReadGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UserBestFriendReadGender from json.
+func (o *OptUserBestFriendReadGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUserBestFriendReadGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UserCreateGender as json.
+func (o OptUserCreateGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UserCreateGender from json.
+func (o *OptUserCreateGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUserCreateGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UserListGender as json.
+func (o OptUserListGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UserListGender from json.
+func (o *OptUserListGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUserListGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UserReadGender as json.
+func (o OptUserReadGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UserReadGender from json.
+func (o *OptUserReadGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUserReadGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Encode encodes UserUpdateGender as json.
+func (o OptUserUpdateGender) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UserUpdateGender from json.
+func (o *OptUserUpdateGender) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUserUpdateGender to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -1979,13 +2272,30 @@ func (s PetCreateOwner) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCreateOwner = [3]string{
+var jsonFieldsNameOfPetCreateOwner = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes PetCreateOwner from json.
@@ -2033,6 +2343,26 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2043,7 +2373,7 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2071,6 +2401,62 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes PetCreateOwnerGender as json.
+func (s PetCreateOwnerGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetCreateOwnerGender from json.
+func (s *PetCreateOwnerGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetCreateOwnerGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetCreateOwnerGender(v) {
+	case PetCreateOwnerGenderMale:
+		*s = PetCreateOwnerGenderMale
+	case PetCreateOwnerGenderFemale:
+		*s = PetCreateOwnerGenderFemale
+	case PetCreateOwnerGenderDiverse:
+		*s = PetCreateOwnerGenderDiverse
+	default:
+		*s = PetCreateOwnerGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes PetCreateOwnerSex as json.
+func (s PetCreateOwnerSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetCreateOwnerSex from json.
+func (s *PetCreateOwnerSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetCreateOwnerSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetCreateOwnerSex(v) {
+	case PetCreateOwnerSexMale:
+		*s = PetCreateOwnerSexMale
+	case PetCreateOwnerSexFemale:
+		*s = PetCreateOwnerSexFemale
+	default:
+		*s = PetCreateOwnerSex(v)
 	}
 
 	return nil
@@ -2396,13 +2782,30 @@ func (s PetOwnerRead) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetOwnerRead = [3]string{
+var jsonFieldsNameOfPetOwnerRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes PetOwnerRead from json.
@@ -2450,6 +2853,26 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2460,7 +2883,7 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2488,6 +2911,62 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes PetOwnerReadGender as json.
+func (s PetOwnerReadGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetOwnerReadGender from json.
+func (s *PetOwnerReadGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetOwnerReadGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetOwnerReadGender(v) {
+	case PetOwnerReadGenderMale:
+		*s = PetOwnerReadGenderMale
+	case PetOwnerReadGenderFemale:
+		*s = PetOwnerReadGenderFemale
+	case PetOwnerReadGenderDiverse:
+		*s = PetOwnerReadGenderDiverse
+	default:
+		*s = PetOwnerReadGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes PetOwnerReadSex as json.
+func (s PetOwnerReadSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetOwnerReadSex from json.
+func (s *PetOwnerReadSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetOwnerReadSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetOwnerReadSex(v) {
+	case PetOwnerReadSexMale:
+		*s = PetOwnerReadSexMale
+	case PetOwnerReadSexFemale:
+		*s = PetOwnerReadSexFemale
+	default:
+		*s = PetOwnerReadSex(v)
 	}
 
 	return nil
@@ -3640,6 +4119,30 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 		}
 	}
 	{
+		if s.Sex.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Sex.Set {
+			e.RawStr("\"sex\"" + ":")
+			s.Sex.Encode(e)
+		}
+	}
+	{
+		if s.Gender.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
+	{
 		if s.Pets != nil {
 			if !first {
 				e.Comma()
@@ -3678,11 +4181,13 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUpdateUserReq = [4]string{
+var jsonFieldsNameOfUpdateUserReq = [6]string{
 	0: "name",
 	1: "age",
-	2: "pets",
-	3: "best_friend",
+	2: "sex",
+	3: "gender",
+	4: "pets",
+	5: "best_friend",
 }
 
 // Decode decodes UpdateUserReq from json.
@@ -3712,6 +4217,26 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
+			}
+		case "sex":
+			if err := func() error {
+				s.Sex.Reset()
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
 			}
 		case "pets":
 			if err := func() error {
@@ -3753,6 +4278,62 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// Encode encodes UpdateUserReqGender as json.
+func (s UpdateUserReqGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UpdateUserReqGender from json.
+func (s *UpdateUserReqGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateUserReqGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UpdateUserReqGender(v) {
+	case UpdateUserReqGenderMale:
+		*s = UpdateUserReqGenderMale
+	case UpdateUserReqGenderFemale:
+		*s = UpdateUserReqGenderFemale
+	case UpdateUserReqGenderDiverse:
+		*s = UpdateUserReqGenderDiverse
+	default:
+		*s = UpdateUserReqGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UpdateUserReqSex as json.
+func (s UpdateUserReqSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UpdateUserReqSex from json.
+func (s *UpdateUserReqSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateUserReqSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UpdateUserReqSex(v) {
+	case UpdateUserReqSexMale:
+		*s = UpdateUserReqSexMale
+	case UpdateUserReqSexFemale:
+		*s = UpdateUserReqSexFemale
+	default:
+		*s = UpdateUserReqSex(v)
+	}
+
+	return nil
+}
+
 // Encode implements json.Marshaler.
 func (s UserBestFriendRead) Encode(e *jx.Writer) {
 	e.ObjStart()
@@ -3781,13 +4362,30 @@ func (s UserBestFriendRead) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserBestFriendRead = [3]string{
+var jsonFieldsNameOfUserBestFriendRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes UserBestFriendRead from json.
@@ -3835,6 +4433,26 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3845,7 +4463,7 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3873,6 +4491,62 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes UserBestFriendReadGender as json.
+func (s UserBestFriendReadGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserBestFriendReadGender from json.
+func (s *UserBestFriendReadGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserBestFriendReadGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserBestFriendReadGender(v) {
+	case UserBestFriendReadGenderMale:
+		*s = UserBestFriendReadGenderMale
+	case UserBestFriendReadGenderFemale:
+		*s = UserBestFriendReadGenderFemale
+	case UserBestFriendReadGenderDiverse:
+		*s = UserBestFriendReadGenderDiverse
+	default:
+		*s = UserBestFriendReadGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UserBestFriendReadSex as json.
+func (s UserBestFriendReadSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserBestFriendReadSex from json.
+func (s *UserBestFriendReadSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserBestFriendReadSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserBestFriendReadSex(v) {
+	case UserBestFriendReadSexMale:
+		*s = UserBestFriendReadSexMale
+	case UserBestFriendReadSexFemale:
+		*s = UserBestFriendReadSexFemale
+	default:
+		*s = UserBestFriendReadSex(v)
 	}
 
 	return nil
@@ -3906,13 +4580,30 @@ func (s UserCreate) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserCreate = [3]string{
+var jsonFieldsNameOfUserCreate = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes UserCreate from json.
@@ -3960,6 +4651,26 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3970,7 +4681,7 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3998,6 +4709,62 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes UserCreateGender as json.
+func (s UserCreateGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserCreateGender from json.
+func (s *UserCreateGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserCreateGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserCreateGender(v) {
+	case UserCreateGenderMale:
+		*s = UserCreateGenderMale
+	case UserCreateGenderFemale:
+		*s = UserCreateGenderFemale
+	case UserCreateGenderDiverse:
+		*s = UserCreateGenderDiverse
+	default:
+		*s = UserCreateGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UserCreateSex as json.
+func (s UserCreateSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserCreateSex from json.
+func (s *UserCreateSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserCreateSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserCreateSex(v) {
+	case UserCreateSexMale:
+		*s = UserCreateSexMale
+	case UserCreateSexFemale:
+		*s = UserCreateSexFemale
+	default:
+		*s = UserCreateSex(v)
 	}
 
 	return nil
@@ -4031,13 +4798,30 @@ func (s UserList) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserList = [3]string{
+var jsonFieldsNameOfUserList = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes UserList from json.
@@ -4085,6 +4869,26 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -4095,7 +4899,7 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -4123,6 +4927,62 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes UserListGender as json.
+func (s UserListGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserListGender from json.
+func (s *UserListGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserListGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserListGender(v) {
+	case UserListGenderMale:
+		*s = UserListGenderMale
+	case UserListGenderFemale:
+		*s = UserListGenderFemale
+	case UserListGenderDiverse:
+		*s = UserListGenderDiverse
+	default:
+		*s = UserListGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UserListSex as json.
+func (s UserListSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserListSex from json.
+func (s *UserListSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserListSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserListSex(v) {
+	case UserListSexMale:
+		*s = UserListSexMale
+	case UserListSexFemale:
+		*s = UserListSexFemale
+	default:
+		*s = UserListSex(v)
 	}
 
 	return nil
@@ -4302,13 +5162,30 @@ func (s UserRead) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserRead = [3]string{
+var jsonFieldsNameOfUserRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes UserRead from json.
@@ -4356,6 +5233,26 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -4366,7 +5263,7 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -4394,6 +5291,62 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes UserReadGender as json.
+func (s UserReadGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserReadGender from json.
+func (s *UserReadGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserReadGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserReadGender(v) {
+	case UserReadGenderMale:
+		*s = UserReadGenderMale
+	case UserReadGenderFemale:
+		*s = UserReadGenderFemale
+	case UserReadGenderDiverse:
+		*s = UserReadGenderDiverse
+	default:
+		*s = UserReadGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UserReadSex as json.
+func (s UserReadSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserReadSex from json.
+func (s *UserReadSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserReadSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserReadSex(v) {
+	case UserReadSexMale:
+		*s = UserReadSexMale
+	case UserReadSexFemale:
+		*s = UserReadSexFemale
+	default:
+		*s = UserReadSex(v)
 	}
 
 	return nil
@@ -4427,13 +5380,30 @@ func (s UserUpdate) Encode(e *jx.Writer) {
 		e.RawStr("\"age\"" + ":")
 		e.Int(s.Age)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"sex\"" + ":")
+		s.Sex.Encode(e)
+	}
+	{
+		if s.Gender.Set {
+			e.Comma()
+		}
+		if s.Gender.Set {
+			e.RawStr("\"gender\"" + ":")
+			s.Gender.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserUpdate = [3]string{
+var jsonFieldsNameOfUserUpdate = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
+	3: "sex",
+	4: "gender",
 }
 
 // Decode decodes UserUpdate from json.
@@ -4481,6 +5451,26 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "sex":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Sex.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"sex\"")
+			}
+		case "gender":
+			if err := func() error {
+				s.Gender.Reset()
+				if err := s.Gender.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"gender\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -4491,7 +5481,7 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -4519,6 +5509,62 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes UserUpdateGender as json.
+func (s UserUpdateGender) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserUpdateGender from json.
+func (s *UserUpdateGender) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserUpdateGender to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserUpdateGender(v) {
+	case UserUpdateGenderMale:
+		*s = UserUpdateGenderMale
+	case UserUpdateGenderFemale:
+		*s = UserUpdateGenderFemale
+	case UserUpdateGenderDiverse:
+		*s = UserUpdateGenderDiverse
+	default:
+		*s = UserUpdateGender(v)
+	}
+
+	return nil
+}
+
+// Encode encodes UserUpdateSex as json.
+func (s UserUpdateSex) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserUpdateSex from json.
+func (s *UserUpdateSex) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserUpdateSex to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserUpdateSex(v) {
+	case UserUpdateSexMale:
+		*s = UserUpdateSexMale
+	case UserUpdateSexFemale:
+		*s = UserUpdateSexFemale
+	default:
+		*s = UserUpdateSex(v)
 	}
 
 	return nil

@@ -16,6 +16,11 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
 		field.Int("age"),
+		field.Enum("sex").
+			Values("male", "female"),
+		field.Enum("gender").
+			Values("male", "female", "diverse").
+			Optional(),
 	}
 }
 

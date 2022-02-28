@@ -123,11 +123,28 @@ type CreatePetReq struct {
 }
 
 type CreateUserReq struct {
-	Name       string "json:\"name\""
-	Age        int    "json:\"age\""
-	Pets       []int  "json:\"pets\""
-	BestFriend OptInt "json:\"best_friend\""
+	Name       string                 "json:\"name\""
+	Age        int                    "json:\"age\""
+	Sex        CreateUserReqSex       "json:\"sex\""
+	Gender     OptCreateUserReqGender "json:\"gender\""
+	Pets       []int                  "json:\"pets\""
+	BestFriend OptInt                 "json:\"best_friend\""
 }
+
+type CreateUserReqGender string
+
+const (
+	CreateUserReqGenderMale    CreateUserReqGender = "male"
+	CreateUserReqGenderFemale  CreateUserReqGender = "female"
+	CreateUserReqGenderDiverse CreateUserReqGender = "diverse"
+)
+
+type CreateUserReqSex string
+
+const (
+	CreateUserReqSexMale   CreateUserReqSex = "male"
+	CreateUserReqSexFemale CreateUserReqSex = "female"
+)
 
 // DeleteCategoryNoContent is response for DeleteCategory operation.
 type DeleteCategoryNoContent struct{}
@@ -171,6 +188,52 @@ func (ListUserOKApplicationJSON) listUserRes() {}
 type ListUserPetsOKApplicationJSON []UserPetsList
 
 func (ListUserPetsOKApplicationJSON) listUserPetsRes() {}
+
+// NewOptCreateUserReqGender returns new OptCreateUserReqGender with value set to v.
+func NewOptCreateUserReqGender(v CreateUserReqGender) OptCreateUserReqGender {
+	return OptCreateUserReqGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCreateUserReqGender is optional CreateUserReqGender.
+type OptCreateUserReqGender struct {
+	Value CreateUserReqGender
+	Set   bool
+}
+
+// IsSet returns true if OptCreateUserReqGender was set.
+func (o OptCreateUserReqGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCreateUserReqGender) Reset() {
+	var v CreateUserReqGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCreateUserReqGender) SetTo(v CreateUserReqGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCreateUserReqGender) Get() (v CreateUserReqGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCreateUserReqGender) Or(d CreateUserReqGender) CreateUserReqGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
@@ -264,6 +327,98 @@ func (o OptInt) Or(d int) int {
 	return d
 }
 
+// NewOptPetCreateOwnerGender returns new OptPetCreateOwnerGender with value set to v.
+func NewOptPetCreateOwnerGender(v PetCreateOwnerGender) OptPetCreateOwnerGender {
+	return OptPetCreateOwnerGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetCreateOwnerGender is optional PetCreateOwnerGender.
+type OptPetCreateOwnerGender struct {
+	Value PetCreateOwnerGender
+	Set   bool
+}
+
+// IsSet returns true if OptPetCreateOwnerGender was set.
+func (o OptPetCreateOwnerGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetCreateOwnerGender) Reset() {
+	var v PetCreateOwnerGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetCreateOwnerGender) SetTo(v PetCreateOwnerGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetCreateOwnerGender) Get() (v PetCreateOwnerGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetCreateOwnerGender) Or(d PetCreateOwnerGender) PetCreateOwnerGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetOwnerReadGender returns new OptPetOwnerReadGender with value set to v.
+func NewOptPetOwnerReadGender(v PetOwnerReadGender) OptPetOwnerReadGender {
+	return OptPetOwnerReadGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetOwnerReadGender is optional PetOwnerReadGender.
+type OptPetOwnerReadGender struct {
+	Value PetOwnerReadGender
+	Set   bool
+}
+
+// IsSet returns true if OptPetOwnerReadGender was set.
+func (o OptPetOwnerReadGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetOwnerReadGender) Reset() {
+	var v PetOwnerReadGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetOwnerReadGender) SetTo(v PetOwnerReadGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetOwnerReadGender) Get() (v PetOwnerReadGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetOwnerReadGender) Or(d PetOwnerReadGender) PetOwnerReadGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -310,6 +465,328 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptUpdateUserReqGender returns new OptUpdateUserReqGender with value set to v.
+func NewOptUpdateUserReqGender(v UpdateUserReqGender) OptUpdateUserReqGender {
+	return OptUpdateUserReqGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateUserReqGender is optional UpdateUserReqGender.
+type OptUpdateUserReqGender struct {
+	Value UpdateUserReqGender
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateUserReqGender was set.
+func (o OptUpdateUserReqGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateUserReqGender) Reset() {
+	var v UpdateUserReqGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateUserReqGender) SetTo(v UpdateUserReqGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateUserReqGender) Get() (v UpdateUserReqGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateUserReqGender) Or(d UpdateUserReqGender) UpdateUserReqGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUpdateUserReqSex returns new OptUpdateUserReqSex with value set to v.
+func NewOptUpdateUserReqSex(v UpdateUserReqSex) OptUpdateUserReqSex {
+	return OptUpdateUserReqSex{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateUserReqSex is optional UpdateUserReqSex.
+type OptUpdateUserReqSex struct {
+	Value UpdateUserReqSex
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateUserReqSex was set.
+func (o OptUpdateUserReqSex) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateUserReqSex) Reset() {
+	var v UpdateUserReqSex
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateUserReqSex) SetTo(v UpdateUserReqSex) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateUserReqSex) Get() (v UpdateUserReqSex, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateUserReqSex) Or(d UpdateUserReqSex) UpdateUserReqSex {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserBestFriendReadGender returns new OptUserBestFriendReadGender with value set to v.
+func NewOptUserBestFriendReadGender(v UserBestFriendReadGender) OptUserBestFriendReadGender {
+	return OptUserBestFriendReadGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserBestFriendReadGender is optional UserBestFriendReadGender.
+type OptUserBestFriendReadGender struct {
+	Value UserBestFriendReadGender
+	Set   bool
+}
+
+// IsSet returns true if OptUserBestFriendReadGender was set.
+func (o OptUserBestFriendReadGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserBestFriendReadGender) Reset() {
+	var v UserBestFriendReadGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserBestFriendReadGender) SetTo(v UserBestFriendReadGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserBestFriendReadGender) Get() (v UserBestFriendReadGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserBestFriendReadGender) Or(d UserBestFriendReadGender) UserBestFriendReadGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserCreateGender returns new OptUserCreateGender with value set to v.
+func NewOptUserCreateGender(v UserCreateGender) OptUserCreateGender {
+	return OptUserCreateGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserCreateGender is optional UserCreateGender.
+type OptUserCreateGender struct {
+	Value UserCreateGender
+	Set   bool
+}
+
+// IsSet returns true if OptUserCreateGender was set.
+func (o OptUserCreateGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserCreateGender) Reset() {
+	var v UserCreateGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserCreateGender) SetTo(v UserCreateGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserCreateGender) Get() (v UserCreateGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserCreateGender) Or(d UserCreateGender) UserCreateGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserListGender returns new OptUserListGender with value set to v.
+func NewOptUserListGender(v UserListGender) OptUserListGender {
+	return OptUserListGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserListGender is optional UserListGender.
+type OptUserListGender struct {
+	Value UserListGender
+	Set   bool
+}
+
+// IsSet returns true if OptUserListGender was set.
+func (o OptUserListGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserListGender) Reset() {
+	var v UserListGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserListGender) SetTo(v UserListGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserListGender) Get() (v UserListGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserListGender) Or(d UserListGender) UserListGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserReadGender returns new OptUserReadGender with value set to v.
+func NewOptUserReadGender(v UserReadGender) OptUserReadGender {
+	return OptUserReadGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserReadGender is optional UserReadGender.
+type OptUserReadGender struct {
+	Value UserReadGender
+	Set   bool
+}
+
+// IsSet returns true if OptUserReadGender was set.
+func (o OptUserReadGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserReadGender) Reset() {
+	var v UserReadGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserReadGender) SetTo(v UserReadGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserReadGender) Get() (v UserReadGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserReadGender) Or(d UserReadGender) UserReadGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserUpdateGender returns new OptUserUpdateGender with value set to v.
+func NewOptUserUpdateGender(v UserUpdateGender) OptUserUpdateGender {
+	return OptUserUpdateGender{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserUpdateGender is optional UserUpdateGender.
+type OptUserUpdateGender struct {
+	Value UserUpdateGender
+	Set   bool
+}
+
+// IsSet returns true if OptUserUpdateGender was set.
+func (o OptUserUpdateGender) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserUpdateGender) Reset() {
+	var v UserUpdateGender
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserUpdateGender) SetTo(v UserUpdateGender) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserUpdateGender) Get() (v UserUpdateGender, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserUpdateGender) Or(d UserUpdateGender) UserUpdateGender {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #/components/schemas/Pet_CategoriesList
 type PetCategoriesList struct {
 	ID   int    "json:\"id\""
@@ -336,10 +813,27 @@ type PetCreateCategories struct {
 
 // Ref: #/components/schemas/PetCreate_Owner
 type PetCreateOwner struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int                     "json:\"id\""
+	Name   string                  "json:\"name\""
+	Age    int                     "json:\"age\""
+	Sex    PetCreateOwnerSex       "json:\"sex\""
+	Gender OptPetCreateOwnerGender "json:\"gender\""
 }
+
+type PetCreateOwnerGender string
+
+const (
+	PetCreateOwnerGenderMale    PetCreateOwnerGender = "male"
+	PetCreateOwnerGenderFemale  PetCreateOwnerGender = "female"
+	PetCreateOwnerGenderDiverse PetCreateOwnerGender = "diverse"
+)
+
+type PetCreateOwnerSex string
+
+const (
+	PetCreateOwnerSexMale   PetCreateOwnerSex = "male"
+	PetCreateOwnerSexFemale PetCreateOwnerSex = "female"
+)
 
 // Ref: #/components/schemas/Pet_FriendsList
 type PetFriendsList struct {
@@ -359,12 +853,29 @@ type PetList struct {
 
 // Ref: #/components/schemas/Pet_OwnerRead
 type PetOwnerRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int                   "json:\"id\""
+	Name   string                "json:\"name\""
+	Age    int                   "json:\"age\""
+	Sex    PetOwnerReadSex       "json:\"sex\""
+	Gender OptPetOwnerReadGender "json:\"gender\""
 }
 
 func (*PetOwnerRead) readPetOwnerRes() {}
+
+type PetOwnerReadGender string
+
+const (
+	PetOwnerReadGenderMale    PetOwnerReadGender = "male"
+	PetOwnerReadGenderFemale  PetOwnerReadGender = "female"
+	PetOwnerReadGenderDiverse PetOwnerReadGender = "diverse"
+)
+
+type PetOwnerReadSex string
+
+const (
+	PetOwnerReadSexMale   PetOwnerReadSex = "male"
+	PetOwnerReadSexFemale PetOwnerReadSex = "female"
+)
 
 // Ref: #/components/schemas/PetRead
 type PetRead struct {
@@ -510,36 +1021,104 @@ type UpdatePetReq struct {
 }
 
 type UpdateUserReq struct {
-	Name       OptString "json:\"name\""
-	Age        OptInt    "json:\"age\""
-	Pets       []int     "json:\"pets\""
-	BestFriend OptInt    "json:\"best_friend\""
+	Name       OptString              "json:\"name\""
+	Age        OptInt                 "json:\"age\""
+	Sex        OptUpdateUserReqSex    "json:\"sex\""
+	Gender     OptUpdateUserReqGender "json:\"gender\""
+	Pets       []int                  "json:\"pets\""
+	BestFriend OptInt                 "json:\"best_friend\""
 }
+
+type UpdateUserReqGender string
+
+const (
+	UpdateUserReqGenderMale    UpdateUserReqGender = "male"
+	UpdateUserReqGenderFemale  UpdateUserReqGender = "female"
+	UpdateUserReqGenderDiverse UpdateUserReqGender = "diverse"
+)
+
+type UpdateUserReqSex string
+
+const (
+	UpdateUserReqSexMale   UpdateUserReqSex = "male"
+	UpdateUserReqSexFemale UpdateUserReqSex = "female"
+)
 
 // Ref: #/components/schemas/User_BestFriendRead
 type UserBestFriendRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int                         "json:\"id\""
+	Name   string                      "json:\"name\""
+	Age    int                         "json:\"age\""
+	Sex    UserBestFriendReadSex       "json:\"sex\""
+	Gender OptUserBestFriendReadGender "json:\"gender\""
 }
 
 func (*UserBestFriendRead) readUserBestFriendRes() {}
 
+type UserBestFriendReadGender string
+
+const (
+	UserBestFriendReadGenderMale    UserBestFriendReadGender = "male"
+	UserBestFriendReadGenderFemale  UserBestFriendReadGender = "female"
+	UserBestFriendReadGenderDiverse UserBestFriendReadGender = "diverse"
+)
+
+type UserBestFriendReadSex string
+
+const (
+	UserBestFriendReadSexMale   UserBestFriendReadSex = "male"
+	UserBestFriendReadSexFemale UserBestFriendReadSex = "female"
+)
+
 // Ref: #/components/schemas/UserCreate
 type UserCreate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int                 "json:\"id\""
+	Name   string              "json:\"name\""
+	Age    int                 "json:\"age\""
+	Sex    UserCreateSex       "json:\"sex\""
+	Gender OptUserCreateGender "json:\"gender\""
 }
 
 func (*UserCreate) createUserRes() {}
 
+type UserCreateGender string
+
+const (
+	UserCreateGenderMale    UserCreateGender = "male"
+	UserCreateGenderFemale  UserCreateGender = "female"
+	UserCreateGenderDiverse UserCreateGender = "diverse"
+)
+
+type UserCreateSex string
+
+const (
+	UserCreateSexMale   UserCreateSex = "male"
+	UserCreateSexFemale UserCreateSex = "female"
+)
+
 // Ref: #/components/schemas/UserList
 type UserList struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int               "json:\"id\""
+	Name   string            "json:\"name\""
+	Age    int               "json:\"age\""
+	Sex    UserListSex       "json:\"sex\""
+	Gender OptUserListGender "json:\"gender\""
 }
+
+type UserListGender string
+
+const (
+	UserListGenderMale    UserListGender = "male"
+	UserListGenderFemale  UserListGender = "female"
+	UserListGenderDiverse UserListGender = "diverse"
+)
+
+type UserListSex string
+
+const (
+	UserListSexMale   UserListSex = "male"
+	UserListSexFemale UserListSex = "female"
+)
 
 // Ref: #/components/schemas/User_PetsList
 type UserPetsList struct {
@@ -551,18 +1130,52 @@ type UserPetsList struct {
 
 // Ref: #/components/schemas/UserRead
 type UserRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int               "json:\"id\""
+	Name   string            "json:\"name\""
+	Age    int               "json:\"age\""
+	Sex    UserReadSex       "json:\"sex\""
+	Gender OptUserReadGender "json:\"gender\""
 }
 
 func (*UserRead) readUserRes() {}
 
+type UserReadGender string
+
+const (
+	UserReadGenderMale    UserReadGender = "male"
+	UserReadGenderFemale  UserReadGender = "female"
+	UserReadGenderDiverse UserReadGender = "diverse"
+)
+
+type UserReadSex string
+
+const (
+	UserReadSexMale   UserReadSex = "male"
+	UserReadSexFemale UserReadSex = "female"
+)
+
 // Ref: #/components/schemas/UserUpdate
 type UserUpdate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID     int                 "json:\"id\""
+	Name   string              "json:\"name\""
+	Age    int                 "json:\"age\""
+	Sex    UserUpdateSex       "json:\"sex\""
+	Gender OptUserUpdateGender "json:\"gender\""
 }
 
 func (*UserUpdate) updateUserRes() {}
+
+type UserUpdateGender string
+
+const (
+	UserUpdateGenderMale    UserUpdateGender = "male"
+	UserUpdateGenderFemale  UserUpdateGender = "female"
+	UserUpdateGenderDiverse UserUpdateGender = "diverse"
+)
+
+type UserUpdateSex string
+
+const (
+	UserUpdateSexMale   UserUpdateSex = "male"
+	UserUpdateSexFemale UserUpdateSex = "female"
+)

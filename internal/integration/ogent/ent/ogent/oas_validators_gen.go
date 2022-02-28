@@ -70,6 +70,65 @@ var (
 	_ = codes.Unset
 )
 
+func (s CreateUserReq) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s CreateUserReqGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s CreateUserReqSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
 func (s ListCategoryOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
@@ -104,6 +163,23 @@ func (s ListUserOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
 	}
+	var failures []validate.FieldError
+	for i, elem := range s {
+		if err := func() error {
+			if err := elem.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			failures = append(failures, validate.FieldError{
+				Name:  fmt.Sprintf("[%d]", i),
+				Error: err,
+			})
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
 	return nil
 }
 func (s ListUserPetsOKApplicationJSON) Validate() error {
@@ -111,4 +187,503 @@ func (s ListUserPetsOKApplicationJSON) Validate() error {
 		return errors.New("nil is invalid value")
 	}
 	return nil
+}
+
+func (s PetCreate) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Owner.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "owner",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s PetCreateOwner) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s PetCreateOwnerGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetCreateOwnerSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetOwnerRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s PetOwnerReadGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetOwnerReadSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UpdateUserReq) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.Sex.Set {
+			if err := func() error {
+				if err := s.Sex.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UpdateUserReqGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UpdateUserReqSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserBestFriendRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserBestFriendReadGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserBestFriendReadSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserCreate) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserCreateGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserCreateSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserList) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserListGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserListSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserReadGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserReadSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserUpdate) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Sex.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sex",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Gender.Set {
+			if err := func() error {
+				if err := s.Gender.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "gender",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserUpdateGender) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	case "diverse":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserUpdateSex) Validate() error {
+	switch s {
+	case "male":
+		return nil
+	case "female":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }

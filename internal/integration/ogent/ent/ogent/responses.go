@@ -211,9 +211,11 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 		return nil
 	}
 	return &PetCreateOwner{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    PetCreateOwnerSex(e.Sex),
+		Gender: NewOptPetCreateOwnerGender(PetCreateOwnerGender(e.Gender)),
 	}
 }
 
@@ -388,9 +390,11 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 		return nil
 	}
 	return &PetOwnerRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    PetOwnerReadSex(e.Sex),
+		Gender: NewOptPetOwnerReadGender(PetOwnerReadGender(e.Gender)),
 	}
 }
 
@@ -417,9 +421,11 @@ func NewUserCreate(e *ent.User) *UserCreate {
 		return nil
 	}
 	return &UserCreate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    UserCreateSex(e.Sex),
+		Gender: NewOptUserCreateGender(UserCreateGender(e.Gender)),
 	}
 }
 
@@ -446,9 +452,11 @@ func NewUserList(e *ent.User) *UserList {
 		return nil
 	}
 	return &UserList{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    UserListSex(e.Sex),
+		Gender: NewOptUserListGender(UserListGender(e.Gender)),
 	}
 }
 
@@ -475,9 +483,11 @@ func NewUserRead(e *ent.User) *UserRead {
 		return nil
 	}
 	return &UserRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    UserReadSex(e.Sex),
+		Gender: NewOptUserReadGender(UserReadGender(e.Gender)),
 	}
 }
 
@@ -504,9 +514,11 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 		return nil
 	}
 	return &UserUpdate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    UserUpdateSex(e.Sex),
+		Gender: NewOptUserUpdateGender(UserUpdateGender(e.Gender)),
 	}
 }
 
@@ -533,9 +545,11 @@ func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 		return nil
 	}
 	return &UserBestFriendRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:     e.ID,
+		Name:   e.Name,
+		Age:    e.Age,
+		Sex:    UserBestFriendReadSex(e.Sex),
+		Gender: NewOptUserBestFriendReadGender(UserBestFriendReadGender(e.Gender)),
 	}
 }
 
