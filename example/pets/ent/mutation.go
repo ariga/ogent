@@ -9,10 +9,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ariga/ogent/example/pets/ent/category"
-	"github.com/ariga/ogent/example/pets/ent/pet"
-	"github.com/ariga/ogent/example/pets/ent/predicate"
-	"github.com/ariga/ogent/example/pets/ent/user"
+	"ariga.io/ogent/example/pets/ent/category"
+	"ariga.io/ogent/example/pets/ent/pet"
+	"ariga.io/ogent/example/pets/ent/predicate"
+	"ariga.io/ogent/example/pets/ent/user"
 
 	"entgo.io/ent"
 )

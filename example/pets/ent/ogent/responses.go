@@ -2,7 +2,7 @@
 
 package ogent
 
-import "github.com/ariga/ogent/example/pets/ent"
+import "ariga.io/ogent/example/pets/ent"
 
 func NewCategoryCreate(e *ent.Category) *CategoryCreate {
 	if e == nil {

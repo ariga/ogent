@@ -1,64 +1,64 @@
 {{/* gotype: entgo.io/ent/entc/gen.Graph */}}
 
 {{ define "ogent/ogent" }}
-	{{- with extend $ "Package" "ogent" }}{{ template "header" . }}{{ end }}
-	{{- $pkg := base $.Config.Package }}
+    {{- with extend $ "Package" "ogent" }}{{ template "header" . }}{{ end }}
+    {{- $pkg := base $.Config.Package }}
 
-	import (
-		"context"
-		"net/http"
+    import (
+    "context"
+    "net/http"
 
-		"{{ $.Config.Package }}"
-	)
+    "{{ $.Config.Package }}"
+    )
 
-	// OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
-	type OgentHandler struct {
-		client *{{ $pkg }}.Client
-	}
+    // OgentHandler implements the ogen generated Handler interface and uses Ent as data layer.
+    type OgentHandler struct {
+    client *{{ $pkg }}.Client
+    }
 
-	// NewOgentHandler returns a new OgentHandler.
-	func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
+    // NewOgentHandler returns a new OgentHandler.
+    func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
 
-	// rawError renders err as json string.
-	func rawError(err error) jx.Raw {
-		var e jx.Encoder
-		e.Str(err.Error())
-		return e.Bytes()
-	}
+    // rawError renders err as json string.
+    func rawError(err error) jx.Raw {
+    var e jx.Encoder
+    e.Str(err.Error())
+    return e.Bytes()
+    }
 
-	{{- range $n := $.Nodes }}
-		{{- $root := print "/" ($n.Name | plural | kebab) }}
-		{{- range $op := nodeOperations $n }}
-			{{- $opID := print ($op | toString | pascal) $n.Name }}
-			// {{ $opID }} handles {{ httpVerb $op }} {{ httpRoute $root $op }} requests.
-			func (h *OgentHandler) {{ $opID }}(ctx context.Context
-				{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}
-				{{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
-				{{- if isCreate $op }}
-					{{- template "ogent/ogent/helper/create" $n -}}
-				{{- else if isRead $op }}
-					{{- template "ogent/ogent/helper/read" $n -}}
-				{{- else if isUpdate $op }}
-					{{- template "ogent/ogent/helper/update" $n -}}
-				{{- else if isDelete $op }}
-					{{- template "ogent/ogent/helper/delete" $n -}}
-				{{- else if isList $op }}
-					{{- template "ogent/ogent/helper/list" $n -}}
-				{{- else }}
-					panic("unimplemented")
-				{{- end }}
-			}
-		{{ end }}
-		{{- range $e := $n.Edges }}
-			{{- range $op := edgeOperations $e }}
-				{{- if or (isRead $op) (isList $op) }}
-					{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
-					// {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
-					func (h *OgentHandler) {{ $opID }}(ctx context.Context, params {{ $opID }}Params) ({{ $opID }}Res, error) {
-						{{- xtemplate (printf "ogent/ogent/helper/%s/sub" $op) (extend $n "Edge" $e) -}}
-					}
-				{{ end }}
-			{{ end }}
-		{{ end }}
-	{{ end }}
+    {{- range $n := $.Nodes }}
+        {{- $root := print "/" ($n.Name | plural | kebab) }}
+        {{- range $op := nodeOperations $n }}
+            {{- $opID := print ($op | toString | pascal) $n.Name }}
+            // {{ $opID }} handles {{ httpVerb $op }} {{ httpRoute $root $op }} requests.
+            func (h *OgentHandler) {{ $opID }}(ctx context.Context
+            {{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}
+            {{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
+            {{- if isCreate $op }}
+                {{- template "ogent/ogent/helper/create" $n -}}
+            {{- else if isRead $op }}
+                {{- template "ogent/ogent/helper/read" $n -}}
+            {{- else if isUpdate $op }}
+                {{- template "ogent/ogent/helper/update" $n -}}
+            {{- else if isDelete $op }}
+                {{- template "ogent/ogent/helper/delete" $n -}}
+            {{- else if isList $op }}
+                {{- template "ogent/ogent/helper/list" $n -}}
+            {{- else }}
+                panic("unimplemented")
+            {{- end }}
+            }
+        {{ end }}
+        {{- range $e := $n.Edges }}
+            {{- range $op := edgeOperations $e }}
+                {{- if or (isRead $op) (isList $op) }}
+                    {{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
+                    // {{ $opID }} handles {{ httpVerb $op }} {{ printf "%s/{id}/%s" $root ($e.Name | kebab) }} requests.
+                    func (h *OgentHandler) {{ $opID }}(ctx context.Context, params {{ $opID }}Params) ({{ $opID }}Res, error) {
+                    {{- xtemplate (printf "ogent/ogent/helper/%s/sub" $op) (extend $n "Edge" $e) -}}
+                    }
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
 {{ end }}

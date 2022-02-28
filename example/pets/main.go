@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"strings"
 
+	"ariga.io/ogent/example/pets/ent"
+	"ariga.io/ogent/example/pets/ent/ogent"
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/ariga/ogent/example/pets/ent"
-	"github.com/ariga/ogent/example/pets/ent/ogent"
 	"github.com/go-faster/jx"
 	_ "github.com/mattn/go-sqlite3"
 )

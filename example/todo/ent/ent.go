@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/example/todo/ent/todo"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/example/todo/ent/todo"
 )
 
 // ent aliases to avoid import conflicts in user's code.

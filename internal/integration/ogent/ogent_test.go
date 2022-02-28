@@ -12,9 +12,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/enttest"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/ogent"
+	"ariga.io/ogent/internal/integration/ogent/ent"
+	"ariga.io/ogent/internal/integration/ogent/ent/enttest"
+	"ariga.io/ogent/internal/integration/ogent/ent/ogent"
 )
 
 func TestOgent(t *testing.T) {

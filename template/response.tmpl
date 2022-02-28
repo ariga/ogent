@@ -1,49 +1,49 @@
 {{/* gotype: entgo.io/ent/entc/gen.Graph */}}
 
 {{ define "ogent/responses" }}
-{{- with extend $ "Package" "ogent" }}{{ template "header" . }}{{ end }}
+    {{- with extend $ "Package" "ogent" }}{{ template "header" . }}{{ end }}
 
-import "{{ $.Config.Package }}"
+    import "{{ $.Config.Package }}"
 
-{{- range $n, $v := $.Config.Annotations.Ogent.Views }}
-    {{- $n = replaceAll $n "_" "" }}
-    {{- $pkg := base $.Config.Package }}
-    func New{{ $n }}(e *{{ $pkg }}.{{ $v.Type.Name }}) *{{ $n }} {
+    {{- range $n, $v := $.Config.Annotations.Ogent.Views }}
+        {{- $n = replaceAll $n "_" "" }}
+        {{- $pkg := base $.Config.Package }}
+        func New{{ $n }}(e *{{ $pkg }}.{{ $v.Type.Name }}) *{{ $n }} {
         if e == nil {
-            return nil
+        return nil
         }
         return &{{ $n }}{
-            {{- range $f := $v.Fields }}
-                {{ setFieldExpr $f "e" }},
-            {{- end }}
-            {{- range $e := $v.Edges }}
-			    {{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
-                {{ $e.StructField }}: New{{ if $e.Unique -}}
-                    {{ $vn }}
-                {{- else -}}
-                    {{ $vn | plural }}
-                {{- end }}(e.Edges.{{ $e.StructField }})
-                {{- if not $e.Optional}}.Elem(){{ end }},
-            {{- end }}
+        {{- range $f := $v.Fields }}
+            {{ setFieldExpr $f "e" }},
+        {{- end }}
+        {{- range $e := $v.Edges }}
+            {{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
+            {{ $e.StructField }}: New{{ if $e.Unique -}}
+                {{ $vn }}
+            {{- else -}}
+                {{ $vn | plural }}
+            {{- end }}(e.Edges.{{ $e.StructField }})
+            {{- if not $e.Optional}}.Elem(){{ end }},
+        {{- end }}
         }
-    }
+        }
 
-    func New{{ $n | plural }}(es []*{{ $pkg }}.{{ $v.Type.Name }}) []{{ $n }} {
+        func New{{ $n | plural }}(es []*{{ $pkg }}.{{ $v.Type.Name }}) []{{ $n }} {
         if len(es) == 0 {
-            return nil
+        return nil
         }
         r := make([]{{ $n }}, len(es))
         for i, e := range es {
-            r[i] = New{{ $n }}(e).Elem()
+        r[i] = New{{ $n }}(e).Elem()
         }
         return r
-    }
-
-	func ({{ $v.Type.Receiver }} *{{ $n }}) Elem() {{ $n }} {
-	    if {{ $v.Type.Receiver }} != nil {
-		    return {{ $n }}{}
         }
-		return *{{ $v.Type.Receiver }}
-	}
-{{ end }}
+
+        func ({{ $v.Type.Receiver }} *{{ $n }}) Elem() {{ $n }} {
+        if {{ $v.Type.Receiver }} != nil {
+        return {{ $n }}{}
+        }
+        return *{{ $v.Type.Receiver }}
+        }
+    {{ end }}
 {{ end }}

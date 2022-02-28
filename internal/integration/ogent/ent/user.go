@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
 )
 
 // User is the model entity for the User schema.

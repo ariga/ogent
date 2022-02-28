@@ -1,4 +1,4 @@
-module github.com/ariga/ogent/example/todo
+module ariga.io/ogent/example/todo
 
 go 1.17
 
@@ -19,7 +19,7 @@ require (
 	ariga.io/atlas v0.3.3 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/ariga/ogent v0.0.0-00010101000000-000000000000 // indirect
+	ariga.io/ogent v0.0.0-00010101000000-000000000000 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/go-logr/logr v1.2.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -40,4 +40,4 @@ require (
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
 
-replace github.com/ariga/ogent => ../../
+replace ariga.io/ogent => ../../

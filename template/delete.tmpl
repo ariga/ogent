@@ -3,9 +3,9 @@
 {{ define "ogent/ogent/helper/delete" }}
     err := h.client.{{ $.Name }}.DeleteOneID(params.{{ $.ID.StructField }}).Exec(ctx)
     {{-
-        template "ogent/ogent/helper/error"
-        extend $
-        "Errors" (list "not-found" "constraint")
+    template "ogent/ogent/helper/error"
+    extend $
+    "Errors" (list "not-found" "constraint")
     -}}
     return new(Delete{{ $.Name }}NoContent), nil
 {{ end }}

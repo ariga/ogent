@@ -6,8 +6,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ariga/ogent/example/todo/ent"
-	"github.com/ariga/ogent/example/todo/ent/todo"
+	"ariga.io/ogent/example/todo/ent"
+	"ariga.io/ogent/example/todo/ent/todo"
 	"github.com/go-faster/jx"
 )
 

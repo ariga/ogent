@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"ariga.io/ogent/example/todo/ent/predicate"
+	"ariga.io/ogent/example/todo/ent/todo"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/todo/ent/predicate"
-	"github.com/ariga/ogent/example/todo/ent/todo"
 )
 
 // TodoDelete is the builder for deleting a Todo entity.

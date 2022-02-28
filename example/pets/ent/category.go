@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
+	"ariga.io/ogent/example/pets/ent/category"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/example/pets/ent/category"
 )
 
 // Category is the model entity for the Category schema.

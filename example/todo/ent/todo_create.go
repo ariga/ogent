@@ -7,9 +7,9 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/example/todo/ent/todo"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/todo/ent/todo"
 )
 
 // TodoCreate is the builder for creating a Todo entity.

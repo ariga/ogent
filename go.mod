@@ -1,4 +1,4 @@
-module github.com/ariga/ogent
+module ariga.io/ogent
 
 go 1.17
 
