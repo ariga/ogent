@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
+	"ariga.io/ogent/example/todo/ent/todo"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/example/todo/ent/todo"
 )
 
 // Todo is the model entity for the Todo schema.

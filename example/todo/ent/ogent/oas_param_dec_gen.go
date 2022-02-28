@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -120,7 +124,7 @@ func decodeListTodoParams(args [0]string, r *http.Request) (ListTodoParams, erro
 			})
 
 			if err := func() error {
-				var paramsPageVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
@@ -132,12 +136,12 @@ func decodeListTodoParams(args [0]string, r *http.Request) (ListTodoParams, erro
 						return err
 					}
 
-					paramsPageVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Page.SetTo(paramsPageVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}(); err != nil {
 				return params, errors.Wrap(err, "query: page: parse")
@@ -155,7 +159,7 @@ func decodeListTodoParams(args [0]string, r *http.Request) (ListTodoParams, erro
 			})
 
 			if err := func() error {
-				var paramsItemsPerPageVal int
+				var paramsDotItemsPerPageVal int
 				if err := func() error {
 					s, err := d.DecodeValue()
 					if err != nil {
@@ -167,12 +171,12 @@ func decodeListTodoParams(args [0]string, r *http.Request) (ListTodoParams, erro
 						return err
 					}
 
-					paramsItemsPerPageVal = c
+					paramsDotItemsPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.ItemsPerPage.SetTo(paramsItemsPerPageVal)
+				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}(); err != nil {
 				return params, errors.Wrap(err, "query: itemsPerPage: parse")

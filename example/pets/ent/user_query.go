@@ -9,12 +9,12 @@ import (
 	"fmt"
 	"math"
 
+	"ariga.io/ogent/example/pets/ent/pet"
+	"ariga.io/ogent/example/pets/ent/predicate"
+	"ariga.io/ogent/example/pets/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/pet"
-	"github.com/ariga/ogent/example/pets/ent/predicate"
-	"github.com/ariga/ogent/example/pets/ent/user"
 )
 
 // UserQuery is the builder for querying User entities.

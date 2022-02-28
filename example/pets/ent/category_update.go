@@ -7,12 +7,12 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/example/pets/ent/category"
+	"ariga.io/ogent/example/pets/ent/pet"
+	"ariga.io/ogent/example/pets/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/category"
-	"github.com/ariga/ogent/example/pets/ent/pet"
-	"github.com/ariga/ogent/example/pets/ent/predicate"
 )
 
 // CategoryUpdate is the builder for updating Category entities.

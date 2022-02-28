@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
 )
 
 // Pet is the model entity for the Pet schema.

@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/ariga/ogent/example/todo/ent/runtime.go
+// The schema-stitching logic is generated in ariga.io/ogent/example/todo/ent/runtime.go
 
 const (
 	Version = "v0.10.0"                                         // Version of ent codegen.

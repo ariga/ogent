@@ -3,9 +3,9 @@
 package category
 
 import (
+	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

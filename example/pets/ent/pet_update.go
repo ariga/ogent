@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"time"
 
+	"ariga.io/ogent/example/pets/ent/category"
+	"ariga.io/ogent/example/pets/ent/pet"
+	"ariga.io/ogent/example/pets/ent/predicate"
+	"ariga.io/ogent/example/pets/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/category"
-	"github.com/ariga/ogent/example/pets/ent/pet"
-	"github.com/ariga/ogent/example/pets/ent/predicate"
-	"github.com/ariga/ogent/example/pets/ent/user"
 )
 
 // PetUpdate is the builder for updating Pet entities.

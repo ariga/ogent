@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -110,7 +114,6 @@ func (s *CreateTodoReq) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "title":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Title = string(v)
@@ -122,7 +125,6 @@ func (s *CreateTodoReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {
@@ -200,7 +202,7 @@ func (s *ListTodoOKApplicationJSON) Decode(d *jx.Decoder) error {
 	}
 	var unwrapped []TodoList
 	if err := func() error {
-		unwrapped = nil
+		unwrapped = make([]TodoList, 0)
 		if err := d.Arr(func(d *jx.Decoder) error {
 			var elem TodoList
 			if err := elem.Decode(d); err != nil {
@@ -232,18 +234,13 @@ func (o *OptBool) Decode(d *jx.Decoder) error {
 	if o == nil {
 		return errors.New("invalid: unable to decode OptBool to nil")
 	}
-	switch d.Next() {
-	case jx.Bool:
-		o.Set = true
-		v, err := d.Bool()
-		if err != nil {
-			return err
-		}
-		o.Value = bool(v)
-		return nil
-	default:
-		return errors.Errorf("unexpected type %q while reading OptBool", d.Next())
+	o.Set = true
+	v, err := d.Bool()
+	if err != nil {
+		return err
 	}
+	o.Value = bool(v)
+	return nil
 }
 
 // Encode encodes string as json.
@@ -259,18 +256,13 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 	if o == nil {
 		return errors.New("invalid: unable to decode OptString to nil")
 	}
-	switch d.Next() {
-	case jx.String:
-		o.Set = true
-		v, err := d.Str()
-		if err != nil {
-			return err
-		}
-		o.Value = string(v)
-		return nil
-	default:
-		return errors.Errorf("unexpected type %q while reading OptString", d.Next())
+	o.Set = true
+	v, err := d.Str()
+	if err != nil {
+		return err
 	}
+	o.Value = string(v)
+	return nil
 }
 
 // Encode implements json.Marshaler.
@@ -325,7 +317,6 @@ func (s *R400) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "code":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.Code = int(v)
@@ -338,7 +329,6 @@ func (s *R400) Decode(d *jx.Decoder) error {
 			}
 		case "status":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Status = string(v)
@@ -350,9 +340,8 @@ func (s *R400) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "errors":
-
 			if err := func() error {
-				v, err := d.Raw()
+				v, err := d.RawAppend(nil)
 				s.Errors = jx.Raw(v)
 				if err != nil {
 					return err
@@ -456,7 +445,6 @@ func (s *R404) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "code":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.Code = int(v)
@@ -469,7 +457,6 @@ func (s *R404) Decode(d *jx.Decoder) error {
 			}
 		case "status":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Status = string(v)
@@ -481,9 +468,8 @@ func (s *R404) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "errors":
-
 			if err := func() error {
-				v, err := d.Raw()
+				v, err := d.RawAppend(nil)
 				s.Errors = jx.Raw(v)
 				if err != nil {
 					return err
@@ -587,7 +573,6 @@ func (s *R409) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "code":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.Code = int(v)
@@ -600,7 +585,6 @@ func (s *R409) Decode(d *jx.Decoder) error {
 			}
 		case "status":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Status = string(v)
@@ -612,9 +596,8 @@ func (s *R409) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "errors":
-
 			if err := func() error {
-				v, err := d.Raw()
+				v, err := d.RawAppend(nil)
 				s.Errors = jx.Raw(v)
 				if err != nil {
 					return err
@@ -718,7 +701,6 @@ func (s *R500) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "code":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.Code = int(v)
@@ -731,7 +713,6 @@ func (s *R500) Decode(d *jx.Decoder) error {
 			}
 		case "status":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Status = string(v)
@@ -743,9 +724,8 @@ func (s *R500) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "errors":
-
 			if err := func() error {
-				v, err := d.Raw()
+				v, err := d.RawAppend(nil)
 				s.Errors = jx.Raw(v)
 				if err != nil {
 					return err
@@ -848,7 +828,6 @@ func (s *TodoCreate) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.ID = int(v)
@@ -861,7 +840,6 @@ func (s *TodoCreate) Decode(d *jx.Decoder) error {
 			}
 		case "title":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Title = string(v)
@@ -873,7 +851,6 @@ func (s *TodoCreate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {
@@ -977,7 +954,6 @@ func (s *TodoList) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.ID = int(v)
@@ -990,7 +966,6 @@ func (s *TodoList) Decode(d *jx.Decoder) error {
 			}
 		case "title":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Title = string(v)
@@ -1002,7 +977,6 @@ func (s *TodoList) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {
@@ -1106,7 +1080,6 @@ func (s *TodoRead) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.ID = int(v)
@@ -1119,7 +1092,6 @@ func (s *TodoRead) Decode(d *jx.Decoder) error {
 			}
 		case "title":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Title = string(v)
@@ -1131,7 +1103,6 @@ func (s *TodoRead) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {
@@ -1235,7 +1206,6 @@ func (s *TodoUpdate) Decode(d *jx.Decoder) error {
 		switch string(k) {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
-
 			if err := func() error {
 				v, err := d.Int()
 				s.ID = int(v)
@@ -1248,7 +1218,6 @@ func (s *TodoUpdate) Decode(d *jx.Decoder) error {
 			}
 		case "title":
 			requiredBitSet[0] |= 1 << 1
-
 			if err := func() error {
 				v, err := d.Str()
 				s.Title = string(v)
@@ -1260,7 +1229,6 @@ func (s *TodoUpdate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {
@@ -1361,7 +1329,6 @@ func (s *UpdateTodoReq) Decode(d *jx.Decoder) error {
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "title":
-
 			if err := func() error {
 				s.Title.Reset()
 				if err := s.Title.Decode(d); err != nil {
@@ -1372,7 +1339,6 @@ func (s *UpdateTodoReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "done":
-
 			if err := func() error {
 				s.Done.Reset()
 				if err := s.Done.Decode(d); err != nil {

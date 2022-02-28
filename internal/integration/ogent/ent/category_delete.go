@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/predicate"
 )
 
 // CategoryDelete is the builder for deleting a Category entity.

@@ -3,8 +3,8 @@
 package todo
 
 import (
+	"ariga.io/ogent/example/todo/ent/predicate"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/example/todo/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

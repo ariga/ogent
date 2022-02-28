@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -67,8 +71,8 @@ var (
 )
 
 type CreateTodoReq struct {
-	Title string  `json:"title"`
-	Done  OptBool `json:"done"`
+	Title string  "json:\"title\""
+	Done  OptBool "json:\"done\""
 }
 
 // DeleteTodoNoContent is response for DeleteTodo operation.
@@ -222,9 +226,9 @@ func (o OptString) Or(d string) string {
 }
 
 type R400 struct {
-	Code   int    `json:"code"`
-	Status string `json:"status"`
-	Errors jx.Raw `json:"errors"`
+	Code   int    "json:\"code\""
+	Status string "json:\"status\""
+	Errors jx.Raw "json:\"errors\""
 }
 
 func (*R400) createTodoRes() {}
@@ -234,9 +238,9 @@ func (*R400) readTodoRes()   {}
 func (*R400) updateTodoRes() {}
 
 type R404 struct {
-	Code   int    `json:"code"`
-	Status string `json:"status"`
-	Errors jx.Raw `json:"errors"`
+	Code   int    "json:\"code\""
+	Status string "json:\"status\""
+	Errors jx.Raw "json:\"errors\""
 }
 
 func (*R404) deleteTodoRes() {}
@@ -245,9 +249,9 @@ func (*R404) readTodoRes()   {}
 func (*R404) updateTodoRes() {}
 
 type R409 struct {
-	Code   int    `json:"code"`
-	Status string `json:"status"`
-	Errors jx.Raw `json:"errors"`
+	Code   int    "json:\"code\""
+	Status string "json:\"status\""
+	Errors jx.Raw "json:\"errors\""
 }
 
 func (*R409) createTodoRes() {}
@@ -257,9 +261,9 @@ func (*R409) readTodoRes()   {}
 func (*R409) updateTodoRes() {}
 
 type R500 struct {
-	Code   int    `json:"code"`
-	Status string `json:"status"`
-	Errors jx.Raw `json:"errors"`
+	Code   int    "json:\"code\""
+	Status string "json:\"status\""
+	Errors jx.Raw "json:\"errors\""
 }
 
 func (*R500) createTodoRes() {}
@@ -270,39 +274,39 @@ func (*R500) updateTodoRes() {}
 
 // Ref: #/components/schemas/TodoCreate
 type TodoCreate struct {
-	ID    int     `json:"id"`
-	Title string  `json:"title"`
-	Done  OptBool `json:"done"`
+	ID    int     "json:\"id\""
+	Title string  "json:\"title\""
+	Done  OptBool "json:\"done\""
 }
 
 func (*TodoCreate) createTodoRes() {}
 
 // Ref: #/components/schemas/TodoList
 type TodoList struct {
-	ID    int     `json:"id"`
-	Title string  `json:"title"`
-	Done  OptBool `json:"done"`
+	ID    int     "json:\"id\""
+	Title string  "json:\"title\""
+	Done  OptBool "json:\"done\""
 }
 
 // Ref: #/components/schemas/TodoRead
 type TodoRead struct {
-	ID    int     `json:"id"`
-	Title string  `json:"title"`
-	Done  OptBool `json:"done"`
+	ID    int     "json:\"id\""
+	Title string  "json:\"title\""
+	Done  OptBool "json:\"done\""
 }
 
 func (*TodoRead) readTodoRes() {}
 
 // Ref: #/components/schemas/TodoUpdate
 type TodoUpdate struct {
-	ID    int     `json:"id"`
-	Title string  `json:"title"`
-	Done  OptBool `json:"done"`
+	ID    int     "json:\"id\""
+	Title string  "json:\"title\""
+	Done  OptBool "json:\"done\""
 }
 
 func (*TodoUpdate) updateTodoRes() {}
 
 type UpdateTodoReq struct {
-	Title OptString `json:"title"`
-	Done  OptBool   `json:"done"`
+	Title OptString "json:\"title\""
+	Done  OptBool   "json:\"done\""
 }

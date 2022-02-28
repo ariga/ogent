@@ -5,9 +5,9 @@ package enttest
 import (
 	"context"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent"
+	"ariga.io/ogent/internal/integration/ogent/ent"
 	// required by schema hooks.
-	_ "github.com/ariga/ogent/internal/integration/ogent/ent/runtime"
+	_ "ariga.io/ogent/internal/integration/ogent/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

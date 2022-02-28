@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -90,6 +94,7 @@ type config struct {
 	MeterProvider  metric.MeterProvider
 	Meter          metric.Meter
 	Client         ht.Client
+	NotFound       http.HandlerFunc
 }
 
 func newConfig(opts ...Option) config {
@@ -97,6 +102,7 @@ func newConfig(opts ...Option) config {
 		TracerProvider: otel.GetTracerProvider(),
 		MeterProvider:  metric.NewNoopMeterProvider(),
 		Client:         http.DefaultClient,
+		NotFound:       http.NotFound,
 	}
 	for _, opt := range opts {
 		opt.apply(&cfg)
@@ -145,6 +151,15 @@ func WithClient(client ht.Client) Option {
 	return optionFunc(func(cfg *config) {
 		if client != nil {
 			cfg.Client = client
+		}
+	})
+}
+
+// WithNotFound specifies http handler to use.
+func WithNotFound(notFound http.HandlerFunc) Option {
+	return optionFunc(func(cfg *config) {
+		if notFound != nil {
+			cfg.NotFound = notFound
 		}
 	})
 }

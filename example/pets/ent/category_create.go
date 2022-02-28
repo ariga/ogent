@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/example/pets/ent/category"
+	"ariga.io/ogent/example/pets/ent/pet"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/category"
-	"github.com/ariga/ogent/example/pets/ent/pet"
 )
 
 // CategoryCreate is the builder for creating a Category entity.

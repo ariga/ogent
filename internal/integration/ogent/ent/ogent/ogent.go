@@ -6,10 +6,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
+	"ariga.io/ogent/internal/integration/ogent/ent"
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"github.com/go-faster/jx"
 )
 

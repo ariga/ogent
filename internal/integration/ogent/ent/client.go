@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent/migrate"
+	"ariga.io/ogent/internal/integration/ogent/ent/migrate"
 
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"time"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
 )
 
 // PetCreate is the builder for creating a Pet entity.

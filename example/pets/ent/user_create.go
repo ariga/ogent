@@ -7,10 +7,10 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/example/pets/ent/pet"
+	"ariga.io/ogent/example/pets/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/pet"
-	"github.com/ariga/ogent/example/pets/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.

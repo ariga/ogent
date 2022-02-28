@@ -9,13 +9,13 @@ import (
 	"fmt"
 	"math"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/predicate"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
 )
 
 // PetQuery is the builder for querying Pet entities.

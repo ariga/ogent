@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"ariga.io/ogent/example/pets/ent/predicate"
+	"ariga.io/ogent/example/pets/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/ariga/ogent/example/pets/ent/predicate"
-	"github.com/ariga/ogent/example/pets/ent/user"
 )
 
 // UserDelete is the builder for deleting a User entity.

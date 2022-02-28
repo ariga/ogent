@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"ariga.io/ogent/example/todo/ent"
+	"ariga.io/ogent/example/todo/ent/ogent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/ariga/ogent/example/todo/ent"
-	"github.com/ariga/ogent/example/todo/ent/ogent"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -37,7 +37,10 @@ func main() {
 		client:       client,
 	}
 	// Start listening.
-	srv := ogent.NewServer(h)
+	srv, err := ogent.NewServer(h)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if err := http.ListenAndServe(":8180", srv); err != nil {
 		log.Fatal(err)
 	}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -109,12 +113,26 @@ type Handler interface {
 type Server struct {
 	h   Handler
 	cfg config
+
+	requests metric.Int64Counter
+	errors   metric.Int64Counter
+	duration metric.Int64Histogram
 }
 
-func NewServer(h Handler, opts ...Option) *Server {
-	srv := &Server{
+func NewServer(h Handler, opts ...Option) (*Server, error) {
+	s := &Server{
 		h:   h,
 		cfg: newConfig(opts...),
 	}
-	return srv
+	var err error
+	if s.requests, err = s.cfg.Meter.NewInt64Counter(otelogen.ServerRequestCount); err != nil {
+		return nil, err
+	}
+	if s.errors, err = s.cfg.Meter.NewInt64Counter(otelogen.ServerErrorsCount); err != nil {
+		return nil, err
+	}
+	if s.duration, err = s.cfg.Meter.NewInt64Histogram(otelogen.ServerDuration); err != nil {
+		return nil, err
+	}
+	return s, nil
 }

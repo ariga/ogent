@@ -6,10 +6,10 @@ package main
 import (
 	"log"
 
+	"ariga.io/ogent"
 	"entgo.io/contrib/entoas"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
-	"github.com/ariga/ogent"
 	"github.com/ogen-go/ogen"
 )
 

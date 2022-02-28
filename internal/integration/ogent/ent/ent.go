@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/category"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/pet"
-	"github.com/ariga/ogent/internal/integration/ogent/ent/user"
 )
 
 // ent aliases to avoid import conflicts in user's code.
