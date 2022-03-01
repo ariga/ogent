@@ -6,6 +6,11 @@ import (
 	"entgo.io/ent/schema/field"
 )
 
+// FishBreed is an enum for the available fish breeds.
+type FishBreed string
+
+func (FishBreed) Values() []string { return []string{"gold", "koi", "shark"} }
+
 // User holds the schema definition for the User entity.
 type User struct {
 	ent.Schema
@@ -20,6 +25,9 @@ func (User) Fields() []ent.Field {
 			Values("siamese", "bengal", "lion", "tiger", "leopard", "other"),
 		field.Enum("favorite_dog_breed").
 			Values("Kuro").
+			Optional(),
+		field.Enum("favorite_fish_breed").
+			GoType(FishBreed("")).
 			Optional(),
 	}
 }

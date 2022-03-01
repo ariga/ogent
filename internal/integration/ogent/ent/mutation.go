@@ -12,6 +12,7 @@ import (
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 
 	"entgo.io/ent"
@@ -1170,23 +1171,24 @@ func (m *PetMutation) ResetEdge(name string) error {
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op                 Op
-	typ                string
-	id                 *int
-	name               *string
-	age                *int
-	addage             *int
-	favorite_cat_breed *user.FavoriteCatBreed
-	favorite_dog_breed *user.FavoriteDogBreed
-	clearedFields      map[string]struct{}
-	pets               map[int]struct{}
-	removedpets        map[int]struct{}
-	clearedpets        bool
-	best_friend        *int
-	clearedbest_friend bool
-	done               bool
-	oldValue           func(context.Context) (*User, error)
-	predicates         []predicate.User
+	op                  Op
+	typ                 string
+	id                  *int
+	name                *string
+	age                 *int
+	addage              *int
+	favorite_cat_breed  *user.FavoriteCatBreed
+	favorite_dog_breed  *user.FavoriteDogBreed
+	favorite_fish_breed *schema.FishBreed
+	clearedFields       map[string]struct{}
+	pets                map[int]struct{}
+	removedpets         map[int]struct{}
+	clearedpets         bool
+	best_friend         *int
+	clearedbest_friend  bool
+	done                bool
+	oldValue            func(context.Context) (*User, error)
+	predicates          []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -1464,6 +1466,55 @@ func (m *UserMutation) ResetFavoriteDogBreed() {
 	delete(m.clearedFields, user.FieldFavoriteDogBreed)
 }
 
+// SetFavoriteFishBreed sets the "favorite_fish_breed" field.
+func (m *UserMutation) SetFavoriteFishBreed(sb schema.FishBreed) {
+	m.favorite_fish_breed = &sb
+}
+
+// FavoriteFishBreed returns the value of the "favorite_fish_breed" field in the mutation.
+func (m *UserMutation) FavoriteFishBreed() (r schema.FishBreed, exists bool) {
+	v := m.favorite_fish_breed
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFavoriteFishBreed returns the old "favorite_fish_breed" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldFavoriteFishBreed(ctx context.Context) (v schema.FishBreed, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFavoriteFishBreed is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFavoriteFishBreed requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFavoriteFishBreed: %w", err)
+	}
+	return oldValue.FavoriteFishBreed, nil
+}
+
+// ClearFavoriteFishBreed clears the value of the "favorite_fish_breed" field.
+func (m *UserMutation) ClearFavoriteFishBreed() {
+	m.favorite_fish_breed = nil
+	m.clearedFields[user.FieldFavoriteFishBreed] = struct{}{}
+}
+
+// FavoriteFishBreedCleared returns if the "favorite_fish_breed" field was cleared in this mutation.
+func (m *UserMutation) FavoriteFishBreedCleared() bool {
+	_, ok := m.clearedFields[user.FieldFavoriteFishBreed]
+	return ok
+}
+
+// ResetFavoriteFishBreed resets all changes to the "favorite_fish_breed" field.
+func (m *UserMutation) ResetFavoriteFishBreed() {
+	m.favorite_fish_breed = nil
+	delete(m.clearedFields, user.FieldFavoriteFishBreed)
+}
+
 // AddPetIDs adds the "pets" edge to the Pet entity by ids.
 func (m *UserMutation) AddPetIDs(ids ...int) {
 	if m.pets == nil {
@@ -1576,7 +1627,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -1588,6 +1639,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.favorite_dog_breed != nil {
 		fields = append(fields, user.FieldFavoriteDogBreed)
+	}
+	if m.favorite_fish_breed != nil {
+		fields = append(fields, user.FieldFavoriteFishBreed)
 	}
 	return fields
 }
@@ -1605,6 +1659,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.FavoriteCatBreed()
 	case user.FieldFavoriteDogBreed:
 		return m.FavoriteDogBreed()
+	case user.FieldFavoriteFishBreed:
+		return m.FavoriteFishBreed()
 	}
 	return nil, false
 }
@@ -1622,6 +1678,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldFavoriteCatBreed(ctx)
 	case user.FieldFavoriteDogBreed:
 		return m.OldFavoriteDogBreed(ctx)
+	case user.FieldFavoriteFishBreed:
+		return m.OldFavoriteFishBreed(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -1658,6 +1716,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFavoriteDogBreed(v)
+		return nil
+	case user.FieldFavoriteFishBreed:
+		v, ok := value.(schema.FishBreed)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFavoriteFishBreed(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -1707,6 +1772,9 @@ func (m *UserMutation) ClearedFields() []string {
 	if m.FieldCleared(user.FieldFavoriteDogBreed) {
 		fields = append(fields, user.FieldFavoriteDogBreed)
 	}
+	if m.FieldCleared(user.FieldFavoriteFishBreed) {
+		fields = append(fields, user.FieldFavoriteFishBreed)
+	}
 	return fields
 }
 
@@ -1723,6 +1791,9 @@ func (m *UserMutation) ClearField(name string) error {
 	switch name {
 	case user.FieldFavoriteDogBreed:
 		m.ClearFavoriteDogBreed()
+		return nil
+	case user.FieldFavoriteFishBreed:
+		m.ClearFavoriteFishBreed()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -1743,6 +1814,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldFavoriteDogBreed:
 		m.ResetFavoriteDogBreed()
+		return nil
+	case user.FieldFavoriteFishBreed:
+		m.ResetFavoriteFishBreed()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

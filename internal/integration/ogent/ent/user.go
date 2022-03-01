@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
 )
@@ -23,6 +24,8 @@ type User struct {
 	FavoriteCatBreed user.FavoriteCatBreed `json:"favorite_cat_breed,omitempty"`
 	// FavoriteDogBreed holds the value of the "favorite_dog_breed" field.
 	FavoriteDogBreed user.FavoriteDogBreed `json:"favorite_dog_breed,omitempty"`
+	// FavoriteFishBreed holds the value of the "favorite_fish_breed" field.
+	FavoriteFishBreed schema.FishBreed `json:"favorite_fish_breed,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the UserQuery when eager-loading is set.
 	Edges            UserEdges `json:"edges"`
@@ -70,7 +73,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldAge:
 			values[i] = new(sql.NullInt64)
-		case user.FieldName, user.FieldFavoriteCatBreed, user.FieldFavoriteDogBreed:
+		case user.FieldName, user.FieldFavoriteCatBreed, user.FieldFavoriteDogBreed, user.FieldFavoriteFishBreed:
 			values[i] = new(sql.NullString)
 		case user.ForeignKeys[0]: // user_best_friend
 			values[i] = new(sql.NullInt64)
@@ -118,6 +121,12 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field favorite_dog_breed", values[i])
 			} else if value.Valid {
 				u.FavoriteDogBreed = user.FavoriteDogBreed(value.String)
+			}
+		case user.FieldFavoriteFishBreed:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favorite_fish_breed", values[i])
+			} else if value.Valid {
+				u.FavoriteFishBreed = schema.FishBreed(value.String)
 			}
 		case user.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -172,6 +181,8 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("%v", u.FavoriteCatBreed))
 	builder.WriteString(", favorite_dog_breed=")
 	builder.WriteString(fmt.Sprintf("%v", u.FavoriteDogBreed))
+	builder.WriteString(", favorite_fish_breed=")
+	builder.WriteString(fmt.Sprintf("%v", u.FavoriteFishBreed))
 	builder.WriteByte(')')
 	return builder.String()
 }

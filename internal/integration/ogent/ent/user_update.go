@@ -9,6 +9,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -70,6 +71,26 @@ func (uu *UserUpdate) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *U
 // ClearFavoriteDogBreed clears the value of the "favorite_dog_breed" field.
 func (uu *UserUpdate) ClearFavoriteDogBreed() *UserUpdate {
 	uu.mutation.ClearFavoriteDogBreed()
+	return uu
+}
+
+// SetFavoriteFishBreed sets the "favorite_fish_breed" field.
+func (uu *UserUpdate) SetFavoriteFishBreed(sb schema.FishBreed) *UserUpdate {
+	uu.mutation.SetFavoriteFishBreed(sb)
+	return uu
+}
+
+// SetNillableFavoriteFishBreed sets the "favorite_fish_breed" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableFavoriteFishBreed(sb *schema.FishBreed) *UserUpdate {
+	if sb != nil {
+		uu.SetFavoriteFishBreed(*sb)
+	}
+	return uu
+}
+
+// ClearFavoriteFishBreed clears the value of the "favorite_fish_breed" field.
+func (uu *UserUpdate) ClearFavoriteFishBreed() *UserUpdate {
+	uu.mutation.ClearFavoriteFishBreed()
 	return uu
 }
 
@@ -211,6 +232,11 @@ func (uu *UserUpdate) check() error {
 			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
+	if v, ok := uu.mutation.FavoriteFishBreed(); ok {
+		if err := user.FavoriteFishBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_fish_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_fish_breed": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -271,6 +297,19 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Column: user.FieldFavoriteDogBreed,
+		})
+	}
+	if value, ok := uu.mutation.FavoriteFishBreed(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteFishBreed,
+		})
+	}
+	if uu.mutation.FavoriteFishBreedCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Column: user.FieldFavoriteFishBreed,
 		})
 	}
 	if uu.mutation.PetsCleared() {
@@ -426,6 +465,26 @@ func (uuo *UserUpdateOne) ClearFavoriteDogBreed() *UserUpdateOne {
 	return uuo
 }
 
+// SetFavoriteFishBreed sets the "favorite_fish_breed" field.
+func (uuo *UserUpdateOne) SetFavoriteFishBreed(sb schema.FishBreed) *UserUpdateOne {
+	uuo.mutation.SetFavoriteFishBreed(sb)
+	return uuo
+}
+
+// SetNillableFavoriteFishBreed sets the "favorite_fish_breed" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableFavoriteFishBreed(sb *schema.FishBreed) *UserUpdateOne {
+	if sb != nil {
+		uuo.SetFavoriteFishBreed(*sb)
+	}
+	return uuo
+}
+
+// ClearFavoriteFishBreed clears the value of the "favorite_fish_breed" field.
+func (uuo *UserUpdateOne) ClearFavoriteFishBreed() *UserUpdateOne {
+	uuo.mutation.ClearFavoriteFishBreed()
+	return uuo
+}
+
 // AddPetIDs adds the "pets" edge to the Pet entity by IDs.
 func (uuo *UserUpdateOne) AddPetIDs(ids ...int) *UserUpdateOne {
 	uuo.mutation.AddPetIDs(ids...)
@@ -571,6 +630,11 @@ func (uuo *UserUpdateOne) check() error {
 			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
+	if v, ok := uuo.mutation.FavoriteFishBreed(); ok {
+		if err := user.FavoriteFishBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_fish_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_fish_breed": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -648,6 +712,19 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Column: user.FieldFavoriteDogBreed,
+		})
+	}
+	if value, ok := uuo.mutation.FavoriteFishBreed(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteFishBreed,
+		})
+	}
+	if uuo.mutation.FavoriteFishBreedCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Column: user.FieldFavoriteFishBreed,
 		})
 	}
 	if uuo.mutation.PetsCleared() {

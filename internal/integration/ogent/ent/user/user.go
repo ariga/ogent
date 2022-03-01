@@ -4,6 +4,8 @@ package user
 
 import (
 	"fmt"
+
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 )
 
 const (
@@ -19,6 +21,8 @@ const (
 	FieldFavoriteCatBreed = "favorite_cat_breed"
 	// FieldFavoriteDogBreed holds the string denoting the favorite_dog_breed field in the database.
 	FieldFavoriteDogBreed = "favorite_dog_breed"
+	// FieldFavoriteFishBreed holds the string denoting the favorite_fish_breed field in the database.
+	FieldFavoriteFishBreed = "favorite_fish_breed"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
 	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
@@ -45,6 +49,7 @@ var Columns = []string{
 	FieldAge,
 	FieldFavoriteCatBreed,
 	FieldFavoriteDogBreed,
+	FieldFavoriteFishBreed,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "users"
@@ -114,5 +119,15 @@ func FavoriteDogBreedValidator(fdb FavoriteDogBreed) error {
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for favorite_dog_breed field: %q", fdb)
+	}
+}
+
+// FavoriteFishBreedValidator is a validator for the "favorite_fish_breed" field enum values. It is called by the builders before save.
+func FavoriteFishBreedValidator(ffb schema.FishBreed) error {
+	switch ffb {
+	case "gold", "koi", "shark":
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for favorite_fish_breed field: %q", ffb)
 	}
 }

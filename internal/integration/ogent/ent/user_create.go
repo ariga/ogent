@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -48,6 +49,20 @@ func (uc *UserCreate) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserCreate
 func (uc *UserCreate) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *UserCreate {
 	if udb != nil {
 		uc.SetFavoriteDogBreed(*udb)
+	}
+	return uc
+}
+
+// SetFavoriteFishBreed sets the "favorite_fish_breed" field.
+func (uc *UserCreate) SetFavoriteFishBreed(sb schema.FishBreed) *UserCreate {
+	uc.mutation.SetFavoriteFishBreed(sb)
+	return uc
+}
+
+// SetNillableFavoriteFishBreed sets the "favorite_fish_breed" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteFishBreed(sb *schema.FishBreed) *UserCreate {
+	if sb != nil {
+		uc.SetFavoriteFishBreed(*sb)
 	}
 	return uc
 }
@@ -175,6 +190,11 @@ func (uc *UserCreate) check() error {
 			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
+	if v, ok := uc.mutation.FavoriteFishBreed(); ok {
+		if err := user.FavoriteFishBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_fish_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_fish_breed": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -233,6 +253,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldFavoriteDogBreed,
 		})
 		_node.FavoriteDogBreed = value
+	}
+	if value, ok := uc.mutation.FavoriteFishBreed(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteFishBreed,
+		})
+		_node.FavoriteFishBreed = value
 	}
 	if nodes := uc.mutation.PetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

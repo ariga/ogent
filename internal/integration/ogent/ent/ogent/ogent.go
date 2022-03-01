@@ -9,6 +9,7 @@ import (
 	"ariga.io/ogent/internal/integration/ogent/ent"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"github.com/go-faster/jx"
 )
@@ -514,6 +515,9 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
+	if v, ok := req.FavoriteFishBreed.Get(); ok {
+		b.SetFavoriteFishBreed(schema.FishBreed(v))
+	}
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
 	if v, ok := req.BestFriend.Get(); ok {
@@ -591,6 +595,9 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 	}
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
+	}
+	if v, ok := req.FavoriteFishBreed.Get(); ok {
+		b.SetFavoriteFishBreed(schema.FishBreed(v))
 	}
 	// Add all edges.
 	b.ClearPets().AddPetIDs(req.Pets...)
