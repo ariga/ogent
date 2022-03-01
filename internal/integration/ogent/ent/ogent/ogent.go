@@ -32,7 +32,6 @@ func rawError(err error) jx.Raw {
 func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {
 	b := h.client.Category.Create()
 	// Add all fields.
-
 	b.SetName(req.Name)
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
@@ -98,7 +97,6 @@ func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq
 	b := h.client.Category.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {
-
 		b.SetName(v)
 	}
 	// Add all edges.
@@ -232,14 +230,11 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
 	// Add all fields.
-
 	b.SetName(req.Name)
 	if v, ok := req.Weight.Get(); ok {
-
 		b.SetWeight(v)
 	}
 	if v, ok := req.Birthday.Get(); ok {
-
 		b.SetBirthday(v)
 	}
 	// Add all edges.
@@ -370,15 +365,12 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params U
 	b := h.client.Pet.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {
-
 		b.SetName(v)
 	}
 	if v, ok := req.Weight.Get(); ok {
-
 		b.SetWeight(v)
 	}
 	if v, ok := req.Birthday.Get(); ok {
-
 		b.SetBirthday(v)
 	}
 	// Add all edges.
@@ -516,14 +508,10 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error) {
 	b := h.client.User.Create()
 	// Add all fields.
-
 	b.SetName(req.Name)
-
 	b.SetAge(req.Age)
-
 	b.SetFavoriteCatBreed(user.FavoriteCatBreed(req.FavoriteCatBreed))
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
-
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
 	// Add all edges.
@@ -593,19 +581,15 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 	b := h.client.User.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {
-
 		b.SetName(v)
 	}
 	if v, ok := req.Age.Get(); ok {
-
 		b.SetAge(v)
 	}
 	if v, ok := req.FavoriteCatBreed.Get(); ok {
-
 		b.SetFavoriteCatBreed(user.FavoriteCatBreed(v))
 	}
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
-
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
 	// Add all edges.

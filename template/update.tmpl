@@ -6,8 +6,8 @@
 	{{- range $f := $.Fields }}
 		{{- if not $f.Immutable }}
 			if v, ok := req.{{ $f.StructField}}.Get(); ok {
-				{{ $x := "v" }}
-				{{ if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				{{- $x := "v" }}
+				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
 				b.Set{{ $f.StructField }}({{ $x }})
 			}
 		{{- end }}
