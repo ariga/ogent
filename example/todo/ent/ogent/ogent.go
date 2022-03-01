@@ -30,8 +30,10 @@ func rawError(err error) jx.Raw {
 func (h *OgentHandler) CreateTodo(ctx context.Context, req CreateTodoReq) (CreateTodoRes, error) {
 	b := h.client.Todo.Create()
 	// Add all fields.
+
 	b.SetTitle(req.Title)
 	if v, ok := req.Done.Get(); ok {
+
 		b.SetDone(v)
 	}
 	// Add all edges.
@@ -97,9 +99,11 @@ func (h *OgentHandler) UpdateTodo(ctx context.Context, req UpdateTodoReq, params
 	b := h.client.Todo.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Title.Get(); ok {
+
 		b.SetTitle(v)
 	}
 	if v, ok := req.Done.Get(); ok {
+
 		b.SetDone(v)
 	}
 	// Add all edges.

@@ -4,6 +4,7 @@ package user
 
 import (
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -289,6 +290,180 @@ func AgeLT(v int) predicate.User {
 func AgeLTE(v int) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldAge), v))
+	})
+}
+
+// FavoriteCatBreedEQ applies the EQ predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedEQ(v FavoriteCatBreed) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFavoriteCatBreed), v))
+	})
+}
+
+// FavoriteCatBreedNEQ applies the NEQ predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedNEQ(v FavoriteCatBreed) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldFavoriteCatBreed), v))
+	})
+}
+
+// FavoriteCatBreedIn applies the In predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedIn(vs ...FavoriteCatBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldFavoriteCatBreed), v...))
+	})
+}
+
+// FavoriteCatBreedNotIn applies the NotIn predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedNotIn(vs ...FavoriteCatBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldFavoriteCatBreed), v...))
+	})
+}
+
+// FavoriteDogBreedEQ applies the EQ predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedEQ(v FavoriteDogBreed) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFavoriteDogBreed), v))
+	})
+}
+
+// FavoriteDogBreedNEQ applies the NEQ predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNEQ(v FavoriteDogBreed) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldFavoriteDogBreed), v))
+	})
+}
+
+// FavoriteDogBreedIn applies the In predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedIn(vs ...FavoriteDogBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldFavoriteDogBreed), v...))
+	})
+}
+
+// FavoriteDogBreedNotIn applies the NotIn predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNotIn(vs ...FavoriteDogBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldFavoriteDogBreed), v...))
+	})
+}
+
+// FavoriteDogBreedIsNil applies the IsNil predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedIsNil() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldFavoriteDogBreed)))
+	})
+}
+
+// FavoriteDogBreedNotNil applies the NotNil predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNotNil() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldFavoriteDogBreed)))
+	})
+}
+
+// FavoriteFishBreedEQ applies the EQ predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedEQ(v schema.FishBreed) predicate.User {
+	vc := v
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldFavoriteFishBreed), vc))
+	})
+}
+
+// FavoriteFishBreedNEQ applies the NEQ predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedNEQ(v schema.FishBreed) predicate.User {
+	vc := v
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldFavoriteFishBreed), vc))
+	})
+}
+
+// FavoriteFishBreedIn applies the In predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedIn(vs ...schema.FishBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldFavoriteFishBreed), v...))
+	})
+}
+
+// FavoriteFishBreedNotIn applies the NotIn predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedNotIn(vs ...schema.FishBreed) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldFavoriteFishBreed), v...))
+	})
+}
+
+// FavoriteFishBreedIsNil applies the IsNil predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedIsNil() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldFavoriteFishBreed)))
+	})
+}
+
+// FavoriteFishBreedNotNil applies the NotNil predicate on the "favorite_fish_breed" field.
+func FavoriteFishBreedNotNil() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldFavoriteFishBreed)))
 	})
 }
 

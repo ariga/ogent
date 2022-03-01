@@ -2,6 +2,12 @@
 
 package user
 
+import (
+	"fmt"
+
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
+)
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
@@ -11,6 +17,12 @@ const (
 	FieldName = "name"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
+	// FieldFavoriteCatBreed holds the string denoting the favorite_cat_breed field in the database.
+	FieldFavoriteCatBreed = "favorite_cat_breed"
+	// FieldFavoriteDogBreed holds the string denoting the favorite_dog_breed field in the database.
+	FieldFavoriteDogBreed = "favorite_dog_breed"
+	// FieldFavoriteFishBreed holds the string denoting the favorite_fish_breed field in the database.
+	FieldFavoriteFishBreed = "favorite_fish_breed"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
 	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
@@ -35,6 +47,9 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldAge,
+	FieldFavoriteCatBreed,
+	FieldFavoriteDogBreed,
+	FieldFavoriteFishBreed,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "users"
@@ -56,4 +71,63 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
+}
+
+// FavoriteCatBreed defines the type for the "favorite_cat_breed" enum field.
+type FavoriteCatBreed string
+
+// FavoriteCatBreed values.
+const (
+	FavoriteCatBreedSiamese FavoriteCatBreed = "siamese"
+	FavoriteCatBreedBengal  FavoriteCatBreed = "bengal"
+	FavoriteCatBreedLion    FavoriteCatBreed = "lion"
+	FavoriteCatBreedTiger   FavoriteCatBreed = "tiger"
+	FavoriteCatBreedLeopard FavoriteCatBreed = "leopard"
+	FavoriteCatBreedOther   FavoriteCatBreed = "other"
+)
+
+func (fcb FavoriteCatBreed) String() string {
+	return string(fcb)
+}
+
+// FavoriteCatBreedValidator is a validator for the "favorite_cat_breed" field enum values. It is called by the builders before save.
+func FavoriteCatBreedValidator(fcb FavoriteCatBreed) error {
+	switch fcb {
+	case FavoriteCatBreedSiamese, FavoriteCatBreedBengal, FavoriteCatBreedLion, FavoriteCatBreedTiger, FavoriteCatBreedLeopard, FavoriteCatBreedOther:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for favorite_cat_breed field: %q", fcb)
+	}
+}
+
+// FavoriteDogBreed defines the type for the "favorite_dog_breed" enum field.
+type FavoriteDogBreed string
+
+// FavoriteDogBreed values.
+const (
+	FavoriteDogBreedKuro FavoriteDogBreed = "Kuro"
+)
+
+func (fdb FavoriteDogBreed) String() string {
+	return string(fdb)
+}
+
+// FavoriteDogBreedValidator is a validator for the "favorite_dog_breed" field enum values. It is called by the builders before save.
+func FavoriteDogBreedValidator(fdb FavoriteDogBreed) error {
+	switch fdb {
+	case FavoriteDogBreedKuro:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for favorite_dog_breed field: %q", fdb)
+	}
+}
+
+// FavoriteFishBreedValidator is a validator for the "favorite_fish_breed" field enum values. It is called by the builders before save.
+func FavoriteFishBreedValidator(ffb schema.FishBreed) error {
+	switch ffb {
+	case "gold", "koi", "shark":
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for favorite_fish_breed field: %q", ffb)
+	}
 }

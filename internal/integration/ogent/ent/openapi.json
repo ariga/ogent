@@ -860,6 +860,31 @@
                   "age": {
                     "type": "integer"
                   },
+                  "favorite_cat_breed": {
+                    "type": "string",
+                    "enum": [
+                      "siamese",
+                      "bengal",
+                      "lion",
+                      "tiger",
+                      "leopard",
+                      "other"
+                    ]
+                  },
+                  "favorite_dog_breed": {
+                    "type": "string",
+                    "enum": [
+                      "Kuro"
+                    ]
+                  },
+                  "favorite_fish_breed": {
+                    "type": "string",
+                    "enum": [
+                      "gold",
+                      "koi",
+                      "shark"
+                    ]
+                  },
                   "pets": {
                     "type": "array",
                     "items": {
@@ -872,7 +897,8 @@
                 },
                 "required": [
                   "name",
-                  "age"
+                  "age",
+                  "favorite_cat_breed"
                 ]
               }
             }
@@ -1012,6 +1038,31 @@
                   },
                   "age": {
                     "type": "integer"
+                  },
+                  "favorite_cat_breed": {
+                    "type": "string",
+                    "enum": [
+                      "siamese",
+                      "bengal",
+                      "lion",
+                      "tiger",
+                      "leopard",
+                      "other"
+                    ]
+                  },
+                  "favorite_dog_breed": {
+                    "type": "string",
+                    "enum": [
+                      "Kuro"
+                    ]
+                  },
+                  "favorite_fish_breed": {
+                    "type": "string",
+                    "enum": [
+                      "gold",
+                      "koi",
+                      "shark"
+                    ]
                   },
                   "pets": {
                     "type": "array",
@@ -1365,12 +1416,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "PetList": {
@@ -1487,12 +1564,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "User": {
@@ -1507,6 +1610,31 @@
           "age": {
             "type": "integer"
           },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
+          },
           "pets": {
             "type": "array",
             "items": {
@@ -1520,7 +1648,8 @@
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "UserCreate": {
@@ -1534,12 +1663,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "UserList": {
@@ -1553,12 +1708,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "UserRead": {
@@ -1572,12 +1753,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "UserUpdate": {
@@ -1591,12 +1798,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "User_BestFriendRead": {
@@ -1610,12 +1843,38 @@
           },
           "age": {
             "type": "integer"
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
           }
         },
         "required": [
           "id",
           "name",
-          "age"
+          "age",
+          "favorite_cat_breed"
         ]
       },
       "User_PetsList": {

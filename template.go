@@ -22,6 +22,7 @@ var (
 		"eagerLoad":      eagerLoad,
 		"edgeOperations": entoas.EdgeOperations,
 		"edgeViewName":   entoas.EdgeViewName,
+		"convertTo":      convertTo,
 		"hasParams":      hasParams,
 		"hasRequestBody": hasRequestBody,
 		"httpVerb":       httpVerb,
@@ -176,16 +177,27 @@ const (
 )
 
 // setFieldExpr returns a Go expression to set the field on a response.
-func setFieldExpr(f *gen.Field, ident string) (string, error) {
+func setFieldExpr(f *gen.Field, schema, ident string) (string, error) {
 	if !f.Optional {
-		return fmt.Sprintf("%s: %s.%s", f.StructField(), ident, f.StructField()), nil
+		expr := fmt.Sprintf("%s.%s", ident, f.StructField())
+		if f.IsEnum() {
+			expr = convertTo(schema+f.StructField(), expr)
+		}
+		return expr, nil
 	}
 	t, err := entoas.OgenSchema(f)
 	if err != nil {
 		return "", err
 	}
 	buf := new(strings.Builder)
-	fmt.Fprintf(buf, "%s: ", f.StructField())
+	// Enums need special handling.
+	if f.IsEnum() {
+		fmt.Fprintf(buf, "NewOpt%s%s(%s)",
+			schema, f.StructField(),
+			convertTo(schema+f.StructField(), fmt.Sprintf("%s.%s", ident, f.StructField())),
+		)
+		return buf.String(), nil
+	}
 	switch t.Type {
 	case Integer:
 		switch t.Format {
@@ -242,4 +254,8 @@ func setFieldExpr(f *gen.Field, ident string) (string, error) {
 	}
 	fmt.Fprintf(buf, "%s.%s)", ident, f.StructField())
 	return buf.String(), nil
+}
+
+func convertTo(typ, expr string) string {
+	return fmt.Sprintf("%s(%s)", typ, expr)
 }

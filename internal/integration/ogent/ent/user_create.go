@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
+	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,6 +30,40 @@ func (uc *UserCreate) SetName(s string) *UserCreate {
 // SetAge sets the "age" field.
 func (uc *UserCreate) SetAge(i int) *UserCreate {
 	uc.mutation.SetAge(i)
+	return uc
+}
+
+// SetFavoriteCatBreed sets the "favorite_cat_breed" field.
+func (uc *UserCreate) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) *UserCreate {
+	uc.mutation.SetFavoriteCatBreed(ucb)
+	return uc
+}
+
+// SetFavoriteDogBreed sets the "favorite_dog_breed" field.
+func (uc *UserCreate) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserCreate {
+	uc.mutation.SetFavoriteDogBreed(udb)
+	return uc
+}
+
+// SetNillableFavoriteDogBreed sets the "favorite_dog_breed" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *UserCreate {
+	if udb != nil {
+		uc.SetFavoriteDogBreed(*udb)
+	}
+	return uc
+}
+
+// SetFavoriteFishBreed sets the "favorite_fish_breed" field.
+func (uc *UserCreate) SetFavoriteFishBreed(sb schema.FishBreed) *UserCreate {
+	uc.mutation.SetFavoriteFishBreed(sb)
+	return uc
+}
+
+// SetNillableFavoriteFishBreed sets the "favorite_fish_breed" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteFishBreed(sb *schema.FishBreed) *UserCreate {
+	if sb != nil {
+		uc.SetFavoriteFishBreed(*sb)
+	}
 	return uc
 }
 
@@ -142,6 +177,24 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Age(); !ok {
 		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "User.age"`)}
 	}
+	if _, ok := uc.mutation.FavoriteCatBreed(); !ok {
+		return &ValidationError{Name: "favorite_cat_breed", err: errors.New(`ent: missing required field "User.favorite_cat_breed"`)}
+	}
+	if v, ok := uc.mutation.FavoriteCatBreed(); ok {
+		if err := user.FavoriteCatBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_cat_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_cat_breed": %w`, err)}
+		}
+	}
+	if v, ok := uc.mutation.FavoriteDogBreed(); ok {
+		if err := user.FavoriteDogBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
+		}
+	}
+	if v, ok := uc.mutation.FavoriteFishBreed(); ok {
+		if err := user.FavoriteFishBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_fish_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_fish_breed": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -184,6 +237,30 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldAge,
 		})
 		_node.Age = value
+	}
+	if value, ok := uc.mutation.FavoriteCatBreed(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteCatBreed,
+		})
+		_node.FavoriteCatBreed = value
+	}
+	if value, ok := uc.mutation.FavoriteDogBreed(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteDogBreed,
+		})
+		_node.FavoriteDogBreed = value
+	}
+	if value, ok := uc.mutation.FavoriteFishBreed(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeEnum,
+			Value:  value,
+			Column: user.FieldFavoriteFishBreed,
+		})
+		_node.FavoriteFishBreed = value
 	}
 	if nodes := uc.mutation.PetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -14,7 +14,7 @@ import "{{ $.Config.Package }}"
         }
         return &{{ $n }}{
             {{- range $f := $v.Fields }}
-                {{ setFieldExpr $f "e" }},
+                {{ $f.StructField}}: {{ setFieldExpr $f $n "e" }},
             {{- end }}
             {{- range $e := $v.Edges }}
 			    {{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}

@@ -123,11 +123,39 @@ type CreatePetReq struct {
 }
 
 type CreateUserReq struct {
-	Name       string "json:\"name\""
-	Age        int    "json:\"age\""
-	Pets       []int  "json:\"pets\""
-	BestFriend OptInt "json:\"best_friend\""
+	Name              string                            "json:\"name\""
+	Age               int                               "json:\"age\""
+	FavoriteCatBreed  CreateUserReqFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptCreateUserReqFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptCreateUserReqFavoriteFishBreed "json:\"favorite_fish_breed\""
+	Pets              []int                             "json:\"pets\""
+	BestFriend        OptInt                            "json:\"best_friend\""
 }
+
+type CreateUserReqFavoriteCatBreed string
+
+const (
+	CreateUserReqFavoriteCatBreedSiamese CreateUserReqFavoriteCatBreed = "siamese"
+	CreateUserReqFavoriteCatBreedBengal  CreateUserReqFavoriteCatBreed = "bengal"
+	CreateUserReqFavoriteCatBreedLion    CreateUserReqFavoriteCatBreed = "lion"
+	CreateUserReqFavoriteCatBreedTiger   CreateUserReqFavoriteCatBreed = "tiger"
+	CreateUserReqFavoriteCatBreedLeopard CreateUserReqFavoriteCatBreed = "leopard"
+	CreateUserReqFavoriteCatBreedOther   CreateUserReqFavoriteCatBreed = "other"
+)
+
+type CreateUserReqFavoriteDogBreed string
+
+const (
+	CreateUserReqFavoriteDogBreedKuro CreateUserReqFavoriteDogBreed = "Kuro"
+)
+
+type CreateUserReqFavoriteFishBreed string
+
+const (
+	CreateUserReqFavoriteFishBreedGold  CreateUserReqFavoriteFishBreed = "gold"
+	CreateUserReqFavoriteFishBreedKoi   CreateUserReqFavoriteFishBreed = "koi"
+	CreateUserReqFavoriteFishBreedShark CreateUserReqFavoriteFishBreed = "shark"
+)
 
 // DeleteCategoryNoContent is response for DeleteCategory operation.
 type DeleteCategoryNoContent struct{}
@@ -171,6 +199,98 @@ func (ListUserOKApplicationJSON) listUserRes() {}
 type ListUserPetsOKApplicationJSON []UserPetsList
 
 func (ListUserPetsOKApplicationJSON) listUserPetsRes() {}
+
+// NewOptCreateUserReqFavoriteDogBreed returns new OptCreateUserReqFavoriteDogBreed with value set to v.
+func NewOptCreateUserReqFavoriteDogBreed(v CreateUserReqFavoriteDogBreed) OptCreateUserReqFavoriteDogBreed {
+	return OptCreateUserReqFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCreateUserReqFavoriteDogBreed is optional CreateUserReqFavoriteDogBreed.
+type OptCreateUserReqFavoriteDogBreed struct {
+	Value CreateUserReqFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptCreateUserReqFavoriteDogBreed was set.
+func (o OptCreateUserReqFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCreateUserReqFavoriteDogBreed) Reset() {
+	var v CreateUserReqFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCreateUserReqFavoriteDogBreed) SetTo(v CreateUserReqFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCreateUserReqFavoriteDogBreed) Get() (v CreateUserReqFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCreateUserReqFavoriteDogBreed) Or(d CreateUserReqFavoriteDogBreed) CreateUserReqFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCreateUserReqFavoriteFishBreed returns new OptCreateUserReqFavoriteFishBreed with value set to v.
+func NewOptCreateUserReqFavoriteFishBreed(v CreateUserReqFavoriteFishBreed) OptCreateUserReqFavoriteFishBreed {
+	return OptCreateUserReqFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCreateUserReqFavoriteFishBreed is optional CreateUserReqFavoriteFishBreed.
+type OptCreateUserReqFavoriteFishBreed struct {
+	Value CreateUserReqFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptCreateUserReqFavoriteFishBreed was set.
+func (o OptCreateUserReqFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCreateUserReqFavoriteFishBreed) Reset() {
+	var v CreateUserReqFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCreateUserReqFavoriteFishBreed) SetTo(v CreateUserReqFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCreateUserReqFavoriteFishBreed) Get() (v CreateUserReqFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCreateUserReqFavoriteFishBreed) Or(d CreateUserReqFavoriteFishBreed) CreateUserReqFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
@@ -264,6 +384,190 @@ func (o OptInt) Or(d int) int {
 	return d
 }
 
+// NewOptPetCreateOwnerFavoriteDogBreed returns new OptPetCreateOwnerFavoriteDogBreed with value set to v.
+func NewOptPetCreateOwnerFavoriteDogBreed(v PetCreateOwnerFavoriteDogBreed) OptPetCreateOwnerFavoriteDogBreed {
+	return OptPetCreateOwnerFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetCreateOwnerFavoriteDogBreed is optional PetCreateOwnerFavoriteDogBreed.
+type OptPetCreateOwnerFavoriteDogBreed struct {
+	Value PetCreateOwnerFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetCreateOwnerFavoriteDogBreed was set.
+func (o OptPetCreateOwnerFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetCreateOwnerFavoriteDogBreed) Reset() {
+	var v PetCreateOwnerFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetCreateOwnerFavoriteDogBreed) SetTo(v PetCreateOwnerFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetCreateOwnerFavoriteDogBreed) Get() (v PetCreateOwnerFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetCreateOwnerFavoriteDogBreed) Or(d PetCreateOwnerFavoriteDogBreed) PetCreateOwnerFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetCreateOwnerFavoriteFishBreed returns new OptPetCreateOwnerFavoriteFishBreed with value set to v.
+func NewOptPetCreateOwnerFavoriteFishBreed(v PetCreateOwnerFavoriteFishBreed) OptPetCreateOwnerFavoriteFishBreed {
+	return OptPetCreateOwnerFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetCreateOwnerFavoriteFishBreed is optional PetCreateOwnerFavoriteFishBreed.
+type OptPetCreateOwnerFavoriteFishBreed struct {
+	Value PetCreateOwnerFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetCreateOwnerFavoriteFishBreed was set.
+func (o OptPetCreateOwnerFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetCreateOwnerFavoriteFishBreed) Reset() {
+	var v PetCreateOwnerFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetCreateOwnerFavoriteFishBreed) SetTo(v PetCreateOwnerFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetCreateOwnerFavoriteFishBreed) Get() (v PetCreateOwnerFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetCreateOwnerFavoriteFishBreed) Or(d PetCreateOwnerFavoriteFishBreed) PetCreateOwnerFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetOwnerReadFavoriteDogBreed returns new OptPetOwnerReadFavoriteDogBreed with value set to v.
+func NewOptPetOwnerReadFavoriteDogBreed(v PetOwnerReadFavoriteDogBreed) OptPetOwnerReadFavoriteDogBreed {
+	return OptPetOwnerReadFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetOwnerReadFavoriteDogBreed is optional PetOwnerReadFavoriteDogBreed.
+type OptPetOwnerReadFavoriteDogBreed struct {
+	Value PetOwnerReadFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetOwnerReadFavoriteDogBreed was set.
+func (o OptPetOwnerReadFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetOwnerReadFavoriteDogBreed) Reset() {
+	var v PetOwnerReadFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetOwnerReadFavoriteDogBreed) SetTo(v PetOwnerReadFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetOwnerReadFavoriteDogBreed) Get() (v PetOwnerReadFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetOwnerReadFavoriteDogBreed) Or(d PetOwnerReadFavoriteDogBreed) PetOwnerReadFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetOwnerReadFavoriteFishBreed returns new OptPetOwnerReadFavoriteFishBreed with value set to v.
+func NewOptPetOwnerReadFavoriteFishBreed(v PetOwnerReadFavoriteFishBreed) OptPetOwnerReadFavoriteFishBreed {
+	return OptPetOwnerReadFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetOwnerReadFavoriteFishBreed is optional PetOwnerReadFavoriteFishBreed.
+type OptPetOwnerReadFavoriteFishBreed struct {
+	Value PetOwnerReadFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetOwnerReadFavoriteFishBreed was set.
+func (o OptPetOwnerReadFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetOwnerReadFavoriteFishBreed) Reset() {
+	var v PetOwnerReadFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetOwnerReadFavoriteFishBreed) SetTo(v PetOwnerReadFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetOwnerReadFavoriteFishBreed) Get() (v PetOwnerReadFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetOwnerReadFavoriteFishBreed) Or(d PetOwnerReadFavoriteFishBreed) PetOwnerReadFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -310,6 +614,604 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptUpdateUserReqFavoriteCatBreed returns new OptUpdateUserReqFavoriteCatBreed with value set to v.
+func NewOptUpdateUserReqFavoriteCatBreed(v UpdateUserReqFavoriteCatBreed) OptUpdateUserReqFavoriteCatBreed {
+	return OptUpdateUserReqFavoriteCatBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateUserReqFavoriteCatBreed is optional UpdateUserReqFavoriteCatBreed.
+type OptUpdateUserReqFavoriteCatBreed struct {
+	Value UpdateUserReqFavoriteCatBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateUserReqFavoriteCatBreed was set.
+func (o OptUpdateUserReqFavoriteCatBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateUserReqFavoriteCatBreed) Reset() {
+	var v UpdateUserReqFavoriteCatBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateUserReqFavoriteCatBreed) SetTo(v UpdateUserReqFavoriteCatBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateUserReqFavoriteCatBreed) Get() (v UpdateUserReqFavoriteCatBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateUserReqFavoriteCatBreed) Or(d UpdateUserReqFavoriteCatBreed) UpdateUserReqFavoriteCatBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUpdateUserReqFavoriteDogBreed returns new OptUpdateUserReqFavoriteDogBreed with value set to v.
+func NewOptUpdateUserReqFavoriteDogBreed(v UpdateUserReqFavoriteDogBreed) OptUpdateUserReqFavoriteDogBreed {
+	return OptUpdateUserReqFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateUserReqFavoriteDogBreed is optional UpdateUserReqFavoriteDogBreed.
+type OptUpdateUserReqFavoriteDogBreed struct {
+	Value UpdateUserReqFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateUserReqFavoriteDogBreed was set.
+func (o OptUpdateUserReqFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateUserReqFavoriteDogBreed) Reset() {
+	var v UpdateUserReqFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateUserReqFavoriteDogBreed) SetTo(v UpdateUserReqFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateUserReqFavoriteDogBreed) Get() (v UpdateUserReqFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateUserReqFavoriteDogBreed) Or(d UpdateUserReqFavoriteDogBreed) UpdateUserReqFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUpdateUserReqFavoriteFishBreed returns new OptUpdateUserReqFavoriteFishBreed with value set to v.
+func NewOptUpdateUserReqFavoriteFishBreed(v UpdateUserReqFavoriteFishBreed) OptUpdateUserReqFavoriteFishBreed {
+	return OptUpdateUserReqFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateUserReqFavoriteFishBreed is optional UpdateUserReqFavoriteFishBreed.
+type OptUpdateUserReqFavoriteFishBreed struct {
+	Value UpdateUserReqFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateUserReqFavoriteFishBreed was set.
+func (o OptUpdateUserReqFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateUserReqFavoriteFishBreed) Reset() {
+	var v UpdateUserReqFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateUserReqFavoriteFishBreed) SetTo(v UpdateUserReqFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateUserReqFavoriteFishBreed) Get() (v UpdateUserReqFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateUserReqFavoriteFishBreed) Or(d UpdateUserReqFavoriteFishBreed) UpdateUserReqFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserBestFriendReadFavoriteDogBreed returns new OptUserBestFriendReadFavoriteDogBreed with value set to v.
+func NewOptUserBestFriendReadFavoriteDogBreed(v UserBestFriendReadFavoriteDogBreed) OptUserBestFriendReadFavoriteDogBreed {
+	return OptUserBestFriendReadFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserBestFriendReadFavoriteDogBreed is optional UserBestFriendReadFavoriteDogBreed.
+type OptUserBestFriendReadFavoriteDogBreed struct {
+	Value UserBestFriendReadFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserBestFriendReadFavoriteDogBreed was set.
+func (o OptUserBestFriendReadFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserBestFriendReadFavoriteDogBreed) Reset() {
+	var v UserBestFriendReadFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserBestFriendReadFavoriteDogBreed) SetTo(v UserBestFriendReadFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserBestFriendReadFavoriteDogBreed) Get() (v UserBestFriendReadFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserBestFriendReadFavoriteDogBreed) Or(d UserBestFriendReadFavoriteDogBreed) UserBestFriendReadFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserBestFriendReadFavoriteFishBreed returns new OptUserBestFriendReadFavoriteFishBreed with value set to v.
+func NewOptUserBestFriendReadFavoriteFishBreed(v UserBestFriendReadFavoriteFishBreed) OptUserBestFriendReadFavoriteFishBreed {
+	return OptUserBestFriendReadFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserBestFriendReadFavoriteFishBreed is optional UserBestFriendReadFavoriteFishBreed.
+type OptUserBestFriendReadFavoriteFishBreed struct {
+	Value UserBestFriendReadFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserBestFriendReadFavoriteFishBreed was set.
+func (o OptUserBestFriendReadFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserBestFriendReadFavoriteFishBreed) Reset() {
+	var v UserBestFriendReadFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserBestFriendReadFavoriteFishBreed) SetTo(v UserBestFriendReadFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserBestFriendReadFavoriteFishBreed) Get() (v UserBestFriendReadFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserBestFriendReadFavoriteFishBreed) Or(d UserBestFriendReadFavoriteFishBreed) UserBestFriendReadFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserCreateFavoriteDogBreed returns new OptUserCreateFavoriteDogBreed with value set to v.
+func NewOptUserCreateFavoriteDogBreed(v UserCreateFavoriteDogBreed) OptUserCreateFavoriteDogBreed {
+	return OptUserCreateFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserCreateFavoriteDogBreed is optional UserCreateFavoriteDogBreed.
+type OptUserCreateFavoriteDogBreed struct {
+	Value UserCreateFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserCreateFavoriteDogBreed was set.
+func (o OptUserCreateFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserCreateFavoriteDogBreed) Reset() {
+	var v UserCreateFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserCreateFavoriteDogBreed) SetTo(v UserCreateFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserCreateFavoriteDogBreed) Get() (v UserCreateFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserCreateFavoriteDogBreed) Or(d UserCreateFavoriteDogBreed) UserCreateFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserCreateFavoriteFishBreed returns new OptUserCreateFavoriteFishBreed with value set to v.
+func NewOptUserCreateFavoriteFishBreed(v UserCreateFavoriteFishBreed) OptUserCreateFavoriteFishBreed {
+	return OptUserCreateFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserCreateFavoriteFishBreed is optional UserCreateFavoriteFishBreed.
+type OptUserCreateFavoriteFishBreed struct {
+	Value UserCreateFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserCreateFavoriteFishBreed was set.
+func (o OptUserCreateFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserCreateFavoriteFishBreed) Reset() {
+	var v UserCreateFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserCreateFavoriteFishBreed) SetTo(v UserCreateFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserCreateFavoriteFishBreed) Get() (v UserCreateFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserCreateFavoriteFishBreed) Or(d UserCreateFavoriteFishBreed) UserCreateFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserListFavoriteDogBreed returns new OptUserListFavoriteDogBreed with value set to v.
+func NewOptUserListFavoriteDogBreed(v UserListFavoriteDogBreed) OptUserListFavoriteDogBreed {
+	return OptUserListFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserListFavoriteDogBreed is optional UserListFavoriteDogBreed.
+type OptUserListFavoriteDogBreed struct {
+	Value UserListFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserListFavoriteDogBreed was set.
+func (o OptUserListFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserListFavoriteDogBreed) Reset() {
+	var v UserListFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserListFavoriteDogBreed) SetTo(v UserListFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserListFavoriteDogBreed) Get() (v UserListFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserListFavoriteDogBreed) Or(d UserListFavoriteDogBreed) UserListFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserListFavoriteFishBreed returns new OptUserListFavoriteFishBreed with value set to v.
+func NewOptUserListFavoriteFishBreed(v UserListFavoriteFishBreed) OptUserListFavoriteFishBreed {
+	return OptUserListFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserListFavoriteFishBreed is optional UserListFavoriteFishBreed.
+type OptUserListFavoriteFishBreed struct {
+	Value UserListFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserListFavoriteFishBreed was set.
+func (o OptUserListFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserListFavoriteFishBreed) Reset() {
+	var v UserListFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserListFavoriteFishBreed) SetTo(v UserListFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserListFavoriteFishBreed) Get() (v UserListFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserListFavoriteFishBreed) Or(d UserListFavoriteFishBreed) UserListFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserReadFavoriteDogBreed returns new OptUserReadFavoriteDogBreed with value set to v.
+func NewOptUserReadFavoriteDogBreed(v UserReadFavoriteDogBreed) OptUserReadFavoriteDogBreed {
+	return OptUserReadFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserReadFavoriteDogBreed is optional UserReadFavoriteDogBreed.
+type OptUserReadFavoriteDogBreed struct {
+	Value UserReadFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserReadFavoriteDogBreed was set.
+func (o OptUserReadFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserReadFavoriteDogBreed) Reset() {
+	var v UserReadFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserReadFavoriteDogBreed) SetTo(v UserReadFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserReadFavoriteDogBreed) Get() (v UserReadFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserReadFavoriteDogBreed) Or(d UserReadFavoriteDogBreed) UserReadFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserReadFavoriteFishBreed returns new OptUserReadFavoriteFishBreed with value set to v.
+func NewOptUserReadFavoriteFishBreed(v UserReadFavoriteFishBreed) OptUserReadFavoriteFishBreed {
+	return OptUserReadFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserReadFavoriteFishBreed is optional UserReadFavoriteFishBreed.
+type OptUserReadFavoriteFishBreed struct {
+	Value UserReadFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserReadFavoriteFishBreed was set.
+func (o OptUserReadFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserReadFavoriteFishBreed) Reset() {
+	var v UserReadFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserReadFavoriteFishBreed) SetTo(v UserReadFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserReadFavoriteFishBreed) Get() (v UserReadFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserReadFavoriteFishBreed) Or(d UserReadFavoriteFishBreed) UserReadFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserUpdateFavoriteDogBreed returns new OptUserUpdateFavoriteDogBreed with value set to v.
+func NewOptUserUpdateFavoriteDogBreed(v UserUpdateFavoriteDogBreed) OptUserUpdateFavoriteDogBreed {
+	return OptUserUpdateFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserUpdateFavoriteDogBreed is optional UserUpdateFavoriteDogBreed.
+type OptUserUpdateFavoriteDogBreed struct {
+	Value UserUpdateFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserUpdateFavoriteDogBreed was set.
+func (o OptUserUpdateFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserUpdateFavoriteDogBreed) Reset() {
+	var v UserUpdateFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserUpdateFavoriteDogBreed) SetTo(v UserUpdateFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserUpdateFavoriteDogBreed) Get() (v UserUpdateFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserUpdateFavoriteDogBreed) Or(d UserUpdateFavoriteDogBreed) UserUpdateFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUserUpdateFavoriteFishBreed returns new OptUserUpdateFavoriteFishBreed with value set to v.
+func NewOptUserUpdateFavoriteFishBreed(v UserUpdateFavoriteFishBreed) OptUserUpdateFavoriteFishBreed {
+	return OptUserUpdateFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUserUpdateFavoriteFishBreed is optional UserUpdateFavoriteFishBreed.
+type OptUserUpdateFavoriteFishBreed struct {
+	Value UserUpdateFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptUserUpdateFavoriteFishBreed was set.
+func (o OptUserUpdateFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUserUpdateFavoriteFishBreed) Reset() {
+	var v UserUpdateFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUserUpdateFavoriteFishBreed) SetTo(v UserUpdateFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUserUpdateFavoriteFishBreed) Get() (v UserUpdateFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUserUpdateFavoriteFishBreed) Or(d UserUpdateFavoriteFishBreed) UserUpdateFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #/components/schemas/Pet_CategoriesList
 type PetCategoriesList struct {
 	ID   int    "json:\"id\""
@@ -336,10 +1238,38 @@ type PetCreateCategories struct {
 
 // Ref: #/components/schemas/PetCreate_Owner
 type PetCreateOwner struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                                "json:\"id\""
+	Name              string                             "json:\"name\""
+	Age               int                                "json:\"age\""
+	FavoriteCatBreed  PetCreateOwnerFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptPetCreateOwnerFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptPetCreateOwnerFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
+
+type PetCreateOwnerFavoriteCatBreed string
+
+const (
+	PetCreateOwnerFavoriteCatBreedSiamese PetCreateOwnerFavoriteCatBreed = "siamese"
+	PetCreateOwnerFavoriteCatBreedBengal  PetCreateOwnerFavoriteCatBreed = "bengal"
+	PetCreateOwnerFavoriteCatBreedLion    PetCreateOwnerFavoriteCatBreed = "lion"
+	PetCreateOwnerFavoriteCatBreedTiger   PetCreateOwnerFavoriteCatBreed = "tiger"
+	PetCreateOwnerFavoriteCatBreedLeopard PetCreateOwnerFavoriteCatBreed = "leopard"
+	PetCreateOwnerFavoriteCatBreedOther   PetCreateOwnerFavoriteCatBreed = "other"
+)
+
+type PetCreateOwnerFavoriteDogBreed string
+
+const (
+	PetCreateOwnerFavoriteDogBreedKuro PetCreateOwnerFavoriteDogBreed = "Kuro"
+)
+
+type PetCreateOwnerFavoriteFishBreed string
+
+const (
+	PetCreateOwnerFavoriteFishBreedGold  PetCreateOwnerFavoriteFishBreed = "gold"
+	PetCreateOwnerFavoriteFishBreedKoi   PetCreateOwnerFavoriteFishBreed = "koi"
+	PetCreateOwnerFavoriteFishBreedShark PetCreateOwnerFavoriteFishBreed = "shark"
+)
 
 // Ref: #/components/schemas/Pet_FriendsList
 type PetFriendsList struct {
@@ -359,12 +1289,40 @@ type PetList struct {
 
 // Ref: #/components/schemas/Pet_OwnerRead
 type PetOwnerRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                              "json:\"id\""
+	Name              string                           "json:\"name\""
+	Age               int                              "json:\"age\""
+	FavoriteCatBreed  PetOwnerReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptPetOwnerReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptPetOwnerReadFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
 
 func (*PetOwnerRead) readPetOwnerRes() {}
+
+type PetOwnerReadFavoriteCatBreed string
+
+const (
+	PetOwnerReadFavoriteCatBreedSiamese PetOwnerReadFavoriteCatBreed = "siamese"
+	PetOwnerReadFavoriteCatBreedBengal  PetOwnerReadFavoriteCatBreed = "bengal"
+	PetOwnerReadFavoriteCatBreedLion    PetOwnerReadFavoriteCatBreed = "lion"
+	PetOwnerReadFavoriteCatBreedTiger   PetOwnerReadFavoriteCatBreed = "tiger"
+	PetOwnerReadFavoriteCatBreedLeopard PetOwnerReadFavoriteCatBreed = "leopard"
+	PetOwnerReadFavoriteCatBreedOther   PetOwnerReadFavoriteCatBreed = "other"
+)
+
+type PetOwnerReadFavoriteDogBreed string
+
+const (
+	PetOwnerReadFavoriteDogBreedKuro PetOwnerReadFavoriteDogBreed = "Kuro"
+)
+
+type PetOwnerReadFavoriteFishBreed string
+
+const (
+	PetOwnerReadFavoriteFishBreedGold  PetOwnerReadFavoriteFishBreed = "gold"
+	PetOwnerReadFavoriteFishBreedKoi   PetOwnerReadFavoriteFishBreed = "koi"
+	PetOwnerReadFavoriteFishBreedShark PetOwnerReadFavoriteFishBreed = "shark"
+)
 
 // Ref: #/components/schemas/PetRead
 type PetRead struct {
@@ -510,36 +1468,148 @@ type UpdatePetReq struct {
 }
 
 type UpdateUserReq struct {
-	Name       OptString "json:\"name\""
-	Age        OptInt    "json:\"age\""
-	Pets       []int     "json:\"pets\""
-	BestFriend OptInt    "json:\"best_friend\""
+	Name              OptString                         "json:\"name\""
+	Age               OptInt                            "json:\"age\""
+	FavoriteCatBreed  OptUpdateUserReqFavoriteCatBreed  "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUpdateUserReqFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUpdateUserReqFavoriteFishBreed "json:\"favorite_fish_breed\""
+	Pets              []int                             "json:\"pets\""
+	BestFriend        OptInt                            "json:\"best_friend\""
 }
+
+type UpdateUserReqFavoriteCatBreed string
+
+const (
+	UpdateUserReqFavoriteCatBreedSiamese UpdateUserReqFavoriteCatBreed = "siamese"
+	UpdateUserReqFavoriteCatBreedBengal  UpdateUserReqFavoriteCatBreed = "bengal"
+	UpdateUserReqFavoriteCatBreedLion    UpdateUserReqFavoriteCatBreed = "lion"
+	UpdateUserReqFavoriteCatBreedTiger   UpdateUserReqFavoriteCatBreed = "tiger"
+	UpdateUserReqFavoriteCatBreedLeopard UpdateUserReqFavoriteCatBreed = "leopard"
+	UpdateUserReqFavoriteCatBreedOther   UpdateUserReqFavoriteCatBreed = "other"
+)
+
+type UpdateUserReqFavoriteDogBreed string
+
+const (
+	UpdateUserReqFavoriteDogBreedKuro UpdateUserReqFavoriteDogBreed = "Kuro"
+)
+
+type UpdateUserReqFavoriteFishBreed string
+
+const (
+	UpdateUserReqFavoriteFishBreedGold  UpdateUserReqFavoriteFishBreed = "gold"
+	UpdateUserReqFavoriteFishBreedKoi   UpdateUserReqFavoriteFishBreed = "koi"
+	UpdateUserReqFavoriteFishBreedShark UpdateUserReqFavoriteFishBreed = "shark"
+)
 
 // Ref: #/components/schemas/User_BestFriendRead
 type UserBestFriendRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                                    "json:\"id\""
+	Name              string                                 "json:\"name\""
+	Age               int                                    "json:\"age\""
+	FavoriteCatBreed  UserBestFriendReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUserBestFriendReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUserBestFriendReadFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
 
 func (*UserBestFriendRead) readUserBestFriendRes() {}
 
+type UserBestFriendReadFavoriteCatBreed string
+
+const (
+	UserBestFriendReadFavoriteCatBreedSiamese UserBestFriendReadFavoriteCatBreed = "siamese"
+	UserBestFriendReadFavoriteCatBreedBengal  UserBestFriendReadFavoriteCatBreed = "bengal"
+	UserBestFriendReadFavoriteCatBreedLion    UserBestFriendReadFavoriteCatBreed = "lion"
+	UserBestFriendReadFavoriteCatBreedTiger   UserBestFriendReadFavoriteCatBreed = "tiger"
+	UserBestFriendReadFavoriteCatBreedLeopard UserBestFriendReadFavoriteCatBreed = "leopard"
+	UserBestFriendReadFavoriteCatBreedOther   UserBestFriendReadFavoriteCatBreed = "other"
+)
+
+type UserBestFriendReadFavoriteDogBreed string
+
+const (
+	UserBestFriendReadFavoriteDogBreedKuro UserBestFriendReadFavoriteDogBreed = "Kuro"
+)
+
+type UserBestFriendReadFavoriteFishBreed string
+
+const (
+	UserBestFriendReadFavoriteFishBreedGold  UserBestFriendReadFavoriteFishBreed = "gold"
+	UserBestFriendReadFavoriteFishBreedKoi   UserBestFriendReadFavoriteFishBreed = "koi"
+	UserBestFriendReadFavoriteFishBreedShark UserBestFriendReadFavoriteFishBreed = "shark"
+)
+
 // Ref: #/components/schemas/UserCreate
 type UserCreate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                            "json:\"id\""
+	Name              string                         "json:\"name\""
+	Age               int                            "json:\"age\""
+	FavoriteCatBreed  UserCreateFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUserCreateFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUserCreateFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
 
 func (*UserCreate) createUserRes() {}
 
+type UserCreateFavoriteCatBreed string
+
+const (
+	UserCreateFavoriteCatBreedSiamese UserCreateFavoriteCatBreed = "siamese"
+	UserCreateFavoriteCatBreedBengal  UserCreateFavoriteCatBreed = "bengal"
+	UserCreateFavoriteCatBreedLion    UserCreateFavoriteCatBreed = "lion"
+	UserCreateFavoriteCatBreedTiger   UserCreateFavoriteCatBreed = "tiger"
+	UserCreateFavoriteCatBreedLeopard UserCreateFavoriteCatBreed = "leopard"
+	UserCreateFavoriteCatBreedOther   UserCreateFavoriteCatBreed = "other"
+)
+
+type UserCreateFavoriteDogBreed string
+
+const (
+	UserCreateFavoriteDogBreedKuro UserCreateFavoriteDogBreed = "Kuro"
+)
+
+type UserCreateFavoriteFishBreed string
+
+const (
+	UserCreateFavoriteFishBreedGold  UserCreateFavoriteFishBreed = "gold"
+	UserCreateFavoriteFishBreedKoi   UserCreateFavoriteFishBreed = "koi"
+	UserCreateFavoriteFishBreedShark UserCreateFavoriteFishBreed = "shark"
+)
+
 // Ref: #/components/schemas/UserList
 type UserList struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                          "json:\"id\""
+	Name              string                       "json:\"name\""
+	Age               int                          "json:\"age\""
+	FavoriteCatBreed  UserListFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUserListFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUserListFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
+
+type UserListFavoriteCatBreed string
+
+const (
+	UserListFavoriteCatBreedSiamese UserListFavoriteCatBreed = "siamese"
+	UserListFavoriteCatBreedBengal  UserListFavoriteCatBreed = "bengal"
+	UserListFavoriteCatBreedLion    UserListFavoriteCatBreed = "lion"
+	UserListFavoriteCatBreedTiger   UserListFavoriteCatBreed = "tiger"
+	UserListFavoriteCatBreedLeopard UserListFavoriteCatBreed = "leopard"
+	UserListFavoriteCatBreedOther   UserListFavoriteCatBreed = "other"
+)
+
+type UserListFavoriteDogBreed string
+
+const (
+	UserListFavoriteDogBreedKuro UserListFavoriteDogBreed = "Kuro"
+)
+
+type UserListFavoriteFishBreed string
+
+const (
+	UserListFavoriteFishBreedGold  UserListFavoriteFishBreed = "gold"
+	UserListFavoriteFishBreedKoi   UserListFavoriteFishBreed = "koi"
+	UserListFavoriteFishBreedShark UserListFavoriteFishBreed = "shark"
+)
 
 // Ref: #/components/schemas/User_PetsList
 type UserPetsList struct {
@@ -551,18 +1621,74 @@ type UserPetsList struct {
 
 // Ref: #/components/schemas/UserRead
 type UserRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                          "json:\"id\""
+	Name              string                       "json:\"name\""
+	Age               int                          "json:\"age\""
+	FavoriteCatBreed  UserReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUserReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUserReadFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
 
 func (*UserRead) readUserRes() {}
 
+type UserReadFavoriteCatBreed string
+
+const (
+	UserReadFavoriteCatBreedSiamese UserReadFavoriteCatBreed = "siamese"
+	UserReadFavoriteCatBreedBengal  UserReadFavoriteCatBreed = "bengal"
+	UserReadFavoriteCatBreedLion    UserReadFavoriteCatBreed = "lion"
+	UserReadFavoriteCatBreedTiger   UserReadFavoriteCatBreed = "tiger"
+	UserReadFavoriteCatBreedLeopard UserReadFavoriteCatBreed = "leopard"
+	UserReadFavoriteCatBreedOther   UserReadFavoriteCatBreed = "other"
+)
+
+type UserReadFavoriteDogBreed string
+
+const (
+	UserReadFavoriteDogBreedKuro UserReadFavoriteDogBreed = "Kuro"
+)
+
+type UserReadFavoriteFishBreed string
+
+const (
+	UserReadFavoriteFishBreedGold  UserReadFavoriteFishBreed = "gold"
+	UserReadFavoriteFishBreedKoi   UserReadFavoriteFishBreed = "koi"
+	UserReadFavoriteFishBreedShark UserReadFavoriteFishBreed = "shark"
+)
+
 // Ref: #/components/schemas/UserUpdate
 type UserUpdate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
-	Age  int    "json:\"age\""
+	ID                int                            "json:\"id\""
+	Name              string                         "json:\"name\""
+	Age               int                            "json:\"age\""
+	FavoriteCatBreed  UserUpdateFavoriteCatBreed     "json:\"favorite_cat_breed\""
+	FavoriteDogBreed  OptUserUpdateFavoriteDogBreed  "json:\"favorite_dog_breed\""
+	FavoriteFishBreed OptUserUpdateFavoriteFishBreed "json:\"favorite_fish_breed\""
 }
 
 func (*UserUpdate) updateUserRes() {}
+
+type UserUpdateFavoriteCatBreed string
+
+const (
+	UserUpdateFavoriteCatBreedSiamese UserUpdateFavoriteCatBreed = "siamese"
+	UserUpdateFavoriteCatBreedBengal  UserUpdateFavoriteCatBreed = "bengal"
+	UserUpdateFavoriteCatBreedLion    UserUpdateFavoriteCatBreed = "lion"
+	UserUpdateFavoriteCatBreedTiger   UserUpdateFavoriteCatBreed = "tiger"
+	UserUpdateFavoriteCatBreedLeopard UserUpdateFavoriteCatBreed = "leopard"
+	UserUpdateFavoriteCatBreedOther   UserUpdateFavoriteCatBreed = "other"
+)
+
+type UserUpdateFavoriteDogBreed string
+
+const (
+	UserUpdateFavoriteDogBreedKuro UserUpdateFavoriteDogBreed = "Kuro"
+)
+
+type UserUpdateFavoriteFishBreed string
+
+const (
+	UserUpdateFavoriteFishBreedGold  UserUpdateFavoriteFishBreed = "gold"
+	UserUpdateFavoriteFishBreedKoi   UserUpdateFavoriteFishBreed = "koi"
+	UserUpdateFavoriteFishBreedShark UserUpdateFavoriteFishBreed = "shark"
+)

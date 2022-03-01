@@ -4,10 +4,14 @@
 	{{- range $f := $.Fields }}
 		{{- if $f.Optional }}
 			if v, ok := req.{{ $f.StructField}}.Get(); ok {
-				b.Set{{ $f.StructField }}(v)
+				{{- $x := "v" }}
+				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				b.Set{{ $f.StructField }}({{ $x }})
 			}
 		{{- else }}
-			b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+			{{- $x := print "req." $f.StructField }}
+			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+			b.Set{{ $f.StructField }}({{ $x }})
 		{{- end }}
 	{{- end }}
 	// Add all edges.

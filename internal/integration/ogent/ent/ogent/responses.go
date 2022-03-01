@@ -211,9 +211,12 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 		return nil
 	}
 	return &PetCreateOwner{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  PetCreateOwnerFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptPetCreateOwnerFavoriteDogBreed(PetCreateOwnerFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptPetCreateOwnerFavoriteFishBreed(PetCreateOwnerFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -388,9 +391,12 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 		return nil
 	}
 	return &PetOwnerRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  PetOwnerReadFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptPetOwnerReadFavoriteDogBreed(PetOwnerReadFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptPetOwnerReadFavoriteFishBreed(PetOwnerReadFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -417,9 +423,12 @@ func NewUserCreate(e *ent.User) *UserCreate {
 		return nil
 	}
 	return &UserCreate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  UserCreateFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptUserCreateFavoriteDogBreed(UserCreateFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptUserCreateFavoriteFishBreed(UserCreateFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -446,9 +455,12 @@ func NewUserList(e *ent.User) *UserList {
 		return nil
 	}
 	return &UserList{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  UserListFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptUserListFavoriteDogBreed(UserListFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptUserListFavoriteFishBreed(UserListFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -475,9 +487,12 @@ func NewUserRead(e *ent.User) *UserRead {
 		return nil
 	}
 	return &UserRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  UserReadFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptUserReadFavoriteDogBreed(UserReadFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptUserReadFavoriteFishBreed(UserReadFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -504,9 +519,12 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 		return nil
 	}
 	return &UserUpdate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  UserUpdateFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptUserUpdateFavoriteDogBreed(UserUpdateFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptUserUpdateFavoriteFishBreed(UserUpdateFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 
@@ -533,9 +551,12 @@ func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 		return nil
 	}
 	return &UserBestFriendRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
+		ID:                e.ID,
+		Name:              e.Name,
+		Age:               e.Age,
+		FavoriteCatBreed:  UserBestFriendReadFavoriteCatBreed(e.FavoriteCatBreed),
+		FavoriteDogBreed:  NewOptUserBestFriendReadFavoriteDogBreed(UserBestFriendReadFavoriteDogBreed(e.FavoriteDogBreed)),
+		FavoriteFishBreed: NewOptUserBestFriendReadFavoriteFishBreed(UserBestFriendReadFavoriteFishBreed(e.FavoriteFishBreed)),
 	}
 }
 

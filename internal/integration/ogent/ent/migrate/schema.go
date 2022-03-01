@@ -46,6 +46,9 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
+		{Name: "favorite_cat_breed", Type: field.TypeEnum, Enums: []string{"siamese", "bengal", "lion", "tiger", "leopard", "other"}},
+		{Name: "favorite_dog_breed", Type: field.TypeEnum, Nullable: true, Enums: []string{"Kuro"}},
+		{Name: "favorite_fish_breed", Type: field.TypeEnum, Nullable: true, Enums: []string{"gold", "koi", "shark"}},
 		{Name: "user_best_friend", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -56,7 +59,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "users_users_best_friend",
-				Columns:    []*schema.Column{UsersColumns[3]},
+				Columns:    []*schema.Column{UsersColumns[6]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

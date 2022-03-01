@@ -172,6 +172,14 @@ func decodeCreateUserRequest(r *http.Request, span trace.Span) (req CreateUserRe
 		}(); err != nil {
 			return req, errors.Wrap(err, "decode CreateUser:application/json request")
 		}
+		if err := func() error {
+			if err := request.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			return req, errors.Wrap(err, "validate CreateUser request")
+		}
 		return request, nil
 	default:
 		return req, validate.InvalidContentType(ct)
@@ -279,6 +287,14 @@ func decodeUpdateUserRequest(r *http.Request, span trace.Span) (req UpdateUserRe
 			return nil
 		}(); err != nil {
 			return req, errors.Wrap(err, "decode UpdateUser:application/json request")
+		}
+		if err := func() error {
+			if err := request.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			return req, errors.Wrap(err, "validate UpdateUser request")
 		}
 		return request, nil
 	default:
