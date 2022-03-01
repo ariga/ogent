@@ -292,22 +292,22 @@ func AgeLTE(v int) predicate.User {
 	})
 }
 
-// SexEQ applies the EQ predicate on the "sex" field.
-func SexEQ(v Sex) predicate.User {
+// FavoriteCatBreedEQ applies the EQ predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedEQ(v FavoriteCatBreed) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldSex), v))
+		s.Where(sql.EQ(s.C(FieldFavoriteCatBreed), v))
 	})
 }
 
-// SexNEQ applies the NEQ predicate on the "sex" field.
-func SexNEQ(v Sex) predicate.User {
+// FavoriteCatBreedNEQ applies the NEQ predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedNEQ(v FavoriteCatBreed) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldSex), v))
+		s.Where(sql.NEQ(s.C(FieldFavoriteCatBreed), v))
 	})
 }
 
-// SexIn applies the In predicate on the "sex" field.
-func SexIn(vs ...Sex) predicate.User {
+// FavoriteCatBreedIn applies the In predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedIn(vs ...FavoriteCatBreed) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -319,12 +319,12 @@ func SexIn(vs ...Sex) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldSex), v...))
+		s.Where(sql.In(s.C(FieldFavoriteCatBreed), v...))
 	})
 }
 
-// SexNotIn applies the NotIn predicate on the "sex" field.
-func SexNotIn(vs ...Sex) predicate.User {
+// FavoriteCatBreedNotIn applies the NotIn predicate on the "favorite_cat_breed" field.
+func FavoriteCatBreedNotIn(vs ...FavoriteCatBreed) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -336,26 +336,26 @@ func SexNotIn(vs ...Sex) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldSex), v...))
+		s.Where(sql.NotIn(s.C(FieldFavoriteCatBreed), v...))
 	})
 }
 
-// GenderEQ applies the EQ predicate on the "gender" field.
-func GenderEQ(v Gender) predicate.User {
+// FavoriteDogBreedEQ applies the EQ predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedEQ(v FavoriteDogBreed) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldGender), v))
+		s.Where(sql.EQ(s.C(FieldFavoriteDogBreed), v))
 	})
 }
 
-// GenderNEQ applies the NEQ predicate on the "gender" field.
-func GenderNEQ(v Gender) predicate.User {
+// FavoriteDogBreedNEQ applies the NEQ predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNEQ(v FavoriteDogBreed) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldGender), v))
+		s.Where(sql.NEQ(s.C(FieldFavoriteDogBreed), v))
 	})
 }
 
-// GenderIn applies the In predicate on the "gender" field.
-func GenderIn(vs ...Gender) predicate.User {
+// FavoriteDogBreedIn applies the In predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedIn(vs ...FavoriteDogBreed) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -367,12 +367,12 @@ func GenderIn(vs ...Gender) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldGender), v...))
+		s.Where(sql.In(s.C(FieldFavoriteDogBreed), v...))
 	})
 }
 
-// GenderNotIn applies the NotIn predicate on the "gender" field.
-func GenderNotIn(vs ...Gender) predicate.User {
+// FavoriteDogBreedNotIn applies the NotIn predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNotIn(vs ...FavoriteDogBreed) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -384,21 +384,21 @@ func GenderNotIn(vs ...Gender) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldGender), v...))
+		s.Where(sql.NotIn(s.C(FieldFavoriteDogBreed), v...))
 	})
 }
 
-// GenderIsNil applies the IsNil predicate on the "gender" field.
-func GenderIsNil() predicate.User {
+// FavoriteDogBreedIsNil applies the IsNil predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedIsNil() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldGender)))
+		s.Where(sql.IsNull(s.C(FieldFavoriteDogBreed)))
 	})
 }
 
-// GenderNotNil applies the NotNil predicate on the "gender" field.
-func GenderNotNil() predicate.User {
+// FavoriteDogBreedNotNil applies the NotNil predicate on the "favorite_dog_breed" field.
+func FavoriteDogBreedNotNil() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldGender)))
+		s.Where(sql.NotNull(s.C(FieldFavoriteDogBreed)))
 	})
 }
 

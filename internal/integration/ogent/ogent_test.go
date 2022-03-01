@@ -40,7 +40,7 @@ func (t *testSuite) TestCreate() {
 	t.reqErr(http.StatusConflict, got)
 
 	// OK
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	got, err = t.handler.CreatePet(context.Background(), ogent.CreatePetReq{
 		Name:       "Ariels most loved Leopard",
 		Weight:     ogent.NewOptInt(10),
@@ -60,7 +60,7 @@ func (t *testSuite) TestRead() {
 	t.reqErr(http.StatusNotFound, got)
 
 	// OK
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	pet := t.client.Pet.Create().SetName("First Pet").SetOwner(owner).SaveX(context.Background())
 	pet.Edges.Owner = owner
 	got, err = t.handler.ReadPet(context.Background(), ogent.ReadPetParams{ID: 1})
@@ -75,7 +75,7 @@ func (t *testSuite) TestUpdate() {
 	t.reqErr(http.StatusNotFound, got)
 
 	// OK
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	pet := t.client.Pet.Create().SetName("First Pet").SetOwner(owner).SaveX(context.Background())
 	pet.Edges.Owner = owner
 	got, err = t.handler.UpdatePet(context.Background(), ogent.UpdatePetReq{Name: ogent.NewOptString("The changed name")}, ogent.UpdatePetParams{ID: pet.ID})
@@ -91,7 +91,7 @@ func (t *testSuite) TestDelete() {
 	t.reqErr(http.StatusNotFound, got)
 
 	// OK TODO(masseelch): This should fail with a foreign key exception once https://github.com/ent/ent/pull/1703 gets merged.
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	got, err = t.handler.DeleteUser(context.Background(), ogent.DeleteUserParams{ID: owner.ID})
 	t.Require().NoError(err)
 	t.Require().Equal(new(ogent.DeleteUserNoContent), got)
@@ -133,13 +133,13 @@ func (t *testSuite) TestReadSub() {
 	t.reqErr(http.StatusNotFound, got)
 
 	// R404 - no attached resource
-	ariel := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	ariel := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	got, err = t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{ID: ariel.ID})
 	t.Require().NoError(err)
 	t.reqErr(http.StatusNotFound, got)
 
 	// OK
-	elch := t.client.User.Create().SetName("MasseElch").SetAge(31).SetSex(user.SexMale).SetBestFriend(ariel).SaveX(context.Background())
+	elch := t.client.User.Create().SetName("MasseElch").SetAge(31).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SetBestFriend(ariel).SaveX(context.Background())
 	got, err = t.handler.ReadUserBestFriend(context.Background(), ogent.ReadUserBestFriendParams{ID: ariel.ID})
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewUserBestFriendRead(elch), got)
@@ -151,7 +151,7 @@ func (t *testSuite) TestListSub() {
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(nil), got)
 
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetSex(user.SexMale).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 
 	// OK - no attached resource
 	loner := t.client.Pet.Create().SetName("Lonely Wolf").SetOwner(owner).SaveX(context.Background())

@@ -521,10 +521,10 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 
 	b.SetAge(req.Age)
 
-	b.SetSex(user.Sex(req.Sex))
-	if v, ok := req.Gender.Get(); ok {
+	b.SetFavoriteCatBreed(user.FavoriteCatBreed(req.FavoriteCatBreed))
+	if v, ok := req.FavoriteDogBreed.Get(); ok {
 
-		b.SetGender(user.Gender(v))
+		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
@@ -600,13 +600,13 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 
 		b.SetAge(v)
 	}
-	if v, ok := req.Sex.Get(); ok {
+	if v, ok := req.FavoriteCatBreed.Get(); ok {
 
-		b.SetSex(user.Sex(v))
+		b.SetFavoriteCatBreed(user.FavoriteCatBreed(v))
 	}
-	if v, ok := req.Gender.Get(); ok {
+	if v, ok := req.FavoriteDogBreed.Get(); ok {
 
-		b.SetGender(user.Gender(v))
+		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
 	// Add all edges.
 	b.ClearPets().AddPetIDs(req.Pets...)

@@ -32,22 +32,22 @@ func (uc *UserCreate) SetAge(i int) *UserCreate {
 	return uc
 }
 
-// SetSex sets the "sex" field.
-func (uc *UserCreate) SetSex(u user.Sex) *UserCreate {
-	uc.mutation.SetSex(u)
+// SetFavoriteCatBreed sets the "favorite_cat_breed" field.
+func (uc *UserCreate) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) *UserCreate {
+	uc.mutation.SetFavoriteCatBreed(ucb)
 	return uc
 }
 
-// SetGender sets the "gender" field.
-func (uc *UserCreate) SetGender(u user.Gender) *UserCreate {
-	uc.mutation.SetGender(u)
+// SetFavoriteDogBreed sets the "favorite_dog_breed" field.
+func (uc *UserCreate) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserCreate {
+	uc.mutation.SetFavoriteDogBreed(udb)
 	return uc
 }
 
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (uc *UserCreate) SetNillableGender(u *user.Gender) *UserCreate {
-	if u != nil {
-		uc.SetGender(*u)
+// SetNillableFavoriteDogBreed sets the "favorite_dog_breed" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *UserCreate {
+	if udb != nil {
+		uc.SetFavoriteDogBreed(*udb)
 	}
 	return uc
 }
@@ -162,17 +162,17 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Age(); !ok {
 		return &ValidationError{Name: "age", err: errors.New(`ent: missing required field "User.age"`)}
 	}
-	if _, ok := uc.mutation.Sex(); !ok {
-		return &ValidationError{Name: "sex", err: errors.New(`ent: missing required field "User.sex"`)}
+	if _, ok := uc.mutation.FavoriteCatBreed(); !ok {
+		return &ValidationError{Name: "favorite_cat_breed", err: errors.New(`ent: missing required field "User.favorite_cat_breed"`)}
 	}
-	if v, ok := uc.mutation.Sex(); ok {
-		if err := user.SexValidator(v); err != nil {
-			return &ValidationError{Name: "sex", err: fmt.Errorf(`ent: validator failed for field "User.sex": %w`, err)}
+	if v, ok := uc.mutation.FavoriteCatBreed(); ok {
+		if err := user.FavoriteCatBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_cat_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_cat_breed": %w`, err)}
 		}
 	}
-	if v, ok := uc.mutation.Gender(); ok {
-		if err := user.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
+	if v, ok := uc.mutation.FavoriteDogBreed(); ok {
+		if err := user.FavoriteDogBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
 	return nil
@@ -218,21 +218,21 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		})
 		_node.Age = value
 	}
-	if value, ok := uc.mutation.Sex(); ok {
+	if value, ok := uc.mutation.FavoriteCatBreed(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldSex,
+			Column: user.FieldFavoriteCatBreed,
 		})
-		_node.Sex = value
+		_node.FavoriteCatBreed = value
 	}
-	if value, ok := uc.mutation.Gender(); ok {
+	if value, ok := uc.mutation.FavoriteDogBreed(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldGender,
+			Column: user.FieldFavoriteDogBreed,
 		})
-		_node.Gender = value
+		_node.FavoriteDogBreed = value
 	}
 	if nodes := uc.mutation.PetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -47,29 +47,29 @@ func (uu *UserUpdate) AddAge(i int) *UserUpdate {
 	return uu
 }
 
-// SetSex sets the "sex" field.
-func (uu *UserUpdate) SetSex(u user.Sex) *UserUpdate {
-	uu.mutation.SetSex(u)
+// SetFavoriteCatBreed sets the "favorite_cat_breed" field.
+func (uu *UserUpdate) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) *UserUpdate {
+	uu.mutation.SetFavoriteCatBreed(ucb)
 	return uu
 }
 
-// SetGender sets the "gender" field.
-func (uu *UserUpdate) SetGender(u user.Gender) *UserUpdate {
-	uu.mutation.SetGender(u)
+// SetFavoriteDogBreed sets the "favorite_dog_breed" field.
+func (uu *UserUpdate) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserUpdate {
+	uu.mutation.SetFavoriteDogBreed(udb)
 	return uu
 }
 
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableGender(u *user.Gender) *UserUpdate {
-	if u != nil {
-		uu.SetGender(*u)
+// SetNillableFavoriteDogBreed sets the "favorite_dog_breed" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *UserUpdate {
+	if udb != nil {
+		uu.SetFavoriteDogBreed(*udb)
 	}
 	return uu
 }
 
-// ClearGender clears the value of the "gender" field.
-func (uu *UserUpdate) ClearGender() *UserUpdate {
-	uu.mutation.ClearGender()
+// ClearFavoriteDogBreed clears the value of the "favorite_dog_breed" field.
+func (uu *UserUpdate) ClearFavoriteDogBreed() *UserUpdate {
+	uu.mutation.ClearFavoriteDogBreed()
 	return uu
 }
 
@@ -201,14 +201,14 @@ func (uu *UserUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (uu *UserUpdate) check() error {
-	if v, ok := uu.mutation.Sex(); ok {
-		if err := user.SexValidator(v); err != nil {
-			return &ValidationError{Name: "sex", err: fmt.Errorf(`ent: validator failed for field "User.sex": %w`, err)}
+	if v, ok := uu.mutation.FavoriteCatBreed(); ok {
+		if err := user.FavoriteCatBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_cat_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_cat_breed": %w`, err)}
 		}
 	}
-	if v, ok := uu.mutation.Gender(); ok {
-		if err := user.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
+	if v, ok := uu.mutation.FavoriteDogBreed(); ok {
+		if err := user.FavoriteDogBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
 	return nil
@@ -253,24 +253,24 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldAge,
 		})
 	}
-	if value, ok := uu.mutation.Sex(); ok {
+	if value, ok := uu.mutation.FavoriteCatBreed(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldSex,
+			Column: user.FieldFavoriteCatBreed,
 		})
 	}
-	if value, ok := uu.mutation.Gender(); ok {
+	if value, ok := uu.mutation.FavoriteDogBreed(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldGender,
+			Column: user.FieldFavoriteDogBreed,
 		})
 	}
-	if uu.mutation.GenderCleared() {
+	if uu.mutation.FavoriteDogBreedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
-			Column: user.FieldGender,
+			Column: user.FieldFavoriteDogBreed,
 		})
 	}
 	if uu.mutation.PetsCleared() {
@@ -400,29 +400,29 @@ func (uuo *UserUpdateOne) AddAge(i int) *UserUpdateOne {
 	return uuo
 }
 
-// SetSex sets the "sex" field.
-func (uuo *UserUpdateOne) SetSex(u user.Sex) *UserUpdateOne {
-	uuo.mutation.SetSex(u)
+// SetFavoriteCatBreed sets the "favorite_cat_breed" field.
+func (uuo *UserUpdateOne) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) *UserUpdateOne {
+	uuo.mutation.SetFavoriteCatBreed(ucb)
 	return uuo
 }
 
-// SetGender sets the "gender" field.
-func (uuo *UserUpdateOne) SetGender(u user.Gender) *UserUpdateOne {
-	uuo.mutation.SetGender(u)
+// SetFavoriteDogBreed sets the "favorite_dog_breed" field.
+func (uuo *UserUpdateOne) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserUpdateOne {
+	uuo.mutation.SetFavoriteDogBreed(udb)
 	return uuo
 }
 
-// SetNillableGender sets the "gender" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableGender(u *user.Gender) *UserUpdateOne {
-	if u != nil {
-		uuo.SetGender(*u)
+// SetNillableFavoriteDogBreed sets the "favorite_dog_breed" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableFavoriteDogBreed(udb *user.FavoriteDogBreed) *UserUpdateOne {
+	if udb != nil {
+		uuo.SetFavoriteDogBreed(*udb)
 	}
 	return uuo
 }
 
-// ClearGender clears the value of the "gender" field.
-func (uuo *UserUpdateOne) ClearGender() *UserUpdateOne {
-	uuo.mutation.ClearGender()
+// ClearFavoriteDogBreed clears the value of the "favorite_dog_breed" field.
+func (uuo *UserUpdateOne) ClearFavoriteDogBreed() *UserUpdateOne {
+	uuo.mutation.ClearFavoriteDogBreed()
 	return uuo
 }
 
@@ -561,14 +561,14 @@ func (uuo *UserUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (uuo *UserUpdateOne) check() error {
-	if v, ok := uuo.mutation.Sex(); ok {
-		if err := user.SexValidator(v); err != nil {
-			return &ValidationError{Name: "sex", err: fmt.Errorf(`ent: validator failed for field "User.sex": %w`, err)}
+	if v, ok := uuo.mutation.FavoriteCatBreed(); ok {
+		if err := user.FavoriteCatBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_cat_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_cat_breed": %w`, err)}
 		}
 	}
-	if v, ok := uuo.mutation.Gender(); ok {
-		if err := user.GenderValidator(v); err != nil {
-			return &ValidationError{Name: "gender", err: fmt.Errorf(`ent: validator failed for field "User.gender": %w`, err)}
+	if v, ok := uuo.mutation.FavoriteDogBreed(); ok {
+		if err := user.FavoriteDogBreedValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_dog_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_dog_breed": %w`, err)}
 		}
 	}
 	return nil
@@ -630,24 +630,24 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Column: user.FieldAge,
 		})
 	}
-	if value, ok := uuo.mutation.Sex(); ok {
+	if value, ok := uuo.mutation.FavoriteCatBreed(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldSex,
+			Column: user.FieldFavoriteCatBreed,
 		})
 	}
-	if value, ok := uuo.mutation.Gender(); ok {
+	if value, ok := uuo.mutation.FavoriteDogBreed(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
 			Value:  value,
-			Column: user.FieldGender,
+			Column: user.FieldFavoriteDogBreed,
 		})
 	}
-	if uuo.mutation.GenderCleared() {
+	if uuo.mutation.FavoriteDogBreedCleared() {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeEnum,
-			Column: user.FieldGender,
+			Column: user.FieldFavoriteDogBreed,
 		})
 	}
 	if uuo.mutation.PetsCleared() {

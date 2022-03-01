@@ -1176,8 +1176,8 @@ type UserMutation struct {
 	name               *string
 	age                *int
 	addage             *int
-	sex                *user.Sex
-	gender             *user.Gender
+	favorite_cat_breed *user.FavoriteCatBreed
+	favorite_dog_breed *user.FavoriteDogBreed
 	clearedFields      map[string]struct{}
 	pets               map[int]struct{}
 	removedpets        map[int]struct{}
@@ -1379,89 +1379,89 @@ func (m *UserMutation) ResetAge() {
 	m.addage = nil
 }
 
-// SetSex sets the "sex" field.
-func (m *UserMutation) SetSex(u user.Sex) {
-	m.sex = &u
+// SetFavoriteCatBreed sets the "favorite_cat_breed" field.
+func (m *UserMutation) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) {
+	m.favorite_cat_breed = &ucb
 }
 
-// Sex returns the value of the "sex" field in the mutation.
-func (m *UserMutation) Sex() (r user.Sex, exists bool) {
-	v := m.sex
+// FavoriteCatBreed returns the value of the "favorite_cat_breed" field in the mutation.
+func (m *UserMutation) FavoriteCatBreed() (r user.FavoriteCatBreed, exists bool) {
+	v := m.favorite_cat_breed
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldSex returns the old "sex" field's value of the User entity.
+// OldFavoriteCatBreed returns the old "favorite_cat_breed" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldSex(ctx context.Context) (v user.Sex, err error) {
+func (m *UserMutation) OldFavoriteCatBreed(ctx context.Context) (v user.FavoriteCatBreed, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldSex is only allowed on UpdateOne operations")
+		return v, errors.New("OldFavoriteCatBreed is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldSex requires an ID field in the mutation")
+		return v, errors.New("OldFavoriteCatBreed requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldSex: %w", err)
+		return v, fmt.Errorf("querying old value for OldFavoriteCatBreed: %w", err)
 	}
-	return oldValue.Sex, nil
+	return oldValue.FavoriteCatBreed, nil
 }
 
-// ResetSex resets all changes to the "sex" field.
-func (m *UserMutation) ResetSex() {
-	m.sex = nil
+// ResetFavoriteCatBreed resets all changes to the "favorite_cat_breed" field.
+func (m *UserMutation) ResetFavoriteCatBreed() {
+	m.favorite_cat_breed = nil
 }
 
-// SetGender sets the "gender" field.
-func (m *UserMutation) SetGender(u user.Gender) {
-	m.gender = &u
+// SetFavoriteDogBreed sets the "favorite_dog_breed" field.
+func (m *UserMutation) SetFavoriteDogBreed(udb user.FavoriteDogBreed) {
+	m.favorite_dog_breed = &udb
 }
 
-// Gender returns the value of the "gender" field in the mutation.
-func (m *UserMutation) Gender() (r user.Gender, exists bool) {
-	v := m.gender
+// FavoriteDogBreed returns the value of the "favorite_dog_breed" field in the mutation.
+func (m *UserMutation) FavoriteDogBreed() (r user.FavoriteDogBreed, exists bool) {
+	v := m.favorite_dog_breed
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldGender returns the old "gender" field's value of the User entity.
+// OldFavoriteDogBreed returns the old "favorite_dog_breed" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldGender(ctx context.Context) (v user.Gender, err error) {
+func (m *UserMutation) OldFavoriteDogBreed(ctx context.Context) (v user.FavoriteDogBreed, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldGender is only allowed on UpdateOne operations")
+		return v, errors.New("OldFavoriteDogBreed is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldGender requires an ID field in the mutation")
+		return v, errors.New("OldFavoriteDogBreed requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldGender: %w", err)
+		return v, fmt.Errorf("querying old value for OldFavoriteDogBreed: %w", err)
 	}
-	return oldValue.Gender, nil
+	return oldValue.FavoriteDogBreed, nil
 }
 
-// ClearGender clears the value of the "gender" field.
-func (m *UserMutation) ClearGender() {
-	m.gender = nil
-	m.clearedFields[user.FieldGender] = struct{}{}
+// ClearFavoriteDogBreed clears the value of the "favorite_dog_breed" field.
+func (m *UserMutation) ClearFavoriteDogBreed() {
+	m.favorite_dog_breed = nil
+	m.clearedFields[user.FieldFavoriteDogBreed] = struct{}{}
 }
 
-// GenderCleared returns if the "gender" field was cleared in this mutation.
-func (m *UserMutation) GenderCleared() bool {
-	_, ok := m.clearedFields[user.FieldGender]
+// FavoriteDogBreedCleared returns if the "favorite_dog_breed" field was cleared in this mutation.
+func (m *UserMutation) FavoriteDogBreedCleared() bool {
+	_, ok := m.clearedFields[user.FieldFavoriteDogBreed]
 	return ok
 }
 
-// ResetGender resets all changes to the "gender" field.
-func (m *UserMutation) ResetGender() {
-	m.gender = nil
-	delete(m.clearedFields, user.FieldGender)
+// ResetFavoriteDogBreed resets all changes to the "favorite_dog_breed" field.
+func (m *UserMutation) ResetFavoriteDogBreed() {
+	m.favorite_dog_breed = nil
+	delete(m.clearedFields, user.FieldFavoriteDogBreed)
 }
 
 // AddPetIDs adds the "pets" edge to the Pet entity by ids.
@@ -1583,11 +1583,11 @@ func (m *UserMutation) Fields() []string {
 	if m.age != nil {
 		fields = append(fields, user.FieldAge)
 	}
-	if m.sex != nil {
-		fields = append(fields, user.FieldSex)
+	if m.favorite_cat_breed != nil {
+		fields = append(fields, user.FieldFavoriteCatBreed)
 	}
-	if m.gender != nil {
-		fields = append(fields, user.FieldGender)
+	if m.favorite_dog_breed != nil {
+		fields = append(fields, user.FieldFavoriteDogBreed)
 	}
 	return fields
 }
@@ -1601,10 +1601,10 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case user.FieldAge:
 		return m.Age()
-	case user.FieldSex:
-		return m.Sex()
-	case user.FieldGender:
-		return m.Gender()
+	case user.FieldFavoriteCatBreed:
+		return m.FavoriteCatBreed()
+	case user.FieldFavoriteDogBreed:
+		return m.FavoriteDogBreed()
 	}
 	return nil, false
 }
@@ -1618,10 +1618,10 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldName(ctx)
 	case user.FieldAge:
 		return m.OldAge(ctx)
-	case user.FieldSex:
-		return m.OldSex(ctx)
-	case user.FieldGender:
-		return m.OldGender(ctx)
+	case user.FieldFavoriteCatBreed:
+		return m.OldFavoriteCatBreed(ctx)
+	case user.FieldFavoriteDogBreed:
+		return m.OldFavoriteDogBreed(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -1645,19 +1645,19 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetAge(v)
 		return nil
-	case user.FieldSex:
-		v, ok := value.(user.Sex)
+	case user.FieldFavoriteCatBreed:
+		v, ok := value.(user.FavoriteCatBreed)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetSex(v)
+		m.SetFavoriteCatBreed(v)
 		return nil
-	case user.FieldGender:
-		v, ok := value.(user.Gender)
+	case user.FieldFavoriteDogBreed:
+		v, ok := value.(user.FavoriteDogBreed)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetGender(v)
+		m.SetFavoriteDogBreed(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -1704,8 +1704,8 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
 	var fields []string
-	if m.FieldCleared(user.FieldGender) {
-		fields = append(fields, user.FieldGender)
+	if m.FieldCleared(user.FieldFavoriteDogBreed) {
+		fields = append(fields, user.FieldFavoriteDogBreed)
 	}
 	return fields
 }
@@ -1721,8 +1721,8 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
 	switch name {
-	case user.FieldGender:
-		m.ClearGender()
+	case user.FieldFavoriteDogBreed:
+		m.ClearFavoriteDogBreed()
 		return nil
 	}
 	return fmt.Errorf("unknown User nullable field %s", name)
@@ -1738,11 +1738,11 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldAge:
 		m.ResetAge()
 		return nil
-	case user.FieldSex:
-		m.ResetSex()
+	case user.FieldFavoriteCatBreed:
+		m.ResetFavoriteCatBreed()
 		return nil
-	case user.FieldGender:
-		m.ResetGender()
+	case user.FieldFavoriteDogBreed:
+		m.ResetFavoriteDogBreed()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

@@ -15,10 +15,10 @@ const (
 	FieldName = "name"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
-	// FieldSex holds the string denoting the sex field in the database.
-	FieldSex = "sex"
-	// FieldGender holds the string denoting the gender field in the database.
-	FieldGender = "gender"
+	// FieldFavoriteCatBreed holds the string denoting the favorite_cat_breed field in the database.
+	FieldFavoriteCatBreed = "favorite_cat_breed"
+	// FieldFavoriteDogBreed holds the string denoting the favorite_dog_breed field in the database.
+	FieldFavoriteDogBreed = "favorite_dog_breed"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
 	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
@@ -43,8 +43,8 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldAge,
-	FieldSex,
-	FieldGender,
+	FieldFavoriteCatBreed,
+	FieldFavoriteDogBreed,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "users"
@@ -68,49 +68,51 @@ func ValidColumn(column string) bool {
 	return false
 }
 
-// Sex defines the type for the "sex" enum field.
-type Sex string
+// FavoriteCatBreed defines the type for the "favorite_cat_breed" enum field.
+type FavoriteCatBreed string
 
-// Sex values.
+// FavoriteCatBreed values.
 const (
-	SexMale   Sex = "male"
-	SexFemale Sex = "female"
+	FavoriteCatBreedSiamese FavoriteCatBreed = "siamese"
+	FavoriteCatBreedBengal  FavoriteCatBreed = "bengal"
+	FavoriteCatBreedLion    FavoriteCatBreed = "lion"
+	FavoriteCatBreedTiger   FavoriteCatBreed = "tiger"
+	FavoriteCatBreedLeopard FavoriteCatBreed = "leopard"
+	FavoriteCatBreedOther   FavoriteCatBreed = "other"
 )
 
-func (s Sex) String() string {
-	return string(s)
+func (fcb FavoriteCatBreed) String() string {
+	return string(fcb)
 }
 
-// SexValidator is a validator for the "sex" field enum values. It is called by the builders before save.
-func SexValidator(s Sex) error {
-	switch s {
-	case SexMale, SexFemale:
+// FavoriteCatBreedValidator is a validator for the "favorite_cat_breed" field enum values. It is called by the builders before save.
+func FavoriteCatBreedValidator(fcb FavoriteCatBreed) error {
+	switch fcb {
+	case FavoriteCatBreedSiamese, FavoriteCatBreedBengal, FavoriteCatBreedLion, FavoriteCatBreedTiger, FavoriteCatBreedLeopard, FavoriteCatBreedOther:
 		return nil
 	default:
-		return fmt.Errorf("user: invalid enum value for sex field: %q", s)
+		return fmt.Errorf("user: invalid enum value for favorite_cat_breed field: %q", fcb)
 	}
 }
 
-// Gender defines the type for the "gender" enum field.
-type Gender string
+// FavoriteDogBreed defines the type for the "favorite_dog_breed" enum field.
+type FavoriteDogBreed string
 
-// Gender values.
+// FavoriteDogBreed values.
 const (
-	GenderMale    Gender = "male"
-	GenderFemale  Gender = "female"
-	GenderDiverse Gender = "diverse"
+	FavoriteDogBreedKuro FavoriteDogBreed = "Kuro"
 )
 
-func (ge Gender) String() string {
-	return string(ge)
+func (fdb FavoriteDogBreed) String() string {
+	return string(fdb)
 }
 
-// GenderValidator is a validator for the "gender" field enum values. It is called by the builders before save.
-func GenderValidator(ge Gender) error {
-	switch ge {
-	case GenderMale, GenderFemale, GenderDiverse:
+// FavoriteDogBreedValidator is a validator for the "favorite_dog_breed" field enum values. It is called by the builders before save.
+func FavoriteDogBreedValidator(fdb FavoriteDogBreed) error {
+	switch fdb {
+	case FavoriteDogBreedKuro:
 		return nil
 	default:
-		return fmt.Errorf("user: invalid enum value for gender field: %q", ge)
+		return fmt.Errorf("user: invalid enum value for favorite_dog_breed field: %q", fdb)
 	}
 }

@@ -860,19 +860,21 @@
                   "age": {
                     "type": "integer"
                   },
-                  "sex": {
+                  "favorite_cat_breed": {
                     "type": "string",
                     "enum": [
-                      "male",
-                      "female"
+                      "siamese",
+                      "bengal",
+                      "lion",
+                      "tiger",
+                      "leopard",
+                      "other"
                     ]
                   },
-                  "gender": {
+                  "favorite_dog_breed": {
                     "type": "string",
                     "enum": [
-                      "male",
-                      "female",
-                      "diverse"
+                      "Kuro"
                     ]
                   },
                   "pets": {
@@ -888,7 +890,7 @@
                 "required": [
                   "name",
                   "age",
-                  "sex"
+                  "favorite_cat_breed"
                 ]
               }
             }
@@ -1029,19 +1031,21 @@
                   "age": {
                     "type": "integer"
                   },
-                  "sex": {
+                  "favorite_cat_breed": {
                     "type": "string",
                     "enum": [
-                      "male",
-                      "female"
+                      "siamese",
+                      "bengal",
+                      "lion",
+                      "tiger",
+                      "leopard",
+                      "other"
                     ]
                   },
-                  "gender": {
+                  "favorite_dog_breed": {
                     "type": "string",
                     "enum": [
-                      "male",
-                      "female",
-                      "diverse"
+                      "Kuro"
                     ]
                   },
                   "pets": {
@@ -1397,19 +1401,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1417,7 +1423,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "PetList": {
@@ -1535,19 +1541,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1555,7 +1563,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "User": {
@@ -1570,19 +1578,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           },
           "pets": {
@@ -1599,7 +1609,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "UserCreate": {
@@ -1614,19 +1624,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1634,7 +1646,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "UserList": {
@@ -1649,19 +1661,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1669,7 +1683,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "UserRead": {
@@ -1684,19 +1698,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1704,7 +1720,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "UserUpdate": {
@@ -1719,19 +1735,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1739,7 +1757,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "User_BestFriendRead": {
@@ -1754,19 +1772,21 @@
           "age": {
             "type": "integer"
           },
-          "sex": {
+          "favorite_cat_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female"
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
             ]
           },
-          "gender": {
+          "favorite_dog_breed": {
             "type": "string",
             "enum": [
-              "male",
-              "female",
-              "diverse"
+              "Kuro"
             ]
           }
         },
@@ -1774,7 +1794,7 @@
           "id",
           "name",
           "age",
-          "sex"
+          "favorite_cat_breed"
         ]
       },
       "User_PetsList": {

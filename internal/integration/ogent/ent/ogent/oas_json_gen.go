@@ -1021,16 +1021,16 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	{
@@ -1069,8 +1069,8 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 var jsonFieldsNameOfCreateUserReq = [6]string{
 	0: "name",
 	1: "age",
-	2: "sex",
-	3: "gender",
+	2: "favorite_cat_breed",
+	3: "favorite_dog_breed",
 	4: "pets",
 	5: "best_friend",
 }
@@ -1108,25 +1108,25 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		case "pets":
 			if err := func() error {
@@ -1200,57 +1200,61 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes CreateUserReqGender as json.
-func (s CreateUserReqGender) Encode(e *jx.Writer) {
+// Encode encodes CreateUserReqFavoriteCatBreed as json.
+func (s CreateUserReqFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes CreateUserReqGender from json.
-func (s *CreateUserReqGender) Decode(d *jx.Decoder) error {
+// Decode decodes CreateUserReqFavoriteCatBreed from json.
+func (s *CreateUserReqFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode CreateUserReqGender to nil")
+		return errors.New("invalid: unable to decode CreateUserReqFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch CreateUserReqGender(v) {
-	case CreateUserReqGenderMale:
-		*s = CreateUserReqGenderMale
-	case CreateUserReqGenderFemale:
-		*s = CreateUserReqGenderFemale
-	case CreateUserReqGenderDiverse:
-		*s = CreateUserReqGenderDiverse
+	switch CreateUserReqFavoriteCatBreed(v) {
+	case CreateUserReqFavoriteCatBreedSiamese:
+		*s = CreateUserReqFavoriteCatBreedSiamese
+	case CreateUserReqFavoriteCatBreedBengal:
+		*s = CreateUserReqFavoriteCatBreedBengal
+	case CreateUserReqFavoriteCatBreedLion:
+		*s = CreateUserReqFavoriteCatBreedLion
+	case CreateUserReqFavoriteCatBreedTiger:
+		*s = CreateUserReqFavoriteCatBreedTiger
+	case CreateUserReqFavoriteCatBreedLeopard:
+		*s = CreateUserReqFavoriteCatBreedLeopard
+	case CreateUserReqFavoriteCatBreedOther:
+		*s = CreateUserReqFavoriteCatBreedOther
 	default:
-		*s = CreateUserReqGender(v)
+		*s = CreateUserReqFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes CreateUserReqSex as json.
-func (s CreateUserReqSex) Encode(e *jx.Writer) {
+// Encode encodes CreateUserReqFavoriteDogBreed as json.
+func (s CreateUserReqFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes CreateUserReqSex from json.
-func (s *CreateUserReqSex) Decode(d *jx.Decoder) error {
+// Decode decodes CreateUserReqFavoriteDogBreed from json.
+func (s *CreateUserReqFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode CreateUserReqSex to nil")
+		return errors.New("invalid: unable to decode CreateUserReqFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch CreateUserReqSex(v) {
-	case CreateUserReqSexMale:
-		*s = CreateUserReqSexMale
-	case CreateUserReqSexFemale:
-		*s = CreateUserReqSexFemale
+	switch CreateUserReqFavoriteDogBreed(v) {
+	case CreateUserReqFavoriteDogBreedKuro:
+		*s = CreateUserReqFavoriteDogBreedKuro
 	default:
-		*s = CreateUserReqSex(v)
+		*s = CreateUserReqFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -1564,18 +1568,18 @@ func (s *ListUserPetsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes CreateUserReqGender as json.
-func (o OptCreateUserReqGender) Encode(e *jx.Writer) {
+// Encode encodes CreateUserReqFavoriteDogBreed as json.
+func (o OptCreateUserReqFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes CreateUserReqGender from json.
-func (o *OptCreateUserReqGender) Decode(d *jx.Decoder) error {
+// Decode decodes CreateUserReqFavoriteDogBreed from json.
+func (o *OptCreateUserReqFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptCreateUserReqGender to nil")
+		return errors.New("invalid: unable to decode OptCreateUserReqFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1628,18 +1632,18 @@ func (o *OptInt) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes PetCreateOwnerGender as json.
-func (o OptPetCreateOwnerGender) Encode(e *jx.Writer) {
+// Encode encodes PetCreateOwnerFavoriteDogBreed as json.
+func (o OptPetCreateOwnerFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes PetCreateOwnerGender from json.
-func (o *OptPetCreateOwnerGender) Decode(d *jx.Decoder) error {
+// Decode decodes PetCreateOwnerFavoriteDogBreed from json.
+func (o *OptPetCreateOwnerFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptPetCreateOwnerGender to nil")
+		return errors.New("invalid: unable to decode OptPetCreateOwnerFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1648,18 +1652,18 @@ func (o *OptPetCreateOwnerGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes PetOwnerReadGender as json.
-func (o OptPetOwnerReadGender) Encode(e *jx.Writer) {
+// Encode encodes PetOwnerReadFavoriteDogBreed as json.
+func (o OptPetOwnerReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes PetOwnerReadGender from json.
-func (o *OptPetOwnerReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes PetOwnerReadFavoriteDogBreed from json.
+func (o *OptPetOwnerReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptPetOwnerReadGender to nil")
+		return errors.New("invalid: unable to decode OptPetOwnerReadFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1690,18 +1694,18 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UpdateUserReqGender as json.
-func (o OptUpdateUserReqGender) Encode(e *jx.Writer) {
+// Encode encodes UpdateUserReqFavoriteCatBreed as json.
+func (o OptUpdateUserReqFavoriteCatBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UpdateUserReqGender from json.
-func (o *OptUpdateUserReqGender) Decode(d *jx.Decoder) error {
+// Decode decodes UpdateUserReqFavoriteCatBreed from json.
+func (o *OptUpdateUserReqFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUpdateUserReqGender to nil")
+		return errors.New("invalid: unable to decode OptUpdateUserReqFavoriteCatBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1710,18 +1714,18 @@ func (o *OptUpdateUserReqGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UpdateUserReqSex as json.
-func (o OptUpdateUserReqSex) Encode(e *jx.Writer) {
+// Encode encodes UpdateUserReqFavoriteDogBreed as json.
+func (o OptUpdateUserReqFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UpdateUserReqSex from json.
-func (o *OptUpdateUserReqSex) Decode(d *jx.Decoder) error {
+// Decode decodes UpdateUserReqFavoriteDogBreed from json.
+func (o *OptUpdateUserReqFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUpdateUserReqSex to nil")
+		return errors.New("invalid: unable to decode OptUpdateUserReqFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1730,18 +1734,18 @@ func (o *OptUpdateUserReqSex) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserBestFriendReadGender as json.
-func (o OptUserBestFriendReadGender) Encode(e *jx.Writer) {
+// Encode encodes UserBestFriendReadFavoriteDogBreed as json.
+func (o OptUserBestFriendReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UserBestFriendReadGender from json.
-func (o *OptUserBestFriendReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserBestFriendReadFavoriteDogBreed from json.
+func (o *OptUserBestFriendReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUserBestFriendReadGender to nil")
+		return errors.New("invalid: unable to decode OptUserBestFriendReadFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1750,18 +1754,18 @@ func (o *OptUserBestFriendReadGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserCreateGender as json.
-func (o OptUserCreateGender) Encode(e *jx.Writer) {
+// Encode encodes UserCreateFavoriteDogBreed as json.
+func (o OptUserCreateFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UserCreateGender from json.
-func (o *OptUserCreateGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserCreateFavoriteDogBreed from json.
+func (o *OptUserCreateFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUserCreateGender to nil")
+		return errors.New("invalid: unable to decode OptUserCreateFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1770,18 +1774,18 @@ func (o *OptUserCreateGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserListGender as json.
-func (o OptUserListGender) Encode(e *jx.Writer) {
+// Encode encodes UserListFavoriteDogBreed as json.
+func (o OptUserListFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UserListGender from json.
-func (o *OptUserListGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserListFavoriteDogBreed from json.
+func (o *OptUserListFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUserListGender to nil")
+		return errors.New("invalid: unable to decode OptUserListFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1790,18 +1794,18 @@ func (o *OptUserListGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserReadGender as json.
-func (o OptUserReadGender) Encode(e *jx.Writer) {
+// Encode encodes UserReadFavoriteDogBreed as json.
+func (o OptUserReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UserReadGender from json.
-func (o *OptUserReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserReadFavoriteDogBreed from json.
+func (o *OptUserReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUserReadGender to nil")
+		return errors.New("invalid: unable to decode OptUserReadFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -1810,18 +1814,18 @@ func (o *OptUserReadGender) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserUpdateGender as json.
-func (o OptUserUpdateGender) Encode(e *jx.Writer) {
+// Encode encodes UserUpdateFavoriteDogBreed as json.
+func (o OptUserUpdateFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
 		return
 	}
 	e.Str(string(o.Value))
 }
 
-// Decode decodes UserUpdateGender from json.
-func (o *OptUserUpdateGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserUpdateFavoriteDogBreed from json.
+func (o *OptUserUpdateFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptUserUpdateGender to nil")
+		return errors.New("invalid: unable to decode OptUserUpdateFavoriteDogBreed to nil")
 	}
 	o.Set = true
 	if err := o.Value.Decode(d); err != nil {
@@ -2275,16 +2279,16 @@ func (s PetCreateOwner) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -2294,8 +2298,8 @@ var jsonFieldsNameOfPetCreateOwner = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes PetCreateOwner from json.
@@ -2343,25 +2347,25 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -2406,57 +2410,61 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes PetCreateOwnerGender as json.
-func (s PetCreateOwnerGender) Encode(e *jx.Writer) {
+// Encode encodes PetCreateOwnerFavoriteCatBreed as json.
+func (s PetCreateOwnerFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes PetCreateOwnerGender from json.
-func (s *PetCreateOwnerGender) Decode(d *jx.Decoder) error {
+// Decode decodes PetCreateOwnerFavoriteCatBreed from json.
+func (s *PetCreateOwnerFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode PetCreateOwnerGender to nil")
+		return errors.New("invalid: unable to decode PetCreateOwnerFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch PetCreateOwnerGender(v) {
-	case PetCreateOwnerGenderMale:
-		*s = PetCreateOwnerGenderMale
-	case PetCreateOwnerGenderFemale:
-		*s = PetCreateOwnerGenderFemale
-	case PetCreateOwnerGenderDiverse:
-		*s = PetCreateOwnerGenderDiverse
+	switch PetCreateOwnerFavoriteCatBreed(v) {
+	case PetCreateOwnerFavoriteCatBreedSiamese:
+		*s = PetCreateOwnerFavoriteCatBreedSiamese
+	case PetCreateOwnerFavoriteCatBreedBengal:
+		*s = PetCreateOwnerFavoriteCatBreedBengal
+	case PetCreateOwnerFavoriteCatBreedLion:
+		*s = PetCreateOwnerFavoriteCatBreedLion
+	case PetCreateOwnerFavoriteCatBreedTiger:
+		*s = PetCreateOwnerFavoriteCatBreedTiger
+	case PetCreateOwnerFavoriteCatBreedLeopard:
+		*s = PetCreateOwnerFavoriteCatBreedLeopard
+	case PetCreateOwnerFavoriteCatBreedOther:
+		*s = PetCreateOwnerFavoriteCatBreedOther
 	default:
-		*s = PetCreateOwnerGender(v)
+		*s = PetCreateOwnerFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes PetCreateOwnerSex as json.
-func (s PetCreateOwnerSex) Encode(e *jx.Writer) {
+// Encode encodes PetCreateOwnerFavoriteDogBreed as json.
+func (s PetCreateOwnerFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes PetCreateOwnerSex from json.
-func (s *PetCreateOwnerSex) Decode(d *jx.Decoder) error {
+// Decode decodes PetCreateOwnerFavoriteDogBreed from json.
+func (s *PetCreateOwnerFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode PetCreateOwnerSex to nil")
+		return errors.New("invalid: unable to decode PetCreateOwnerFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch PetCreateOwnerSex(v) {
-	case PetCreateOwnerSexMale:
-		*s = PetCreateOwnerSexMale
-	case PetCreateOwnerSexFemale:
-		*s = PetCreateOwnerSexFemale
+	switch PetCreateOwnerFavoriteDogBreed(v) {
+	case PetCreateOwnerFavoriteDogBreedKuro:
+		*s = PetCreateOwnerFavoriteDogBreedKuro
 	default:
-		*s = PetCreateOwnerSex(v)
+		*s = PetCreateOwnerFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -2785,16 +2793,16 @@ func (s PetOwnerRead) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -2804,8 +2812,8 @@ var jsonFieldsNameOfPetOwnerRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes PetOwnerRead from json.
@@ -2853,25 +2861,25 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -2916,57 +2924,61 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes PetOwnerReadGender as json.
-func (s PetOwnerReadGender) Encode(e *jx.Writer) {
+// Encode encodes PetOwnerReadFavoriteCatBreed as json.
+func (s PetOwnerReadFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes PetOwnerReadGender from json.
-func (s *PetOwnerReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes PetOwnerReadFavoriteCatBreed from json.
+func (s *PetOwnerReadFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode PetOwnerReadGender to nil")
+		return errors.New("invalid: unable to decode PetOwnerReadFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch PetOwnerReadGender(v) {
-	case PetOwnerReadGenderMale:
-		*s = PetOwnerReadGenderMale
-	case PetOwnerReadGenderFemale:
-		*s = PetOwnerReadGenderFemale
-	case PetOwnerReadGenderDiverse:
-		*s = PetOwnerReadGenderDiverse
+	switch PetOwnerReadFavoriteCatBreed(v) {
+	case PetOwnerReadFavoriteCatBreedSiamese:
+		*s = PetOwnerReadFavoriteCatBreedSiamese
+	case PetOwnerReadFavoriteCatBreedBengal:
+		*s = PetOwnerReadFavoriteCatBreedBengal
+	case PetOwnerReadFavoriteCatBreedLion:
+		*s = PetOwnerReadFavoriteCatBreedLion
+	case PetOwnerReadFavoriteCatBreedTiger:
+		*s = PetOwnerReadFavoriteCatBreedTiger
+	case PetOwnerReadFavoriteCatBreedLeopard:
+		*s = PetOwnerReadFavoriteCatBreedLeopard
+	case PetOwnerReadFavoriteCatBreedOther:
+		*s = PetOwnerReadFavoriteCatBreedOther
 	default:
-		*s = PetOwnerReadGender(v)
+		*s = PetOwnerReadFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes PetOwnerReadSex as json.
-func (s PetOwnerReadSex) Encode(e *jx.Writer) {
+// Encode encodes PetOwnerReadFavoriteDogBreed as json.
+func (s PetOwnerReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes PetOwnerReadSex from json.
-func (s *PetOwnerReadSex) Decode(d *jx.Decoder) error {
+// Decode decodes PetOwnerReadFavoriteDogBreed from json.
+func (s *PetOwnerReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode PetOwnerReadSex to nil")
+		return errors.New("invalid: unable to decode PetOwnerReadFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch PetOwnerReadSex(v) {
-	case PetOwnerReadSexMale:
-		*s = PetOwnerReadSexMale
-	case PetOwnerReadSexFemale:
-		*s = PetOwnerReadSexFemale
+	switch PetOwnerReadFavoriteDogBreed(v) {
+	case PetOwnerReadFavoriteDogBreedKuro:
+		*s = PetOwnerReadFavoriteDogBreedKuro
 	default:
-		*s = PetOwnerReadSex(v)
+		*s = PetOwnerReadFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -4119,27 +4131,27 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 		}
 	}
 	{
-		if s.Sex.Set {
+		if s.FavoriteCatBreed.Set {
 			if !first {
 				e.Comma()
 			}
 			first = false
 		}
-		if s.Sex.Set {
-			e.RawStr("\"sex\"" + ":")
-			s.Sex.Encode(e)
+		if s.FavoriteCatBreed.Set {
+			e.RawStr("\"favorite_cat_breed\"" + ":")
+			s.FavoriteCatBreed.Encode(e)
 		}
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if !first {
 				e.Comma()
 			}
 			first = false
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	{
@@ -4184,8 +4196,8 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 var jsonFieldsNameOfUpdateUserReq = [6]string{
 	0: "name",
 	1: "age",
-	2: "sex",
-	3: "gender",
+	2: "favorite_cat_breed",
+	3: "favorite_dog_breed",
 	4: "pets",
 	5: "best_friend",
 }
@@ -4218,25 +4230,25 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			if err := func() error {
-				s.Sex.Reset()
-				if err := s.Sex.Decode(d); err != nil {
+				s.FavoriteCatBreed.Reset()
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		case "pets":
 			if err := func() error {
@@ -4278,57 +4290,61 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UpdateUserReqGender as json.
-func (s UpdateUserReqGender) Encode(e *jx.Writer) {
+// Encode encodes UpdateUserReqFavoriteCatBreed as json.
+func (s UpdateUserReqFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UpdateUserReqGender from json.
-func (s *UpdateUserReqGender) Decode(d *jx.Decoder) error {
+// Decode decodes UpdateUserReqFavoriteCatBreed from json.
+func (s *UpdateUserReqFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UpdateUserReqGender to nil")
+		return errors.New("invalid: unable to decode UpdateUserReqFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UpdateUserReqGender(v) {
-	case UpdateUserReqGenderMale:
-		*s = UpdateUserReqGenderMale
-	case UpdateUserReqGenderFemale:
-		*s = UpdateUserReqGenderFemale
-	case UpdateUserReqGenderDiverse:
-		*s = UpdateUserReqGenderDiverse
+	switch UpdateUserReqFavoriteCatBreed(v) {
+	case UpdateUserReqFavoriteCatBreedSiamese:
+		*s = UpdateUserReqFavoriteCatBreedSiamese
+	case UpdateUserReqFavoriteCatBreedBengal:
+		*s = UpdateUserReqFavoriteCatBreedBengal
+	case UpdateUserReqFavoriteCatBreedLion:
+		*s = UpdateUserReqFavoriteCatBreedLion
+	case UpdateUserReqFavoriteCatBreedTiger:
+		*s = UpdateUserReqFavoriteCatBreedTiger
+	case UpdateUserReqFavoriteCatBreedLeopard:
+		*s = UpdateUserReqFavoriteCatBreedLeopard
+	case UpdateUserReqFavoriteCatBreedOther:
+		*s = UpdateUserReqFavoriteCatBreedOther
 	default:
-		*s = UpdateUserReqGender(v)
+		*s = UpdateUserReqFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UpdateUserReqSex as json.
-func (s UpdateUserReqSex) Encode(e *jx.Writer) {
+// Encode encodes UpdateUserReqFavoriteDogBreed as json.
+func (s UpdateUserReqFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UpdateUserReqSex from json.
-func (s *UpdateUserReqSex) Decode(d *jx.Decoder) error {
+// Decode decodes UpdateUserReqFavoriteDogBreed from json.
+func (s *UpdateUserReqFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UpdateUserReqSex to nil")
+		return errors.New("invalid: unable to decode UpdateUserReqFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UpdateUserReqSex(v) {
-	case UpdateUserReqSexMale:
-		*s = UpdateUserReqSexMale
-	case UpdateUserReqSexFemale:
-		*s = UpdateUserReqSexFemale
+	switch UpdateUserReqFavoriteDogBreed(v) {
+	case UpdateUserReqFavoriteDogBreedKuro:
+		*s = UpdateUserReqFavoriteDogBreedKuro
 	default:
-		*s = UpdateUserReqSex(v)
+		*s = UpdateUserReqFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -4365,16 +4381,16 @@ func (s UserBestFriendRead) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -4384,8 +4400,8 @@ var jsonFieldsNameOfUserBestFriendRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes UserBestFriendRead from json.
@@ -4433,25 +4449,25 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -4496,57 +4512,61 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserBestFriendReadGender as json.
-func (s UserBestFriendReadGender) Encode(e *jx.Writer) {
+// Encode encodes UserBestFriendReadFavoriteCatBreed as json.
+func (s UserBestFriendReadFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserBestFriendReadGender from json.
-func (s *UserBestFriendReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserBestFriendReadFavoriteCatBreed from json.
+func (s *UserBestFriendReadFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserBestFriendReadGender to nil")
+		return errors.New("invalid: unable to decode UserBestFriendReadFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserBestFriendReadGender(v) {
-	case UserBestFriendReadGenderMale:
-		*s = UserBestFriendReadGenderMale
-	case UserBestFriendReadGenderFemale:
-		*s = UserBestFriendReadGenderFemale
-	case UserBestFriendReadGenderDiverse:
-		*s = UserBestFriendReadGenderDiverse
+	switch UserBestFriendReadFavoriteCatBreed(v) {
+	case UserBestFriendReadFavoriteCatBreedSiamese:
+		*s = UserBestFriendReadFavoriteCatBreedSiamese
+	case UserBestFriendReadFavoriteCatBreedBengal:
+		*s = UserBestFriendReadFavoriteCatBreedBengal
+	case UserBestFriendReadFavoriteCatBreedLion:
+		*s = UserBestFriendReadFavoriteCatBreedLion
+	case UserBestFriendReadFavoriteCatBreedTiger:
+		*s = UserBestFriendReadFavoriteCatBreedTiger
+	case UserBestFriendReadFavoriteCatBreedLeopard:
+		*s = UserBestFriendReadFavoriteCatBreedLeopard
+	case UserBestFriendReadFavoriteCatBreedOther:
+		*s = UserBestFriendReadFavoriteCatBreedOther
 	default:
-		*s = UserBestFriendReadGender(v)
+		*s = UserBestFriendReadFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UserBestFriendReadSex as json.
-func (s UserBestFriendReadSex) Encode(e *jx.Writer) {
+// Encode encodes UserBestFriendReadFavoriteDogBreed as json.
+func (s UserBestFriendReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserBestFriendReadSex from json.
-func (s *UserBestFriendReadSex) Decode(d *jx.Decoder) error {
+// Decode decodes UserBestFriendReadFavoriteDogBreed from json.
+func (s *UserBestFriendReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserBestFriendReadSex to nil")
+		return errors.New("invalid: unable to decode UserBestFriendReadFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserBestFriendReadSex(v) {
-	case UserBestFriendReadSexMale:
-		*s = UserBestFriendReadSexMale
-	case UserBestFriendReadSexFemale:
-		*s = UserBestFriendReadSexFemale
+	switch UserBestFriendReadFavoriteDogBreed(v) {
+	case UserBestFriendReadFavoriteDogBreedKuro:
+		*s = UserBestFriendReadFavoriteDogBreedKuro
 	default:
-		*s = UserBestFriendReadSex(v)
+		*s = UserBestFriendReadFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -4583,16 +4603,16 @@ func (s UserCreate) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -4602,8 +4622,8 @@ var jsonFieldsNameOfUserCreate = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes UserCreate from json.
@@ -4651,25 +4671,25 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -4714,57 +4734,61 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserCreateGender as json.
-func (s UserCreateGender) Encode(e *jx.Writer) {
+// Encode encodes UserCreateFavoriteCatBreed as json.
+func (s UserCreateFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserCreateGender from json.
-func (s *UserCreateGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserCreateFavoriteCatBreed from json.
+func (s *UserCreateFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserCreateGender to nil")
+		return errors.New("invalid: unable to decode UserCreateFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserCreateGender(v) {
-	case UserCreateGenderMale:
-		*s = UserCreateGenderMale
-	case UserCreateGenderFemale:
-		*s = UserCreateGenderFemale
-	case UserCreateGenderDiverse:
-		*s = UserCreateGenderDiverse
+	switch UserCreateFavoriteCatBreed(v) {
+	case UserCreateFavoriteCatBreedSiamese:
+		*s = UserCreateFavoriteCatBreedSiamese
+	case UserCreateFavoriteCatBreedBengal:
+		*s = UserCreateFavoriteCatBreedBengal
+	case UserCreateFavoriteCatBreedLion:
+		*s = UserCreateFavoriteCatBreedLion
+	case UserCreateFavoriteCatBreedTiger:
+		*s = UserCreateFavoriteCatBreedTiger
+	case UserCreateFavoriteCatBreedLeopard:
+		*s = UserCreateFavoriteCatBreedLeopard
+	case UserCreateFavoriteCatBreedOther:
+		*s = UserCreateFavoriteCatBreedOther
 	default:
-		*s = UserCreateGender(v)
+		*s = UserCreateFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UserCreateSex as json.
-func (s UserCreateSex) Encode(e *jx.Writer) {
+// Encode encodes UserCreateFavoriteDogBreed as json.
+func (s UserCreateFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserCreateSex from json.
-func (s *UserCreateSex) Decode(d *jx.Decoder) error {
+// Decode decodes UserCreateFavoriteDogBreed from json.
+func (s *UserCreateFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserCreateSex to nil")
+		return errors.New("invalid: unable to decode UserCreateFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserCreateSex(v) {
-	case UserCreateSexMale:
-		*s = UserCreateSexMale
-	case UserCreateSexFemale:
-		*s = UserCreateSexFemale
+	switch UserCreateFavoriteDogBreed(v) {
+	case UserCreateFavoriteDogBreedKuro:
+		*s = UserCreateFavoriteDogBreedKuro
 	default:
-		*s = UserCreateSex(v)
+		*s = UserCreateFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -4801,16 +4825,16 @@ func (s UserList) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -4820,8 +4844,8 @@ var jsonFieldsNameOfUserList = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes UserList from json.
@@ -4869,25 +4893,25 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -4932,57 +4956,61 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserListGender as json.
-func (s UserListGender) Encode(e *jx.Writer) {
+// Encode encodes UserListFavoriteCatBreed as json.
+func (s UserListFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserListGender from json.
-func (s *UserListGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserListFavoriteCatBreed from json.
+func (s *UserListFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserListGender to nil")
+		return errors.New("invalid: unable to decode UserListFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserListGender(v) {
-	case UserListGenderMale:
-		*s = UserListGenderMale
-	case UserListGenderFemale:
-		*s = UserListGenderFemale
-	case UserListGenderDiverse:
-		*s = UserListGenderDiverse
+	switch UserListFavoriteCatBreed(v) {
+	case UserListFavoriteCatBreedSiamese:
+		*s = UserListFavoriteCatBreedSiamese
+	case UserListFavoriteCatBreedBengal:
+		*s = UserListFavoriteCatBreedBengal
+	case UserListFavoriteCatBreedLion:
+		*s = UserListFavoriteCatBreedLion
+	case UserListFavoriteCatBreedTiger:
+		*s = UserListFavoriteCatBreedTiger
+	case UserListFavoriteCatBreedLeopard:
+		*s = UserListFavoriteCatBreedLeopard
+	case UserListFavoriteCatBreedOther:
+		*s = UserListFavoriteCatBreedOther
 	default:
-		*s = UserListGender(v)
+		*s = UserListFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UserListSex as json.
-func (s UserListSex) Encode(e *jx.Writer) {
+// Encode encodes UserListFavoriteDogBreed as json.
+func (s UserListFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserListSex from json.
-func (s *UserListSex) Decode(d *jx.Decoder) error {
+// Decode decodes UserListFavoriteDogBreed from json.
+func (s *UserListFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserListSex to nil")
+		return errors.New("invalid: unable to decode UserListFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserListSex(v) {
-	case UserListSexMale:
-		*s = UserListSexMale
-	case UserListSexFemale:
-		*s = UserListSexFemale
+	switch UserListFavoriteDogBreed(v) {
+	case UserListFavoriteDogBreedKuro:
+		*s = UserListFavoriteDogBreedKuro
 	default:
-		*s = UserListSex(v)
+		*s = UserListFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -5165,16 +5193,16 @@ func (s UserRead) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -5184,8 +5212,8 @@ var jsonFieldsNameOfUserRead = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes UserRead from json.
@@ -5233,25 +5261,25 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -5296,57 +5324,61 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserReadGender as json.
-func (s UserReadGender) Encode(e *jx.Writer) {
+// Encode encodes UserReadFavoriteCatBreed as json.
+func (s UserReadFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserReadGender from json.
-func (s *UserReadGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserReadFavoriteCatBreed from json.
+func (s *UserReadFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserReadGender to nil")
+		return errors.New("invalid: unable to decode UserReadFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserReadGender(v) {
-	case UserReadGenderMale:
-		*s = UserReadGenderMale
-	case UserReadGenderFemale:
-		*s = UserReadGenderFemale
-	case UserReadGenderDiverse:
-		*s = UserReadGenderDiverse
+	switch UserReadFavoriteCatBreed(v) {
+	case UserReadFavoriteCatBreedSiamese:
+		*s = UserReadFavoriteCatBreedSiamese
+	case UserReadFavoriteCatBreedBengal:
+		*s = UserReadFavoriteCatBreedBengal
+	case UserReadFavoriteCatBreedLion:
+		*s = UserReadFavoriteCatBreedLion
+	case UserReadFavoriteCatBreedTiger:
+		*s = UserReadFavoriteCatBreedTiger
+	case UserReadFavoriteCatBreedLeopard:
+		*s = UserReadFavoriteCatBreedLeopard
+	case UserReadFavoriteCatBreedOther:
+		*s = UserReadFavoriteCatBreedOther
 	default:
-		*s = UserReadGender(v)
+		*s = UserReadFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UserReadSex as json.
-func (s UserReadSex) Encode(e *jx.Writer) {
+// Encode encodes UserReadFavoriteDogBreed as json.
+func (s UserReadFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserReadSex from json.
-func (s *UserReadSex) Decode(d *jx.Decoder) error {
+// Decode decodes UserReadFavoriteDogBreed from json.
+func (s *UserReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserReadSex to nil")
+		return errors.New("invalid: unable to decode UserReadFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserReadSex(v) {
-	case UserReadSexMale:
-		*s = UserReadSexMale
-	case UserReadSexFemale:
-		*s = UserReadSexFemale
+	switch UserReadFavoriteDogBreed(v) {
+	case UserReadFavoriteDogBreedKuro:
+		*s = UserReadFavoriteDogBreedKuro
 	default:
-		*s = UserReadSex(v)
+		*s = UserReadFavoriteDogBreed(v)
 	}
 
 	return nil
@@ -5383,16 +5415,16 @@ func (s UserUpdate) Encode(e *jx.Writer) {
 	{
 		e.Comma()
 
-		e.RawStr("\"sex\"" + ":")
-		s.Sex.Encode(e)
+		e.RawStr("\"favorite_cat_breed\"" + ":")
+		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			e.Comma()
 		}
-		if s.Gender.Set {
-			e.RawStr("\"gender\"" + ":")
-			s.Gender.Encode(e)
+		if s.FavoriteDogBreed.Set {
+			e.RawStr("\"favorite_dog_breed\"" + ":")
+			s.FavoriteDogBreed.Encode(e)
 		}
 	}
 	e.ObjEnd()
@@ -5402,8 +5434,8 @@ var jsonFieldsNameOfUserUpdate = [5]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "sex",
-	4: "gender",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
 }
 
 // Decode decodes UserUpdate from json.
@@ -5451,25 +5483,25 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
-		case "sex":
+		case "favorite_cat_breed":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.Sex.Decode(d); err != nil {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sex\"")
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
-		case "gender":
+		case "favorite_dog_breed":
 			if err := func() error {
-				s.Gender.Reset()
-				if err := s.Gender.Decode(d); err != nil {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"gender\"")
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
 			}
 		default:
 			return d.Skip()
@@ -5514,57 +5546,61 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode encodes UserUpdateGender as json.
-func (s UserUpdateGender) Encode(e *jx.Writer) {
+// Encode encodes UserUpdateFavoriteCatBreed as json.
+func (s UserUpdateFavoriteCatBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserUpdateGender from json.
-func (s *UserUpdateGender) Decode(d *jx.Decoder) error {
+// Decode decodes UserUpdateFavoriteCatBreed from json.
+func (s *UserUpdateFavoriteCatBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserUpdateGender to nil")
+		return errors.New("invalid: unable to decode UserUpdateFavoriteCatBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserUpdateGender(v) {
-	case UserUpdateGenderMale:
-		*s = UserUpdateGenderMale
-	case UserUpdateGenderFemale:
-		*s = UserUpdateGenderFemale
-	case UserUpdateGenderDiverse:
-		*s = UserUpdateGenderDiverse
+	switch UserUpdateFavoriteCatBreed(v) {
+	case UserUpdateFavoriteCatBreedSiamese:
+		*s = UserUpdateFavoriteCatBreedSiamese
+	case UserUpdateFavoriteCatBreedBengal:
+		*s = UserUpdateFavoriteCatBreedBengal
+	case UserUpdateFavoriteCatBreedLion:
+		*s = UserUpdateFavoriteCatBreedLion
+	case UserUpdateFavoriteCatBreedTiger:
+		*s = UserUpdateFavoriteCatBreedTiger
+	case UserUpdateFavoriteCatBreedLeopard:
+		*s = UserUpdateFavoriteCatBreedLeopard
+	case UserUpdateFavoriteCatBreedOther:
+		*s = UserUpdateFavoriteCatBreedOther
 	default:
-		*s = UserUpdateGender(v)
+		*s = UserUpdateFavoriteCatBreed(v)
 	}
 
 	return nil
 }
 
-// Encode encodes UserUpdateSex as json.
-func (s UserUpdateSex) Encode(e *jx.Writer) {
+// Encode encodes UserUpdateFavoriteDogBreed as json.
+func (s UserUpdateFavoriteDogBreed) Encode(e *jx.Writer) {
 	e.Str(string(s))
 }
 
-// Decode decodes UserUpdateSex from json.
-func (s *UserUpdateSex) Decode(d *jx.Decoder) error {
+// Decode decodes UserUpdateFavoriteDogBreed from json.
+func (s *UserUpdateFavoriteDogBreed) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode UserUpdateSex to nil")
+		return errors.New("invalid: unable to decode UserUpdateFavoriteDogBreed to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch UserUpdateSex(v) {
-	case UserUpdateSexMale:
-		*s = UserUpdateSexMale
-	case UserUpdateSexFemale:
-		*s = UserUpdateSexFemale
+	switch UserUpdateFavoriteDogBreed(v) {
+	case UserUpdateFavoriteDogBreedKuro:
+		*s = UserUpdateFavoriteDogBreedKuro
 	default:
-		*s = UserUpdateSex(v)
+		*s = UserUpdateFavoriteDogBreed(v)
 	}
 
 	return nil

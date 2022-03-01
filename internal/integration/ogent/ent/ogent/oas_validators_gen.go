@@ -73,20 +73,20 @@ var (
 func (s CreateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -98,7 +98,7 @@ func (s CreateUserReq) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -107,23 +107,27 @@ func (s CreateUserReq) Validate() error {
 	}
 	return nil
 }
-func (s CreateUserReqGender) Validate() error {
+func (s CreateUserReqFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s CreateUserReqSex) Validate() error {
+func (s CreateUserReqFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -210,20 +214,20 @@ func (s PetCreate) Validate() error {
 func (s PetCreateOwner) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -235,7 +239,7 @@ func (s PetCreateOwner) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -244,23 +248,27 @@ func (s PetCreateOwner) Validate() error {
 	}
 	return nil
 }
-func (s PetCreateOwnerGender) Validate() error {
+func (s PetCreateOwnerFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s PetCreateOwnerSex) Validate() error {
+func (s PetCreateOwnerFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -269,20 +277,20 @@ func (s PetCreateOwnerSex) Validate() error {
 func (s PetOwnerRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -294,7 +302,7 @@ func (s PetOwnerRead) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -303,23 +311,27 @@ func (s PetOwnerRead) Validate() error {
 	}
 	return nil
 }
-func (s PetOwnerReadGender) Validate() error {
+func (s PetOwnerReadFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s PetOwnerReadSex) Validate() error {
+func (s PetOwnerReadFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -328,9 +340,9 @@ func (s PetOwnerReadSex) Validate() error {
 func (s UpdateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if s.Sex.Set {
+		if s.FavoriteCatBreed.Set {
 			if err := func() error {
-				if err := s.Sex.Value.Validate(); err != nil {
+				if err := s.FavoriteCatBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -342,14 +354,14 @@ func (s UpdateUserReq) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -361,7 +373,7 @@ func (s UpdateUserReq) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -370,23 +382,27 @@ func (s UpdateUserReq) Validate() error {
 	}
 	return nil
 }
-func (s UpdateUserReqGender) Validate() error {
+func (s UpdateUserReqFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UpdateUserReqSex) Validate() error {
+func (s UpdateUserReqFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -395,20 +411,20 @@ func (s UpdateUserReqSex) Validate() error {
 func (s UserBestFriendRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -420,7 +436,7 @@ func (s UserBestFriendRead) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -429,23 +445,27 @@ func (s UserBestFriendRead) Validate() error {
 	}
 	return nil
 }
-func (s UserBestFriendReadGender) Validate() error {
+func (s UserBestFriendReadFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserBestFriendReadSex) Validate() error {
+func (s UserBestFriendReadFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -454,20 +474,20 @@ func (s UserBestFriendReadSex) Validate() error {
 func (s UserCreate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -479,7 +499,7 @@ func (s UserCreate) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -488,23 +508,27 @@ func (s UserCreate) Validate() error {
 	}
 	return nil
 }
-func (s UserCreateGender) Validate() error {
+func (s UserCreateFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserCreateSex) Validate() error {
+func (s UserCreateFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -513,20 +537,20 @@ func (s UserCreateSex) Validate() error {
 func (s UserList) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -538,7 +562,7 @@ func (s UserList) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -547,23 +571,27 @@ func (s UserList) Validate() error {
 	}
 	return nil
 }
-func (s UserListGender) Validate() error {
+func (s UserListFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserListSex) Validate() error {
+func (s UserListFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -572,20 +600,20 @@ func (s UserListSex) Validate() error {
 func (s UserRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -597,7 +625,7 @@ func (s UserRead) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -606,23 +634,27 @@ func (s UserRead) Validate() error {
 	}
 	return nil
 }
-func (s UserReadGender) Validate() error {
+func (s UserReadFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserReadSex) Validate() error {
+func (s UserReadFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -631,20 +663,20 @@ func (s UserReadSex) Validate() error {
 func (s UserUpdate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Sex.Validate(); err != nil {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sex",
+			Name:  "favorite_cat_breed",
 			Error: err,
 		})
 	}
 	if err := func() error {
-		if s.Gender.Set {
+		if s.FavoriteDogBreed.Set {
 			if err := func() error {
-				if err := s.Gender.Value.Validate(); err != nil {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -656,7 +688,7 @@ func (s UserUpdate) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "gender",
+			Name:  "favorite_dog_breed",
 			Error: err,
 		})
 	}
@@ -665,23 +697,27 @@ func (s UserUpdate) Validate() error {
 	}
 	return nil
 }
-func (s UserUpdateGender) Validate() error {
+func (s UserUpdateFavoriteCatBreed) Validate() error {
 	switch s {
-	case "male":
+	case "siamese":
 		return nil
-	case "female":
+	case "bengal":
 		return nil
-	case "diverse":
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserUpdateSex) Validate() error {
+func (s UserUpdateFavoriteDogBreed) Validate() error {
 	switch s {
-	case "male":
-		return nil
-	case "female":
+	case "Kuro":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

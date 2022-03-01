@@ -46,8 +46,8 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "age", Type: field.TypeInt},
-		{Name: "sex", Type: field.TypeEnum, Enums: []string{"male", "female"}},
-		{Name: "gender", Type: field.TypeEnum, Nullable: true, Enums: []string{"male", "female", "diverse"}},
+		{Name: "favorite_cat_breed", Type: field.TypeEnum, Enums: []string{"siamese", "bengal", "lion", "tiger", "leopard", "other"}},
+		{Name: "favorite_dog_breed", Type: field.TypeEnum, Nullable: true, Enums: []string{"Kuro"}},
 		{Name: "user_best_friend", Type: field.TypeInt, Unique: true, Nullable: true},
 	}
 	// UsersTable holds the schema information for the "users" table.
