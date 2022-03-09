@@ -2,7 +2,7 @@
 	q := h.client.{{ $.Name }}.Query(){{ with eagerLoad $ "list" }}{{ . }}{{ end }}
 	{{- template "ogent/ogent/helper/list/paginate-and-filter" $ -}}
 	r := New{{ viewName $ "list" | plural }}(es)
-	return (*List{{ $.Name }}OKApplicationJSON(&r), nil
+	return (*List{{ $.Name }}OKApplicationJSON)(&r), nil
 {{- end }}
 
 {{ define "ogent/ogent/helper/list/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
@@ -10,7 +10,7 @@
 	{{- with eagerLoad $.Type "list" }}{{ . }}{{ end }}
 	{{- template "ogent/ogent/helper/list/paginate-and-filter" $.Type -}}
 	r := New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "list") "_" "" | plural }}(es)
-	return List{{ $.Type.Name }}{{ $.Scope.Edge.Name | pascal }}OKApplicationJSON(&r), nil
+	return (*List{{ $.Type.Name }}{{ $.Scope.Edge.Name | pascal }}OKApplicationJSON)(&r), nil
 {{ end }}
 
 {{ define "ogent/ogent/helper/list/paginate-and-filter" }}
