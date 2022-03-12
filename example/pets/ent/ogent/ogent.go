@@ -189,7 +189,8 @@ func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryPara
 			return nil, err
 		}
 	}
-	return ListCategoryOKApplicationJSON(NewCategoryLists(es)), nil
+	r := NewCategoryLists(es)
+	return (*ListCategoryOKApplicationJSON)(&r), nil
 }
 
 // ListCategoryPets handles GET /categories/{id}/pets requests.
@@ -223,7 +224,8 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 			return nil, err
 		}
 	}
-	return ListCategoryPetsOKApplicationJSON(NewCategoryPetsLists(es)), nil
+	r := NewCategoryPetsLists(es)
+	return (*ListCategoryPetsOKApplicationJSON)(&r), nil
 }
 
 // CreatePet handles POST /pets requests.
@@ -331,7 +333,8 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 			return nil, err
 		}
 	}
-	return ListPetOKApplicationJSON(NewPetLists(es)), nil
+	r := NewPetLists(es)
+	return (*ListPetOKApplicationJSON)(&r), nil
 }
 
 // ReadPet handles GET /pets/{id} requests.
@@ -441,7 +444,8 @@ func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCate
 			return nil, err
 		}
 	}
-	return ListPetCategoriesOKApplicationJSON(NewPetCategoriesLists(es)), nil
+	r := NewPetCategoriesLists(es)
+	return (*ListPetCategoriesOKApplicationJSON)(&r), nil
 }
 
 // ReadPetOwner handles GET /pets/{id}/owner requests.
@@ -501,7 +505,8 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 			return nil, err
 		}
 	}
-	return ListPetFriendsOKApplicationJSON(NewPetFriendsLists(es)), nil
+	r := NewPetFriendsLists(es)
+	return (*ListPetFriendsOKApplicationJSON)(&r), nil
 }
 
 // CreateUser handles POST /users requests.
@@ -669,7 +674,8 @@ func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (Lis
 			return nil, err
 		}
 	}
-	return ListUserOKApplicationJSON(NewUserLists(es)), nil
+	r := NewUserLists(es)
+	return (*ListUserOKApplicationJSON)(&r), nil
 }
 
 // ListUserPets handles GET /users/{id}/pets requests.
@@ -703,5 +709,6 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 			return nil, err
 		}
 	}
-	return ListUserPetsOKApplicationJSON(NewUserPetsLists(es)), nil
+	r := NewUserPetsLists(es)
+	return (*ListUserPetsOKApplicationJSON)(&r), nil
 }

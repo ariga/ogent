@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/big"
 	"math/bits"
 	"net"
 	"net/http"
@@ -29,6 +30,7 @@ import (
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
@@ -53,10 +55,12 @@ var (
 	_ = url.URL{}
 	_ = math.Mod
 	_ = bits.LeadingZeros64
+	_ = big.Rat{}
 	_ = validate.Int{}
 	_ = ht.NewRequest
 	_ = net.IP{}
 	_ = otelogen.Version
+	_ = attribute.KeyValue{}
 	_ = trace.TraceIDFromHex
 	_ = otel.GetTracerProvider
 	_ = metric.NewNoopMeterProvider
@@ -104,21 +108,24 @@ func NewClient(serverURL string, opts ...Option) (*Client, error) {
 // POST /categories
 func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) (res CreateCategoryRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("createCategory"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateCategory",
-		trace.WithAttributes(otelogen.OperationID("createCategory")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -160,21 +167,24 @@ func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) 
 // POST /pets
 func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res CreatePetRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("createPet"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreatePet",
-		trace.WithAttributes(otelogen.OperationID("createPet")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -216,21 +226,24 @@ func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res Creat
 // POST /users
 func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res CreateUserRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("createUser"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateUser",
-		trace.WithAttributes(otelogen.OperationID("createUser")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -270,21 +283,24 @@ func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res Cre
 // GET /db-health
 func (c *Client) DBHealth(ctx context.Context) (res DBHealthRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("DBHealth"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "DBHealth",
-		trace.WithAttributes(otelogen.OperationID("DBHealth")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/db-health"
 
@@ -312,21 +328,24 @@ func (c *Client) DBHealth(ctx context.Context) (res DBHealthRes, err error) {
 // DELETE /categories/{id}
 func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (res DeleteCategoryRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deleteCategory"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteCategory",
-		trace.WithAttributes(otelogen.OperationID("deleteCategory")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories/"
 	{
@@ -368,21 +387,24 @@ func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams
 // DELETE /pets/{id}
 func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res DeletePetRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deletePet"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeletePet",
-		trace.WithAttributes(otelogen.OperationID("deletePet")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
 	{
@@ -424,21 +446,24 @@ func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res Del
 // DELETE /users/{id}
 func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res DeleteUserRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deleteUser"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteUser",
-		trace.WithAttributes(otelogen.OperationID("deleteUser")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users/"
 	{
@@ -480,21 +505,24 @@ func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res D
 // GET /categories
 func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (res ListCategoryRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listCategory"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategory",
-		trace.WithAttributes(otelogen.OperationID("listCategory")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories"
 
@@ -557,21 +585,24 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 // GET /categories/{id}/pets
 func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (res ListCategoryPetsRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listCategoryPets"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategoryPets",
-		trace.WithAttributes(otelogen.OperationID("listCategoryPets")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories/"
 	{
@@ -649,21 +680,24 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 // GET /pets
 func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPetRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listPet"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPet",
-		trace.WithAttributes(otelogen.OperationID("listPet")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets"
 
@@ -726,21 +760,24 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 // GET /pets/{id}/categories
 func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (res ListPetCategoriesRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listPetCategories"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetCategories",
-		trace.WithAttributes(otelogen.OperationID("listPetCategories")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
 	{
@@ -818,21 +855,24 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 // GET /pets/{id}/friends
 func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (res ListPetFriendsRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listPetFriends"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetFriends",
-		trace.WithAttributes(otelogen.OperationID("listPetFriends")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
 	{
@@ -910,21 +950,24 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 // GET /users
 func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListUserRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listUser"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListUser",
-		trace.WithAttributes(otelogen.OperationID("listUser")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users"
 
@@ -987,21 +1030,24 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 // GET /users/{id}/pets
 func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (res ListUserPetsRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listUserPets"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListUserPets",
-		trace.WithAttributes(otelogen.OperationID("listUserPets")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users/"
 	{
@@ -1079,21 +1125,24 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 // GET /categories/{id}
 func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (res ReadCategoryRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readCategory"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadCategory",
-		trace.WithAttributes(otelogen.OperationID("readCategory")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/categories/"
 	{
@@ -1135,21 +1184,24 @@ func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (r
 // GET /pets/{id}
 func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPetRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readPet"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPet",
-		trace.WithAttributes(otelogen.OperationID("readPet")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
 	{
@@ -1191,21 +1243,24 @@ func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPet
 // GET /pets/{id}/owner
 func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (res ReadPetOwnerRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readPetOwner"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPetOwner",
-		trace.WithAttributes(otelogen.OperationID("readPetOwner")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/pets/"
 	{
@@ -1248,21 +1303,24 @@ func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (r
 // GET /users/{id}
 func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadUserRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readUser"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadUser",
-		trace.WithAttributes(otelogen.OperationID("readUser")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	u := uri.Clone(c.serverURL)
 	u.Path += "/users/"
 	{
@@ -1304,21 +1362,24 @@ func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadU
 // PATCH /categories/{id}
 func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, params UpdateCategoryParams) (res UpdateCategoryRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateCategory"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateCategory",
-		trace.WithAttributes(otelogen.OperationID("updateCategory")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -1374,21 +1435,24 @@ func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, 
 // PATCH /pets/{id}
 func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params UpdatePetParams) (res UpdatePetRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updatePet"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdatePet",
-		trace.WithAttributes(otelogen.OperationID("updatePet")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader
@@ -1444,21 +1508,24 @@ func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params Upd
 // PATCH /users/{id}
 func (c *Client) UpdateUser(ctx context.Context, request UpdateUserReq, params UpdateUserParams) (res UpdateUserRes, err error) {
 	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateUser"),
+	}
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateUser",
-		trace.WithAttributes(otelogen.OperationID("updateUser")),
+		trace.WithAttributes(otelAttrs...),
 		trace.WithSpanKind(trace.SpanKindClient),
 	)
 	defer func() {
 		if err != nil {
 			span.RecordError(err)
-			c.errors.Add(ctx, 1)
+			c.errors.Add(ctx, 1, otelAttrs...)
 		} else {
 			elapsedDuration := time.Since(startTime)
-			c.duration.Record(ctx, elapsedDuration.Microseconds())
+			c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 		}
 		span.End()
 	}()
-	c.requests.Add(ctx, 1)
+	c.requests.Add(ctx, 1, otelAttrs...)
 	var (
 		contentType string
 		reqBody     io.Reader

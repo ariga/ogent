@@ -26,7 +26,7 @@ func NewCategoryCreates(es []*ent.Category) []CategoryCreate {
 }
 
 func (c *CategoryCreate) Elem() CategoryCreate {
-	if c != nil {
+	if c == nil {
 		return CategoryCreate{}
 	}
 	return *c
@@ -54,7 +54,7 @@ func NewCategoryLists(es []*ent.Category) []CategoryList {
 }
 
 func (c *CategoryList) Elem() CategoryList {
-	if c != nil {
+	if c == nil {
 		return CategoryList{}
 	}
 	return *c
@@ -82,7 +82,7 @@ func NewCategoryReads(es []*ent.Category) []CategoryRead {
 }
 
 func (c *CategoryRead) Elem() CategoryRead {
-	if c != nil {
+	if c == nil {
 		return CategoryRead{}
 	}
 	return *c
@@ -110,7 +110,7 @@ func NewCategoryUpdates(es []*ent.Category) []CategoryUpdate {
 }
 
 func (c *CategoryUpdate) Elem() CategoryUpdate {
-	if c != nil {
+	if c == nil {
 		return CategoryUpdate{}
 	}
 	return *c
@@ -124,7 +124,7 @@ func NewCategoryPetsList(e *ent.Pet) *CategoryPetsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -140,7 +140,7 @@ func NewCategoryPetsLists(es []*ent.Pet) []CategoryPetsList {
 }
 
 func (pe *CategoryPetsList) Elem() CategoryPetsList {
-	if pe != nil {
+	if pe == nil {
 		return CategoryPetsList{}
 	}
 	return *pe
@@ -154,7 +154,7 @@ func NewPetCreate(e *ent.Pet) *PetCreate {
 		ID:         e.ID,
 		Name:       e.Name,
 		Weight:     NewOptInt(e.Weight),
-		Birthday:   NewOptTime(e.Birthday),
+		Birthday:   NewOptDateTime(e.Birthday),
 		Categories: NewPetCreateCategoriesSlice(e.Edges.Categories),
 		Owner:      NewPetCreateOwner(e.Edges.Owner).Elem(),
 	}
@@ -172,7 +172,7 @@ func NewPetCreates(es []*ent.Pet) []PetCreate {
 }
 
 func (pe *PetCreate) Elem() PetCreate {
-	if pe != nil {
+	if pe == nil {
 		return PetCreate{}
 	}
 	return *pe
@@ -200,7 +200,7 @@ func NewPetCreateCategoriesSlice(es []*ent.Category) []PetCreateCategories {
 }
 
 func (c *PetCreateCategories) Elem() PetCreateCategories {
-	if c != nil {
+	if c == nil {
 		return PetCreateCategories{}
 	}
 	return *c
@@ -229,7 +229,7 @@ func NewPetCreateOwners(es []*ent.User) []PetCreateOwner {
 }
 
 func (u *PetCreateOwner) Elem() PetCreateOwner {
-	if u != nil {
+	if u == nil {
 		return PetCreateOwner{}
 	}
 	return *u
@@ -243,7 +243,7 @@ func NewPetList(e *ent.Pet) *PetList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -259,7 +259,7 @@ func NewPetLists(es []*ent.Pet) []PetList {
 }
 
 func (pe *PetList) Elem() PetList {
-	if pe != nil {
+	if pe == nil {
 		return PetList{}
 	}
 	return *pe
@@ -273,7 +273,7 @@ func NewPetRead(e *ent.Pet) *PetRead {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -289,7 +289,7 @@ func NewPetReads(es []*ent.Pet) []PetRead {
 }
 
 func (pe *PetRead) Elem() PetRead {
-	if pe != nil {
+	if pe == nil {
 		return PetRead{}
 	}
 	return *pe
@@ -303,7 +303,7 @@ func NewPetUpdate(e *ent.Pet) *PetUpdate {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -319,7 +319,7 @@ func NewPetUpdates(es []*ent.Pet) []PetUpdate {
 }
 
 func (pe *PetUpdate) Elem() PetUpdate {
-	if pe != nil {
+	if pe == nil {
 		return PetUpdate{}
 	}
 	return *pe
@@ -347,7 +347,7 @@ func NewPetCategoriesLists(es []*ent.Category) []PetCategoriesList {
 }
 
 func (c *PetCategoriesList) Elem() PetCategoriesList {
-	if c != nil {
+	if c == nil {
 		return PetCategoriesList{}
 	}
 	return *c
@@ -361,7 +361,7 @@ func NewPetFriendsList(e *ent.Pet) *PetFriendsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -377,7 +377,7 @@ func NewPetFriendsLists(es []*ent.Pet) []PetFriendsList {
 }
 
 func (pe *PetFriendsList) Elem() PetFriendsList {
-	if pe != nil {
+	if pe == nil {
 		return PetFriendsList{}
 	}
 	return *pe
@@ -406,7 +406,7 @@ func NewPetOwnerReads(es []*ent.User) []PetOwnerRead {
 }
 
 func (u *PetOwnerRead) Elem() PetOwnerRead {
-	if u != nil {
+	if u == nil {
 		return PetOwnerRead{}
 	}
 	return *u
@@ -435,7 +435,7 @@ func NewUserCreates(es []*ent.User) []UserCreate {
 }
 
 func (u *UserCreate) Elem() UserCreate {
-	if u != nil {
+	if u == nil {
 		return UserCreate{}
 	}
 	return *u
@@ -464,7 +464,7 @@ func NewUserLists(es []*ent.User) []UserList {
 }
 
 func (u *UserList) Elem() UserList {
-	if u != nil {
+	if u == nil {
 		return UserList{}
 	}
 	return *u
@@ -493,7 +493,7 @@ func NewUserReads(es []*ent.User) []UserRead {
 }
 
 func (u *UserRead) Elem() UserRead {
-	if u != nil {
+	if u == nil {
 		return UserRead{}
 	}
 	return *u
@@ -522,7 +522,7 @@ func NewUserUpdates(es []*ent.User) []UserUpdate {
 }
 
 func (u *UserUpdate) Elem() UserUpdate {
-	if u != nil {
+	if u == nil {
 		return UserUpdate{}
 	}
 	return *u
@@ -536,7 +536,7 @@ func NewUserPetsList(e *ent.Pet) *UserPetsList {
 		ID:       e.ID,
 		Name:     e.Name,
 		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptTime(e.Birthday),
+		Birthday: NewOptDateTime(e.Birthday),
 	}
 }
 
@@ -552,7 +552,7 @@ func NewUserPetsLists(es []*ent.Pet) []UserPetsList {
 }
 
 func (pe *UserPetsList) Elem() UserPetsList {
-	if pe != nil {
+	if pe == nil {
 		return UserPetsList{}
 	}
 	return *pe

@@ -27,7 +27,7 @@ func NewTodoCreates(es []*ent.Todo) []TodoCreate {
 }
 
 func (t *TodoCreate) Elem() TodoCreate {
-	if t != nil {
+	if t == nil {
 		return TodoCreate{}
 	}
 	return *t
@@ -56,7 +56,7 @@ func NewTodoLists(es []*ent.Todo) []TodoList {
 }
 
 func (t *TodoList) Elem() TodoList {
-	if t != nil {
+	if t == nil {
 		return TodoList{}
 	}
 	return *t
@@ -85,7 +85,7 @@ func NewTodoReads(es []*ent.Todo) []TodoRead {
 }
 
 func (t *TodoRead) Elem() TodoRead {
-	if t != nil {
+	if t == nil {
 		return TodoRead{}
 	}
 	return *t
@@ -114,7 +114,7 @@ func NewTodoUpdates(es []*ent.Todo) []TodoUpdate {
 }
 
 func (t *TodoUpdate) Elem() TodoUpdate {
-	if t != nil {
+	if t == nil {
 		return TodoUpdate{}
 	}
 	return *t

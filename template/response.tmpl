@@ -40,7 +40,7 @@ import "{{ $.Config.Package }}"
     }
 
 	func ({{ $v.Type.Receiver }} *{{ $n }}) Elem() {{ $n }} {
-	    if {{ $v.Type.Receiver }} != nil {
+	    if {{ $v.Type.Receiver }} == nil {
 		    return {{ $n }}{}
         }
 		return *{{ $v.Type.Receiver }}
