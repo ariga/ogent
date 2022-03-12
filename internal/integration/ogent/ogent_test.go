@@ -108,22 +108,26 @@ func (t *testSuite) TestList() {
 	// Default page size.
 	got, err := t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{})
 	t.Require().NoError(err)
-	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[0:30])), got)
+	r := ogent.NewCategoryLists(es[0:30])
+	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
 
 	// Custom page size.
 	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{ItemsPerPage: ogent.NewOptInt(10)})
 	t.Require().NoError(err)
-	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[0:10])), got)
+	r = ogent.NewCategoryLists(es[0:10])
+	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
 
 	// Custom page.
 	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{Page: ogent.NewOptInt(2)})
 	t.Require().NoError(err)
-	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:50])), got)
+	r = ogent.NewCategoryLists(es[30:50])
+	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
 
 	// Custom page and page size.
 	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{Page: ogent.NewOptInt(2), ItemsPerPage: ogent.NewOptInt(10)})
 	t.Require().NoError(err)
-	t.Require().Equal(ogent.ListCategoryOKApplicationJSON(ogent.NewCategoryLists(es[30:40])), got)
+	r = ogent.NewCategoryLists(es[10:20])
+	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
 }
 
 func (t *testSuite) TestReadSub() {
@@ -149,7 +153,7 @@ func (t *testSuite) TestListSub() {
 	// OK - parent not found
 	got, err := t.handler.ListPetFriends(context.Background(), ogent.ListPetFriendsParams{})
 	t.Require().NoError(err)
-	t.Require().Equal(ogent.ListPetFriendsOKApplicationJSON(nil), got)
+	t.Require().Equal((*ogent.ListPetFriendsOKApplicationJSON)(nil), got)
 
 	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 
