@@ -3,7 +3,7 @@
 	// Add all fields.
 	{{- range $f := $.Fields }}
 	    {{- $a := fieldAnnotation $f }}
-	    {{- if or (not $a) (not $a.ReadOnly) }}
+	    {{- if not (and $a $a.ReadOnly) }}
     		{{- if $f.Optional }}
 	    		if v, ok := req.{{ $f.StructField}}.Get(); ok {
 		    		{{- $x := "v" }}
