@@ -1238,8 +1238,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "CategoryCreate": {
@@ -1257,8 +1256,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "CategoryList": {
@@ -1276,8 +1274,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "CategoryRead": {
@@ -1295,8 +1292,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "CategoryUpdate": {
@@ -1314,8 +1310,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "Category_PetsList": {
@@ -1425,8 +1420,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "PetCreate_Owner": {
@@ -1555,8 +1549,7 @@
         },
         "required": [
           "id",
-          "name",
-          "readonly"
+          "name"
         ]
       },
       "Pet_FriendsList": {

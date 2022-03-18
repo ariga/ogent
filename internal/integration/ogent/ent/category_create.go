@@ -32,6 +32,14 @@ func (cc *CategoryCreate) SetReadonly(s string) *CategoryCreate {
 	return cc
 }
 
+// SetNillableReadonly sets the "readonly" field if the given value is not nil.
+func (cc *CategoryCreate) SetNillableReadonly(s *string) *CategoryCreate {
+	if s != nil {
+		cc.SetReadonly(*s)
+	}
+	return cc
+}
+
 // AddPetIDs adds the "pets" edge to the Pet entity by IDs.
 func (cc *CategoryCreate) AddPetIDs(ids ...int) *CategoryCreate {
 	cc.mutation.AddPetIDs(ids...)
@@ -119,9 +127,6 @@ func (cc *CategoryCreate) ExecX(ctx context.Context) {
 func (cc *CategoryCreate) check() error {
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Category.name"`)}
-	}
-	if _, ok := cc.mutation.Readonly(); !ok {
-		return &ValidationError{Name: "readonly", err: errors.New(`ent: missing required field "Category.readonly"`)}
 	}
 	return nil
 }

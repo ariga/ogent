@@ -16,7 +16,7 @@ type Category struct {
 func (Category) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
-		field.String("readonly").Annotations(entoas.Annotation{ReadOnly: true}),
+		field.String("readonly").Optional().Annotations(entoas.Annotation{ReadOnly: true}),
 	}
 }
 

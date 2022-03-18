@@ -11,7 +11,7 @@ func NewCategoryCreate(e *ent.Category) *CategoryCreate {
 	return &CategoryCreate{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 
@@ -40,7 +40,7 @@ func NewCategoryList(e *ent.Category) *CategoryList {
 	return &CategoryList{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 
@@ -69,7 +69,7 @@ func NewCategoryRead(e *ent.Category) *CategoryRead {
 	return &CategoryRead{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 
@@ -98,7 +98,7 @@ func NewCategoryUpdate(e *ent.Category) *CategoryUpdate {
 	return &CategoryUpdate{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 
@@ -189,7 +189,7 @@ func NewPetCreateCategories(e *ent.Category) *PetCreateCategories {
 	return &PetCreateCategories{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 
@@ -340,7 +340,7 @@ func NewPetCategoriesList(e *ent.Category) *PetCategoriesList {
 	return &PetCategoriesList{
 		ID:       e.ID,
 		Name:     e.Name,
-		Readonly: e.Readonly,
+		Readonly: NewOptString(e.Readonly),
 	}
 }
 

@@ -214,9 +214,22 @@ func (m *CategoryMutation) OldReadonly(ctx context.Context) (v string, err error
 	return oldValue.Readonly, nil
 }
 
+// ClearReadonly clears the value of the "readonly" field.
+func (m *CategoryMutation) ClearReadonly() {
+	m.readonly = nil
+	m.clearedFields[category.FieldReadonly] = struct{}{}
+}
+
+// ReadonlyCleared returns if the "readonly" field was cleared in this mutation.
+func (m *CategoryMutation) ReadonlyCleared() bool {
+	_, ok := m.clearedFields[category.FieldReadonly]
+	return ok
+}
+
 // ResetReadonly resets all changes to the "readonly" field.
 func (m *CategoryMutation) ResetReadonly() {
 	m.readonly = nil
+	delete(m.clearedFields, category.FieldReadonly)
 }
 
 // AddPetIDs adds the "pets" edge to the Pet entity by ids.
@@ -376,7 +389,11 @@ func (m *CategoryMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *CategoryMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(category.FieldReadonly) {
+		fields = append(fields, category.FieldReadonly)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -389,6 +406,11 @@ func (m *CategoryMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *CategoryMutation) ClearField(name string) error {
+	switch name {
+	case category.FieldReadonly:
+		m.ClearReadonly()
+		return nil
+	}
 	return fmt.Errorf("unknown Category nullable field %s", name)
 }
 

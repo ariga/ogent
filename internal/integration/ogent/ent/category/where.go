@@ -313,6 +313,20 @@ func ReadonlyHasSuffix(v string) predicate.Category {
 	})
 }
 
+// ReadonlyIsNil applies the IsNil predicate on the "readonly" field.
+func ReadonlyIsNil() predicate.Category {
+	return predicate.Category(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldReadonly)))
+	})
+}
+
+// ReadonlyNotNil applies the NotNil predicate on the "readonly" field.
+func ReadonlyNotNil() predicate.Category {
+	return predicate.Category(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldReadonly)))
+	})
+}
+
 // ReadonlyEqualFold applies the EqualFold predicate on the "readonly" field.
 func ReadonlyEqualFold(v string) predicate.Category {
 	return predicate.Category(func(s *sql.Selector) {

@@ -93,10 +93,13 @@ func (s CategoryCreate) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -141,11 +144,9 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -162,7 +163,7 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -218,10 +219,13 @@ func (s CategoryList) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -266,11 +270,9 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -287,7 +289,7 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -489,10 +491,13 @@ func (s CategoryRead) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -537,11 +542,9 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -558,7 +561,7 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -614,10 +617,13 @@ func (s CategoryUpdate) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -662,11 +668,9 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -683,7 +687,7 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2162,10 +2166,13 @@ func (s PetCategoriesList) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -2210,11 +2217,9 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -2231,7 +2236,7 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2489,10 +2494,13 @@ func (s PetCreateCategories) Encode(e *jx.Writer) {
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
-
-		e.RawStr("\"readonly\"" + ":")
-		e.Str(s.Readonly)
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
 	}
 	e.ObjEnd()
 }
@@ -2537,11 +2545,9 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "readonly":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Readonly = string(v)
-				if err != nil {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -2558,7 +2564,7 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
