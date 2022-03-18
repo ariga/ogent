@@ -92,12 +92,19 @@ func (s CategoryCreate) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryCreate = [2]string{
+var jsonFieldsNameOfCategoryCreate = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryCreate from json.
@@ -133,6 +140,18 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -143,7 +162,7 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -198,12 +217,19 @@ func (s CategoryList) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryList = [2]string{
+var jsonFieldsNameOfCategoryList = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryList from json.
@@ -239,6 +265,18 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -249,7 +287,7 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -450,12 +488,19 @@ func (s CategoryRead) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryRead = [2]string{
+var jsonFieldsNameOfCategoryRead = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryRead from json.
@@ -491,6 +536,18 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -501,7 +558,7 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -556,12 +613,19 @@ func (s CategoryUpdate) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryUpdate = [2]string{
+var jsonFieldsNameOfCategoryUpdate = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryUpdate from json.
@@ -597,6 +661,18 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -607,7 +683,7 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2085,12 +2161,19 @@ func (s PetCategoriesList) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCategoriesList = [2]string{
+var jsonFieldsNameOfPetCategoriesList = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes PetCategoriesList from json.
@@ -2126,6 +2209,18 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2136,7 +2231,7 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2393,12 +2488,19 @@ func (s PetCreateCategories) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"readonly\"" + ":")
+		e.Str(s.Readonly)
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCreateCategories = [2]string{
+var jsonFieldsNameOfPetCreateCategories = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes PetCreateCategories from json.
@@ -2434,6 +2536,18 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "readonly":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Readonly = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2444,7 +2558,7 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

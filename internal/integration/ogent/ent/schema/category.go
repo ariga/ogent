@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entoas"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
@@ -15,6 +16,7 @@ type Category struct {
 func (Category) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
+		field.String("readonly").Annotations(entoas.Annotation{ReadOnly: true}),
 	}
 }
 

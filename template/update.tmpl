@@ -5,7 +5,7 @@
 	// Add all fields.
 	{{- range $f := $.Fields }}
 	    {{- $a := fieldAnnotation $f }}
-	    {{- if and (not $f.Immutable) (or (not $a) (not $a.Field.ReadOnly)) }}
+	    {{- if and (not $f.Immutable) (or (not $a) (not $a.ReadOnly)) }}
 			if v, ok := req.{{ $f.StructField}}.Get(); ok {
 				{{- $x := "v" }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}

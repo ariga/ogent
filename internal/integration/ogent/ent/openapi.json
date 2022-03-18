@@ -1226,6 +1226,9 @@
           "name": {
             "type": "string"
           },
+          "readonly": {
+            "type": "string"
+          },
           "pets": {
             "type": "array",
             "items": {
@@ -1235,7 +1238,8 @@
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "CategoryCreate": {
@@ -1246,11 +1250,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "CategoryList": {
@@ -1261,11 +1269,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "CategoryRead": {
@@ -1276,11 +1288,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "CategoryUpdate": {
@@ -1291,11 +1307,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "Category_PetsList": {
@@ -1398,11 +1418,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "PetCreate_Owner": {
@@ -1524,11 +1548,15 @@
           },
           "name": {
             "type": "string"
+          },
+          "readonly": {
+            "type": "string"
           }
         },
         "required": [
           "id",
-          "name"
+          "name",
+          "readonly"
         ]
       },
       "Pet_FriendsList": {

@@ -9,8 +9,9 @@ func NewCategoryCreate(e *ent.Category) *CategoryCreate {
 		return nil
 	}
 	return &CategoryCreate{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
@@ -37,8 +38,9 @@ func NewCategoryList(e *ent.Category) *CategoryList {
 		return nil
 	}
 	return &CategoryList{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
@@ -65,8 +67,9 @@ func NewCategoryRead(e *ent.Category) *CategoryRead {
 		return nil
 	}
 	return &CategoryRead{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
@@ -93,8 +96,9 @@ func NewCategoryUpdate(e *ent.Category) *CategoryUpdate {
 		return nil
 	}
 	return &CategoryUpdate{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
@@ -183,8 +187,9 @@ func NewPetCreateCategories(e *ent.Category) *PetCreateCategories {
 		return nil
 	}
 	return &PetCreateCategories{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
@@ -333,8 +338,9 @@ func NewPetCategoriesList(e *ent.Category) *PetCategoriesList {
 		return nil
 	}
 	return &PetCategoriesList{
-		ID:   e.ID,
-		Name: e.Name,
+		ID:       e.ID,
+		Name:     e.Name,
+		Readonly: e.Readonly,
 	}
 }
 
