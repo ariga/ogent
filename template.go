@@ -19,26 +19,26 @@ var (
 	templateDir embed.FS
 	// FuncMap contains extra template functions used by ogent.
 	FuncMap = template.FuncMap{
+		"convertTo":       convertTo,
 		"eagerLoad":       eagerLoad,
 		"edgeOperations":  entoas.EdgeOperations,
 		"edgeViewName":    entoas.EdgeViewName,
-		"convertTo":       convertTo,
+		"fieldAnnotation": entoas.FieldAnnotation,
 		"hasParams":       hasParams,
 		"hasRequestBody":  hasRequestBody,
-		"httpVerb":        httpVerb,
 		"httpRoute":       httpRoute,
+		"httpVerb":        httpVerb,
 		"isCreate":        isCreate,
-		"isRead":          isRead,
-		"isUpdate":        isUpdate,
 		"isDelete":        isDelete,
 		"isList":          isList,
+		"isRead":          isRead,
+		"isUpdate":        isUpdate,
 		"kebab":           strcase.KebabCase,
 		"nodeOperations":  entoas.NodeOperations,
 		"replaceAll":      strings.ReplaceAll,
 		"setFieldExpr":    setFieldExpr,
 		"viewName":        entoas.ViewName,
 		"viewNameEdge":    entoas.ViewNameEdge,
-		"fieldAnnotation": entoas.FieldAnnotation,
 	}
 	// Templates holds all templates used by ogent.
 	Templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(FuncMap).ParseFS(templateDir, "template/*tmpl"))

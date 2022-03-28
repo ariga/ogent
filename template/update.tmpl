@@ -4,8 +4,8 @@
 	b := h.client.{{ $.Name }}.UpdateOneID(params.{{ $.ID.StructField }})
 	// Add all fields.
 	{{- range $f := $.Fields }}
-	    {{- $a := fieldAnnotation $f }}
-	    {{- if not (or $f.Immutable (and $a $a.ReadOnly)) }}
+		{{- $a := fieldAnnotation $f }}
+		{{- if and (not $f.Immutable) (or (not $a) (not $a.ReadOnly)) }}
 			if v, ok := req.{{ $f.StructField}}.Get(); ok {
 				{{- $x := "v" }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
@@ -43,4 +43,3 @@
 	}
 	return New{{ viewName $ "update"  }}(e), nil
 {{- end }}
-
