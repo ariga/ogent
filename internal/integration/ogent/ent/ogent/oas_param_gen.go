@@ -90,6 +90,10 @@ type ListCategoryParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListCategoryPetsParams struct {
@@ -99,6 +103,10 @@ type ListCategoryPetsParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListPetParams struct {
@@ -106,6 +114,10 @@ type ListPetParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListPetCategoriesParams struct {
@@ -115,6 +127,10 @@ type ListPetCategoriesParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListPetFriendsParams struct {
@@ -124,6 +140,10 @@ type ListPetFriendsParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListUserParams struct {
@@ -131,6 +151,10 @@ type ListUserParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ListUserPetsParams struct {
@@ -140,6 +164,10 @@ type ListUserPetsParams struct {
 	Page OptInt
 	// Item count to render per page.
 	ItemsPerPage OptInt
+	// Clause is used to sort the records in the result set for a SELECT statement.
+	OrderBy OptString
+	// Text strings that you use to specify a subset of the data items.
+	Filter OptString
 }
 
 type ReadCategoryParams struct {

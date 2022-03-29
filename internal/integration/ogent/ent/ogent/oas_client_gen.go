@@ -524,6 +524,38 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 		}
 		q["itemsPerPage"] = e.Result()
 	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
+	}
 	u.RawQuery = q.Encode()
 
 	r := ht.NewRequest(ctx, "GET", u, nil)
@@ -619,6 +651,38 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 		}
 		q["itemsPerPage"] = e.Result()
 	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
+	}
 	u.RawQuery = q.Encode()
 
 	r := ht.NewRequest(ctx, "GET", u, nil)
@@ -698,6 +762,38 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 			return res, errors.Wrap(err, "encode query")
 		}
 		q["itemsPerPage"] = e.Result()
+	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
 	}
 	u.RawQuery = q.Encode()
 
@@ -794,6 +890,38 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 		}
 		q["itemsPerPage"] = e.Result()
 	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
+	}
 	u.RawQuery = q.Encode()
 
 	r := ht.NewRequest(ctx, "GET", u, nil)
@@ -889,6 +1017,38 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 		}
 		q["itemsPerPage"] = e.Result()
 	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
+	}
 	u.RawQuery = q.Encode()
 
 	r := ht.NewRequest(ctx, "GET", u, nil)
@@ -968,6 +1128,38 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 			return res, errors.Wrap(err, "encode query")
 		}
 		q["itemsPerPage"] = e.Result()
+	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
 	}
 	u.RawQuery = q.Encode()
 
@@ -1063,6 +1255,38 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 			return res, errors.Wrap(err, "encode query")
 		}
 		q["itemsPerPage"] = e.Result()
+	}
+	{
+		// Encode "orderBy" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.OrderBy.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["orderBy"] = e.Result()
+	}
+	{
+		// Encode "filter" parameter.
+		e := uri.NewQueryEncoder(uri.QueryEncoderConfig{
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		})
+		if err := func() error {
+			if val, ok := params.Filter.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+		q["filter"] = e.Result()
 	}
 	u.RawQuery = q.Encode()
 

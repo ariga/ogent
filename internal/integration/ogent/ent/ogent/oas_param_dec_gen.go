@@ -259,6 +259,76 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (ListCategoryPara
 			}
 		}
 	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
+			}
+		}
+	}
 	return params, nil
 }
 
@@ -368,6 +438,76 @@ func decodeListCategoryPetsParams(args [1]string, r *http.Request) (ListCategory
 			}
 		}
 	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
+			}
+		}
+	}
 	return params, nil
 }
 
@@ -443,6 +583,76 @@ func decodeListPetParams(args [0]string, r *http.Request) (ListPetParams, error)
 				return nil
 			}(); err != nil {
 				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+			}
+		}
+	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
 			}
 		}
 	}
@@ -555,6 +765,76 @@ func decodeListPetCategoriesParams(args [1]string, r *http.Request) (ListPetCate
 			}
 		}
 	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
+			}
+		}
+	}
 	return params, nil
 }
 
@@ -664,6 +944,76 @@ func decodeListPetFriendsParams(args [1]string, r *http.Request) (ListPetFriends
 			}
 		}
 	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
+			}
+		}
+	}
 	return params, nil
 }
 
@@ -739,6 +1089,76 @@ func decodeListUserParams(args [0]string, r *http.Request) (ListUserParams, erro
 				return nil
 			}(); err != nil {
 				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+			}
+		}
+	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
 			}
 		}
 	}
@@ -848,6 +1268,76 @@ func decodeListUserPetsParams(args [1]string, r *http.Request) (ListUserPetsPara
 				return nil
 			}(); err != nil {
 				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+			}
+		}
+	}
+	// Decode query: orderBy.
+	{
+		values, ok := queryArgs["orderBy"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotOrderByVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotOrderByVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.OrderBy.SetTo(paramsDotOrderByVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: orderBy: parse")
+			}
+		}
+	}
+	// Decode query: filter.
+	{
+		values, ok := queryArgs["filter"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotFilterVal string
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotFilterVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Filter.SetTo(paramsDotFilterVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: filter: parse")
 			}
 		}
 	}

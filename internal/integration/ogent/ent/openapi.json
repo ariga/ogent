@@ -30,6 +30,22 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -294,6 +310,22 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -348,6 +380,22 @@
             "description": "item count to render per page",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -646,6 +694,22 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -709,6 +773,22 @@
             "description": "item count to render per page",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -809,6 +889,22 @@
             "description": "item count to render per page",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -1182,6 +1278,22 @@
             "description": "item count to render per page",
             "schema": {
               "type": "integer"
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "clause is used to sort the records in the result set for a SELECT statement.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "text strings that you use to specify a subset of the data items",
+            "schema": {
+              "type": "string"
             }
           }
         ],
