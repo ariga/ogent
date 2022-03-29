@@ -2,8 +2,10 @@ package ogent
 
 import (
 	"context"
+	"entgo.io/ent/dialect/sql"
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"testing"
 	"time"
@@ -128,6 +130,15 @@ func (t *testSuite) TestList() {
 	t.Require().NoError(err)
 	r = ogent.NewCategoryLists(es[10:20])
 	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
+
+	//Order By
+	got, err = t.handler.ListCategory(context.Background(), ogent.ListCategoryParams{OrderBy: ogent.NewOptString("id desc")})
+	t.Require().NoError(err)
+	r = ogent.NewCategoryLists(es[20:50])
+	sort.SliceStable(r, func(i, j int) bool {
+		return r[i].ID > r[j].ID
+	})
+	t.Require().Equal((*ogent.ListCategoryOKApplicationJSON)(&r), got)
 }
 
 func (t *testSuite) TestReadSub() {
@@ -220,4 +231,71 @@ func (t *testSuite) reqErr(c int, err interface{}) {
 	}
 	t.Require().Equal(c, ac, err)
 	t.Require().Equal(http.StatusText(c), at, err)
+}
+
+func (t *testSuite) TestParseFilterToSQL() {
+	f, e := preparePetFilterToSQL()
+	t.Equal(len(f), len(e), "filter and expected list must have the same length")
+	i := 0
+	n := len(f)
+	for i < n {
+		q := t.client.Pet.Query()
+		exp := &ogent.Expression{}
+		err := ogent.SqlParser.ParseString(f[i], exp)
+		t.Require().NoError(err, "fail to parse the filter: "+f[i])
+		q.Where(func(s *sql.Selector) {
+			ogent.ParseExpression(exp, s)
+			query, _ := s.Query()
+			t.Equal(e[i], query, "actual query created is not the expected one")
+		})
+		_, err = q.All(context.Background())
+		t.Require().NoError(err, "fail to execute the query")
+		i++
+	}
+}
+
+func preparePetFilterToSQL() ([]string, []string) {
+	var f []string //filter
+	var e []string //expected
+	//EQ
+	f = append(f, "name eq 'Ariel'")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ?")
+	//NE
+	f = append(f, "name ne 'Milk'")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` <> ?")
+	//GT
+	f = append(f, "weight gt 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` > ?")
+	//GE
+	f = append(f, "weight ge 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` >= ?")
+	//LT
+	f = append(f, "weight lt 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` < ?")
+	//LE
+	f = append(f, "weight le 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` <= ?")
+	//AND
+	f = append(f, "name eq 'Ariel' and weight le 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ? AND `pets`.`weight` <= ?")
+	//OR
+	f = append(f, "name eq 'Ariel' or weight le 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ? OR `pets`.`weight` <= ?")
+	//AND Recursive
+	f = append(f, "(name eq 'Ariel' or name eq 'Milk') and weight le 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`name` = ? OR `pets`.`name` = ?) AND `pets`.`weight` <= ?")
+	//AND Recursive
+	f = append(f, "weight le 2 and (name eq 'Ariel' or name eq 'Milk')")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`weight` <= ? AND `pets`.`name` = ?) OR `pets`.`name` = ?")
+	//OR Recursive
+	f = append(f, "(name eq 'Ariel' or name eq 'Milk') or weight le 2")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`name` = ? OR `pets`.`name` = ?) OR `pets`.`weight` <= ?")
+	//OR Recursive
+	f = append(f, "weight le 2 or (name eq 'Ariel' or name eq 'Milk')")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`weight` <= ? OR `pets`.`name` = ?) OR `pets`.`name` = ?")
+	//NOT
+	f = append(f, "not weight le 3.5")
+	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE NOT (`pets`.`weight` <= ?)")
+
+	return f, e
 }

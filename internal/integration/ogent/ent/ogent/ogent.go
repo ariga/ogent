@@ -5,12 +5,17 @@ package ogent
 import (
 	"context"
 	"net/http"
+	"strings"
+	"time"
 
 	"ariga.io/ogent/internal/integration/ogent/ent"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"entgo.io/ent/dialect/sql"
+	"github.com/alecthomas/participle"
+	"github.com/alecthomas/participle/lexer"
 	"github.com/go-faster/jx"
 )
 
@@ -28,6 +33,245 @@ func rawError(err error) jx.Raw {
 	e.Str(err.Error())
 	return e.Bytes()
 }
+
+type Boolean bool
+
+func (b *Boolean) Capture(values []string) error {
+	*b = values[0] == "TRUE"
+	return nil
+}
+
+type Select struct {
+	Top        *Term             `"SELECT" [ "TOP" @@ ]`
+	Distinct   bool              `[  @"DISTINCT"`
+	All        bool              ` | @"ALL" ]`
+	Expression *SelectExpression `@@`
+	From       *From             `"FROM" @@`
+	Limit      *Expression       `[ "LIMIT" @@ ]`
+	Offset     *Expression       `[ "OFFSET" @@ ]`
+	GroupBy    *Expression       `[ "GROUP" "BY" @@ ]`
+}
+
+type From struct {
+	TableExpressions []*TableExpression `@@ { "," @@ }`
+	Where            *Expression        `[ "WHERE" @@ ]`
+}
+
+type TableExpression struct {
+	Table  string        `( @Ident { "." @Ident }`
+	Select *Select       `  | "(" @@ ")"`
+	Values []*Expression `  | "VALUES" "(" @@ { "," @@ } ")")`
+	As     string        `[ "AS" @Ident ]`
+}
+
+type SelectExpression struct {
+	All         bool                 `  @"*"`
+	Expressions []*AliasedExpression `| @@ { "," @@ }`
+}
+
+type AliasedExpression struct {
+	Expression *Expression `@@`
+	As         string      `[ "AS" @Ident ]`
+}
+
+type Expression struct {
+	Or []*OrCondition `@@ { "or" @@ }`
+}
+
+type OrCondition struct {
+	And []*Condition `@@ { "and" @@ }`
+}
+
+type Condition struct {
+	Operand *ConditionOperand `  @@`
+	Not     *Condition        `| "NOT" @@`
+	Exists  *Select           `| "EXISTS" "(" @@ ")"`
+}
+
+type ConditionOperand struct {
+	Operand      *Operand      `@@`
+	ConditionRHS *ConditionRHS `[ @@ ]`
+}
+
+type ConditionRHS struct {
+	Compare *Compare `  @@`
+	Is      *Is      `| "IS" @@`
+	Between *Between `| "BETWEEN" @@`
+	In      *In      `| "IN" "(" @@ ")"`
+	Like    *Like    `| "LIKE" @@`
+}
+
+type Compare struct {
+	Operator string         `@( "ne" | "le" | "ge" | "eq" | "lt" | "gt")`
+	Operand  *Operand       `(  @@`
+	Select   *CompareSelect ` | @@ )`
+}
+
+type CompareSelect struct {
+	All    bool    `(  @"ALL"`
+	Any    bool    ` | @"ANY"`
+	Some   bool    ` | @"SOME" )`
+	Select *Select `"(" @@ ")"`
+}
+
+type Like struct {
+	Not     bool     `[ @"NOT" ]`
+	Operand *Operand `@@`
+}
+
+type Is struct {
+	Not          bool     `[ @"NOT" ]`
+	Null         bool     `( @"NULL"`
+	DistinctFrom *Operand `  | "DISTINCT" "FROM" @@ )`
+}
+
+type Between struct {
+	Start *Operand `@@`
+	End   *Operand `"and" @@`
+}
+
+type In struct {
+	Select      *Select       `  @@`
+	Expressions []*Expression `| @@ { "," @@ }`
+}
+
+type Operand struct {
+	Summand []*Summand `@@ { "|" "|" @@ }`
+}
+
+type Summand struct {
+	LHS *Factor `@@`
+	Op  string  `[ @("+" | "-")`
+	RHS *Factor `  @@ ]`
+}
+
+type Factor struct {
+	LHS *Term  `@@`
+	Op  string `[ @("*" | "/" | "%")`
+	RHS *Term  `  @@ ]`
+}
+
+type Term struct {
+	Select        *Select     `  @@`
+	Value         *Value      `| @@`
+	SymbolRef     *SymbolRef  `| @@`
+	SubExpression *Expression `| "(" @@ ")"`
+}
+
+type SymbolRef struct {
+	Symbol     string        `@Ident @{ "." Ident }`
+	Parameters []*Expression `[ "(" @@ { "," @@ } ")" ]`
+}
+
+type Value struct {
+	Wildcard bool       `(  @"*"`
+	Number   *float64   ` | @Number`
+	String   *string    ` | @String`
+	Boolean  *Boolean   ` | @("TRUE" | "FALSE")`
+	Null     bool       ` | @"NULL"`
+	Date     *time.Time ` | @Date`
+	Array    *Array     ` | @@ )`
+}
+
+type Array struct {
+	Expressions []*Expression `"(" @@ { "," @@ } ")"`
+}
+
+func ParseExpression(exp *Expression, s *sql.Selector) {
+	i := 0
+	len := len(exp.Or)
+	for i < len { //OR
+		parseAndExpression(exp.Or[i], s)
+		i++
+		if i < len {
+			s.Or()
+		}
+	}
+}
+
+func parseAndExpression(and *OrCondition, s *sql.Selector) {
+	for _, c := range and.And {
+		if c.Operand != nil {
+			addPredicate(c, s)
+		} else if c.Not != nil {
+			addPredicate(c.Not, s)
+		}
+	}
+}
+
+func addPredicate(c *Condition, s *sql.Selector) {
+	con := c.Operand.ConditionRHS
+	if con != nil {
+		op := con.Compare.Operator
+		col := getColumn(c.Operand)
+		v := getOperand(c.Operand.ConditionRHS.Compare.Operand, s)
+		switch op {
+		case "eq":
+			s.Where(sql.EQ(s.C(col), v)) //Equal
+		case "ne":
+			s.Where(sql.NEQ(s.C(col), v)) //Not equal
+		case "gt":
+			s.Where(sql.GT(s.C(col), v)) //Greater than
+		case "ge":
+			s.Where(sql.GTE(s.C(col), v)) //Greater than or equal
+		case "lt":
+			s.Where(sql.LT(s.C(col), v)) //Less than
+		case "le":
+			s.Where(sql.LTE(s.C(col), v)) //Less than or equal
+		}
+	} else {
+		v := getOperand(c.Operand.Operand, s).(*Array)
+		for _, i := range v.Expressions {
+			ParseExpression(i, s)
+		}
+	}
+}
+
+func getColumn(col *ConditionOperand) string {
+	return getOperand(col.Operand, nil).(string)
+}
+
+func getOperand(op *Operand, s *sql.Selector) interface{} {
+	for _, su := range op.Summand {
+		return getValue(su, s)
+	}
+	return nil
+}
+
+func getValue(su *Summand, s *sql.Selector) interface{} {
+	if su.LHS.LHS.Value != nil {
+		v := su.LHS.LHS.Value
+		if v.String != nil {
+			return v.String
+		} else if v.Number != nil {
+			return v.Number
+		} else if v.Date != nil {
+			return v.Date
+		} else if v.Array != nil {
+			return v.Array
+		}
+	} else {
+		return su.LHS.LHS.SymbolRef.Symbol
+	}
+	return nil
+}
+
+var (
+	sqlLexer = lexer.Must(lexer.Regexp(`(\s+)` +
+		`|(?P<Keyword>(?i)SELECT|FROM|TOP|DISTINCT|ALL|WHERE|GROUP|BY|HAVING|UNION|MINUS|EXCEPT|INTERSECT|ORDER|LIMIT|OFFSET|TRUE|FALSE|NULL|IS|NOT|ANY|SOME|BETWEEN|and|or|LIKE|AS|IN)` +
+		`|(?P<Ident>[a-zA-Z_][a-zA-Z0-9_]*)` +
+		`|(?P<Date>\d{4})-(\d{2})-(\d{2})[tT](\d{2}):(\d{2}):(\d{2})(\.\d+)?([zZ]|(\+|-)(\d{2}):(\d{2}))` +
+		`|(?P<Number>[-+]?\d*\.?\d+([eE][-+]?\d+)?)` +
+		`|(?P<String>'[^']*'|"[^"]*")` +
+		`|(?P<Operators><>|!=|<=|>=|[-+*/%,.()=<>]|eq|ne|gt|ge|lt|le)`,
+	))
+	SqlParser = participle.MustBuild(
+		&Expression{},
+		participle.Lexer(sqlLexer),
+		participle.Unquote("String"),
+		participle.CaseInsensitive("Keyword"),
+	)
+)
 
 // CreateCategory handles POST /categories requests.
 func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {
@@ -170,6 +414,38 @@ func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryPara
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//Filter operations
+	if v, ok := params.Filter.Get(); ok {
+		exp := &Expression{}
+		err := SqlParser.ParseString(v, exp)
+		if err != nil {
+			return &R400{
+				Code:   http.StatusBadRequest,
+				Status: http.StatusText(http.StatusBadRequest),
+				Errors: rawError(err),
+			}, nil
+		} else {
+			//parse filter
+			q.Where(func(s *sql.Selector) {
+				ParseExpression(exp, s)
+			})
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -205,6 +481,20 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -314,6 +604,38 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//Filter operations
+	if v, ok := params.Filter.Get(); ok {
+		exp := &Expression{}
+		err := SqlParser.ParseString(v, exp)
+		if err != nil {
+			return &R400{
+				Code:   http.StatusBadRequest,
+				Status: http.StatusText(http.StatusBadRequest),
+				Errors: rawError(err),
+			}, nil
+		} else {
+			//parse filter
+			q.Where(func(s *sql.Selector) {
+				ParseExpression(exp, s)
+			})
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -425,6 +747,20 @@ func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCate
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -486,6 +822,20 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -677,6 +1027,38 @@ func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (Lis
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//Filter operations
+	if v, ok := params.Filter.Get(); ok {
+		exp := &Expression{}
+		err := SqlParser.ParseString(v, exp)
+		if err != nil {
+			return &R400{
+				Code:   http.StatusBadRequest,
+				Status: http.StatusText(http.StatusBadRequest),
+				Errors: rawError(err),
+			}, nil
+		} else {
+			//parse filter
+			q.Where(func(s *sql.Selector) {
+				ParseExpression(exp, s)
+			})
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {
@@ -712,6 +1094,20 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc" {
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	if err != nil {
 		switch {

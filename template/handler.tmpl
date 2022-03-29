@@ -26,6 +26,8 @@
 		return e.Bytes()
 	}
 
+	{{- template "ogent/ogent/helper/list-filter" -}}
+
 	{{- range $n := $.Nodes }}
 		{{- $root := print "/" ($n.Name | plural | kebab) }}
 		{{- range $op := nodeOperations $n }}
@@ -48,6 +50,7 @@
 					panic("unimplemented")
 				{{- end }}
 			}
+
 		{{ end }}
 		{{- range $e := $n.Edges }}
 			{{- range $op := edgeOperations $e }}
@@ -62,3 +65,4 @@
 		{{ end }}
 	{{ end }}
 {{ end }}
+

@@ -1,6 +1,8 @@
 {{ define "ogent/ogent/helper/list" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	q := h.client.{{ $.Name }}.Query(){{ with eagerLoad $ "list" }}{{ . }}{{ end }}
-	{{- template "ogent/ogent/helper/list/paginate-and-filter" $ -}}
+	{{- template "ogent/ogent/helper/list/paginate-and-sort" $ -}}
+	{{- template "ogent/ogent/helper/list/filter" $ -}}
+	{{- template "ogent/ogent/helper/list/execute-query" $ -}}
 	r := New{{ viewName $ "list" | plural }}(es)
 	return (*List{{ $.Name }}OKApplicationJSON)(&r), nil
 {{- end }}
@@ -8,12 +10,13 @@
 {{ define "ogent/ogent/helper/list/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
 	q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ(params.{{ $.Type.ID.StructField }})).Query{{ $.Scope.Edge.Name | pascal }}()
 	{{- with eagerLoad $.Type "list" }}{{ . }}{{ end }}
-	{{- template "ogent/ogent/helper/list/paginate-and-filter" $.Type -}}
+	{{- template "ogent/ogent/helper/list/paginate-and-sort" $.Type -}}
+	{{- template "ogent/ogent/helper/list/execute-query" $ -}}
 	r := New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "list") "_" "" | plural }}(es)
 	return (*List{{ $.Type.Name }}{{ $.Scope.Edge.Name | pascal }}OKApplicationJSON)(&r), nil
 {{ end }}
 
-{{ define "ogent/ogent/helper/list/paginate-and-filter" }}
+{{ define "ogent/ogent/helper/list/paginate-and-sort" }}
 	page := 1
 	if v, ok := params.Page.Get(); ok {
 		page = v
@@ -22,6 +25,42 @@
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
+	//Sort the fetched data in either ascending or descending
+	if v, ok := params.OrderBy.Get(); ok {
+		for _, p := range strings.Split(v, ",") {
+			f := strings.Fields(p)
+			column := f[0]
+			if len(f) > 1 && f[1] == "desc"{
+				q.Order(ent.Desc(column))
+			} else {
+				q.Order(ent.Asc(column))
+			}
+		}
+	}
+{{ end }}
+
+{{ define "ogent/ogent/helper/list/filter" }}
+	//Filter operations
+	if v, ok := params.Filter.Get(); ok {
+		exp := &Expression{}
+		err := SqlParser.ParseString(v, exp)
+		if err != nil {
+			return &R400{
+				Code:   http.StatusBadRequest,
+				Status: http.StatusText(http.StatusBadRequest),
+				Errors: rawError(err),
+			}, nil
+		} else {
+			//parse filter
+			q.Where(func(s *sql.Selector) {
+				ParseExpression(exp, s)
+			})
+		}
+	}
+{{ end }}
+
+{{ define "ogent/ogent/helper/list/execute-query" }}
+	//run the query
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
 	{{-
 		template "ogent/ogent/helper/error"
