@@ -34,6 +34,26 @@ func (cu *CategoryUpdate) SetName(s string) *CategoryUpdate {
 	return cu
 }
 
+// SetReadonly sets the "readonly" field.
+func (cu *CategoryUpdate) SetReadonly(s string) *CategoryUpdate {
+	cu.mutation.SetReadonly(s)
+	return cu
+}
+
+// SetNillableReadonly sets the "readonly" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableReadonly(s *string) *CategoryUpdate {
+	if s != nil {
+		cu.SetReadonly(*s)
+	}
+	return cu
+}
+
+// ClearReadonly clears the value of the "readonly" field.
+func (cu *CategoryUpdate) ClearReadonly() *CategoryUpdate {
+	cu.mutation.ClearReadonly()
+	return cu
+}
+
 // AddPetIDs adds the "pets" edge to the Pet entity by IDs.
 func (cu *CategoryUpdate) AddPetIDs(ids ...int) *CategoryUpdate {
 	cu.mutation.AddPetIDs(ids...)
@@ -154,6 +174,19 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: category.FieldName,
 		})
 	}
+	if value, ok := cu.mutation.Readonly(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: category.FieldReadonly,
+		})
+	}
+	if cu.mutation.ReadonlyCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: category.FieldReadonly,
+		})
+	}
 	if cu.mutation.PetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -230,6 +263,26 @@ type CategoryUpdateOne struct {
 // SetName sets the "name" field.
 func (cuo *CategoryUpdateOne) SetName(s string) *CategoryUpdateOne {
 	cuo.mutation.SetName(s)
+	return cuo
+}
+
+// SetReadonly sets the "readonly" field.
+func (cuo *CategoryUpdateOne) SetReadonly(s string) *CategoryUpdateOne {
+	cuo.mutation.SetReadonly(s)
+	return cuo
+}
+
+// SetNillableReadonly sets the "readonly" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableReadonly(s *string) *CategoryUpdateOne {
+	if s != nil {
+		cuo.SetReadonly(*s)
+	}
+	return cuo
+}
+
+// ClearReadonly clears the value of the "readonly" field.
+func (cuo *CategoryUpdateOne) ClearReadonly() *CategoryUpdateOne {
+	cuo.mutation.ClearReadonly()
 	return cuo
 }
 
@@ -375,6 +428,19 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 			Type:   field.TypeString,
 			Value:  value,
 			Column: category.FieldName,
+		})
+	}
+	if value, ok := cuo.mutation.Readonly(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: category.FieldReadonly,
+		})
+	}
+	if cuo.mutation.ReadonlyCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: category.FieldReadonly,
 		})
 	}
 	if cuo.mutation.PetsCleared() {

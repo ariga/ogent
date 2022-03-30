@@ -3,8 +3,8 @@ module ariga.io/ogent
 go 1.17
 
 require (
-	entgo.io/contrib v0.2.1-0.20220210075301-2b75bf138815
-	entgo.io/ent v0.10.0
+	entgo.io/contrib v0.2.1-0.20220318114515-f36b07ef7734
+	entgo.io/ent v0.10.1
 	github.com/go-faster/errors v0.5.0
 	github.com/go-faster/jx v0.32.2
 	github.com/google/uuid v1.3.0
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.3.6 // indirect
+	ariga.io/atlas v0.3.7-0.20220303204946-787354f533c3 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

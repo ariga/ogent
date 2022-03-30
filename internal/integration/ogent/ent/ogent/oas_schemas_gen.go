@@ -72,16 +72,18 @@ var (
 
 // Ref: #/components/schemas/CategoryCreate
 type CategoryCreate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 func (*CategoryCreate) createCategoryRes() {}
 
 // Ref: #/components/schemas/CategoryList
 type CategoryList struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 // Ref: #/components/schemas/Category_PetsList
@@ -94,16 +96,18 @@ type CategoryPetsList struct {
 
 // Ref: #/components/schemas/CategoryRead
 type CategoryRead struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 func (*CategoryRead) readCategoryRes() {}
 
 // Ref: #/components/schemas/CategoryUpdate
 type CategoryUpdate struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 func (*CategoryUpdate) updateCategoryRes() {}
@@ -1214,8 +1218,9 @@ func (o OptUserUpdateFavoriteFishBreed) Or(d UserUpdateFavoriteFishBreed) UserUp
 
 // Ref: #/components/schemas/Pet_CategoriesList
 type PetCategoriesList struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 // Ref: #/components/schemas/PetCreate
@@ -1232,8 +1237,9 @@ func (*PetCreate) createPetRes() {}
 
 // Ref: #/components/schemas/PetCreate_Categories
 type PetCreateCategories struct {
-	ID   int    "json:\"id\""
-	Name string "json:\"name\""
+	ID       int       "json:\"id\""
+	Name     string    "json:\"name\""
+	Readonly OptString "json:\"readonly\""
 }
 
 // Ref: #/components/schemas/PetCreate_Owner

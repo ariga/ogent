@@ -2,16 +2,19 @@
 	b := h.client.{{ $.Name }}.Create()
 	// Add all fields.
 	{{- range $f := $.Fields }}
-		{{- if $f.Optional }}
-			if v, ok := req.{{ $f.StructField}}.Get(); ok {
-				{{- $x := "v" }}
+		{{- $a := fieldAnnotation $f }}
+		{{- if or (not $a) (not $a.ReadOnly) }}
+			{{- if $f.Optional }}
+				if v, ok := req.{{ $f.StructField}}.Get(); ok {
+					{{- $x := "v" }}
+					{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+					b.Set{{ $f.StructField }}({{ $x }})
+				}
+			{{- else }}
+				{{- $x := print "req." $f.StructField }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
 				b.Set{{ $f.StructField }}({{ $x }})
-			}
-		{{- else }}
-			{{- $x := print "req." $f.StructField }}
-			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
-			b.Set{{ $f.StructField }}({{ $x }})
+			{{- end }}
 		{{- end }}
 	{{- end }}
 	// Add all edges.

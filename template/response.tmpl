@@ -6,43 +6,43 @@
 import "{{ $.Config.Package }}"
 
 {{- range $n, $v := $.Config.Annotations.Ogent.Views }}
-    {{- $n = replaceAll $n "_" "" }}
-    {{- $pkg := base $.Config.Package }}
-    func New{{ $n }}(e *{{ $pkg }}.{{ $v.Type.Name }}) *{{ $n }} {
-        if e == nil {
-            return nil
-        }
-        return &{{ $n }}{
-            {{- range $f := $v.Fields }}
-                {{ $f.StructField}}: {{ setFieldExpr $f $n "e" }},
-            {{- end }}
-            {{- range $e := $v.Edges }}
-			    {{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
-                {{ $e.StructField }}: New{{ if $e.Unique -}}
-                    {{ $vn }}
-                {{- else -}}
-                    {{ $vn | plural }}
-                {{- end }}(e.Edges.{{ $e.StructField }})
-                {{- if not $e.Optional}}.Elem(){{ end }},
-            {{- end }}
-        }
-    }
+	{{- $n = replaceAll $n "_" "" }}
+	{{- $pkg := base $.Config.Package }}
+	func New{{ $n }}(e *{{ $pkg }}.{{ $v.Type.Name }}) *{{ $n }} {
+		if e == nil {
+			return nil
+		}
+		return &{{ $n }}{
+			{{- range $f := $v.Fields }}
+				{{ $f.StructField}}: {{ setFieldExpr $f $n "e" }},
+			{{- end }}
+			{{- range $e := $v.Edges }}
+				{{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
+				{{ $e.StructField }}: New{{ if $e.Unique -}}
+					{{ $vn }}
+				{{- else -}}
+					{{ $vn | plural }}
+				{{- end }}(e.Edges.{{ $e.StructField }})
+				{{- if not $e.Optional}}.Elem(){{ end }},
+			{{- end }}
+		}
+	}
 
-    func New{{ $n | plural }}(es []*{{ $pkg }}.{{ $v.Type.Name }}) []{{ $n }} {
-        if len(es) == 0 {
-            return nil
-        }
-        r := make([]{{ $n }}, len(es))
-        for i, e := range es {
-            r[i] = New{{ $n }}(e).Elem()
-        }
-        return r
-    }
+	func New{{ $n | plural }}(es []*{{ $pkg }}.{{ $v.Type.Name }}) []{{ $n }} {
+		if len(es) == 0 {
+			return nil
+		}
+		r := make([]{{ $n }}, len(es))
+		for i, e := range es {
+			r[i] = New{{ $n }}(e).Elem()
+		}
+		return r
+	}
 
 	func ({{ $v.Type.Receiver }} *{{ $n }}) Elem() {{ $n }} {
-	    if {{ $v.Type.Receiver }} == nil {
-		    return {{ $n }}{}
-        }
+		if {{ $v.Type.Receiver }} == nil {
+			return {{ $n }}{}
+		}
 		return *{{ $v.Type.Receiver }}
 	}
 {{ end }}

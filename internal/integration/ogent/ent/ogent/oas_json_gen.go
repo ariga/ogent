@@ -92,12 +92,22 @@ func (s CategoryCreate) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryCreate = [2]string{
+var jsonFieldsNameOfCategoryCreate = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryCreate from json.
@@ -132,6 +142,16 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
@@ -198,12 +218,22 @@ func (s CategoryList) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryList = [2]string{
+var jsonFieldsNameOfCategoryList = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryList from json.
@@ -238,6 +268,16 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
@@ -450,12 +490,22 @@ func (s CategoryRead) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryRead = [2]string{
+var jsonFieldsNameOfCategoryRead = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryRead from json.
@@ -490,6 +540,16 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
@@ -556,12 +616,22 @@ func (s CategoryUpdate) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryUpdate = [2]string{
+var jsonFieldsNameOfCategoryUpdate = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes CategoryUpdate from json.
@@ -596,6 +666,16 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
@@ -2085,12 +2165,22 @@ func (s PetCategoriesList) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCategoriesList = [2]string{
+var jsonFieldsNameOfPetCategoriesList = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes PetCategoriesList from json.
@@ -2125,6 +2215,16 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
@@ -2393,12 +2493,22 @@ func (s PetCreateCategories) Encode(e *jx.Writer) {
 		e.RawStr("\"name\"" + ":")
 		e.Str(s.Name)
 	}
+	{
+		if s.Readonly.Set {
+			e.Comma()
+		}
+		if s.Readonly.Set {
+			e.RawStr("\"readonly\"" + ":")
+			s.Readonly.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCreateCategories = [2]string{
+var jsonFieldsNameOfPetCreateCategories = [3]string{
 	0: "id",
 	1: "name",
+	2: "readonly",
 }
 
 // Decode decodes PetCreateCategories from json.
@@ -2433,6 +2543,16 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "readonly":
+			if err := func() error {
+				s.Readonly.Reset()
+				if err := s.Readonly.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"readonly\"")
 			}
 		default:
 			return d.Skip()
