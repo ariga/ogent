@@ -9,11 +9,11 @@ require (
 	github.com/go-faster/jx v0.33.0
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.10
-	github.com/ogen-go/ogen v0.18.1
+	github.com/ogen-go/ogen v0.22.0
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.7.1
 	go.opentelemetry.io/otel v1.6.1
-	go.opentelemetry.io/otel/metric v0.27.0
+	go.opentelemetry.io/otel/metric v0.28.0
 	go.opentelemetry.io/otel/trace v1.6.1
 )
 
