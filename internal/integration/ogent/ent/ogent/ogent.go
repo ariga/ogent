@@ -4,6 +4,7 @@ package ogent
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -177,33 +178,103 @@ type Array struct {
 	Expressions []*Expression `"(" @@ { "," @@ } ")"`
 }
 
-func ParseExpression(exp *Expression, s *sql.Selector) {
+type ValidationError struct {
+	Name string // Field or edge name.
+	err  error
+}
+
+// Error implements the error interface.
+func (e *ValidationError) Error() string {
+	return e.err.Error()
+}
+
+// Unwrap implements the errors.Wrapper interface.
+func (e *ValidationError) Unwrap() error {
+	return e.err
+}
+
+type PredicateNotFound struct {
+	Name string // Field or edge name.
+	err  error
+}
+
+// Error implements the error interface.
+func (e *PredicateNotFound) Error() string {
+	return e.err.Error()
+}
+
+// Unwrap implements the errors.Wrapper interface.
+func (e *PredicateNotFound) Unwrap() error {
+	return e.err
+}
+
+func createColumnMap(col []string) map[string]bool {
+	columnsMap := make(map[string]bool)
+	for i := 0; i < len(col); i += 1 {
+		columnsMap[col[i]] = true
+	}
+	return columnsMap
+}
+
+func ParseExpression(exp *Expression, s *sql.Selector, cols map[string]bool) error {
 	i := 0
-	len := len(exp.Or)
-	for i < len { //OR
-		parseAndExpression(exp.Or[i], s)
+	size := len(exp.Or)
+	for i < size { //OR
+		parseAndExpression(exp.Or[i], s, cols)
 		i++
-		if i < len {
-			s.Or()
+		if i < size {
+			s.Or() //OR Operator
 		}
 	}
+	return nil
 }
 
-func parseAndExpression(and *OrCondition, s *sql.Selector) {
+func parseAndExpression(and *OrCondition, s *sql.Selector, cols map[string]bool) {
 	for _, c := range and.And {
-		if c.Operand != nil {
-			addPredicate(c, s)
-		} else if c.Not != nil {
-			addPredicate(c.Not, s)
+		if c.Operand != nil { // And Operator
+			con := c.Operand.ConditionRHS
+			if con != nil {
+				col := getColumn(c)
+				if !cols[col] { //check if column is valid
+					s.AddError(&ValidationError{Name: col, err: fmt.Errorf("ogent: invalid field %q for query", col)})
+				}
+				addPredicate(c, s, col)
+			} else {
+				recursiveOperation(c, s, cols)
+			}
+		} else if c.Not != nil { // Not Operator
+			col := getColumn(c)
+			if !cols[col] { //check if column is valid
+				s.AddError(&ValidationError{Name: col, err: fmt.Errorf("ogent: invalid field %q for query", col)})
+			}
+			s.Not()
+			addPredicate(c.Not, s, col)
 		}
 	}
 }
 
-func addPredicate(c *Condition, s *sql.Selector) {
+func recursiveOperation(c *Condition, s *sql.Selector, cols map[string]bool) {
+	v := getOperand(c.Operand.Operand, s).(*Array)
+	for _, i := range v.Expressions {
+		ParseExpression(i, s, cols)
+	}
+}
+
+func getColumn(c *Condition) string {
+	if c.Operand != nil {
+		if c.Operand.ConditionRHS != nil {
+			return getOperand(c.Operand.Operand, nil).(string)
+		}
+	} else {
+		return getOperand(c.Not.Operand.Operand, nil).(string)
+	}
+	return ""
+}
+
+func addPredicate(c *Condition, s *sql.Selector, col string) {
 	con := c.Operand.ConditionRHS
 	if con != nil {
 		op := con.Compare.Operator
-		col := getColumn(c.Operand)
 		v := getOperand(c.Operand.ConditionRHS.Compare.Operand, s)
 		switch op {
 		case "eq":
@@ -218,17 +289,10 @@ func addPredicate(c *Condition, s *sql.Selector) {
 			s.Where(sql.LT(s.C(col), v)) //Less than
 		case "le":
 			s.Where(sql.LTE(s.C(col), v)) //Less than or equal
-		}
-	} else {
-		v := getOperand(c.Operand.Operand, s).(*Array)
-		for _, i := range v.Expressions {
-			ParseExpression(i, s)
+		default:
+			s.AddError(&PredicateNotFound{Name: col, err: fmt.Errorf("ogent: predicate not found %q for query", op)})
 		}
 	}
-}
-
-func getColumn(col *ConditionOperand) string {
-	return getOperand(col.Operand, nil).(string)
 }
 
 func getOperand(op *Operand, s *sql.Selector) interface{} {
@@ -258,7 +322,7 @@ func getValue(su *Summand, s *sql.Selector) interface{} {
 
 var (
 	sqlLexer = lexer.Must(lexer.Regexp(`(\s+)` +
-		`|(?P<Keyword>(?i)SELECT|FROM|TOP|DISTINCT|ALL|WHERE|GROUP|BY|HAVING|UNION|MINUS|EXCEPT|INTERSECT|ORDER|LIMIT|OFFSET|TRUE|FALSE|NULL|IS|NOT|ANY|SOME|BETWEEN|and|or|LIKE|AS|IN)` +
+		`|(?P<Keyword>(?i)SELECT|FROM|TOP|DISTINCT|ALL|WHERE|GROUP|BY|HAVING|UNION|MINUS|EXCEPT|INTERSECT|ORDER|LIMIT|OFFSET|TRUE|FALSE|NULL|NOT|ANY|SOME|BETWEEN|and|or|LIKE|AS)` +
 		`|(?P<Ident>[a-zA-Z_][a-zA-Z0-9_]*)` +
 		`|(?P<Date>\d{4})-(\d{2})-(\d{2})[tT](\d{2}):(\d{2}):(\d{2})(\.\d+)?([zZ]|(\+|-)(\d{2}):(\d{2}))` +
 		`|(?P<Number>[-+]?\d*\.?\d+([eE][-+]?\d+)?)` +
@@ -440,7 +504,7 @@ func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryPara
 		} else {
 			//parse filter
 			q.Where(func(s *sql.Selector) {
-				ParseExpression(exp, s)
+				ParseExpression(exp, s, createColumnMap(category.Columns))
 			})
 		}
 	}
@@ -630,7 +694,7 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 		} else {
 			//parse filter
 			q.Where(func(s *sql.Selector) {
-				ParseExpression(exp, s)
+				ParseExpression(exp, s, createColumnMap(pet.Columns))
 			})
 		}
 	}
@@ -1053,7 +1117,7 @@ func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (Lis
 		} else {
 			//parse filter
 			q.Where(func(s *sql.Selector) {
-				ParseExpression(exp, s)
+				ParseExpression(exp, s, createColumnMap(user.Columns))
 			})
 		}
 	}

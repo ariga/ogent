@@ -53,7 +53,7 @@
 		} else {
 			//parse filter
 			q.Where(func(s *sql.Selector) {
-				ParseExpression(exp, s)
+				ParseExpression(exp, s, createColumnMap({{lower $.Name}}.Columns))
 			})
 		}
 	}

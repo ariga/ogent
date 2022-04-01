@@ -143,59 +143,121 @@ type Array struct {
     Expressions []*Expression `"(" @@ { "," @@ } ")"`
 }
 
+type ValidationError struct {
+    Name string // Field or edge name.
+    err  error
+}
 
-func ParseExpression(exp *Expression, s *sql.Selector) {
+// Error implements the error interface.
+func (e *ValidationError) Error() string {
+    return e.err.Error()
+}
+
+// Unwrap implements the errors.Wrapper interface.
+func (e *ValidationError) Unwrap() error {
+    return e.err
+}
+
+type PredicateNotFound struct {
+    Name string // Field or edge name.
+    err  error
+}
+
+// Error implements the error interface.
+func (e *PredicateNotFound) Error() string {
+    return e.err.Error()
+}
+
+// Unwrap implements the errors.Wrapper interface.
+func (e *PredicateNotFound) Unwrap() error {
+    return e.err
+}
+
+func createColumnMap(col []string) map[string]bool {
+    columnsMap := make(map[string]bool)
+    for i := 0; i < len(col); i += 1 {
+        columnsMap[col[i]] = true
+    }
+    return columnsMap
+}
+
+func ParseExpression(exp *Expression, s *sql.Selector, cols map[string]bool) error {
     i := 0
-    len := len(exp.Or)
-    for i < len { //OR
-        parseAndExpression(exp.Or[i], s)
+    size := len(exp.Or)
+    for i < size { //OR
+        parseAndExpression(exp.Or[i], s, cols)
         i++
-        if i < len {
-            s.Or()
+        if i < size {
+            s.Or() //OR Operator
         }
     }
+    return nil
 }
 
-func parseAndExpression(and *OrCondition, s *sql.Selector) {
+func parseAndExpression(and *OrCondition, s *sql.Selector, cols map[string]bool) {
     for _, c := range and.And {
-        if c.Operand != nil{
-            addPredicate(c, s)
-        }else if c.Not != nil {
-            addPredicate(c.Not, s)
+        if c.Operand != nil { // And Operator
+            con := c.Operand.ConditionRHS
+            if con != nil {
+                col := getColumn(c)
+                if !cols[col] { //check if column is valid
+                    s.AddError(&ValidationError{Name: col, err: fmt.Errorf("ogent: invalid field %q for query", col)})
+                }
+                addPredicate(c, s, col)
+            } else {
+                recursiveOperation(c, s, cols)
+            }
+        } else if c.Not != nil { // Not Operator
+                col := getColumn(c)
+                if !cols[col] { //check if column is valid
+                    s.AddError(&ValidationError{Name: col, err: fmt.Errorf("ogent: invalid field %q for query", col)})
+                }
+                s.Not()
+                addPredicate(c.Not, s, col)
         }
     }
 }
 
-func addPredicate(c *Condition, s *sql.Selector){
+func recursiveOperation(c *Condition, s *sql.Selector, cols map[string]bool) {
+    v := getOperand(c.Operand.Operand, s).(*Array)
+    for _, i := range v.Expressions {
+        ParseExpression(i, s, cols)
+    }
+}
+
+func getColumn(c *Condition) string {
+    if c.Operand != nil {
+        if c.Operand.ConditionRHS != nil {
+            return getOperand(c.Operand.Operand, nil).(string)
+        }
+    } else {
+        return getOperand(c.Not.Operand.Operand, nil).(string)
+    }
+    return ""
+}
+
+func addPredicate(c *Condition, s *sql.Selector, col string){
     con := c.Operand.ConditionRHS
-    if con != nil{
-    op := con.Compare.Operator
-    col := getColumn(c.Operand)
-    v := getOperand(c.Operand.ConditionRHS.Compare.Operand, s)
-    switch op {
-    case "eq":
-        s.Where(sql.EQ(s.C(col), v)) //Equal
-    case "ne":
-        s.Where(sql.NEQ(s.C(col), v)) //Not equal
-    case "gt":
-        s.Where(sql.GT(s.C(col), v)) //Greater than
-    case "ge":
-        s.Where(sql.GTE(s.C(col), v)) //Greater than or equal
-    case "lt":
-        s.Where(sql.LT(s.C(col), v)) //Less than
-    case "le":
-        s.Where(sql.LTE(s.C(col), v)) //Less than or equal
-    }
-    }else{
-        v := getOperand(c.Operand.Operand, s).(*Array)
-        for _, i := range v.Expressions{
-            ParseExpression(i, s)
+    if con != nil {
+        op := con.Compare.Operator
+        v := getOperand(c.Operand.ConditionRHS.Compare.Operand, s)
+        switch op {
+        case "eq":
+            s.Where(sql.EQ(s.C(col), v)) //Equal
+        case "ne":
+            s.Where(sql.NEQ(s.C(col), v)) //Not equal
+        case "gt":
+            s.Where(sql.GT(s.C(col), v)) //Greater than
+        case "ge":
+            s.Where(sql.GTE(s.C(col), v)) //Greater than or equal
+        case "lt":
+            s.Where(sql.LT(s.C(col), v)) //Less than
+        case "le":
+            s.Where(sql.LTE(s.C(col), v)) //Less than or equal
+        default:
+            s.AddError(&PredicateNotFound{Name: col, err: fmt.Errorf("ogent: predicate not found %q for query", op)})
         }
     }
-}
-
-func getColumn(col *ConditionOperand) string {
-    return getOperand(col.Operand, nil).(string)
 }
 
 func getOperand(op *Operand, s *sql.Selector) interface{} {
@@ -208,15 +270,15 @@ func getOperand(op *Operand, s *sql.Selector) interface{} {
 func getValue(su *Summand, s *sql.Selector) interface{} {
     if su.LHS.LHS.Value != nil {
         v := su.LHS.LHS.Value
-    if v.String != nil {
-        return v.String
-    } else if v.Number != nil {
-        return v.Number
-    } else if v.Date != nil {
-        return v.Date
-    }else if v.Array != nil {
-        return v.Array
-    }
+        if v.String != nil {
+            return v.String
+        } else if v.Number != nil {
+            return v.Number
+        } else if v.Date != nil {
+            return v.Date
+        } else if v.Array != nil {
+            return v.Array
+        }
     } else {
         return su.LHS.LHS.SymbolRef.Symbol
     }
@@ -225,7 +287,7 @@ func getValue(su *Summand, s *sql.Selector) interface{} {
 
 var (
     sqlLexer = lexer.Must(lexer.Regexp(`(\s+)` +
-    `|(?P<Keyword>(?i)SELECT|FROM|TOP|DISTINCT|ALL|WHERE|GROUP|BY|HAVING|UNION|MINUS|EXCEPT|INTERSECT|ORDER|LIMIT|OFFSET|TRUE|FALSE|NULL|IS|NOT|ANY|SOME|BETWEEN|and|or|LIKE|AS|IN)` +
+    `|(?P<Keyword>(?i)SELECT|FROM|TOP|DISTINCT|ALL|WHERE|GROUP|BY|HAVING|UNION|MINUS|EXCEPT|INTERSECT|ORDER|LIMIT|OFFSET|TRUE|FALSE|NULL|NOT|ANY|SOME|BETWEEN|and|or|LIKE|AS)` +
     `|(?P<Ident>[a-zA-Z_][a-zA-Z0-9_]*)` +
     `|(?P<Date>\d{4})-(\d{2})-(\d{2})[tT](\d{2}):(\d{2}):(\d{2})(\.\d+)?([zZ]|(\+|-)(\d{2}):(\d{2}))` +
     `|(?P<Number>[-+]?\d*\.?\d+([eE][-+]?\d+)?)` +
@@ -233,10 +295,12 @@ var (
     `|(?P<Operators><>|!=|<=|>=|[-+*/%,.()=<>]|eq|ne|gt|ge|lt|le)`,
     ))
     SqlParser = participle.MustBuild(
-    &Expression{},
-    participle.Lexer(sqlLexer),
-    participle.Unquote("String"),
-    participle.CaseInsensitive("Keyword"),
+        &Expression{},
+        participle.Lexer(sqlLexer),
+        participle.Unquote("String"),
+        participle.CaseInsensitive("Keyword"),
     )
 )
+
+
 {{- end }}

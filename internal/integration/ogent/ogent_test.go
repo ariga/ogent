@@ -2,7 +2,6 @@ package ogent
 
 import (
 	"context"
-	"entgo.io/ent/dialect/sql"
 	"fmt"
 	"net/http"
 	"sort"
@@ -233,69 +232,83 @@ func (t *testSuite) reqErr(c int, err interface{}) {
 	t.Require().Equal(http.StatusText(c), at, err)
 }
 
-func (t *testSuite) TestParseFilterToSQL() {
-	f, e := preparePetFilterToSQL()
-	t.Equal(len(f), len(e), "filter and expected list must have the same length")
-	i := 0
-	n := len(f)
-	for i < n {
-		q := t.client.Pet.Query()
-		exp := &ogent.Expression{}
-		err := ogent.SqlParser.ParseString(f[i], exp)
-		t.Require().NoError(err, "fail to parse the filter: "+f[i])
-		q.Where(func(s *sql.Selector) {
-			ogent.ParseExpression(exp, s)
-			query, _ := s.Query()
-			t.Equal(e[i], query, "actual query created is not the expected one")
-		})
-		_, err = q.All(context.Background())
-		t.Require().NoError(err, "fail to execute the query")
-		i++
+func (t *testSuite) TestListFilter() {
+
+	owner := t.client.User.Create().SetName("Bob").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
+	b := make([]*ent.PetCreate, 50)
+	for i := range b {
+		b[i] = t.client.Pet.Create().SetName("Ariel").SetWeight(i + 1).SetOwner(owner)
 	}
-}
+	es := t.client.Pet.CreateBulk(b...).SaveX(context.Background())
 
-func preparePetFilterToSQL() ([]string, []string) {
-	var f []string //filter
-	var e []string //expected
 	//EQ
-	f = append(f, "name eq 'Ariel'")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ?")
-	//NE
-	f = append(f, "name ne 'Milk'")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` <> ?")
-	//GT
-	f = append(f, "weight gt 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` > ?")
-	//GE
-	f = append(f, "weight ge 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` >= ?")
-	//LT
-	f = append(f, "weight lt 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` < ?")
-	//LE
-	f = append(f, "weight le 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`weight` <= ?")
-	//AND
-	f = append(f, "name eq 'Ariel' and weight le 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ? AND `pets`.`weight` <= ?")
-	//OR
-	f = append(f, "name eq 'Ariel' or weight le 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE `pets`.`name` = ? OR `pets`.`weight` <= ?")
-	//AND Recursive
-	f = append(f, "(name eq 'Ariel' or name eq 'Milk') and weight le 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`name` = ? OR `pets`.`name` = ?) AND `pets`.`weight` <= ?")
-	//AND Recursive
-	f = append(f, "weight le 2 and (name eq 'Ariel' or name eq 'Milk')")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`weight` <= ? AND `pets`.`name` = ?) OR `pets`.`name` = ?")
-	//OR Recursive
-	f = append(f, "(name eq 'Ariel' or name eq 'Milk') or weight le 2")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`name` = ? OR `pets`.`name` = ?) OR `pets`.`weight` <= ?")
-	//OR Recursive
-	f = append(f, "weight le 2 or (name eq 'Ariel' or name eq 'Milk')")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE (`pets`.`weight` <= ? OR `pets`.`name` = ?) OR `pets`.`name` = ?")
-	//NOT
-	f = append(f, "not weight le 3.5")
-	e = append(e, "SELECT `pets`.`id`, `pets`.`name`, `pets`.`weight`, `pets`.`birthday` FROM `pets` WHERE NOT (`pets`.`weight` <= ?)")
+	got, err := t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("name eq 'Ariel'")})
+	t.Require().NoError(err)
+	r := ogent.NewPetLists(es[0:30])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
 
-	return f, e
+	//NE
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("name ne 'Milk'")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:30])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//GT
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("weight gt 40")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[40:50])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//GE
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("weight ge 40")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[39:50])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//LT
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("weight lt 2")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:1])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//LE
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("weight le 2")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:2])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//AND
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("name eq 'Ariel' and weight le 2")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:2])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//OR
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("name eq 'Ariel' or weight le 2")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:30])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//AND Recursive
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("weight le 2 and (name eq 'Ariel' or name eq 'Milk')")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:2])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//OR Recursive
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("(name eq 'Ariel' or name eq 'Milk') or weight le 2")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[0:30])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//NOT
+	got, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("not weight le 30")})
+	t.Require().NoError(err)
+	r = ogent.NewPetLists(es[30:50])
+	t.Require().Equal((*ogent.ListPetOKApplicationJSON)(&r), got)
+
+	//EXCEPTION WRONG COLUMN
+	_, err = t.handler.ListPet(context.Background(), ogent.ListPetParams{Filter: ogent.NewOptString("invalid_column eq 'Ariel'")})
+	t.Require().Error(err) //return error
+
 }
