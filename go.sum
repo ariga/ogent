@@ -143,8 +143,8 @@ github.com/go-faster/errors v0.5.0 h1:hS/zHFJ2Vb14jcupq5J9tk05XW+PFTmySOkDRByHBo
 github.com/go-faster/errors v0.5.0/go.mod h1:/9SNBcg2ESJTYztBFEiM5Np6ns85BtPNMJd8lFTiFwk=
 github.com/go-faster/jx v0.25.0/go.mod h1:I2qnT5kkW6iO0RXe4rOnIW3y3yZYJVeT7fG8JSQkP8I=
 github.com/go-faster/jx v0.32.1/go.mod h1:T561ezgn74siJgc+QzZzoGHokGBKxV6WZugVyfw+68c=
-github.com/go-faster/jx v0.33.0 h1:YTiLVjpeVr7Zv66BivgBGa3f33a7cup8uFleiBg82qY=
-github.com/go-faster/jx v0.33.0/go.mod h1:Ya1ynk3qKb3R7bJwORf0QggETqlOvLO1Owjr3R4crqk=
+github.com/go-faster/jx v0.34.0 h1:4V/7G+v6S7MNRihCrMXqKgiZLLVs57Qv9HqAJ8zprtg=
+github.com/go-faster/jx v0.34.0/go.mod h1:FdJhlaqQP+Drk7zHphPa6fF0Lg19rc6eh6dOugjpEFI=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200222043503-6f7a984d4dc4/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
