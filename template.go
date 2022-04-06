@@ -17,8 +17,8 @@ import (
 var (
 	//go:embed template
 	templateDir embed.FS
-	// FuncMap contains extra template functions used by ogent.
-	FuncMap = template.FuncMap{
+	// funcMap contains extra template functions used by ogent.
+	funcMap = template.FuncMap{
 		"convertTo":       convertTo,
 		"eagerLoad":       eagerLoad,
 		"edgeOperations":  entoas.EdgeOperations,
@@ -40,8 +40,8 @@ var (
 		"viewName":        entoas.ViewName,
 		"viewNameEdge":    entoas.ViewNameEdge,
 	}
-	// Templates holds all templates used by ogent.
-	Templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(FuncMap).ParseFS(templateDir, "template/*tmpl"))
+	// templates holds all templates used by ogent.
+	templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(funcMap).ParseFS(templateDir, "template/*tmpl"))
 )
 
 // eagerLoad returns the Go expression to eager load the required edges on the node operation.

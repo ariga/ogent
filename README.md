@@ -209,3 +209,46 @@ func main() {
 	}
 }
 ```
+
+## Customizing Templates
+
+Since `ogent` is written as an extension to Ent, you can pass in custom templates to customize the generated code by
+using the `Templates()` option.
+
+```go
+//go:build ignore
+
+package main
+
+import (
+	"log"
+
+	"ariga.io/ogent"
+	"entgo.io/contrib/entoas"
+	"entgo.io/ent/entc"
+	"entgo.io/ent/entc/gen"
+	"github.com/ogen-go/ogen"
+)
+
+var noPagination = gen.MustParse(gen.NewTemplate("").Parse(`
+{{ define "ogent/ogent/helper/list/paginate" }}
+// Skip pagination
+{{ end }}
+`))
+
+func main() {
+	spec := new(ogen.Spec)
+	oas, err := entoas.NewExtension(entoas.Spec(spec))
+	if err != nil {
+		log.Fatalf("creating entoas extension: %v", err)
+	}
+	ogent, err := ogent.NewExtension(spec, ogent.Templates(noPagination))
+	if err != nil {
+		log.Fatalf("creating ogent extension: %v", err)
+	}
+	err = entc.Generate("./schema", &gen.Config{}, entc.Extensions(ogent, oas))
+	if err != nil {
+		log.Fatalf("running ent codegen: %v", err)
+	}
+}
+```
