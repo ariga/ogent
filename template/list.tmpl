@@ -1,6 +1,13 @@
 {{ define "ogent/ogent/helper/list" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	q := h.client.{{ $.Name }}.Query(){{ with eagerLoad $ "list" }}{{ . }}{{ end }}
-	{{- template "ogent/ogent/helper/list/paginate-and-filter" $ -}}
+	{{- template "ogent/ogent/helper/list/paginate" $ -}}
+	{{- if hasTemplate "ogent/ogent/helper/list/filter" }}{{ template "ogent/ogent/helper/list/filter" $ }}{{ end }}
+	es, err := q.All(ctx)
+	{{-
+		template "ogent/ogent/helper/error"
+		extend $
+		"Errors" (list "not-found" "not-singular")
+	-}}
 	r := New{{ viewName $ "list" | plural }}(es)
 	return (*List{{ $.Name }}OKApplicationJSON)(&r), nil
 {{- end }}
@@ -8,12 +15,19 @@
 {{ define "ogent/ogent/helper/list/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
 	q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ(params.{{ $.Type.ID.StructField }})).Query{{ $.Scope.Edge.Name | pascal }}()
 	{{- with eagerLoad $.Type "list" }}{{ . }}{{ end }}
-	{{- template "ogent/ogent/helper/list/paginate-and-filter" $.Type -}}
+	{{- template "ogent/ogent/helper/list/paginate" $.Type -}}
+	{{- if hasTemplate "ogent/ogent/helper/list/filter" }}{{ template "ogent/ogent/helper/list/filter" $.Type }}{{ end -}}
+	es, err := q.All(ctx)
+	{{-
+		template "ogent/ogent/helper/error"
+		extend $
+		"Errors" (list "not-found" "not-singular")
+	-}}
 	r := New{{ replaceAll (edgeViewName $.Type $.Scope.Edge "list") "_" "" | plural }}(es)
 	return (*List{{ $.Type.Name }}{{ $.Scope.Edge.Name | pascal }}OKApplicationJSON)(&r), nil
 {{ end }}
 
-{{ define "ogent/ogent/helper/list/paginate-and-filter" }}
+{{ define "ogent/ogent/helper/list/paginate" }}
 	page := 1
 	if v, ok := params.Page.Get(); ok {
 		page = v
@@ -22,10 +36,5 @@
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
-	{{-
-		template "ogent/ogent/helper/error"
-		extend $
-		"Errors" (list "not-found" "not-singular")
-	-}}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
 {{ end }}

@@ -170,7 +170,9 @@ func (h *OgentHandler) ListCategory(ctx context.Context, params ListCategoryPara
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -205,7 +207,8 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -314,7 +317,9 @@ func (h *OgentHandler) ListPet(ctx context.Context, params ListPetParams) (ListP
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -425,7 +430,8 @@ func (h *OgentHandler) ListPetCategories(ctx context.Context, params ListPetCate
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -486,7 +492,8 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -677,7 +684,9 @@ func (h *OgentHandler) ListUser(ctx context.Context, params ListUserParams) (Lis
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
@@ -712,7 +721,8 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
