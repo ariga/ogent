@@ -171,7 +171,9 @@ func (h *OgentHandler) ListTodo(ctx context.Context, params ListTodoParams) (Lis
 	if v, ok := params.ItemsPerPage.Get(); ok {
 		itemsPerPage = v
 	}
-	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(ctx)
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):
