@@ -13,7 +13,7 @@ jobs:
         goversion: [ 1.17 ]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.goversion }}
       - name: Run linters
@@ -28,7 +28,7 @@ jobs:
         goversion: [ 1.17 ]
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.goversion }}
       - uses: actions/cache@v3.0.1
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: '1.17'
       - uses: actions/cache@v3.0.1
