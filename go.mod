@@ -6,15 +6,15 @@ require (
 	entgo.io/contrib v0.2.1-0.20220318114515-f36b07ef7734
 	entgo.io/ent v0.10.1
 	github.com/go-faster/errors v0.5.0
-	github.com/go-faster/jx v0.33.0
+	github.com/go-faster/jx v0.34.0
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.10
-	github.com/ogen-go/ogen v0.18.1
+	github.com/ogen-go/ogen v0.25.0
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.7.1
-	go.opentelemetry.io/otel v1.6.2
-	go.opentelemetry.io/otel/metric v0.27.0
-	go.opentelemetry.io/otel/trace v1.6.2
+	go.opentelemetry.io/otel v1.6.3
+	go.opentelemetry.io/otel/metric v0.29.0
+	go.opentelemetry.io/otel/trace v1.6.3
 )
 
 require (
