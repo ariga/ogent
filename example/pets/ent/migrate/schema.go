@@ -25,7 +25,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "weight", Type: field.TypeInt, Nullable: true},
 		{Name: "birthday", Type: field.TypeTime, Nullable: true},
-		{Name: "user_pets", Type: field.TypeInt, Nullable: true},
+		{Name: "user_pets", Type: field.TypeInt},
 	}
 	// PetsTable holds the schema information for the "pets" table.
 	PetsTable = &schema.Table{
@@ -37,7 +37,7 @@ var (
 				Symbol:     "pets_users_pets",
 				Columns:    []*schema.Column{PetsColumns[4]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
+				OnDelete:   schema.NoAction,
 			},
 		},
 	}
