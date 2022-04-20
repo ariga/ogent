@@ -13,6 +13,10 @@ const (
 	FieldWeight = "weight"
 	// FieldBirthday holds the string denoting the birthday field in the database.
 	FieldBirthday = "birthday"
+	// FieldTagID holds the string denoting the tag_id field in the database.
+	FieldTagID = "tag_id"
+	// FieldHeight holds the string denoting the height field in the database.
+	FieldHeight = "height"
 	// EdgeCategories holds the string denoting the categories edge name in mutations.
 	EdgeCategories = "categories"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -43,6 +47,8 @@ var Columns = []string{
 	FieldName,
 	FieldWeight,
 	FieldBirthday,
+	FieldTagID,
+	FieldHeight,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "pets"

@@ -21,6 +21,11 @@ func (Pet) Fields() []ent.Field {
 			Optional(),
 		field.Time("birthday").
 			Optional(),
+		field.Bytes("tag_id").
+			Optional(),
+		field.Int("height").
+			Optional().
+			Nillable(),
 	}
 }
 

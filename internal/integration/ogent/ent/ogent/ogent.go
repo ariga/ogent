@@ -243,6 +243,12 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreateP
 	if v, ok := req.Birthday.Get(); ok {
 		b.SetBirthday(v)
 	}
+	if req.TagID != nil {
+		b.SetTagID(req.TagID)
+	}
+	if v, ok := req.Height.Get(); ok {
+		b.SetHeight(v)
+	}
 	// Add all edges.
 	b.AddCategoryIDs(req.Categories...)
 	b.SetOwnerID(req.Owner)
@@ -381,6 +387,12 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params U
 	}
 	if v, ok := req.Birthday.Get(); ok {
 		b.SetBirthday(v)
+	}
+	if req.TagID != nil {
+		b.SetTagID(req.TagID)
+	}
+	if v, ok := req.Height.Get(); ok {
+		b.SetHeight(v)
 	}
 	// Add all edges.
 	b.ClearCategories().AddCategoryIDs(req.Categories...)

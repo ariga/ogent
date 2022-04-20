@@ -12,20 +12,20 @@ import "{{ $.Config.Package }}"
 		if e == nil {
 			return nil
 		}
-		return &{{ $n }}{
-			{{- range $f := $v.Fields }}
-				{{ $f.StructField}}: {{ setFieldExpr $f $n "e" }},
-			{{- end }}
-			{{- range $e := $v.Edges }}
-				{{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
-				{{ $e.StructField }}: New{{ if $e.Unique -}}
-					{{ $vn }}
-				{{- else -}}
-					{{ $vn | plural }}
-				{{- end }}(e.Edges.{{ $e.StructField }})
-				{{- if not $e.Optional}}.Elem(){{ end }},
-			{{- end }}
-		}
+		var ret {{ $n }}
+		{{- range $f := $v.Fields }}
+			{{ setFieldExpr $f $n "ret" "e" }}
+		{{- end }}
+		{{- range $e := $v.Edges }}
+			{{- $vn := replaceAll (viewNameEdge $n $e) "_" "" }}
+			ret.{{ $e.StructField }}= New{{ if $e.Unique -}}
+				{{ $vn }}
+			{{- else -}}
+				{{ $vn | plural }}
+			{{- end }}(e.Edges.{{ $e.StructField }})
+			{{- if not $e.Optional}}.Elem(){{ end }}
+		{{- end }}
+		return &ret
 	}
 
 	func New{{ $n | plural }}(es []*{{ $pkg }}.{{ $v.Type.Name }}) []{{ $n }} {

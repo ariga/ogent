@@ -6,11 +6,17 @@
 	{{- range $f := $.Fields }}
 		{{- $a := fieldAnnotation $f }}
 		{{- if and (not $f.Immutable) (or (not $a) (not $a.ReadOnly)) }}
-			if v, ok := req.{{ $f.StructField}}.Get(); ok {
-				{{- $x := "v" }}
-				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
-				b.Set{{ $f.StructField }}({{ $x }})
-			}
+			{{- if $f.IsBytes }}
+				if req.{{ $f.StructField }} != nil {
+					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+				}
+			{{- else }}
+				if v, ok := req.{{ $f.StructField}}.Get(); ok {
+					{{- $x := "v" }}
+					{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+					b.Set{{ $f.StructField }}({{ $x }})
+				}
+			{{- end }}
 		{{- end }}
 	{{- end }}
 	// Add all edges.

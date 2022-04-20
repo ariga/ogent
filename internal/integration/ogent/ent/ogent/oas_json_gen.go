@@ -362,14 +362,31 @@ func (s CategoryPetsList) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCategoryPetsList = [4]string{
+var jsonFieldsNameOfCategoryPetsList = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes CategoryPetsList from json.
@@ -424,6 +441,27 @@ func (s *CategoryPetsList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()
@@ -883,6 +921,21 @@ func (s CreatePetReq) Encode(e *jx.Writer) {
 		}
 	}
 	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		if s.Categories != nil {
 			e.Comma()
 		}
@@ -933,13 +986,15 @@ func (s CreatePetReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCreatePetReq = [6]string{
+var jsonFieldsNameOfCreatePetReq = [8]string{
 	0: "name",
 	1: "weight",
 	2: "birthday",
-	3: "categories",
-	4: "owner",
-	5: "friends",
+	3: "tag_id",
+	4: "height",
+	5: "categories",
+	6: "owner",
+	7: "friends",
 }
 
 // Decode decodes CreatePetReq from json.
@@ -983,6 +1038,27 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
 			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "categories":
 			if err := func() error {
 				s.Categories = make([]int, 0)
@@ -1003,7 +1079,7 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"categories\"")
 			}
 		case "owner":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := d.Int()
 				s.Owner = int(v)
@@ -1043,7 +1119,7 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010001,
+		0b01000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2310,6 +2386,21 @@ func (s PetCreate) Encode(e *jx.Writer) {
 		}
 	}
 	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		if s.Categories != nil {
 			e.Comma()
 		}
@@ -2339,13 +2430,15 @@ func (s PetCreate) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCreate = [6]string{
+var jsonFieldsNameOfPetCreate = [8]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
-	4: "categories",
-	5: "owner",
+	4: "tag_id",
+	5: "height",
+	6: "categories",
+	7: "owner",
 }
 
 // Decode decodes PetCreate from json.
@@ -2401,6 +2494,27 @@ func (s *PetCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
 			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "categories":
 			if err := func() error {
 				s.Categories = make([]PetCreateCategories, 0)
@@ -2419,7 +2533,7 @@ func (s *PetCreate) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"categories\"")
 			}
 		case "owner":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				if err := s.Owner.Decode(d); err != nil {
 					return err
@@ -2438,7 +2552,7 @@ func (s *PetCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00100011,
+		0b10000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2908,14 +3022,31 @@ func (s PetFriendsList) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetFriendsList = [4]string{
+var jsonFieldsNameOfPetFriendsList = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes PetFriendsList from json.
@@ -2970,6 +3101,27 @@ func (s *PetFriendsList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()
@@ -3054,14 +3206,31 @@ func (s PetList) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetList = [4]string{
+var jsonFieldsNameOfPetList = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes PetList from json.
@@ -3116,6 +3285,27 @@ func (s *PetList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()
@@ -3471,14 +3661,31 @@ func (s PetRead) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetRead = [4]string{
+var jsonFieldsNameOfPetRead = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes PetRead from json.
@@ -3533,6 +3740,27 @@ func (s *PetRead) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()
@@ -3617,14 +3845,31 @@ func (s PetUpdate) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetUpdate = [4]string{
+var jsonFieldsNameOfPetUpdate = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes PetUpdate from json.
@@ -3679,6 +3924,27 @@ func (s *PetUpdate) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()
@@ -4378,11 +4644,26 @@ func (s UpdatePetReq) Encode(e *jx.Writer) {
 		}
 	}
 	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		if s.Categories != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
+			e.Comma()
 		}
 		if s.Categories != nil {
 			e.RawStr("\"categories\"" + ":")
@@ -4403,10 +4684,7 @@ func (s UpdatePetReq) Encode(e *jx.Writer) {
 	}
 	{
 		if s.Owner.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
+			e.Comma()
 		}
 		if s.Owner.Set {
 			e.RawStr("\"owner\"" + ":")
@@ -4415,10 +4693,7 @@ func (s UpdatePetReq) Encode(e *jx.Writer) {
 	}
 	{
 		if s.Friends != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
+			e.Comma()
 		}
 		if s.Friends != nil {
 			e.RawStr("\"friends\"" + ":")
@@ -4440,13 +4715,15 @@ func (s UpdatePetReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUpdatePetReq = [6]string{
+var jsonFieldsNameOfUpdatePetReq = [8]string{
 	0: "name",
 	1: "weight",
 	2: "birthday",
-	3: "categories",
-	4: "owner",
-	5: "friends",
+	3: "tag_id",
+	4: "height",
+	5: "categories",
+	6: "owner",
+	7: "friends",
 }
 
 // Decode decodes UpdatePetReq from json.
@@ -4486,6 +4763,27 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		case "categories":
 			if err := func() error {
@@ -5702,14 +6000,31 @@ func (s UserPetsList) Encode(e *jx.Writer) {
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
+	{
+		e.Comma()
+
+		e.RawStr("\"tag_id\"" + ":")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserPetsList = [4]string{
+var jsonFieldsNameOfUserPetsList = [6]string{
 	0: "id",
 	1: "name",
 	2: "weight",
 	3: "birthday",
+	4: "tag_id",
+	5: "height",
 }
 
 // Decode decodes UserPetsList from json.
@@ -5764,6 +6079,27 @@ func (s *UserPetsList) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		default:
 			return d.Skip()

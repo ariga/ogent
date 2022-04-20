@@ -83,6 +83,45 @@ func (pu *PetUpdate) ClearBirthday() *PetUpdate {
 	return pu
 }
 
+// SetTagID sets the "tag_id" field.
+func (pu *PetUpdate) SetTagID(b []byte) *PetUpdate {
+	pu.mutation.SetTagID(b)
+	return pu
+}
+
+// ClearTagID clears the value of the "tag_id" field.
+func (pu *PetUpdate) ClearTagID() *PetUpdate {
+	pu.mutation.ClearTagID()
+	return pu
+}
+
+// SetHeight sets the "height" field.
+func (pu *PetUpdate) SetHeight(i int) *PetUpdate {
+	pu.mutation.ResetHeight()
+	pu.mutation.SetHeight(i)
+	return pu
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (pu *PetUpdate) SetNillableHeight(i *int) *PetUpdate {
+	if i != nil {
+		pu.SetHeight(*i)
+	}
+	return pu
+}
+
+// AddHeight adds i to the "height" field.
+func (pu *PetUpdate) AddHeight(i int) *PetUpdate {
+	pu.mutation.AddHeight(i)
+	return pu
+}
+
+// ClearHeight clears the value of the "height" field.
+func (pu *PetUpdate) ClearHeight() *PetUpdate {
+	pu.mutation.ClearHeight()
+	return pu
+}
+
 // AddCategoryIDs adds the "categories" edge to the Category entity by IDs.
 func (pu *PetUpdate) AddCategoryIDs(ids ...int) *PetUpdate {
 	pu.mutation.AddCategoryIDs(ids...)
@@ -303,6 +342,39 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: pet.FieldBirthday,
 		})
 	}
+	if value, ok := pu.mutation.TagID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: pet.FieldTagID,
+		})
+	}
+	if pu.mutation.TagIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Column: pet.FieldTagID,
+		})
+	}
+	if value, ok := pu.mutation.Height(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: pet.FieldHeight,
+		})
+	}
+	if value, ok := pu.mutation.AddedHeight(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: pet.FieldHeight,
+		})
+	}
+	if pu.mutation.HeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Column: pet.FieldHeight,
+		})
+	}
 	if pu.mutation.CategoriesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -515,6 +587,45 @@ func (puo *PetUpdateOne) SetNillableBirthday(t *time.Time) *PetUpdateOne {
 // ClearBirthday clears the value of the "birthday" field.
 func (puo *PetUpdateOne) ClearBirthday() *PetUpdateOne {
 	puo.mutation.ClearBirthday()
+	return puo
+}
+
+// SetTagID sets the "tag_id" field.
+func (puo *PetUpdateOne) SetTagID(b []byte) *PetUpdateOne {
+	puo.mutation.SetTagID(b)
+	return puo
+}
+
+// ClearTagID clears the value of the "tag_id" field.
+func (puo *PetUpdateOne) ClearTagID() *PetUpdateOne {
+	puo.mutation.ClearTagID()
+	return puo
+}
+
+// SetHeight sets the "height" field.
+func (puo *PetUpdateOne) SetHeight(i int) *PetUpdateOne {
+	puo.mutation.ResetHeight()
+	puo.mutation.SetHeight(i)
+	return puo
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (puo *PetUpdateOne) SetNillableHeight(i *int) *PetUpdateOne {
+	if i != nil {
+		puo.SetHeight(*i)
+	}
+	return puo
+}
+
+// AddHeight adds i to the "height" field.
+func (puo *PetUpdateOne) AddHeight(i int) *PetUpdateOne {
+	puo.mutation.AddHeight(i)
+	return puo
+}
+
+// ClearHeight clears the value of the "height" field.
+func (puo *PetUpdateOne) ClearHeight() *PetUpdateOne {
+	puo.mutation.ClearHeight()
 	return puo
 }
 
@@ -760,6 +871,39 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeTime,
 			Column: pet.FieldBirthday,
+		})
+	}
+	if value, ok := puo.mutation.TagID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: pet.FieldTagID,
+		})
+	}
+	if puo.mutation.TagIDCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Column: pet.FieldTagID,
+		})
+	}
+	if value, ok := puo.mutation.Height(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: pet.FieldHeight,
+		})
+	}
+	if value, ok := puo.mutation.AddedHeight(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: pet.FieldHeight,
+		})
+	}
+	if puo.mutation.HeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Column: pet.FieldHeight,
 		})
 	}
 	if puo.mutation.CategoriesCleared() {

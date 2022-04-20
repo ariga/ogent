@@ -26,6 +26,8 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "weight", Type: field.TypeInt, Nullable: true},
 		{Name: "birthday", Type: field.TypeTime, Nullable: true},
+		{Name: "tag_id", Type: field.TypeBytes, Nullable: true},
+		{Name: "height", Type: field.TypeInt, Nullable: true},
 		{Name: "user_pets", Type: field.TypeInt},
 	}
 	// PetsTable holds the schema information for the "pets" table.
@@ -36,7 +38,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "pets_users_pets",
-				Columns:    []*schema.Column{PetsColumns[4]},
+				Columns:    []*schema.Column{PetsColumns[6]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
