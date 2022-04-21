@@ -1,11 +1,12 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/update" }}
+	p := GetPolicyFromContext(ctx)
 	b := h.client.{{ $.Name }}.UpdateOneID(params.{{ $.ID.StructField }})
 	// Add all fields.
 	{{- range $f := $.Fields }}
 		{{- if not $f.Immutable }}
-			if v, ok := req.{{ $f.StructField}}.Get(); ok {
+			if v, ok := req.{{ $f.StructField}}.Get(); ok && p.IsAllowed(PrivIdUpdate{{ $.Name }}Req{{ $f.StructField }}){
 				{{- $x := "v" }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
 				b.Set{{ $f.StructField }}({{ $x }})
@@ -17,7 +18,7 @@
 		{{- if not $e.Unique }}
 			b.{{ $e.MutationClear }}().{{ $e.MutationAdd }}(req.{{ $e.StructField }}...)
 		{{- else }}
-			if v, ok := req.{{ $e.StructField }}.Get(); ok {
+			if v, ok := req.{{ $e.StructField }}.Get(); ok && p.IsAllowed(PrivIdUpdate{{ $.Name }}Req{{ $e.StructField }}){
 				b.{{ $e.MutationSet }}(v)
 			}
 		{{- end }}
@@ -40,6 +41,27 @@
 		// This should never happen.
 		return nil, err
 	}
-	return New{{ viewName $ "update"  }}(e), nil
+	r := New{{ viewName $ "update"  }}(e)
+	if r == nil{
+		return nil, nil
+	}
+	v := &{{ viewName $ "update"  }}{}
+	v.ID = r.ID
+	{{- range $f := $.Fields }}
+		{{- if $f.Optional }}
+			if v, ok := req.{{ $f.StructField}}.Get(); ok {
+				{{- $x := "v" }}
+				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				v.{{ $f.StructField }} = r.{{ $f.StructField }}
+			}
+		{{- else }}
+			{{- $x := print "req." $f.StructField }}
+			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				if p.IsAllowed(PrivIdUpdate{{ $.Name }}Req{{ $f.StructField }}) {
+					v.{{ $f.StructField }} = r.{{ $f.StructField }}
+				}
+		{{- end }}
+	{{- end }}
+	return v, nil
 {{- end }}
 

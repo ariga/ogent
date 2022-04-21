@@ -35,6 +35,50 @@ func rawError(err error) jx.Raw {
 	return e.Bytes()
 }
 
+var (
+	PrivIdCreateCategory int
+
+	PrivIdReadCategory int
+
+	PrivIdUpdateCategory int
+
+	PrivIdDeleteCategory int
+
+	PrivIdListCategory int
+
+	PrivIdListCategoryPets int
+
+	PrivIdCreatePet int
+
+	PrivIdDeletePet int
+
+	PrivIdListPet int
+
+	PrivIdReadPet int
+
+	PrivIdUpdatePet int
+
+	PrivIdListPetCategories int
+
+	PrivIdReadPetOwner int
+
+	PrivIdListPetFriends int
+
+	PrivIdCreateUser int
+
+	PrivIdReadUser int
+
+	PrivIdUpdateUser int
+
+	PrivIdDeleteUser int
+
+	PrivIdListUser int
+
+	PrivIdListUserPets int
+
+	PrivIdReadUserBestFriend int
+)
+
 type Boolean bool
 
 func (b *Boolean) Capture(values []string) error {
@@ -336,6 +380,11 @@ var (
 		participle.CaseInsensitive("Keyword"),
 	)
 )
+
+func (h *OgentHandler) PolicyForRequest(ctx context.Context, r *http.Request) Policy{
+
+	return nil
+}
 
 // CreateCategory handles POST /categories requests.
 func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {

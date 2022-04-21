@@ -1,6 +1,7 @@
 {{ define "ogent/ogent/helper/create" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+	p := GetPolicyFromContext(ctx)
 	b := h.client.{{ $.Name }}.Create()
-	// Add all fields.
+	// Add all fields.!
 	{{- range $f := $.Fields }}
 		{{- if $f.Optional }}
 			if v, ok := req.{{ $f.StructField}}.Get(); ok {
@@ -11,7 +12,9 @@
 		{{- else }}
 			{{- $x := print "req." $f.StructField }}
 			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
-			b.Set{{ $f.StructField }}({{ $x }})
+			if p.IsAllowed(PrivIdCreate{{ $.Name }}Req{{ $f.StructField }}) {
+				b.Set{{ $f.StructField }}({{ $x }})
+			}
 		{{- end }}
 	{{- end }}
 	// Add all edges.
@@ -20,7 +23,7 @@
 			b.{{ $e.MutationAdd }}(req.{{ $e.StructField }}...)
 		{{- else }}
 			{{- if $e.Optional }}
-				if v, ok := req.{{ $e.StructField }}.Get(); ok {
+				if v, ok := req.{{ $e.StructField }}.Get(); ok && !p.IsAllowed(PrivIdCreate{{ $.Name }}Req{{ $e.StructField }}){
 					b.{{ $e.MutationSet }}(v)
 				}
 			{{- else }}
@@ -46,5 +49,27 @@
 		// This should never happen.
 		return nil, err
 	}
-	return New{{ viewName $ "create"  }}(e), nil
+	r := New{{ viewName $ "create"  }}(e)
+	if r == nil{
+		return nil, nil
+	}
+	v := &{{ viewName $ "create"  }}{}
+	v.ID = r.ID
+	{{- range $f := $.Fields }}
+		{{- if $f.Optional }}
+			if v, ok := req.{{ $f.StructField}}.Get(); ok {
+				{{- $x := "v" }}
+				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				v.{{ $f.StructField }} = r.{{ $f.StructField }}
+			}
+		{{- else }}
+			{{- $x := print "req." $f.StructField }}
+			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+			if p.IsAllowed(PrivIdCreate{{ $.Name }}Res{{ $f.StructField }}) {
+				v.{{ $f.StructField }} = r.{{ $f.StructField }}
+		}
+		{{- end }}
+	{{- end }}
+	return v, nil
+
 {{- end }}

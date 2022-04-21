@@ -1,6 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/read" }}
+	p := GetPolicyFromContext(ctx)
 	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ(params.{{ $.ID.StructField }}))
 	{{- with eagerLoad $ "read" }}{{ . }}{{- end }}
 	e, err := q.Only(ctx)
@@ -9,7 +10,28 @@
 		extend $
 		"Errors" (list "not-found" "not-singular")
 	-}}
-	return New{{ viewName $ "read"  }}(e), nil
+	r := New{{ viewName $ "read"  }}(e)
+	if r == nil{
+		return nil, nil
+	}
+	v := &{{ viewName $ "read"  }}{}
+	v.ID = r.ID
+	{{- range $f := $.Fields }}
+		{{- if $f.Optional }}
+			if v, ok := req.{{ $f.StructField}}.Get(); ok {
+				{{- $x := "v" }}
+				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				v.{{ $f.StructField }} = r.{{ $f.StructField }}
+			}
+		{{- else }}
+			{{- $x := print "req." $f.StructField }}
+			{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				if p.IsAllowed(PrivIdRead{{ $.Name }}Req{{ $f.StructField }}) {
+					v.{{ $f.StructField }} = r.{{ $f.StructField }}
+				}
+		{{- end }}
+	{{- end }}
+	return v, nil
 {{- end }}
 
 {{ define "ogent/ogent/helper/read/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}

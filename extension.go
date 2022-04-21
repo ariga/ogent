@@ -21,6 +21,8 @@ type (
 		Target string
 		// The Views created by entoas.
 		Views map[string]*entoas.View
+		//Enable the ogent security policy support
+		PolicySupport bool
 	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
@@ -46,6 +48,14 @@ func NewExtension(spec *ogen.Spec, opts ...ExtensionOption) (*Extension, error) 
 		}
 	}
 	return ex, nil
+}
+
+// EnablePolicySupport sets the ogent security policy support
+func EnablePolicySupport() ExtensionOption {
+	return func(ex *Extension) error {
+		ex.cfg.PolicySupport = true
+		return nil
+	}
 }
 
 // Target sets the directory the ogen assets are written to.

@@ -16,8 +16,47 @@
 		client *{{ $pkg }}.Client
 	}
 
+	type PolicyIdProvider interface {
+		GetPrivId(value ...string) int
+	}
+
+	type PolicyInit struct{
+		policy sync.Once
+	}
+
+	func (f *PolicyInit) Init(p PolicyIdProvider) {
+		f.policy.Do(func() {
+			{{- range $n := $.Nodes }}
+				{{- range $op := nodeOperations $n }}
+					{{- $opID := print ($op | toString | pascal) $n.Name }}
+					// {{ $opID }}
+					PrivId{{ $opID }} = p.GetPrivId("{{ $op }}", "{{ lower $n.Name }}")
+					{{- range $f := $n.Fields }}
+						PrivId{{ $opID }}Req{{ $f.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "req", "{{lower $f.StructField }}")
+						PrivId{{ $opID }}Res{{ $f.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "res", "{{lower $f.StructField }}")
+					{{- end }}
+					{{- range $e := $n.Edges }}
+						PrivId{{ $opID }}Req{{ $e.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "req", "{{lower $e.StructField }}")
+						PrivId{{ $opID }}Res{{ $e.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "res", "{{lower $e.StructField }}")
+					{{- end }}
+				{{- end }}
+				{{- range $e := $n.Edges }}
+					{{- range $op := edgeOperations $e }}
+						{{- if or (isRead $op) (isList $op) }}
+							{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
+							// {{ $opID }}
+							PrivId{{ $opID }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "{{lower $e.Name }}")
+						{{- end }}
+					{{ end }}
+				{{ end }}
+			{{ end }}
+		})
+	}
+
 	// NewOgentHandler returns a new OgentHandler.
-	func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler { return &OgentHandler{c} }
+	func NewOgentHandler(c *{{ $pkg }}.Client) *OgentHandler {
+		return &OgentHandler{c}
+	}
 
 	// rawError renders err as json string.
 	func rawError(err error) jx.Raw {
@@ -25,6 +64,33 @@
 		e.Str(err.Error())
 		return e.Bytes()
 	}
+
+	var (
+	{{- range $n := $.Nodes }}
+		{{- range $op := nodeOperations $n }}
+			{{- $opID := print ($op | toString | pascal) $n.Name }}
+			// {{ $opID }}
+			PrivId{{ $opID }} int
+			{{- range $f := $n.Fields }}
+				PrivId{{ $opID }}Req{{ $f.StructField }} int
+				PrivId{{ $opID }}Res{{ $f.StructField }} int
+			{{- end }}
+			{{- range $e := $n.Edges }}
+				PrivId{{ $opID }}Req{{ $e.StructField }} int
+				PrivId{{ $opID }}Res{{ $e.StructField }} int
+			{{- end }}
+		{{- end }}
+		{{- range $e := $n.Edges }}
+			{{- range $op := edgeOperations $e }}
+				{{- if or (isRead $op) (isList $op) }}
+					{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
+					// {{ $opID }}
+					PrivId{{ $opID }} int
+				{{- end }}
+			{{ end }}
+		{{ end }}
+	{{ end }}
+	)
 
 	{{- template "ogent/ogent/helper/list-filter" -}}
 
