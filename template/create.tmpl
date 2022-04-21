@@ -12,13 +12,21 @@
 				{{- else }}
 					if v, ok := req.{{ $f.StructField}}.Get(); ok {
 						{{- $x := "v" }}
-						{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+						{{- if $f.IsEnum -}}
+							{{ $x = convertTo $f.Type.String $x }}
+						{{- else -}}
+							{{ $x = itou $f $x }}
+						{{- end }}
 						b.Set{{ $f.StructField }}({{ $x }})
 					}
 				{{- end }}
 			{{- else }}
 				{{- $x := print "req." $f.StructField }}
-				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
+				{{- if $f.IsEnum -}}
+					{{ $x = convertTo $f.Type.String $x }}
+				{{- else -}}
+					{{ $x = itou $f $x }}
+				{{- end }}
 				b.Set{{ $f.StructField }}({{ $x }})
 			{{- end }}
 		{{- end }}

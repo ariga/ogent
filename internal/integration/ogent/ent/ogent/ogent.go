@@ -534,7 +534,10 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (Creat
 	b := h.client.User.Create()
 	// Add all fields.
 	b.SetName(req.Name)
-	b.SetAge(req.Age)
+	b.SetAge(uint(req.Age))
+	if v, ok := req.Height.Get(); ok {
+		b.SetHeight(uint(v))
+	}
 	b.SetFavoriteCatBreed(user.FavoriteCatBreed(req.FavoriteCatBreed))
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
@@ -612,7 +615,10 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 		b.SetName(v)
 	}
 	if v, ok := req.Age.Get(); ok {
-		b.SetAge(v)
+		b.SetAge(uint(v))
+	}
+	if v, ok := req.Height.Get(); ok {
+		b.SetHeight(uint(v))
 	}
 	if v, ok := req.FavoriteCatBreed.Get(); ok {
 		b.SetFavoriteCatBreed(user.FavoriteCatBreed(v))

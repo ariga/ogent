@@ -28,8 +28,22 @@ func (uc *UserCreate) SetName(s string) *UserCreate {
 }
 
 // SetAge sets the "age" field.
-func (uc *UserCreate) SetAge(i int) *UserCreate {
-	uc.mutation.SetAge(i)
+func (uc *UserCreate) SetAge(u uint) *UserCreate {
+	uc.mutation.SetAge(u)
+	return uc
+}
+
+// SetHeight sets the "height" field.
+func (uc *UserCreate) SetHeight(u uint) *UserCreate {
+	uc.mutation.SetHeight(u)
+	return uc
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (uc *UserCreate) SetNillableHeight(u *uint) *UserCreate {
+	if u != nil {
+		uc.SetHeight(*u)
+	}
 	return uc
 }
 
@@ -232,11 +246,19 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := uc.mutation.Age(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeUint,
 			Value:  value,
 			Column: user.FieldAge,
 		})
 		_node.Age = value
+	}
+	if value, ok := uc.mutation.Height(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Value:  value,
+			Column: user.FieldHeight,
+		})
+		_node.Height = value
 	}
 	if value, ok := uc.mutation.FavoriteCatBreed(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

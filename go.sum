@@ -50,6 +50,10 @@ cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 entgo.io/contrib v0.2.1-0.20220405093919-945c677d460d h1:HMhr0OEBK1F7/MJTNw12fZM5+1izgOYacRiy7SHSvR4=
 entgo.io/contrib v0.2.1-0.20220405093919-945c677d460d/go.mod h1:s+k8RsuNfn6BbaW0ynd/iKBVoXkVPIcqN92KBNRpqHw=
+entgo.io/contrib v0.2.1-0.20220421083403-565528d2ae91 h1:v3i+IUamqvHL5XjELG8LXMWx6MV/11n94Vf0Lwp1ZCg=
+entgo.io/contrib v0.2.1-0.20220421083403-565528d2ae91/go.mod h1:zl4XiE6QLK84yF1WxlkjLOyXl9xbDMZYwWFjiZPp+gI=
+entgo.io/contrib v0.2.1-0.20220421093944-3186275bff87 h1:Nju9l/zbig4ORFj3DMHmuDLtag8QlnbHq15mIZYoLuk=
+entgo.io/contrib v0.2.1-0.20220421093944-3186275bff87/go.mod h1:zl4XiE6QLK84yF1WxlkjLOyXl9xbDMZYwWFjiZPp+gI=
 entgo.io/ent v0.10.2-0.20220402190128-05246cbd26dd/go.mod h1:N5rSx938yoabKH4MHfkLQ7HQIqUJnqJaUUFXERXWE70=
 entgo.io/ent v0.10.2-0.20220407165443-5dd5acc08d0e h1:pyi1r2QHcaiudAGrZpo+nKM89F4r0pHhnuk3nb0ueXM=
 entgo.io/ent v0.10.2-0.20220407165443-5dd5acc08d0e/go.mod h1:N5rSx938yoabKH4MHfkLQ7HQIqUJnqJaUUFXERXWE70=

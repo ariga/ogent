@@ -20,7 +20,9 @@ type User struct {
 func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
-		field.Int("age"),
+		field.Uint("age"),
+		field.Uint("height").
+			Optional(),
 		field.Enum("favorite_cat_breed").
 			Values("siamese", "bengal", "lion", "tiger", "leopard", "other"),
 		field.Enum("favorite_dog_breed").

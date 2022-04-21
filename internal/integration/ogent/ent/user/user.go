@@ -17,6 +17,8 @@ const (
 	FieldName = "name"
 	// FieldAge holds the string denoting the age field in the database.
 	FieldAge = "age"
+	// FieldHeight holds the string denoting the height field in the database.
+	FieldHeight = "height"
 	// FieldFavoriteCatBreed holds the string denoting the favorite_cat_breed field in the database.
 	FieldFavoriteCatBreed = "favorite_cat_breed"
 	// FieldFavoriteDogBreed holds the string denoting the favorite_dog_breed field in the database.
@@ -47,6 +49,7 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldAge,
+	FieldHeight,
 	FieldFavoriteCatBreed,
 	FieldFavoriteDogBreed,
 	FieldFavoriteFishBreed,

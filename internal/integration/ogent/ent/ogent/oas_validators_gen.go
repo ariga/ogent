@@ -73,6 +73,54 @@ var (
 func (s CreateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -245,6 +293,54 @@ func (s PetCreate) Validate() error {
 func (s PetCreateOwner) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -339,6 +435,54 @@ func (s PetCreateOwnerFavoriteFishBreed) Validate() error {
 func (s PetOwnerRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -432,6 +576,62 @@ func (s PetOwnerReadFavoriteFishBreed) Validate() error {
 }
 func (s UpdateUserReq) Validate() error {
 	var failures []validate.FieldError
+	if err := func() error {
+		if s.Age.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Age.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
 	if err := func() error {
 		if s.FavoriteCatBreed.Set {
 			if err := func() error {
@@ -535,6 +735,54 @@ func (s UpdateUserReqFavoriteFishBreed) Validate() error {
 func (s UserBestFriendRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -628,6 +876,54 @@ func (s UserBestFriendReadFavoriteFishBreed) Validate() error {
 }
 func (s UserCreate) Validate() error {
 	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
 	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
@@ -723,6 +1019,54 @@ func (s UserCreateFavoriteFishBreed) Validate() error {
 func (s UserList) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -817,6 +1161,54 @@ func (s UserListFavoriteFishBreed) Validate() error {
 func (s UserRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err
 		}
@@ -910,6 +1302,54 @@ func (s UserReadFavoriteFishBreed) Validate() error {
 }
 func (s UserUpdate) Validate() error {
 	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        false,
+			Max:           0,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
 	if err := func() error {
 		if err := s.FavoriteCatBreed.Validate(); err != nil {
 			return err

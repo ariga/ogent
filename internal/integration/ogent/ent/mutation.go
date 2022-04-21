@@ -1431,8 +1431,10 @@ type UserMutation struct {
 	typ                 string
 	id                  *int
 	name                *string
-	age                 *int
+	age                 *uint
 	addage              *int
+	height              *uint
+	addheight           *int
 	favorite_cat_breed  *user.FavoriteCatBreed
 	favorite_dog_breed  *user.FavoriteDogBreed
 	favorite_fish_breed *schema.FishBreed
@@ -1582,13 +1584,13 @@ func (m *UserMutation) ResetName() {
 }
 
 // SetAge sets the "age" field.
-func (m *UserMutation) SetAge(i int) {
-	m.age = &i
+func (m *UserMutation) SetAge(u uint) {
+	m.age = &u
 	m.addage = nil
 }
 
 // Age returns the value of the "age" field in the mutation.
-func (m *UserMutation) Age() (r int, exists bool) {
+func (m *UserMutation) Age() (r uint, exists bool) {
 	v := m.age
 	if v == nil {
 		return
@@ -1599,7 +1601,7 @@ func (m *UserMutation) Age() (r int, exists bool) {
 // OldAge returns the old "age" field's value of the User entity.
 // If the User object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *UserMutation) OldAge(ctx context.Context) (v int, err error) {
+func (m *UserMutation) OldAge(ctx context.Context) (v uint, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAge is only allowed on UpdateOne operations")
 	}
@@ -1613,12 +1615,12 @@ func (m *UserMutation) OldAge(ctx context.Context) (v int, err error) {
 	return oldValue.Age, nil
 }
 
-// AddAge adds i to the "age" field.
-func (m *UserMutation) AddAge(i int) {
+// AddAge adds u to the "age" field.
+func (m *UserMutation) AddAge(u int) {
 	if m.addage != nil {
-		*m.addage += i
+		*m.addage += u
 	} else {
-		m.addage = &i
+		m.addage = &u
 	}
 }
 
@@ -1635,6 +1637,76 @@ func (m *UserMutation) AddedAge() (r int, exists bool) {
 func (m *UserMutation) ResetAge() {
 	m.age = nil
 	m.addage = nil
+}
+
+// SetHeight sets the "height" field.
+func (m *UserMutation) SetHeight(u uint) {
+	m.height = &u
+	m.addheight = nil
+}
+
+// Height returns the value of the "height" field in the mutation.
+func (m *UserMutation) Height() (r uint, exists bool) {
+	v := m.height
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHeight returns the old "height" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldHeight(ctx context.Context) (v uint, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHeight: %w", err)
+	}
+	return oldValue.Height, nil
+}
+
+// AddHeight adds u to the "height" field.
+func (m *UserMutation) AddHeight(u int) {
+	if m.addheight != nil {
+		*m.addheight += u
+	} else {
+		m.addheight = &u
+	}
+}
+
+// AddedHeight returns the value that was added to the "height" field in this mutation.
+func (m *UserMutation) AddedHeight() (r int, exists bool) {
+	v := m.addheight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearHeight clears the value of the "height" field.
+func (m *UserMutation) ClearHeight() {
+	m.height = nil
+	m.addheight = nil
+	m.clearedFields[user.FieldHeight] = struct{}{}
+}
+
+// HeightCleared returns if the "height" field was cleared in this mutation.
+func (m *UserMutation) HeightCleared() bool {
+	_, ok := m.clearedFields[user.FieldHeight]
+	return ok
+}
+
+// ResetHeight resets all changes to the "height" field.
+func (m *UserMutation) ResetHeight() {
+	m.height = nil
+	m.addheight = nil
+	delete(m.clearedFields, user.FieldHeight)
 }
 
 // SetFavoriteCatBreed sets the "favorite_cat_breed" field.
@@ -1883,12 +1955,15 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
 	if m.age != nil {
 		fields = append(fields, user.FieldAge)
+	}
+	if m.height != nil {
+		fields = append(fields, user.FieldHeight)
 	}
 	if m.favorite_cat_breed != nil {
 		fields = append(fields, user.FieldFavoriteCatBreed)
@@ -1911,6 +1986,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Name()
 	case user.FieldAge:
 		return m.Age()
+	case user.FieldHeight:
+		return m.Height()
 	case user.FieldFavoriteCatBreed:
 		return m.FavoriteCatBreed()
 	case user.FieldFavoriteDogBreed:
@@ -1930,6 +2007,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldName(ctx)
 	case user.FieldAge:
 		return m.OldAge(ctx)
+	case user.FieldHeight:
+		return m.OldHeight(ctx)
 	case user.FieldFavoriteCatBreed:
 		return m.OldFavoriteCatBreed(ctx)
 	case user.FieldFavoriteDogBreed:
@@ -1953,11 +2032,18 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		m.SetName(v)
 		return nil
 	case user.FieldAge:
-		v, ok := value.(int)
+		v, ok := value.(uint)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAge(v)
+		return nil
+	case user.FieldHeight:
+		v, ok := value.(uint)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHeight(v)
 		return nil
 	case user.FieldFavoriteCatBreed:
 		v, ok := value.(user.FavoriteCatBreed)
@@ -1991,6 +2077,9 @@ func (m *UserMutation) AddedFields() []string {
 	if m.addage != nil {
 		fields = append(fields, user.FieldAge)
 	}
+	if m.addheight != nil {
+		fields = append(fields, user.FieldHeight)
+	}
 	return fields
 }
 
@@ -2001,6 +2090,8 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldAge:
 		return m.AddedAge()
+	case user.FieldHeight:
+		return m.AddedHeight()
 	}
 	return nil, false
 }
@@ -2017,6 +2108,13 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddAge(v)
 		return nil
+	case user.FieldHeight:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHeight(v)
+		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
 }
@@ -2025,6 +2123,9 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 // mutation.
 func (m *UserMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(user.FieldHeight) {
+		fields = append(fields, user.FieldHeight)
+	}
 	if m.FieldCleared(user.FieldFavoriteDogBreed) {
 		fields = append(fields, user.FieldFavoriteDogBreed)
 	}
@@ -2045,6 +2146,9 @@ func (m *UserMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *UserMutation) ClearField(name string) error {
 	switch name {
+	case user.FieldHeight:
+		m.ClearHeight()
+		return nil
 	case user.FieldFavoriteDogBreed:
 		m.ClearFavoriteDogBreed()
 		return nil
@@ -2064,6 +2168,9 @@ func (m *UserMutation) ResetField(name string) error {
 		return nil
 	case user.FieldAge:
 		m.ResetAge()
+		return nil
+	case user.FieldHeight:
+		m.ResetHeight()
 		return nil
 	case user.FieldFavoriteCatBreed:
 		m.ResetFavoriteCatBreed()
