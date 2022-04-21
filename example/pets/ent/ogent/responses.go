@@ -8,10 +8,10 @@ func NewCategoryCreate(e *ent.Category) *CategoryCreate {
 	if e == nil {
 		return nil
 	}
-	return &CategoryCreate{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret CategoryCreate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewCategoryCreates(es []*ent.Category) []CategoryCreate {
@@ -36,10 +36,10 @@ func NewCategoryList(e *ent.Category) *CategoryList {
 	if e == nil {
 		return nil
 	}
-	return &CategoryList{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret CategoryList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewCategoryLists(es []*ent.Category) []CategoryList {
@@ -64,10 +64,10 @@ func NewCategoryRead(e *ent.Category) *CategoryRead {
 	if e == nil {
 		return nil
 	}
-	return &CategoryRead{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret CategoryRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewCategoryReads(es []*ent.Category) []CategoryRead {
@@ -92,10 +92,10 @@ func NewCategoryUpdate(e *ent.Category) *CategoryUpdate {
 	if e == nil {
 		return nil
 	}
-	return &CategoryUpdate{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret CategoryUpdate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewCategoryUpdates(es []*ent.Category) []CategoryUpdate {
@@ -120,12 +120,12 @@ func NewCategoryPetsList(e *ent.Pet) *CategoryPetsList {
 	if e == nil {
 		return nil
 	}
-	return &CategoryPetsList{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret CategoryPetsList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewCategoryPetsLists(es []*ent.Pet) []CategoryPetsList {
@@ -150,14 +150,14 @@ func NewPetCreate(e *ent.Pet) *PetCreate {
 	if e == nil {
 		return nil
 	}
-	return &PetCreate{
-		ID:         e.ID,
-		Name:       e.Name,
-		Weight:     NewOptInt(e.Weight),
-		Birthday:   NewOptDateTime(e.Birthday),
-		Categories: NewPetCreateCategoriesSlice(e.Edges.Categories),
-		Owner:      NewPetCreateOwner(e.Edges.Owner).Elem(),
-	}
+	var ret PetCreate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	ret.Categories = NewPetCreateCategoriesSlice(e.Edges.Categories)
+	ret.Owner = NewPetCreateOwner(e.Edges.Owner).Elem()
+	return &ret
 }
 
 func NewPetCreates(es []*ent.Pet) []PetCreate {
@@ -182,10 +182,10 @@ func NewPetCreateCategories(e *ent.Category) *PetCreateCategories {
 	if e == nil {
 		return nil
 	}
-	return &PetCreateCategories{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret PetCreateCategories
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewPetCreateCategoriesSlice(es []*ent.Category) []PetCreateCategories {
@@ -210,11 +210,11 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 	if e == nil {
 		return nil
 	}
-	return &PetCreateOwner{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret PetCreateOwner
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewPetCreateOwners(es []*ent.User) []PetCreateOwner {
@@ -239,12 +239,12 @@ func NewPetList(e *ent.Pet) *PetList {
 	if e == nil {
 		return nil
 	}
-	return &PetList{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret PetList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewPetLists(es []*ent.Pet) []PetList {
@@ -269,12 +269,12 @@ func NewPetRead(e *ent.Pet) *PetRead {
 	if e == nil {
 		return nil
 	}
-	return &PetRead{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret PetRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewPetReads(es []*ent.Pet) []PetRead {
@@ -299,12 +299,12 @@ func NewPetUpdate(e *ent.Pet) *PetUpdate {
 	if e == nil {
 		return nil
 	}
-	return &PetUpdate{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret PetUpdate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewPetUpdates(es []*ent.Pet) []PetUpdate {
@@ -329,10 +329,10 @@ func NewPetCategoriesList(e *ent.Category) *PetCategoriesList {
 	if e == nil {
 		return nil
 	}
-	return &PetCategoriesList{
-		ID:   e.ID,
-		Name: e.Name,
-	}
+	var ret PetCategoriesList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	return &ret
 }
 
 func NewPetCategoriesLists(es []*ent.Category) []PetCategoriesList {
@@ -357,12 +357,12 @@ func NewPetFriendsList(e *ent.Pet) *PetFriendsList {
 	if e == nil {
 		return nil
 	}
-	return &PetFriendsList{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret PetFriendsList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewPetFriendsLists(es []*ent.Pet) []PetFriendsList {
@@ -387,11 +387,11 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 	if e == nil {
 		return nil
 	}
-	return &PetOwnerRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret PetOwnerRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewPetOwnerReads(es []*ent.User) []PetOwnerRead {
@@ -416,11 +416,11 @@ func NewUserCreate(e *ent.User) *UserCreate {
 	if e == nil {
 		return nil
 	}
-	return &UserCreate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret UserCreate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewUserCreates(es []*ent.User) []UserCreate {
@@ -445,11 +445,11 @@ func NewUserList(e *ent.User) *UserList {
 	if e == nil {
 		return nil
 	}
-	return &UserList{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret UserList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewUserLists(es []*ent.User) []UserList {
@@ -474,11 +474,11 @@ func NewUserRead(e *ent.User) *UserRead {
 	if e == nil {
 		return nil
 	}
-	return &UserRead{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret UserRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewUserReads(es []*ent.User) []UserRead {
@@ -503,11 +503,11 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 	if e == nil {
 		return nil
 	}
-	return &UserUpdate{
-		ID:   e.ID,
-		Name: e.Name,
-		Age:  e.Age,
-	}
+	var ret UserUpdate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = e.Age
+	return &ret
 }
 
 func NewUserUpdates(es []*ent.User) []UserUpdate {
@@ -532,12 +532,12 @@ func NewUserPetsList(e *ent.Pet) *UserPetsList {
 	if e == nil {
 		return nil
 	}
-	return &UserPetsList{
-		ID:       e.ID,
-		Name:     e.Name,
-		Weight:   NewOptInt(e.Weight),
-		Birthday: NewOptDateTime(e.Birthday),
-	}
+	var ret UserPetsList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	return &ret
 }
 
 func NewUserPetsLists(es []*ent.Pet) []UserPetsList {

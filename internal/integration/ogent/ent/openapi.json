@@ -403,6 +403,13 @@
                     "type": "string",
                     "format": "date-time"
                   },
+                  "tag_id": {
+                    "type": "string",
+                    "format": "byte"
+                  },
+                  "height": {
+                    "type": "integer"
+                  },
                   "categories": {
                     "type": "array",
                     "items": {
@@ -565,6 +572,13 @@
                   "birthday": {
                     "type": "string",
                     "format": "date-time"
+                  },
+                  "tag_id": {
+                    "type": "string",
+                    "format": "byte"
+                  },
+                  "height": {
+                    "type": "integer"
                   },
                   "categories": {
                     "type": "array",
@@ -1328,6 +1342,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1350,6 +1371,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           },
           "categories": {
             "type": "array",
@@ -1388,6 +1416,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           },
           "categories": {
             "type": "array",
@@ -1483,6 +1518,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1505,6 +1547,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1527,6 +1576,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1567,6 +1623,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1913,6 +1976,13 @@
           "birthday": {
             "type": "string",
             "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
           }
         },
         "required": [

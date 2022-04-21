@@ -92,6 +92,8 @@ type CategoryPetsList struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 // Ref: #/components/schemas/CategoryRead
@@ -121,6 +123,8 @@ type CreatePetReq struct {
 	Name       string      "json:\"name\""
 	Weight     OptInt      "json:\"weight\""
 	Birthday   OptDateTime "json:\"birthday\""
+	TagID      []byte      "json:\"tag_id\""
+	Height     OptInt      "json:\"height\""
 	Categories []int       "json:\"categories\""
 	Owner      int         "json:\"owner\""
 	Friends    []int       "json:\"friends\""
@@ -1229,6 +1233,8 @@ type PetCreate struct {
 	Name       string                "json:\"name\""
 	Weight     OptInt                "json:\"weight\""
 	Birthday   OptDateTime           "json:\"birthday\""
+	TagID      []byte                "json:\"tag_id\""
+	Height     OptInt                "json:\"height\""
 	Categories []PetCreateCategories "json:\"categories\""
 	Owner      PetCreateOwner        "json:\"owner\""
 }
@@ -1283,6 +1289,8 @@ type PetFriendsList struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 // Ref: #/components/schemas/PetList
@@ -1291,6 +1299,8 @@ type PetList struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 // Ref: #/components/schemas/Pet_OwnerRead
@@ -1336,6 +1346,8 @@ type PetRead struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 func (*PetRead) readPetRes() {}
@@ -1346,6 +1358,8 @@ type PetUpdate struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 func (*PetUpdate) updatePetRes() {}
@@ -1468,6 +1482,8 @@ type UpdatePetReq struct {
 	Name       OptString   "json:\"name\""
 	Weight     OptInt      "json:\"weight\""
 	Birthday   OptDateTime "json:\"birthday\""
+	TagID      []byte      "json:\"tag_id\""
+	Height     OptInt      "json:\"height\""
 	Categories []int       "json:\"categories\""
 	Owner      OptInt      "json:\"owner\""
 	Friends    []int       "json:\"friends\""
@@ -1623,6 +1639,8 @@ type UserPetsList struct {
 	Name     string      "json:\"name\""
 	Weight   OptInt      "json:\"weight\""
 	Birthday OptDateTime "json:\"birthday\""
+	TagID    []byte      "json:\"tag_id\""
+	Height   OptInt      "json:\"height\""
 }
 
 // Ref: #/components/schemas/UserRead

@@ -522,6 +522,9 @@ type PetMutation struct {
 	weight            *int
 	addweight         *int
 	birthday          *time.Time
+	tag_id            *[]byte
+	height            *int
+	addheight         *int
 	clearedFields     map[string]struct{}
 	categories        map[int]struct{}
 	removedcategories map[int]struct{}
@@ -789,6 +792,125 @@ func (m *PetMutation) ResetBirthday() {
 	delete(m.clearedFields, pet.FieldBirthday)
 }
 
+// SetTagID sets the "tag_id" field.
+func (m *PetMutation) SetTagID(b []byte) {
+	m.tag_id = &b
+}
+
+// TagID returns the value of the "tag_id" field in the mutation.
+func (m *PetMutation) TagID() (r []byte, exists bool) {
+	v := m.tag_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTagID returns the old "tag_id" field's value of the Pet entity.
+// If the Pet object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetMutation) OldTagID(ctx context.Context) (v []byte, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTagID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTagID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTagID: %w", err)
+	}
+	return oldValue.TagID, nil
+}
+
+// ClearTagID clears the value of the "tag_id" field.
+func (m *PetMutation) ClearTagID() {
+	m.tag_id = nil
+	m.clearedFields[pet.FieldTagID] = struct{}{}
+}
+
+// TagIDCleared returns if the "tag_id" field was cleared in this mutation.
+func (m *PetMutation) TagIDCleared() bool {
+	_, ok := m.clearedFields[pet.FieldTagID]
+	return ok
+}
+
+// ResetTagID resets all changes to the "tag_id" field.
+func (m *PetMutation) ResetTagID() {
+	m.tag_id = nil
+	delete(m.clearedFields, pet.FieldTagID)
+}
+
+// SetHeight sets the "height" field.
+func (m *PetMutation) SetHeight(i int) {
+	m.height = &i
+	m.addheight = nil
+}
+
+// Height returns the value of the "height" field in the mutation.
+func (m *PetMutation) Height() (r int, exists bool) {
+	v := m.height
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHeight returns the old "height" field's value of the Pet entity.
+// If the Pet object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PetMutation) OldHeight(ctx context.Context) (v *int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHeight: %w", err)
+	}
+	return oldValue.Height, nil
+}
+
+// AddHeight adds i to the "height" field.
+func (m *PetMutation) AddHeight(i int) {
+	if m.addheight != nil {
+		*m.addheight += i
+	} else {
+		m.addheight = &i
+	}
+}
+
+// AddedHeight returns the value that was added to the "height" field in this mutation.
+func (m *PetMutation) AddedHeight() (r int, exists bool) {
+	v := m.addheight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearHeight clears the value of the "height" field.
+func (m *PetMutation) ClearHeight() {
+	m.height = nil
+	m.addheight = nil
+	m.clearedFields[pet.FieldHeight] = struct{}{}
+}
+
+// HeightCleared returns if the "height" field was cleared in this mutation.
+func (m *PetMutation) HeightCleared() bool {
+	_, ok := m.clearedFields[pet.FieldHeight]
+	return ok
+}
+
+// ResetHeight resets all changes to the "height" field.
+func (m *PetMutation) ResetHeight() {
+	m.height = nil
+	m.addheight = nil
+	delete(m.clearedFields, pet.FieldHeight)
+}
+
 // AddCategoryIDs adds the "categories" edge to the Category entity by ids.
 func (m *PetMutation) AddCategoryIDs(ids ...int) {
 	if m.categories == nil {
@@ -955,7 +1077,7 @@ func (m *PetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PetMutation) Fields() []string {
-	fields := make([]string, 0, 3)
+	fields := make([]string, 0, 5)
 	if m.name != nil {
 		fields = append(fields, pet.FieldName)
 	}
@@ -964,6 +1086,12 @@ func (m *PetMutation) Fields() []string {
 	}
 	if m.birthday != nil {
 		fields = append(fields, pet.FieldBirthday)
+	}
+	if m.tag_id != nil {
+		fields = append(fields, pet.FieldTagID)
+	}
+	if m.height != nil {
+		fields = append(fields, pet.FieldHeight)
 	}
 	return fields
 }
@@ -979,6 +1107,10 @@ func (m *PetMutation) Field(name string) (ent.Value, bool) {
 		return m.Weight()
 	case pet.FieldBirthday:
 		return m.Birthday()
+	case pet.FieldTagID:
+		return m.TagID()
+	case pet.FieldHeight:
+		return m.Height()
 	}
 	return nil, false
 }
@@ -994,6 +1126,10 @@ func (m *PetMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldWeight(ctx)
 	case pet.FieldBirthday:
 		return m.OldBirthday(ctx)
+	case pet.FieldTagID:
+		return m.OldTagID(ctx)
+	case pet.FieldHeight:
+		return m.OldHeight(ctx)
 	}
 	return nil, fmt.Errorf("unknown Pet field %s", name)
 }
@@ -1024,6 +1160,20 @@ func (m *PetMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBirthday(v)
 		return nil
+	case pet.FieldTagID:
+		v, ok := value.([]byte)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTagID(v)
+		return nil
+	case pet.FieldHeight:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHeight(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Pet field %s", name)
 }
@@ -1035,6 +1185,9 @@ func (m *PetMutation) AddedFields() []string {
 	if m.addweight != nil {
 		fields = append(fields, pet.FieldWeight)
 	}
+	if m.addheight != nil {
+		fields = append(fields, pet.FieldHeight)
+	}
 	return fields
 }
 
@@ -1045,6 +1198,8 @@ func (m *PetMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case pet.FieldWeight:
 		return m.AddedWeight()
+	case pet.FieldHeight:
+		return m.AddedHeight()
 	}
 	return nil, false
 }
@@ -1061,6 +1216,13 @@ func (m *PetMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddWeight(v)
 		return nil
+	case pet.FieldHeight:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddHeight(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Pet numeric field %s", name)
 }
@@ -1074,6 +1236,12 @@ func (m *PetMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(pet.FieldBirthday) {
 		fields = append(fields, pet.FieldBirthday)
+	}
+	if m.FieldCleared(pet.FieldTagID) {
+		fields = append(fields, pet.FieldTagID)
+	}
+	if m.FieldCleared(pet.FieldHeight) {
+		fields = append(fields, pet.FieldHeight)
 	}
 	return fields
 }
@@ -1095,6 +1263,12 @@ func (m *PetMutation) ClearField(name string) error {
 	case pet.FieldBirthday:
 		m.ClearBirthday()
 		return nil
+	case pet.FieldTagID:
+		m.ClearTagID()
+		return nil
+	case pet.FieldHeight:
+		m.ClearHeight()
+		return nil
 	}
 	return fmt.Errorf("unknown Pet nullable field %s", name)
 }
@@ -1111,6 +1285,12 @@ func (m *PetMutation) ResetField(name string) error {
 		return nil
 	case pet.FieldBirthday:
 		m.ResetBirthday()
+		return nil
+	case pet.FieldTagID:
+		m.ResetTagID()
+		return nil
+	case pet.FieldHeight:
+		m.ResetHeight()
 		return nil
 	}
 	return fmt.Errorf("unknown Pet field %s", name)

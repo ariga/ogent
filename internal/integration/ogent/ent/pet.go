@@ -23,6 +23,10 @@ type Pet struct {
 	Weight int `json:"weight,omitempty"`
 	// Birthday holds the value of the "birthday" field.
 	Birthday time.Time `json:"birthday,omitempty"`
+	// TagID holds the value of the "tag_id" field.
+	TagID []byte `json:"tag_id,omitempty"`
+	// Height holds the value of the "height" field.
+	Height *int `json:"height,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PetQuery when eager-loading is set.
 	Edges     PetEdges `json:"edges"`
@@ -79,7 +83,9 @@ func (*Pet) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case pet.FieldID, pet.FieldWeight:
+		case pet.FieldTagID:
+			values[i] = new([]byte)
+		case pet.FieldID, pet.FieldWeight, pet.FieldHeight:
 			values[i] = new(sql.NullInt64)
 		case pet.FieldName:
 			values[i] = new(sql.NullString)
@@ -125,6 +131,19 @@ func (pe *Pet) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field birthday", values[i])
 			} else if value.Valid {
 				pe.Birthday = value.Time
+			}
+		case pet.FieldTagID:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field tag_id", values[i])
+			} else if value != nil {
+				pe.TagID = *value
+			}
+		case pet.FieldHeight:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field height", values[i])
+			} else if value.Valid {
+				pe.Height = new(int)
+				*pe.Height = int(value.Int64)
 			}
 		case pet.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -182,6 +201,12 @@ func (pe *Pet) String() string {
 	builder.WriteString(fmt.Sprintf("%v", pe.Weight))
 	builder.WriteString(", birthday=")
 	builder.WriteString(pe.Birthday.Format(time.ANSIC))
+	builder.WriteString(", tag_id=")
+	builder.WriteString(fmt.Sprintf("%v", pe.TagID))
+	if v := pe.Height; v != nil {
+		builder.WriteString(", height=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

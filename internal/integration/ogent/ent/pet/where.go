@@ -114,6 +114,20 @@ func Birthday(v time.Time) predicate.Pet {
 	})
 }
 
+// TagID applies equality check predicate on the "tag_id" field. It's identical to TagIDEQ.
+func TagID(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTagID), v))
+	})
+}
+
+// Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
+func Height(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHeight), v))
+	})
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
@@ -402,6 +416,186 @@ func BirthdayIsNil() predicate.Pet {
 func BirthdayNotNil() predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldBirthday)))
+	})
+}
+
+// TagIDEQ applies the EQ predicate on the "tag_id" field.
+func TagIDEQ(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDNEQ applies the NEQ predicate on the "tag_id" field.
+func TagIDNEQ(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDIn applies the In predicate on the "tag_id" field.
+func TagIDIn(vs ...[]byte) predicate.Pet {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Pet(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldTagID), v...))
+	})
+}
+
+// TagIDNotIn applies the NotIn predicate on the "tag_id" field.
+func TagIDNotIn(vs ...[]byte) predicate.Pet {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Pet(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldTagID), v...))
+	})
+}
+
+// TagIDGT applies the GT predicate on the "tag_id" field.
+func TagIDGT(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDGTE applies the GTE predicate on the "tag_id" field.
+func TagIDGTE(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDLT applies the LT predicate on the "tag_id" field.
+func TagIDLT(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDLTE applies the LTE predicate on the "tag_id" field.
+func TagIDLTE(v []byte) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldTagID), v))
+	})
+}
+
+// TagIDIsNil applies the IsNil predicate on the "tag_id" field.
+func TagIDIsNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldTagID)))
+	})
+}
+
+// TagIDNotNil applies the NotNil predicate on the "tag_id" field.
+func TagIDNotNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldTagID)))
+	})
+}
+
+// HeightEQ applies the EQ predicate on the "height" field.
+func HeightEQ(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldHeight), v))
+	})
+}
+
+// HeightNEQ applies the NEQ predicate on the "height" field.
+func HeightNEQ(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldHeight), v))
+	})
+}
+
+// HeightIn applies the In predicate on the "height" field.
+func HeightIn(vs ...int) predicate.Pet {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Pet(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldHeight), v...))
+	})
+}
+
+// HeightNotIn applies the NotIn predicate on the "height" field.
+func HeightNotIn(vs ...int) predicate.Pet {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Pet(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldHeight), v...))
+	})
+}
+
+// HeightGT applies the GT predicate on the "height" field.
+func HeightGT(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldHeight), v))
+	})
+}
+
+// HeightGTE applies the GTE predicate on the "height" field.
+func HeightGTE(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldHeight), v))
+	})
+}
+
+// HeightLT applies the LT predicate on the "height" field.
+func HeightLT(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldHeight), v))
+	})
+}
+
+// HeightLTE applies the LTE predicate on the "height" field.
+func HeightLTE(v int) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldHeight), v))
+	})
+}
+
+// HeightIsNil applies the IsNil predicate on the "height" field.
+func HeightIsNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldHeight)))
+	})
+}
+
+// HeightNotNil applies the NotNil predicate on the "height" field.
+func HeightNotNil() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldHeight)))
 	})
 }
 

@@ -178,13 +178,13 @@ const (
 )
 
 // setFieldExpr returns a Go expression to set the field on a response.
-func setFieldExpr(f *gen.Field, schema, ident string) (string, error) {
+func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 	if !f.Optional {
 		expr := fmt.Sprintf("%s.%s", ident, f.StructField())
 		if f.IsEnum() {
 			expr = convertTo(schema+f.StructField(), expr)
 		}
-		return expr, nil
+		return fmt.Sprintf("%s.%s = %s", rec, f.StructField(), expr), nil
 	}
 	t, err := entoas.OgenSchema(f)
 	if err != nil {
@@ -199,61 +199,71 @@ func setFieldExpr(f *gen.Field, schema, ident string) (string, error) {
 		)
 		return buf.String(), nil
 	}
+	var opt string
 	switch t.Type {
 	case Integer:
 		switch t.Format {
 		case Int32:
-			buf.WriteString("NewOptInt32(")
+			opt = "Int32"
 		case Int64:
-			buf.WriteString("NewOptInt64(")
+			opt = "Int64"
 		case None:
-			buf.WriteString("NewOptInt(")
+			opt = "Int"
 		default:
 			return "", fmt.Errorf("unexpected type: %q", t.Format)
 		}
 	case Number:
 		switch t.Format {
 		case Float:
-			buf.WriteString("NewOptFloat32(")
+			opt = "Float32"
 		case Double, None:
-			buf.WriteString("NewOptFloat64(")
+			opt = "Float64"
 		case Int32:
-			buf.WriteString("NewOptInt32(")
+			opt = "Int32"
 		case Int64:
-			buf.WriteString("NewOptInt64(")
+			opt = "Int64"
 		default:
 			return "", fmt.Errorf("unexpected type: %q", t.Format)
 		}
 	case String:
 		switch t.Format {
 		case Byte:
-			buf.WriteString("NewOptByteSlice(")
+			return fmt.Sprintf("%s.%s = %s.%s", rec, f.StructField(), ident, f.StructField()), nil
 		case DateTime, Date, Time:
-			buf.WriteString("NewOptDateTime(")
+			opt = "DateTime"
 		case Duration:
-			buf.WriteString("NewOptDuration(")
+			opt = "Duration"
 		case UUID:
-			buf.WriteString("NewOptUUID(")
+			opt = "UUID"
 		case IPv4, IPv6:
-			buf.WriteString("NewOptIP(")
+			opt = "IP"
 		case URI:
-			buf.WriteString("NewOptURL(")
+			opt = "URL"
 		case Password, None:
-			buf.WriteString("NewOptString(")
+			opt = "String"
 		default:
 			return "", fmt.Errorf("unexpected type: %q", t.Format)
 		}
 	case Boolean:
 		switch t.Format {
 		case None:
-			buf.WriteString("NewOptBool(")
+			opt = "Bool"
 		default:
 			return "", fmt.Errorf("unexpected type: %q", t.Format)
 		}
 	default:
 		return "", fmt.Errorf("unexpected type: %q", t.Format)
 	}
-	fmt.Fprintf(buf, "%s.%s)", ident, f.StructField())
+	if f.Nillable {
+		fmt.Fprintf(buf, "%s.%s = Opt%s{}\n", rec, f.StructField(), opt)
+		fmt.Fprintf(buf, "if %s.%s != nil { %s.%s.SetTo(*%s.%s) }",
+			ident, f.StructField(),
+			rec, f.StructField(),
+			ident, f.StructField(),
+		)
+	} else {
+		fmt.Fprintf(buf, "%s.%s = NewOpt%s(%s.%s)", rec, f.StructField(), opt, ident, f.StructField())
+	}
 	return buf.String(), nil
 }
 

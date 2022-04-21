@@ -56,6 +56,26 @@ func (pc *PetCreate) SetNillableBirthday(t *time.Time) *PetCreate {
 	return pc
 }
 
+// SetTagID sets the "tag_id" field.
+func (pc *PetCreate) SetTagID(b []byte) *PetCreate {
+	pc.mutation.SetTagID(b)
+	return pc
+}
+
+// SetHeight sets the "height" field.
+func (pc *PetCreate) SetHeight(i int) *PetCreate {
+	pc.mutation.SetHeight(i)
+	return pc
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (pc *PetCreate) SetNillableHeight(i *int) *PetCreate {
+	if i != nil {
+		pc.SetHeight(*i)
+	}
+	return pc
+}
+
 // AddCategoryIDs adds the "categories" edge to the Category entity by IDs.
 func (pc *PetCreate) AddCategoryIDs(ids ...int) *PetCreate {
 	pc.mutation.AddCategoryIDs(ids...)
@@ -223,6 +243,22 @@ func (pc *PetCreate) createSpec() (*Pet, *sqlgraph.CreateSpec) {
 			Column: pet.FieldBirthday,
 		})
 		_node.Birthday = value
+	}
+	if value, ok := pc.mutation.TagID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBytes,
+			Value:  value,
+			Column: pet.FieldTagID,
+		})
+		_node.TagID = value
+	}
+	if value, ok := pc.mutation.Height(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeInt,
+			Value:  value,
+			Column: pet.FieldHeight,
+		})
+		_node.Height = &value
 	}
 	if nodes := pc.mutation.CategoriesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
