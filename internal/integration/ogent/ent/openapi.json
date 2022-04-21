@@ -872,7 +872,12 @@
                     "type": "string"
                   },
                   "age": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 0
                   },
                   "favorite_cat_breed": {
                     "type": "string",
@@ -1051,7 +1056,12 @@
                     "type": "string"
                   },
                   "age": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 0
                   },
                   "favorite_cat_breed": {
                     "type": "string",
@@ -1468,7 +1478,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1647,7 +1662,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1692,7 +1712,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1746,7 +1771,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1791,7 +1821,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1836,7 +1871,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1881,7 +1921,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",
@@ -1926,7 +1971,12 @@
             "type": "string"
           },
           "age": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 0
           },
           "favorite_cat_breed": {
             "type": "string",

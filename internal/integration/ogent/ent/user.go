@@ -19,7 +19,9 @@ type User struct {
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
 	// Age holds the value of the "age" field.
-	Age int `json:"age,omitempty"`
+	Age uint `json:"age,omitempty"`
+	// Height holds the value of the "height" field.
+	Height uint `json:"height,omitempty"`
 	// FavoriteCatBreed holds the value of the "favorite_cat_breed" field.
 	FavoriteCatBreed user.FavoriteCatBreed `json:"favorite_cat_breed,omitempty"`
 	// FavoriteDogBreed holds the value of the "favorite_dog_breed" field.
@@ -71,7 +73,7 @@ func (*User) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldAge:
+		case user.FieldID, user.FieldAge, user.FieldHeight:
 			values[i] = new(sql.NullInt64)
 		case user.FieldName, user.FieldFavoriteCatBreed, user.FieldFavoriteDogBreed, user.FieldFavoriteFishBreed:
 			values[i] = new(sql.NullString)
@@ -108,7 +110,13 @@ func (u *User) assignValues(columns []string, values []interface{}) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field age", values[i])
 			} else if value.Valid {
-				u.Age = int(value.Int64)
+				u.Age = uint(value.Int64)
+			}
+		case user.FieldHeight:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field height", values[i])
+			} else if value.Valid {
+				u.Height = uint(value.Int64)
 			}
 		case user.FieldFavoriteCatBreed:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -177,6 +185,8 @@ func (u *User) String() string {
 	builder.WriteString(u.Name)
 	builder.WriteString(", age=")
 	builder.WriteString(fmt.Sprintf("%v", u.Age))
+	builder.WriteString(", height=")
+	builder.WriteString(fmt.Sprintf("%v", u.Height))
 	builder.WriteString(", favorite_cat_breed=")
 	builder.WriteString(fmt.Sprintf("%v", u.FavoriteCatBreed))
 	builder.WriteString(", favorite_dog_breed=")

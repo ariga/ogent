@@ -36,15 +36,42 @@ func (uu *UserUpdate) SetName(s string) *UserUpdate {
 }
 
 // SetAge sets the "age" field.
-func (uu *UserUpdate) SetAge(i int) *UserUpdate {
+func (uu *UserUpdate) SetAge(u uint) *UserUpdate {
 	uu.mutation.ResetAge()
-	uu.mutation.SetAge(i)
+	uu.mutation.SetAge(u)
 	return uu
 }
 
-// AddAge adds i to the "age" field.
-func (uu *UserUpdate) AddAge(i int) *UserUpdate {
-	uu.mutation.AddAge(i)
+// AddAge adds u to the "age" field.
+func (uu *UserUpdate) AddAge(u int) *UserUpdate {
+	uu.mutation.AddAge(u)
+	return uu
+}
+
+// SetHeight sets the "height" field.
+func (uu *UserUpdate) SetHeight(u uint) *UserUpdate {
+	uu.mutation.ResetHeight()
+	uu.mutation.SetHeight(u)
+	return uu
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (uu *UserUpdate) SetNillableHeight(u *uint) *UserUpdate {
+	if u != nil {
+		uu.SetHeight(*u)
+	}
+	return uu
+}
+
+// AddHeight adds u to the "height" field.
+func (uu *UserUpdate) AddHeight(u int) *UserUpdate {
+	uu.mutation.AddHeight(u)
+	return uu
+}
+
+// ClearHeight clears the value of the "height" field.
+func (uu *UserUpdate) ClearHeight() *UserUpdate {
+	uu.mutation.ClearHeight()
 	return uu
 }
 
@@ -267,16 +294,36 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := uu.mutation.Age(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeUint,
 			Value:  value,
 			Column: user.FieldAge,
 		})
 	}
 	if value, ok := uu.mutation.AddedAge(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeUint,
 			Value:  value,
 			Column: user.FieldAge,
+		})
+	}
+	if value, ok := uu.mutation.Height(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Value:  value,
+			Column: user.FieldHeight,
+		})
+	}
+	if value, ok := uu.mutation.AddedHeight(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Value:  value,
+			Column: user.FieldHeight,
+		})
+	}
+	if uu.mutation.HeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Column: user.FieldHeight,
 		})
 	}
 	if value, ok := uu.mutation.FavoriteCatBreed(); ok {
@@ -427,15 +474,42 @@ func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
 }
 
 // SetAge sets the "age" field.
-func (uuo *UserUpdateOne) SetAge(i int) *UserUpdateOne {
+func (uuo *UserUpdateOne) SetAge(u uint) *UserUpdateOne {
 	uuo.mutation.ResetAge()
-	uuo.mutation.SetAge(i)
+	uuo.mutation.SetAge(u)
 	return uuo
 }
 
-// AddAge adds i to the "age" field.
-func (uuo *UserUpdateOne) AddAge(i int) *UserUpdateOne {
-	uuo.mutation.AddAge(i)
+// AddAge adds u to the "age" field.
+func (uuo *UserUpdateOne) AddAge(u int) *UserUpdateOne {
+	uuo.mutation.AddAge(u)
+	return uuo
+}
+
+// SetHeight sets the "height" field.
+func (uuo *UserUpdateOne) SetHeight(u uint) *UserUpdateOne {
+	uuo.mutation.ResetHeight()
+	uuo.mutation.SetHeight(u)
+	return uuo
+}
+
+// SetNillableHeight sets the "height" field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableHeight(u *uint) *UserUpdateOne {
+	if u != nil {
+		uuo.SetHeight(*u)
+	}
+	return uuo
+}
+
+// AddHeight adds u to the "height" field.
+func (uuo *UserUpdateOne) AddHeight(u int) *UserUpdateOne {
+	uuo.mutation.AddHeight(u)
+	return uuo
+}
+
+// ClearHeight clears the value of the "height" field.
+func (uuo *UserUpdateOne) ClearHeight() *UserUpdateOne {
+	uuo.mutation.ClearHeight()
 	return uuo
 }
 
@@ -682,16 +756,36 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	}
 	if value, ok := uuo.mutation.Age(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeUint,
 			Value:  value,
 			Column: user.FieldAge,
 		})
 	}
 	if value, ok := uuo.mutation.AddedAge(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
+			Type:   field.TypeUint,
 			Value:  value,
 			Column: user.FieldAge,
+		})
+	}
+	if value, ok := uuo.mutation.Height(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Value:  value,
+			Column: user.FieldHeight,
+		})
+	}
+	if value, ok := uuo.mutation.AddedHeight(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Value:  value,
+			Column: user.FieldHeight,
+		})
+	}
+	if uuo.mutation.HeightCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint,
+			Column: user.FieldHeight,
 		})
 	}
 	if value, ok := uuo.mutation.FavoriteCatBreed(); ok {

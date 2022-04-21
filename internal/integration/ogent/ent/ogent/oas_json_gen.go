@@ -1175,6 +1175,15 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -1231,14 +1240,15 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfCreateUserReq = [7]string{
+var jsonFieldsNameOfCreateUserReq = [8]string{
 	0: "name",
 	1: "age",
-	2: "favorite_cat_breed",
-	3: "favorite_dog_breed",
-	4: "favorite_fish_breed",
-	5: "pets",
-	6: "best_friend",
+	2: "height",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
+	5: "favorite_fish_breed",
+	6: "pets",
+	7: "best_friend",
 }
 
 // Decode decodes CreateUserReq from json.
@@ -1274,8 +1284,18 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -1343,7 +1363,7 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2740,6 +2760,15 @@ func (s PetCreateOwner) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -2766,13 +2795,14 @@ func (s PetCreateOwner) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetCreateOwner = [6]string{
+var jsonFieldsNameOfPetCreateOwner = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes PetCreateOwner from json.
@@ -2820,8 +2850,18 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -2860,7 +2900,7 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3379,6 +3419,15 @@ func (s PetOwnerRead) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -3405,13 +3454,14 @@ func (s PetOwnerRead) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfPetOwnerRead = [6]string{
+var jsonFieldsNameOfPetOwnerRead = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes PetOwnerRead from json.
@@ -3459,8 +3509,18 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -3499,7 +3559,7 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -4876,6 +4936,18 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 		}
 	}
 	{
+		if s.Height.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		if s.FavoriteCatBreed.Set {
 			if !first {
 				e.Comma()
@@ -4950,14 +5022,15 @@ func (s UpdateUserReq) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUpdateUserReq = [7]string{
+var jsonFieldsNameOfUpdateUserReq = [8]string{
 	0: "name",
 	1: "age",
-	2: "favorite_cat_breed",
-	3: "favorite_dog_breed",
-	4: "favorite_fish_breed",
-	5: "pets",
-	6: "best_friend",
+	2: "height",
+	3: "favorite_cat_breed",
+	4: "favorite_dog_breed",
+	5: "favorite_fish_breed",
+	6: "pets",
+	7: "best_friend",
 }
 
 // Decode decodes UpdateUserReq from json.
@@ -4987,6 +5060,16 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
 			}
 		case "favorite_cat_breed":
 			if err := func() error {
@@ -5176,6 +5259,15 @@ func (s UserBestFriendRead) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -5202,13 +5294,14 @@ func (s UserBestFriendRead) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserBestFriendRead = [6]string{
+var jsonFieldsNameOfUserBestFriendRead = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes UserBestFriendRead from json.
@@ -5256,8 +5349,18 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -5296,7 +5399,7 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -5447,6 +5550,15 @@ func (s UserCreate) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -5473,13 +5585,14 @@ func (s UserCreate) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserCreate = [6]string{
+var jsonFieldsNameOfUserCreate = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes UserCreate from json.
@@ -5527,8 +5640,18 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -5567,7 +5690,7 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -5718,6 +5841,15 @@ func (s UserList) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -5744,13 +5876,14 @@ func (s UserList) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserList = [6]string{
+var jsonFieldsNameOfUserList = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes UserList from json.
@@ -5798,8 +5931,18 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -5838,7 +5981,7 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -6173,6 +6316,15 @@ func (s UserRead) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -6199,13 +6351,14 @@ func (s UserRead) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserRead = [6]string{
+var jsonFieldsNameOfUserRead = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes UserRead from json.
@@ -6253,8 +6406,18 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -6293,7 +6456,7 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -6444,6 +6607,15 @@ func (s UserUpdate) Encode(e *jx.Writer) {
 		e.Int(s.Age)
 	}
 	{
+		if s.Height.Set {
+			e.Comma()
+		}
+		if s.Height.Set {
+			e.RawStr("\"height\"" + ":")
+			s.Height.Encode(e)
+		}
+	}
+	{
 		e.Comma()
 
 		e.RawStr("\"favorite_cat_breed\"" + ":")
@@ -6470,13 +6642,14 @@ func (s UserUpdate) Encode(e *jx.Writer) {
 	e.ObjEnd()
 }
 
-var jsonFieldsNameOfUserUpdate = [6]string{
+var jsonFieldsNameOfUserUpdate = [7]string{
 	0: "id",
 	1: "name",
 	2: "age",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_dog_breed",
+	6: "favorite_fish_breed",
 }
 
 // Decode decodes UserUpdate from json.
@@ -6524,8 +6697,18 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"age\"")
 			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
 		case "favorite_cat_breed":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.FavoriteCatBreed.Decode(d); err != nil {
 					return err
@@ -6564,7 +6747,7 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

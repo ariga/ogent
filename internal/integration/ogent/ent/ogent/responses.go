@@ -228,7 +228,8 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 	var ret PetCreateOwner
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = PetCreateOwnerFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptPetCreateOwnerFavoriteDogBreed(PetCreateOwnerFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetCreateOwnerFavoriteFishBreed(PetCreateOwnerFavoriteFishBreed(e.FavoriteFishBreed))
@@ -429,7 +430,8 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 	var ret PetOwnerRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = PetOwnerReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptPetOwnerReadFavoriteDogBreed(PetOwnerReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetOwnerReadFavoriteFishBreed(PetOwnerReadFavoriteFishBreed(e.FavoriteFishBreed))
@@ -461,7 +463,8 @@ func NewUserCreate(e *ent.User) *UserCreate {
 	var ret UserCreate
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = UserCreateFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserCreateFavoriteDogBreed(UserCreateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserCreateFavoriteFishBreed(UserCreateFavoriteFishBreed(e.FavoriteFishBreed))
@@ -493,7 +496,8 @@ func NewUserList(e *ent.User) *UserList {
 	var ret UserList
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = UserListFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserListFavoriteDogBreed(UserListFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserListFavoriteFishBreed(UserListFavoriteFishBreed(e.FavoriteFishBreed))
@@ -525,7 +529,8 @@ func NewUserRead(e *ent.User) *UserRead {
 	var ret UserRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = UserReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserReadFavoriteDogBreed(UserReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserReadFavoriteFishBreed(UserReadFavoriteFishBreed(e.FavoriteFishBreed))
@@ -557,7 +562,8 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 	var ret UserUpdate
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = UserUpdateFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserUpdateFavoriteDogBreed(UserUpdateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserUpdateFavoriteFishBreed(UserUpdateFavoriteFishBreed(e.FavoriteFishBreed))
@@ -589,7 +595,8 @@ func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 	var ret UserBestFriendRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = e.Age
+	ret.Age = int(e.Age)
+	ret.Height = NewOptInt(int(e.Height))
 	ret.FavoriteCatBreed = UserBestFriendReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserBestFriendReadFavoriteDogBreed(UserBestFriendReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserBestFriendReadFavoriteFishBreed(UserBestFriendReadFavoriteFishBreed(e.FavoriteFishBreed))
