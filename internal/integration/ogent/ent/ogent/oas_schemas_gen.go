@@ -70,6 +70,136 @@ var (
 	_ = codes.Unset
 )
 
+// Ref: #/components/schemas/AllTypesCreate
+type AllTypesCreate struct {
+	ID         int                 "json:\"id\""
+	Int        int                 "json:\"int\""
+	Int8       int32               "json:\"int8\""
+	Int16      int32               "json:\"int16\""
+	Int32      int32               "json:\"int32\""
+	Int64      int64               "json:\"int64\""
+	Uint       int                 "json:\"uint\""
+	Uint8      int32               "json:\"uint8\""
+	Uint16     int32               "json:\"uint16\""
+	Uint32     int32               "json:\"uint32\""
+	Uint64     int64               "json:\"uint64\""
+	Float32    float32             "json:\"float32\""
+	Float64    float64             "json:\"float64\""
+	StringType string              "json:\"string_type\""
+	Bool       bool                "json:\"bool\""
+	UUID       uuid.UUID           "json:\"uuid\""
+	Time       time.Time           "json:\"time\""
+	Text       string              "json:\"text\""
+	State      AllTypesCreateState "json:\"state\""
+	Bytes      []byte              "json:\"bytes\""
+}
+
+func (*AllTypesCreate) createAllTypesRes() {}
+
+type AllTypesCreateState string
+
+const (
+	AllTypesCreateStateOn  AllTypesCreateState = "on"
+	AllTypesCreateStateOff AllTypesCreateState = "off"
+)
+
+// Ref: #/components/schemas/AllTypesList
+type AllTypesList struct {
+	ID         int               "json:\"id\""
+	Int        int               "json:\"int\""
+	Int8       int32             "json:\"int8\""
+	Int16      int32             "json:\"int16\""
+	Int32      int32             "json:\"int32\""
+	Int64      int64             "json:\"int64\""
+	Uint       int               "json:\"uint\""
+	Uint8      int32             "json:\"uint8\""
+	Uint16     int32             "json:\"uint16\""
+	Uint32     int32             "json:\"uint32\""
+	Uint64     int64             "json:\"uint64\""
+	Float32    float32           "json:\"float32\""
+	Float64    float64           "json:\"float64\""
+	StringType string            "json:\"string_type\""
+	Bool       bool              "json:\"bool\""
+	UUID       uuid.UUID         "json:\"uuid\""
+	Time       time.Time         "json:\"time\""
+	Text       string            "json:\"text\""
+	State      AllTypesListState "json:\"state\""
+	Bytes      []byte            "json:\"bytes\""
+}
+
+type AllTypesListState string
+
+const (
+	AllTypesListStateOn  AllTypesListState = "on"
+	AllTypesListStateOff AllTypesListState = "off"
+)
+
+// Ref: #/components/schemas/AllTypesRead
+type AllTypesRead struct {
+	ID         int               "json:\"id\""
+	Int        int               "json:\"int\""
+	Int8       int32             "json:\"int8\""
+	Int16      int32             "json:\"int16\""
+	Int32      int32             "json:\"int32\""
+	Int64      int64             "json:\"int64\""
+	Uint       int               "json:\"uint\""
+	Uint8      int32             "json:\"uint8\""
+	Uint16     int32             "json:\"uint16\""
+	Uint32     int32             "json:\"uint32\""
+	Uint64     int64             "json:\"uint64\""
+	Float32    float32           "json:\"float32\""
+	Float64    float64           "json:\"float64\""
+	StringType string            "json:\"string_type\""
+	Bool       bool              "json:\"bool\""
+	UUID       uuid.UUID         "json:\"uuid\""
+	Time       time.Time         "json:\"time\""
+	Text       string            "json:\"text\""
+	State      AllTypesReadState "json:\"state\""
+	Bytes      []byte            "json:\"bytes\""
+}
+
+func (*AllTypesRead) readAllTypesRes() {}
+
+type AllTypesReadState string
+
+const (
+	AllTypesReadStateOn  AllTypesReadState = "on"
+	AllTypesReadStateOff AllTypesReadState = "off"
+)
+
+// Ref: #/components/schemas/AllTypesUpdate
+type AllTypesUpdate struct {
+	ID         int                 "json:\"id\""
+	Int        int                 "json:\"int\""
+	Int8       int32               "json:\"int8\""
+	Int16      int32               "json:\"int16\""
+	Int32      int32               "json:\"int32\""
+	Int64      int64               "json:\"int64\""
+	Uint       int                 "json:\"uint\""
+	Uint8      int32               "json:\"uint8\""
+	Uint16     int32               "json:\"uint16\""
+	Uint32     int32               "json:\"uint32\""
+	Uint64     int64               "json:\"uint64\""
+	Float32    float32             "json:\"float32\""
+	Float64    float64             "json:\"float64\""
+	StringType string              "json:\"string_type\""
+	Bool       bool                "json:\"bool\""
+	UUID       uuid.UUID           "json:\"uuid\""
+	Time       time.Time           "json:\"time\""
+	Text       string              "json:\"text\""
+	State      AllTypesUpdateState "json:\"state\""
+	Bytes      []byte              "json:\"bytes\""
+}
+
+func (*AllTypesUpdate) updateAllTypesRes() {}
+
+type AllTypesUpdateState string
+
+const (
+	AllTypesUpdateStateOn  AllTypesUpdateState = "on"
+	AllTypesUpdateStateOff AllTypesUpdateState = "off"
+)
+
 // Ref: #/components/schemas/CategoryCreate
 type CategoryCreate struct {
 	ID       int       "json:\"id\""
@@ -113,6 +243,35 @@ type CategoryUpdate struct {
 }
 
 func (*CategoryUpdate) updateCategoryRes() {}
+
+type CreateAllTypesReq struct {
+	Int        int                    "json:\"int\""
+	Int8       int32                  "json:\"int8\""
+	Int16      int32                  "json:\"int16\""
+	Int32      int32                  "json:\"int32\""
+	Int64      int64                  "json:\"int64\""
+	Uint       int                    "json:\"uint\""
+	Uint8      int32                  "json:\"uint8\""
+	Uint16     int32                  "json:\"uint16\""
+	Uint32     int32                  "json:\"uint32\""
+	Uint64     int64                  "json:\"uint64\""
+	Float32    float32                "json:\"float32\""
+	Float64    float64                "json:\"float64\""
+	StringType string                 "json:\"string_type\""
+	Bool       bool                   "json:\"bool\""
+	UUID       uuid.UUID              "json:\"uuid\""
+	Time       time.Time              "json:\"time\""
+	Text       string                 "json:\"text\""
+	State      CreateAllTypesReqState "json:\"state\""
+	Bytes      []byte                 "json:\"bytes\""
+}
+
+type CreateAllTypesReqState string
+
+const (
+	CreateAllTypesReqStateOn  CreateAllTypesReqState = "on"
+	CreateAllTypesReqStateOff CreateAllTypesReqState = "off"
+)
 
 type CreateCategoryReq struct {
 	Name string "json:\"name\""
@@ -166,6 +325,11 @@ const (
 	CreateUserReqFavoriteFishBreedShark CreateUserReqFavoriteFishBreed = "shark"
 )
 
+// DeleteAllTypesNoContent is response for DeleteAllTypes operation.
+type DeleteAllTypesNoContent struct{}
+
+func (*DeleteAllTypesNoContent) deleteAllTypesRes() {}
+
 // DeleteCategoryNoContent is response for DeleteCategory operation.
 type DeleteCategoryNoContent struct{}
 
@@ -180,6 +344,10 @@ func (*DeletePetNoContent) deletePetRes() {}
 type DeleteUserNoContent struct{}
 
 func (*DeleteUserNoContent) deleteUserRes() {}
+
+type ListAllTypesOKApplicationJSON []AllTypesList
+
+func (ListAllTypesOKApplicationJSON) listAllTypesRes() {}
 
 type ListCategoryOKApplicationJSON []CategoryList
 
@@ -208,6 +376,52 @@ func (ListUserOKApplicationJSON) listUserRes() {}
 type ListUserPetsOKApplicationJSON []UserPetsList
 
 func (ListUserPetsOKApplicationJSON) listUserPetsRes() {}
+
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptCreateUserReqFavoriteDogBreed returns new OptCreateUserReqFavoriteDogBreed with value set to v.
 func NewOptCreateUserReqFavoriteDogBreed(v CreateUserReqFavoriteDogBreed) OptCreateUserReqFavoriteDogBreed {
@@ -347,6 +561,98 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptFloat32 returns new OptFloat32 with value set to v.
+func NewOptFloat32(v float32) OptFloat32 {
+	return OptFloat32{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFloat32 is optional float32.
+type OptFloat32 struct {
+	Value float32
+	Set   bool
+}
+
+// IsSet returns true if OptFloat32 was set.
+func (o OptFloat32) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFloat32) Reset() {
+	var v float32
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFloat32) SetTo(v float32) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFloat32) Get() (v float32, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFloat32) Or(d float32) float32 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptFloat64 returns new OptFloat64 with value set to v.
+func NewOptFloat64(v float64) OptFloat64 {
+	return OptFloat64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFloat64 is optional float64.
+type OptFloat64 struct {
+	Value float64
+	Set   bool
+}
+
+// IsSet returns true if OptFloat64 was set.
+func (o OptFloat64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFloat64) Reset() {
+	var v float64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFloat64) SetTo(v float64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFloat64) Get() (v float64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -387,6 +693,98 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt32 returns new OptInt32 with value set to v.
+func NewOptInt32(v int32) OptInt32 {
+	return OptInt32{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt32 is optional int32.
+type OptInt32 struct {
+	Value int32
+	Set   bool
+}
+
+// IsSet returns true if OptInt32 was set.
+func (o OptInt32) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt32) Reset() {
+	var v int32
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt32) SetTo(v int32) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt32) Get() (v int32, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt32) Or(d int32) int32 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptInt64 returns new OptInt64 with value set to v.
+func NewOptInt64(v int64) OptInt64 {
+	return OptInt64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInt64 is optional int64.
+type OptInt64 struct {
+	Value int64
+	Set   bool
+}
+
+// IsSet returns true if OptInt64 was set.
+func (o OptInt64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInt64) Reset() {
+	var v int64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInt64) SetTo(v int64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInt64) Get() (v int64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInt64) Or(d int64) int64 {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -617,6 +1015,98 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUUID returns new OptUUID with value set to v.
+func NewOptUUID(v uuid.UUID) OptUUID {
+	return OptUUID{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUUID is optional uuid.UUID.
+type OptUUID struct {
+	Value uuid.UUID
+	Set   bool
+}
+
+// IsSet returns true if OptUUID was set.
+func (o OptUUID) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUUID) Reset() {
+	var v uuid.UUID
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUUID) SetTo(v uuid.UUID) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUUID) Get() (v uuid.UUID, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUUID) Or(d uuid.UUID) uuid.UUID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptUpdateAllTypesReqState returns new OptUpdateAllTypesReqState with value set to v.
+func NewOptUpdateAllTypesReqState(v UpdateAllTypesReqState) OptUpdateAllTypesReqState {
+	return OptUpdateAllTypesReqState{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUpdateAllTypesReqState is optional UpdateAllTypesReqState.
+type OptUpdateAllTypesReqState struct {
+	Value UpdateAllTypesReqState
+	Set   bool
+}
+
+// IsSet returns true if OptUpdateAllTypesReqState was set.
+func (o OptUpdateAllTypesReqState) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUpdateAllTypesReqState) Reset() {
+	var v UpdateAllTypesReqState
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUpdateAllTypesReqState) SetTo(v UpdateAllTypesReqState) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUpdateAllTypesReqState) Get() (v UpdateAllTypesReqState, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUpdateAllTypesReqState) Or(d UpdateAllTypesReqState) UpdateAllTypesReqState {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1373,12 +1863,15 @@ type R400 struct {
 	Errors jx.Raw "json:\"errors\""
 }
 
+func (*R400) createAllTypesRes()     {}
 func (*R400) createCategoryRes()     {}
 func (*R400) createPetRes()          {}
 func (*R400) createUserRes()         {}
+func (*R400) deleteAllTypesRes()     {}
 func (*R400) deleteCategoryRes()     {}
 func (*R400) deletePetRes()          {}
 func (*R400) deleteUserRes()         {}
+func (*R400) listAllTypesRes()       {}
 func (*R400) listCategoryPetsRes()   {}
 func (*R400) listCategoryRes()       {}
 func (*R400) listPetCategoriesRes()  {}
@@ -1386,11 +1879,13 @@ func (*R400) listPetFriendsRes()     {}
 func (*R400) listPetRes()            {}
 func (*R400) listUserPetsRes()       {}
 func (*R400) listUserRes()           {}
+func (*R400) readAllTypesRes()       {}
 func (*R400) readCategoryRes()       {}
 func (*R400) readPetOwnerRes()       {}
 func (*R400) readPetRes()            {}
 func (*R400) readUserBestFriendRes() {}
 func (*R400) readUserRes()           {}
+func (*R400) updateAllTypesRes()     {}
 func (*R400) updateCategoryRes()     {}
 func (*R400) updatePetRes()          {}
 func (*R400) updateUserRes()         {}
@@ -1401,9 +1896,11 @@ type R404 struct {
 	Errors jx.Raw "json:\"errors\""
 }
 
+func (*R404) deleteAllTypesRes()     {}
 func (*R404) deleteCategoryRes()     {}
 func (*R404) deletePetRes()          {}
 func (*R404) deleteUserRes()         {}
+func (*R404) listAllTypesRes()       {}
 func (*R404) listCategoryPetsRes()   {}
 func (*R404) listCategoryRes()       {}
 func (*R404) listPetCategoriesRes()  {}
@@ -1411,11 +1908,13 @@ func (*R404) listPetFriendsRes()     {}
 func (*R404) listPetRes()            {}
 func (*R404) listUserPetsRes()       {}
 func (*R404) listUserRes()           {}
+func (*R404) readAllTypesRes()       {}
 func (*R404) readCategoryRes()       {}
 func (*R404) readPetOwnerRes()       {}
 func (*R404) readPetRes()            {}
 func (*R404) readUserBestFriendRes() {}
 func (*R404) readUserRes()           {}
+func (*R404) updateAllTypesRes()     {}
 func (*R404) updateCategoryRes()     {}
 func (*R404) updatePetRes()          {}
 func (*R404) updateUserRes()         {}
@@ -1426,12 +1925,15 @@ type R409 struct {
 	Errors jx.Raw "json:\"errors\""
 }
 
+func (*R409) createAllTypesRes()     {}
 func (*R409) createCategoryRes()     {}
 func (*R409) createPetRes()          {}
 func (*R409) createUserRes()         {}
+func (*R409) deleteAllTypesRes()     {}
 func (*R409) deleteCategoryRes()     {}
 func (*R409) deletePetRes()          {}
 func (*R409) deleteUserRes()         {}
+func (*R409) listAllTypesRes()       {}
 func (*R409) listCategoryPetsRes()   {}
 func (*R409) listCategoryRes()       {}
 func (*R409) listPetCategoriesRes()  {}
@@ -1439,11 +1941,13 @@ func (*R409) listPetFriendsRes()     {}
 func (*R409) listPetRes()            {}
 func (*R409) listUserPetsRes()       {}
 func (*R409) listUserRes()           {}
+func (*R409) readAllTypesRes()       {}
 func (*R409) readCategoryRes()       {}
 func (*R409) readPetOwnerRes()       {}
 func (*R409) readPetRes()            {}
 func (*R409) readUserBestFriendRes() {}
 func (*R409) readUserRes()           {}
+func (*R409) updateAllTypesRes()     {}
 func (*R409) updateCategoryRes()     {}
 func (*R409) updatePetRes()          {}
 func (*R409) updateUserRes()         {}
@@ -1454,12 +1958,15 @@ type R500 struct {
 	Errors jx.Raw "json:\"errors\""
 }
 
+func (*R500) createAllTypesRes()     {}
 func (*R500) createCategoryRes()     {}
 func (*R500) createPetRes()          {}
 func (*R500) createUserRes()         {}
+func (*R500) deleteAllTypesRes()     {}
 func (*R500) deleteCategoryRes()     {}
 func (*R500) deletePetRes()          {}
 func (*R500) deleteUserRes()         {}
+func (*R500) listAllTypesRes()       {}
 func (*R500) listCategoryPetsRes()   {}
 func (*R500) listCategoryRes()       {}
 func (*R500) listPetCategoriesRes()  {}
@@ -1467,14 +1974,45 @@ func (*R500) listPetFriendsRes()     {}
 func (*R500) listPetRes()            {}
 func (*R500) listUserPetsRes()       {}
 func (*R500) listUserRes()           {}
+func (*R500) readAllTypesRes()       {}
 func (*R500) readCategoryRes()       {}
 func (*R500) readPetOwnerRes()       {}
 func (*R500) readPetRes()            {}
 func (*R500) readUserBestFriendRes() {}
 func (*R500) readUserRes()           {}
+func (*R500) updateAllTypesRes()     {}
 func (*R500) updateCategoryRes()     {}
 func (*R500) updatePetRes()          {}
 func (*R500) updateUserRes()         {}
+
+type UpdateAllTypesReq struct {
+	Int        OptInt                    "json:\"int\""
+	Int8       OptInt32                  "json:\"int8\""
+	Int16      OptInt32                  "json:\"int16\""
+	Int32      OptInt32                  "json:\"int32\""
+	Int64      OptInt64                  "json:\"int64\""
+	Uint       OptInt                    "json:\"uint\""
+	Uint8      OptInt32                  "json:\"uint8\""
+	Uint16     OptInt32                  "json:\"uint16\""
+	Uint32     OptInt32                  "json:\"uint32\""
+	Uint64     OptInt64                  "json:\"uint64\""
+	Float32    OptFloat32                "json:\"float32\""
+	Float64    OptFloat64                "json:\"float64\""
+	StringType OptString                 "json:\"string_type\""
+	Bool       OptBool                   "json:\"bool\""
+	UUID       OptUUID                   "json:\"uuid\""
+	Time       OptDateTime               "json:\"time\""
+	Text       OptString                 "json:\"text\""
+	State      OptUpdateAllTypesReqState "json:\"state\""
+	Bytes      []byte                    "json:\"bytes\""
+}
+
+type UpdateAllTypesReqState string
+
+const (
+	UpdateAllTypesReqStateOn  UpdateAllTypesReqState = "on"
+	UpdateAllTypesReqStateOff UpdateAllTypesReqState = "off"
+)
 
 type UpdateCategoryReq struct {
 	Name OptString "json:\"name\""

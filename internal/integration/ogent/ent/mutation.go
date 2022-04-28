@@ -9,11 +9,13 @@ import (
 	"sync"
 	"time"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"github.com/google/uuid"
 
 	"entgo.io/ent"
 )
@@ -27,10 +29,1693 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
+	TypeAllTypes = "AllTypes"
 	TypeCategory = "Category"
 	TypePet      = "Pet"
 	TypeUser     = "User"
 )
+
+// AllTypesMutation represents an operation that mutates the AllTypes nodes in the graph.
+type AllTypesMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	int           *int
+	addint        *int
+	int8          *int8
+	addint8       *int8
+	int16         *int16
+	addint16      *int16
+	int32         *int32
+	addint32      *int32
+	int64         *int64
+	addint64      *int64
+	uint          *uint
+	adduint       *int
+	uint8         *uint8
+	adduint8      *int8
+	uint16        *uint16
+	adduint16     *int16
+	uint32        *uint32
+	adduint32     *int32
+	uint64        *uint64
+	adduint64     *int64
+	float32       *float32
+	addfloat32    *float32
+	float64       *float64
+	addfloat64    *float64
+	string_type   *string
+	bool          *bool
+	uuid          *uuid.UUID
+	time          *time.Time
+	text          *string
+	state         *alltypes.State
+	bytes         *[]byte
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*AllTypes, error)
+	predicates    []predicate.AllTypes
+}
+
+var _ ent.Mutation = (*AllTypesMutation)(nil)
+
+// alltypesOption allows management of the mutation configuration using functional options.
+type alltypesOption func(*AllTypesMutation)
+
+// newAllTypesMutation creates new mutation for the AllTypes entity.
+func newAllTypesMutation(c config, op Op, opts ...alltypesOption) *AllTypesMutation {
+	m := &AllTypesMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAllTypes,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAllTypesID sets the ID field of the mutation.
+func withAllTypesID(id int) alltypesOption {
+	return func(m *AllTypesMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AllTypes
+		)
+		m.oldValue = func(ctx context.Context) (*AllTypes, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AllTypes.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAllTypes sets the old AllTypes of the mutation.
+func withAllTypes(node *AllTypes) alltypesOption {
+	return func(m *AllTypesMutation) {
+		m.oldValue = func(context.Context) (*AllTypes, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AllTypesMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AllTypesMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AllTypesMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AllTypesMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AllTypes.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetInt sets the "int" field.
+func (m *AllTypesMutation) SetInt(i int) {
+	m.int = &i
+	m.addint = nil
+}
+
+// Int returns the value of the "int" field in the mutation.
+func (m *AllTypesMutation) Int() (r int, exists bool) {
+	v := m.int
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInt returns the old "int" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldInt(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInt: %w", err)
+	}
+	return oldValue.Int, nil
+}
+
+// AddInt adds i to the "int" field.
+func (m *AllTypesMutation) AddInt(i int) {
+	if m.addint != nil {
+		*m.addint += i
+	} else {
+		m.addint = &i
+	}
+}
+
+// AddedInt returns the value that was added to the "int" field in this mutation.
+func (m *AllTypesMutation) AddedInt() (r int, exists bool) {
+	v := m.addint
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetInt resets all changes to the "int" field.
+func (m *AllTypesMutation) ResetInt() {
+	m.int = nil
+	m.addint = nil
+}
+
+// SetInt8 sets the "int8" field.
+func (m *AllTypesMutation) SetInt8(i int8) {
+	m.int8 = &i
+	m.addint8 = nil
+}
+
+// Int8 returns the value of the "int8" field in the mutation.
+func (m *AllTypesMutation) Int8() (r int8, exists bool) {
+	v := m.int8
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInt8 returns the old "int8" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldInt8(ctx context.Context) (v int8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInt8 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInt8 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInt8: %w", err)
+	}
+	return oldValue.Int8, nil
+}
+
+// AddInt8 adds i to the "int8" field.
+func (m *AllTypesMutation) AddInt8(i int8) {
+	if m.addint8 != nil {
+		*m.addint8 += i
+	} else {
+		m.addint8 = &i
+	}
+}
+
+// AddedInt8 returns the value that was added to the "int8" field in this mutation.
+func (m *AllTypesMutation) AddedInt8() (r int8, exists bool) {
+	v := m.addint8
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetInt8 resets all changes to the "int8" field.
+func (m *AllTypesMutation) ResetInt8() {
+	m.int8 = nil
+	m.addint8 = nil
+}
+
+// SetInt16 sets the "int16" field.
+func (m *AllTypesMutation) SetInt16(i int16) {
+	m.int16 = &i
+	m.addint16 = nil
+}
+
+// Int16 returns the value of the "int16" field in the mutation.
+func (m *AllTypesMutation) Int16() (r int16, exists bool) {
+	v := m.int16
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInt16 returns the old "int16" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldInt16(ctx context.Context) (v int16, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInt16 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInt16 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInt16: %w", err)
+	}
+	return oldValue.Int16, nil
+}
+
+// AddInt16 adds i to the "int16" field.
+func (m *AllTypesMutation) AddInt16(i int16) {
+	if m.addint16 != nil {
+		*m.addint16 += i
+	} else {
+		m.addint16 = &i
+	}
+}
+
+// AddedInt16 returns the value that was added to the "int16" field in this mutation.
+func (m *AllTypesMutation) AddedInt16() (r int16, exists bool) {
+	v := m.addint16
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetInt16 resets all changes to the "int16" field.
+func (m *AllTypesMutation) ResetInt16() {
+	m.int16 = nil
+	m.addint16 = nil
+}
+
+// SetInt32 sets the "int32" field.
+func (m *AllTypesMutation) SetInt32(i int32) {
+	m.int32 = &i
+	m.addint32 = nil
+}
+
+// Int32 returns the value of the "int32" field in the mutation.
+func (m *AllTypesMutation) Int32() (r int32, exists bool) {
+	v := m.int32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInt32 returns the old "int32" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldInt32(ctx context.Context) (v int32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInt32 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInt32 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInt32: %w", err)
+	}
+	return oldValue.Int32, nil
+}
+
+// AddInt32 adds i to the "int32" field.
+func (m *AllTypesMutation) AddInt32(i int32) {
+	if m.addint32 != nil {
+		*m.addint32 += i
+	} else {
+		m.addint32 = &i
+	}
+}
+
+// AddedInt32 returns the value that was added to the "int32" field in this mutation.
+func (m *AllTypesMutation) AddedInt32() (r int32, exists bool) {
+	v := m.addint32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetInt32 resets all changes to the "int32" field.
+func (m *AllTypesMutation) ResetInt32() {
+	m.int32 = nil
+	m.addint32 = nil
+}
+
+// SetInt64 sets the "int64" field.
+func (m *AllTypesMutation) SetInt64(i int64) {
+	m.int64 = &i
+	m.addint64 = nil
+}
+
+// Int64 returns the value of the "int64" field in the mutation.
+func (m *AllTypesMutation) Int64() (r int64, exists bool) {
+	v := m.int64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInt64 returns the old "int64" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldInt64(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInt64 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInt64 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInt64: %w", err)
+	}
+	return oldValue.Int64, nil
+}
+
+// AddInt64 adds i to the "int64" field.
+func (m *AllTypesMutation) AddInt64(i int64) {
+	if m.addint64 != nil {
+		*m.addint64 += i
+	} else {
+		m.addint64 = &i
+	}
+}
+
+// AddedInt64 returns the value that was added to the "int64" field in this mutation.
+func (m *AllTypesMutation) AddedInt64() (r int64, exists bool) {
+	v := m.addint64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetInt64 resets all changes to the "int64" field.
+func (m *AllTypesMutation) ResetInt64() {
+	m.int64 = nil
+	m.addint64 = nil
+}
+
+// SetUint sets the "uint" field.
+func (m *AllTypesMutation) SetUint(u uint) {
+	m.uint = &u
+	m.adduint = nil
+}
+
+// Uint returns the value of the "uint" field in the mutation.
+func (m *AllTypesMutation) Uint() (r uint, exists bool) {
+	v := m.uint
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUint returns the old "uint" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUint(ctx context.Context) (v uint, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUint is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUint requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUint: %w", err)
+	}
+	return oldValue.Uint, nil
+}
+
+// AddUint adds u to the "uint" field.
+func (m *AllTypesMutation) AddUint(u int) {
+	if m.adduint != nil {
+		*m.adduint += u
+	} else {
+		m.adduint = &u
+	}
+}
+
+// AddedUint returns the value that was added to the "uint" field in this mutation.
+func (m *AllTypesMutation) AddedUint() (r int, exists bool) {
+	v := m.adduint
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUint resets all changes to the "uint" field.
+func (m *AllTypesMutation) ResetUint() {
+	m.uint = nil
+	m.adduint = nil
+}
+
+// SetUint8 sets the "uint8" field.
+func (m *AllTypesMutation) SetUint8(u uint8) {
+	m.uint8 = &u
+	m.adduint8 = nil
+}
+
+// Uint8 returns the value of the "uint8" field in the mutation.
+func (m *AllTypesMutation) Uint8() (r uint8, exists bool) {
+	v := m.uint8
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUint8 returns the old "uint8" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUint8(ctx context.Context) (v uint8, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUint8 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUint8 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUint8: %w", err)
+	}
+	return oldValue.Uint8, nil
+}
+
+// AddUint8 adds u to the "uint8" field.
+func (m *AllTypesMutation) AddUint8(u int8) {
+	if m.adduint8 != nil {
+		*m.adduint8 += u
+	} else {
+		m.adduint8 = &u
+	}
+}
+
+// AddedUint8 returns the value that was added to the "uint8" field in this mutation.
+func (m *AllTypesMutation) AddedUint8() (r int8, exists bool) {
+	v := m.adduint8
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUint8 resets all changes to the "uint8" field.
+func (m *AllTypesMutation) ResetUint8() {
+	m.uint8 = nil
+	m.adduint8 = nil
+}
+
+// SetUint16 sets the "uint16" field.
+func (m *AllTypesMutation) SetUint16(u uint16) {
+	m.uint16 = &u
+	m.adduint16 = nil
+}
+
+// Uint16 returns the value of the "uint16" field in the mutation.
+func (m *AllTypesMutation) Uint16() (r uint16, exists bool) {
+	v := m.uint16
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUint16 returns the old "uint16" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUint16(ctx context.Context) (v uint16, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUint16 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUint16 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUint16: %w", err)
+	}
+	return oldValue.Uint16, nil
+}
+
+// AddUint16 adds u to the "uint16" field.
+func (m *AllTypesMutation) AddUint16(u int16) {
+	if m.adduint16 != nil {
+		*m.adduint16 += u
+	} else {
+		m.adduint16 = &u
+	}
+}
+
+// AddedUint16 returns the value that was added to the "uint16" field in this mutation.
+func (m *AllTypesMutation) AddedUint16() (r int16, exists bool) {
+	v := m.adduint16
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUint16 resets all changes to the "uint16" field.
+func (m *AllTypesMutation) ResetUint16() {
+	m.uint16 = nil
+	m.adduint16 = nil
+}
+
+// SetUint32 sets the "uint32" field.
+func (m *AllTypesMutation) SetUint32(u uint32) {
+	m.uint32 = &u
+	m.adduint32 = nil
+}
+
+// Uint32 returns the value of the "uint32" field in the mutation.
+func (m *AllTypesMutation) Uint32() (r uint32, exists bool) {
+	v := m.uint32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUint32 returns the old "uint32" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUint32(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUint32 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUint32 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUint32: %w", err)
+	}
+	return oldValue.Uint32, nil
+}
+
+// AddUint32 adds u to the "uint32" field.
+func (m *AllTypesMutation) AddUint32(u int32) {
+	if m.adduint32 != nil {
+		*m.adduint32 += u
+	} else {
+		m.adduint32 = &u
+	}
+}
+
+// AddedUint32 returns the value that was added to the "uint32" field in this mutation.
+func (m *AllTypesMutation) AddedUint32() (r int32, exists bool) {
+	v := m.adduint32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUint32 resets all changes to the "uint32" field.
+func (m *AllTypesMutation) ResetUint32() {
+	m.uint32 = nil
+	m.adduint32 = nil
+}
+
+// SetUint64 sets the "uint64" field.
+func (m *AllTypesMutation) SetUint64(u uint64) {
+	m.uint64 = &u
+	m.adduint64 = nil
+}
+
+// Uint64 returns the value of the "uint64" field in the mutation.
+func (m *AllTypesMutation) Uint64() (r uint64, exists bool) {
+	v := m.uint64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUint64 returns the old "uint64" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUint64(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUint64 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUint64 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUint64: %w", err)
+	}
+	return oldValue.Uint64, nil
+}
+
+// AddUint64 adds u to the "uint64" field.
+func (m *AllTypesMutation) AddUint64(u int64) {
+	if m.adduint64 != nil {
+		*m.adduint64 += u
+	} else {
+		m.adduint64 = &u
+	}
+}
+
+// AddedUint64 returns the value that was added to the "uint64" field in this mutation.
+func (m *AllTypesMutation) AddedUint64() (r int64, exists bool) {
+	v := m.adduint64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUint64 resets all changes to the "uint64" field.
+func (m *AllTypesMutation) ResetUint64() {
+	m.uint64 = nil
+	m.adduint64 = nil
+}
+
+// SetFloat32 sets the "float32" field.
+func (m *AllTypesMutation) SetFloat32(f float32) {
+	m.float32 = &f
+	m.addfloat32 = nil
+}
+
+// Float32 returns the value of the "float32" field in the mutation.
+func (m *AllTypesMutation) Float32() (r float32, exists bool) {
+	v := m.float32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloat32 returns the old "float32" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldFloat32(ctx context.Context) (v float32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloat32 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloat32 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloat32: %w", err)
+	}
+	return oldValue.Float32, nil
+}
+
+// AddFloat32 adds f to the "float32" field.
+func (m *AllTypesMutation) AddFloat32(f float32) {
+	if m.addfloat32 != nil {
+		*m.addfloat32 += f
+	} else {
+		m.addfloat32 = &f
+	}
+}
+
+// AddedFloat32 returns the value that was added to the "float32" field in this mutation.
+func (m *AllTypesMutation) AddedFloat32() (r float32, exists bool) {
+	v := m.addfloat32
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFloat32 resets all changes to the "float32" field.
+func (m *AllTypesMutation) ResetFloat32() {
+	m.float32 = nil
+	m.addfloat32 = nil
+}
+
+// SetFloat64 sets the "float64" field.
+func (m *AllTypesMutation) SetFloat64(f float64) {
+	m.float64 = &f
+	m.addfloat64 = nil
+}
+
+// Float64 returns the value of the "float64" field in the mutation.
+func (m *AllTypesMutation) Float64() (r float64, exists bool) {
+	v := m.float64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFloat64 returns the old "float64" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldFloat64(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFloat64 is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFloat64 requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFloat64: %w", err)
+	}
+	return oldValue.Float64, nil
+}
+
+// AddFloat64 adds f to the "float64" field.
+func (m *AllTypesMutation) AddFloat64(f float64) {
+	if m.addfloat64 != nil {
+		*m.addfloat64 += f
+	} else {
+		m.addfloat64 = &f
+	}
+}
+
+// AddedFloat64 returns the value that was added to the "float64" field in this mutation.
+func (m *AllTypesMutation) AddedFloat64() (r float64, exists bool) {
+	v := m.addfloat64
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFloat64 resets all changes to the "float64" field.
+func (m *AllTypesMutation) ResetFloat64() {
+	m.float64 = nil
+	m.addfloat64 = nil
+}
+
+// SetStringType sets the "string_type" field.
+func (m *AllTypesMutation) SetStringType(s string) {
+	m.string_type = &s
+}
+
+// StringType returns the value of the "string_type" field in the mutation.
+func (m *AllTypesMutation) StringType() (r string, exists bool) {
+	v := m.string_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStringType returns the old "string_type" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldStringType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStringType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStringType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStringType: %w", err)
+	}
+	return oldValue.StringType, nil
+}
+
+// ResetStringType resets all changes to the "string_type" field.
+func (m *AllTypesMutation) ResetStringType() {
+	m.string_type = nil
+}
+
+// SetBool sets the "bool" field.
+func (m *AllTypesMutation) SetBool(b bool) {
+	m.bool = &b
+}
+
+// Bool returns the value of the "bool" field in the mutation.
+func (m *AllTypesMutation) Bool() (r bool, exists bool) {
+	v := m.bool
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBool returns the old "bool" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldBool(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBool is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBool requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBool: %w", err)
+	}
+	return oldValue.Bool, nil
+}
+
+// ResetBool resets all changes to the "bool" field.
+func (m *AllTypesMutation) ResetBool() {
+	m.bool = nil
+}
+
+// SetUUID sets the "uuid" field.
+func (m *AllTypesMutation) SetUUID(u uuid.UUID) {
+	m.uuid = &u
+}
+
+// UUID returns the value of the "uuid" field in the mutation.
+func (m *AllTypesMutation) UUID() (r uuid.UUID, exists bool) {
+	v := m.uuid
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUUID returns the old "uuid" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldUUID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUUID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUUID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUUID: %w", err)
+	}
+	return oldValue.UUID, nil
+}
+
+// ResetUUID resets all changes to the "uuid" field.
+func (m *AllTypesMutation) ResetUUID() {
+	m.uuid = nil
+}
+
+// SetTime sets the "time" field.
+func (m *AllTypesMutation) SetTime(t time.Time) {
+	m.time = &t
+}
+
+// Time returns the value of the "time" field in the mutation.
+func (m *AllTypesMutation) Time() (r time.Time, exists bool) {
+	v := m.time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTime returns the old "time" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTime: %w", err)
+	}
+	return oldValue.Time, nil
+}
+
+// ResetTime resets all changes to the "time" field.
+func (m *AllTypesMutation) ResetTime() {
+	m.time = nil
+}
+
+// SetText sets the "text" field.
+func (m *AllTypesMutation) SetText(s string) {
+	m.text = &s
+}
+
+// Text returns the value of the "text" field in the mutation.
+func (m *AllTypesMutation) Text() (r string, exists bool) {
+	v := m.text
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldText returns the old "text" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldText(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldText is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldText requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldText: %w", err)
+	}
+	return oldValue.Text, nil
+}
+
+// ResetText resets all changes to the "text" field.
+func (m *AllTypesMutation) ResetText() {
+	m.text = nil
+}
+
+// SetState sets the "state" field.
+func (m *AllTypesMutation) SetState(a alltypes.State) {
+	m.state = &a
+}
+
+// State returns the value of the "state" field in the mutation.
+func (m *AllTypesMutation) State() (r alltypes.State, exists bool) {
+	v := m.state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldState returns the old "state" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldState(ctx context.Context) (v alltypes.State, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldState: %w", err)
+	}
+	return oldValue.State, nil
+}
+
+// ResetState resets all changes to the "state" field.
+func (m *AllTypesMutation) ResetState() {
+	m.state = nil
+}
+
+// SetBytes sets the "bytes" field.
+func (m *AllTypesMutation) SetBytes(b []byte) {
+	m.bytes = &b
+}
+
+// Bytes returns the value of the "bytes" field in the mutation.
+func (m *AllTypesMutation) Bytes() (r []byte, exists bool) {
+	v := m.bytes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBytes returns the old "bytes" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldBytes(ctx context.Context) (v []byte, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBytes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBytes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBytes: %w", err)
+	}
+	return oldValue.Bytes, nil
+}
+
+// ResetBytes resets all changes to the "bytes" field.
+func (m *AllTypesMutation) ResetBytes() {
+	m.bytes = nil
+}
+
+// Where appends a list predicates to the AllTypesMutation builder.
+func (m *AllTypesMutation) Where(ps ...predicate.AllTypes) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *AllTypesMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (AllTypes).
+func (m *AllTypesMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AllTypesMutation) Fields() []string {
+	fields := make([]string, 0, 19)
+	if m.int != nil {
+		fields = append(fields, alltypes.FieldInt)
+	}
+	if m.int8 != nil {
+		fields = append(fields, alltypes.FieldInt8)
+	}
+	if m.int16 != nil {
+		fields = append(fields, alltypes.FieldInt16)
+	}
+	if m.int32 != nil {
+		fields = append(fields, alltypes.FieldInt32)
+	}
+	if m.int64 != nil {
+		fields = append(fields, alltypes.FieldInt64)
+	}
+	if m.uint != nil {
+		fields = append(fields, alltypes.FieldUint)
+	}
+	if m.uint8 != nil {
+		fields = append(fields, alltypes.FieldUint8)
+	}
+	if m.uint16 != nil {
+		fields = append(fields, alltypes.FieldUint16)
+	}
+	if m.uint32 != nil {
+		fields = append(fields, alltypes.FieldUint32)
+	}
+	if m.uint64 != nil {
+		fields = append(fields, alltypes.FieldUint64)
+	}
+	if m.float32 != nil {
+		fields = append(fields, alltypes.FieldFloat32)
+	}
+	if m.float64 != nil {
+		fields = append(fields, alltypes.FieldFloat64)
+	}
+	if m.string_type != nil {
+		fields = append(fields, alltypes.FieldStringType)
+	}
+	if m.bool != nil {
+		fields = append(fields, alltypes.FieldBool)
+	}
+	if m.uuid != nil {
+		fields = append(fields, alltypes.FieldUUID)
+	}
+	if m.time != nil {
+		fields = append(fields, alltypes.FieldTime)
+	}
+	if m.text != nil {
+		fields = append(fields, alltypes.FieldText)
+	}
+	if m.state != nil {
+		fields = append(fields, alltypes.FieldState)
+	}
+	if m.bytes != nil {
+		fields = append(fields, alltypes.FieldBytes)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AllTypesMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case alltypes.FieldInt:
+		return m.Int()
+	case alltypes.FieldInt8:
+		return m.Int8()
+	case alltypes.FieldInt16:
+		return m.Int16()
+	case alltypes.FieldInt32:
+		return m.Int32()
+	case alltypes.FieldInt64:
+		return m.Int64()
+	case alltypes.FieldUint:
+		return m.Uint()
+	case alltypes.FieldUint8:
+		return m.Uint8()
+	case alltypes.FieldUint16:
+		return m.Uint16()
+	case alltypes.FieldUint32:
+		return m.Uint32()
+	case alltypes.FieldUint64:
+		return m.Uint64()
+	case alltypes.FieldFloat32:
+		return m.Float32()
+	case alltypes.FieldFloat64:
+		return m.Float64()
+	case alltypes.FieldStringType:
+		return m.StringType()
+	case alltypes.FieldBool:
+		return m.Bool()
+	case alltypes.FieldUUID:
+		return m.UUID()
+	case alltypes.FieldTime:
+		return m.Time()
+	case alltypes.FieldText:
+		return m.Text()
+	case alltypes.FieldState:
+		return m.State()
+	case alltypes.FieldBytes:
+		return m.Bytes()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AllTypesMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case alltypes.FieldInt:
+		return m.OldInt(ctx)
+	case alltypes.FieldInt8:
+		return m.OldInt8(ctx)
+	case alltypes.FieldInt16:
+		return m.OldInt16(ctx)
+	case alltypes.FieldInt32:
+		return m.OldInt32(ctx)
+	case alltypes.FieldInt64:
+		return m.OldInt64(ctx)
+	case alltypes.FieldUint:
+		return m.OldUint(ctx)
+	case alltypes.FieldUint8:
+		return m.OldUint8(ctx)
+	case alltypes.FieldUint16:
+		return m.OldUint16(ctx)
+	case alltypes.FieldUint32:
+		return m.OldUint32(ctx)
+	case alltypes.FieldUint64:
+		return m.OldUint64(ctx)
+	case alltypes.FieldFloat32:
+		return m.OldFloat32(ctx)
+	case alltypes.FieldFloat64:
+		return m.OldFloat64(ctx)
+	case alltypes.FieldStringType:
+		return m.OldStringType(ctx)
+	case alltypes.FieldBool:
+		return m.OldBool(ctx)
+	case alltypes.FieldUUID:
+		return m.OldUUID(ctx)
+	case alltypes.FieldTime:
+		return m.OldTime(ctx)
+	case alltypes.FieldText:
+		return m.OldText(ctx)
+	case alltypes.FieldState:
+		return m.OldState(ctx)
+	case alltypes.FieldBytes:
+		return m.OldBytes(ctx)
+	}
+	return nil, fmt.Errorf("unknown AllTypes field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AllTypesMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case alltypes.FieldInt:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInt(v)
+		return nil
+	case alltypes.FieldInt8:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInt8(v)
+		return nil
+	case alltypes.FieldInt16:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInt16(v)
+		return nil
+	case alltypes.FieldInt32:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInt32(v)
+		return nil
+	case alltypes.FieldInt64:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInt64(v)
+		return nil
+	case alltypes.FieldUint:
+		v, ok := value.(uint)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUint(v)
+		return nil
+	case alltypes.FieldUint8:
+		v, ok := value.(uint8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUint8(v)
+		return nil
+	case alltypes.FieldUint16:
+		v, ok := value.(uint16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUint16(v)
+		return nil
+	case alltypes.FieldUint32:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUint32(v)
+		return nil
+	case alltypes.FieldUint64:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUint64(v)
+		return nil
+	case alltypes.FieldFloat32:
+		v, ok := value.(float32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloat32(v)
+		return nil
+	case alltypes.FieldFloat64:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFloat64(v)
+		return nil
+	case alltypes.FieldStringType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStringType(v)
+		return nil
+	case alltypes.FieldBool:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBool(v)
+		return nil
+	case alltypes.FieldUUID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUUID(v)
+		return nil
+	case alltypes.FieldTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTime(v)
+		return nil
+	case alltypes.FieldText:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetText(v)
+		return nil
+	case alltypes.FieldState:
+		v, ok := value.(alltypes.State)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetState(v)
+		return nil
+	case alltypes.FieldBytes:
+		v, ok := value.([]byte)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBytes(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AllTypes field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AllTypesMutation) AddedFields() []string {
+	var fields []string
+	if m.addint != nil {
+		fields = append(fields, alltypes.FieldInt)
+	}
+	if m.addint8 != nil {
+		fields = append(fields, alltypes.FieldInt8)
+	}
+	if m.addint16 != nil {
+		fields = append(fields, alltypes.FieldInt16)
+	}
+	if m.addint32 != nil {
+		fields = append(fields, alltypes.FieldInt32)
+	}
+	if m.addint64 != nil {
+		fields = append(fields, alltypes.FieldInt64)
+	}
+	if m.adduint != nil {
+		fields = append(fields, alltypes.FieldUint)
+	}
+	if m.adduint8 != nil {
+		fields = append(fields, alltypes.FieldUint8)
+	}
+	if m.adduint16 != nil {
+		fields = append(fields, alltypes.FieldUint16)
+	}
+	if m.adduint32 != nil {
+		fields = append(fields, alltypes.FieldUint32)
+	}
+	if m.adduint64 != nil {
+		fields = append(fields, alltypes.FieldUint64)
+	}
+	if m.addfloat32 != nil {
+		fields = append(fields, alltypes.FieldFloat32)
+	}
+	if m.addfloat64 != nil {
+		fields = append(fields, alltypes.FieldFloat64)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AllTypesMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case alltypes.FieldInt:
+		return m.AddedInt()
+	case alltypes.FieldInt8:
+		return m.AddedInt8()
+	case alltypes.FieldInt16:
+		return m.AddedInt16()
+	case alltypes.FieldInt32:
+		return m.AddedInt32()
+	case alltypes.FieldInt64:
+		return m.AddedInt64()
+	case alltypes.FieldUint:
+		return m.AddedUint()
+	case alltypes.FieldUint8:
+		return m.AddedUint8()
+	case alltypes.FieldUint16:
+		return m.AddedUint16()
+	case alltypes.FieldUint32:
+		return m.AddedUint32()
+	case alltypes.FieldUint64:
+		return m.AddedUint64()
+	case alltypes.FieldFloat32:
+		return m.AddedFloat32()
+	case alltypes.FieldFloat64:
+		return m.AddedFloat64()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AllTypesMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case alltypes.FieldInt:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInt(v)
+		return nil
+	case alltypes.FieldInt8:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInt8(v)
+		return nil
+	case alltypes.FieldInt16:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInt16(v)
+		return nil
+	case alltypes.FieldInt32:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInt32(v)
+		return nil
+	case alltypes.FieldInt64:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddInt64(v)
+		return nil
+	case alltypes.FieldUint:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUint(v)
+		return nil
+	case alltypes.FieldUint8:
+		v, ok := value.(int8)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUint8(v)
+		return nil
+	case alltypes.FieldUint16:
+		v, ok := value.(int16)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUint16(v)
+		return nil
+	case alltypes.FieldUint32:
+		v, ok := value.(int32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUint32(v)
+		return nil
+	case alltypes.FieldUint64:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUint64(v)
+		return nil
+	case alltypes.FieldFloat32:
+		v, ok := value.(float32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFloat32(v)
+		return nil
+	case alltypes.FieldFloat64:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFloat64(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AllTypes numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AllTypesMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AllTypesMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AllTypesMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown AllTypes nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AllTypesMutation) ResetField(name string) error {
+	switch name {
+	case alltypes.FieldInt:
+		m.ResetInt()
+		return nil
+	case alltypes.FieldInt8:
+		m.ResetInt8()
+		return nil
+	case alltypes.FieldInt16:
+		m.ResetInt16()
+		return nil
+	case alltypes.FieldInt32:
+		m.ResetInt32()
+		return nil
+	case alltypes.FieldInt64:
+		m.ResetInt64()
+		return nil
+	case alltypes.FieldUint:
+		m.ResetUint()
+		return nil
+	case alltypes.FieldUint8:
+		m.ResetUint8()
+		return nil
+	case alltypes.FieldUint16:
+		m.ResetUint16()
+		return nil
+	case alltypes.FieldUint32:
+		m.ResetUint32()
+		return nil
+	case alltypes.FieldUint64:
+		m.ResetUint64()
+		return nil
+	case alltypes.FieldFloat32:
+		m.ResetFloat32()
+		return nil
+	case alltypes.FieldFloat64:
+		m.ResetFloat64()
+		return nil
+	case alltypes.FieldStringType:
+		m.ResetStringType()
+		return nil
+	case alltypes.FieldBool:
+		m.ResetBool()
+		return nil
+	case alltypes.FieldUUID:
+		m.ResetUUID()
+		return nil
+	case alltypes.FieldTime:
+		m.ResetTime()
+		return nil
+	case alltypes.FieldText:
+		m.ResetText()
+		return nil
+	case alltypes.FieldState:
+		m.ResetState()
+		return nil
+	case alltypes.FieldBytes:
+		m.ResetBytes()
+		return nil
+	}
+	return fmt.Errorf("unknown AllTypes field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AllTypesMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AllTypesMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AllTypesMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AllTypesMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AllTypesMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AllTypesMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AllTypesMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AllTypes unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AllTypesMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AllTypes edge %s", name)
+}
 
 // CategoryMutation represents an operation that mutates the Category nodes in the graph.
 type CategoryMutation struct {

@@ -34,9 +34,9 @@ var (
 		"isList":          isList,
 		"isRead":          isRead,
 		"isUpdate":        isUpdate,
-		"itou":            itou,
 		"kebab":           strcase.KebabCase,
 		"nodeOperations":  entoas.NodeOperations,
+		"ogenToEnt":       ogenToEnt,
 		"replaceAll":      strings.ReplaceAll,
 		"setFieldExpr":    setFieldExpr,
 		"viewName":        entoas.ViewName,
@@ -186,7 +186,7 @@ func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 		if f.IsEnum() {
 			expr = convertTo(schema+f.StructField(), expr)
 		}
-		expr = utoi(f, expr)
+		expr = entToOgen(f, expr)
 		return fmt.Sprintf("%s.%s = %s", rec, f.StructField(), expr), nil
 	}
 	t, err := entoas.OgenSchema(f)
@@ -265,7 +265,7 @@ func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 			ident, f.StructField(),
 		)
 	} else {
-		expr := utoi(f, fmt.Sprintf("%s.%s", ident, f.StructField()))
+		expr := entToOgen(f, fmt.Sprintf("%s.%s", ident, f.StructField()))
 		fmt.Fprintf(buf, "%s.%s = NewOpt%s(%s)", rec, f.StructField(), opt, expr)
 	}
 	return buf.String(), nil
@@ -275,35 +275,37 @@ func convertTo(typ, expr string) string {
 	return fmt.Sprintf("%s(%s)", typ, expr)
 }
 
-func utoi(f *gen.Field, expr string) string {
-	switch f.Type.Type {
-	case field.TypeUint8:
-		return fmt.Sprintf("int8(%s)", expr)
-	case field.TypeUint16:
-		return fmt.Sprintf("int16(%s)", expr)
-	case field.TypeUint32:
-		return fmt.Sprintf("int32(%s)", expr)
-	case field.TypeUint:
-		return fmt.Sprintf("int(%s)", expr)
-	case field.TypeUint64:
-		return fmt.Sprintf("int64(%s)", expr)
-	default:
-		return expr
-	}
-}
-
-func itou(f *gen.Field, expr string) string {
+func ogenToEnt(f *gen.Field, expr string) string {
 	switch f.Type.Type {
 	case field.TypeUint8:
 		return fmt.Sprintf("uint8(%s)", expr)
+	case field.TypeInt8:
+		return fmt.Sprintf("int8(%s)", expr)
 	case field.TypeUint16:
 		return fmt.Sprintf("uint16(%s)", expr)
+	case field.TypeInt16:
+		return fmt.Sprintf("int16(%s)", expr)
 	case field.TypeUint32:
 		return fmt.Sprintf("uint32(%s)", expr)
 	case field.TypeUint:
 		return fmt.Sprintf("uint(%s)", expr)
 	case field.TypeUint64:
 		return fmt.Sprintf("uint64(%s)", expr)
+	default:
+		return expr
+	}
+}
+
+func entToOgen(f *gen.Field, expr string) string {
+	switch f.Type.Type {
+	case field.TypeInt8, field.TypeUint8,
+		field.TypeInt16, field.TypeUint16,
+		field.TypeUint32:
+		return fmt.Sprintf("int32(%s)", expr)
+	case field.TypeUint:
+		return fmt.Sprintf("int(%s)", expr)
+	case field.TypeUint64:
+		return fmt.Sprintf("int64(%s)", expr) // TODO: possibly losing information here
 	default:
 		return expr
 	}

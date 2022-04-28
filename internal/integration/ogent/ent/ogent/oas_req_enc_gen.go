@@ -70,6 +70,14 @@ var (
 	_ = codes.Unset
 )
 
+func encodeCreateAllTypesRequestJSON(req CreateAllTypesReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
+
+	req.Encode(e)
+
+	return e, nil
+}
+
 func encodeCreateCategoryRequestJSON(req CreateCategoryReq, span trace.Span) (data *jx.Writer, err error) {
 	e := jx.GetWriter()
 
@@ -87,6 +95,14 @@ func encodeCreatePetRequestJSON(req CreatePetReq, span trace.Span) (data *jx.Wri
 }
 
 func encodeCreateUserRequestJSON(req CreateUserReq, span trace.Span) (data *jx.Writer, err error) {
+	e := jx.GetWriter()
+
+	req.Encode(e)
+
+	return e, nil
+}
+
+func encodeUpdateAllTypesRequestJSON(req UpdateAllTypesReq, span trace.Span) (data *jx.Writer, err error) {
 	e := jx.GetWriter()
 
 	req.Encode(e)

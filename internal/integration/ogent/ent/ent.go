@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
@@ -33,6 +34,7 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
+		alltypes.Table: alltypes.ValidColumn,
 		category.Table: category.ValidColumn,
 		pet.Table:      pet.ValidColumn,
 		user.Table:     user.ValidColumn,

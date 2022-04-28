@@ -9,6 +9,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/migrate"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
@@ -23,6 +24,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// AllTypes is the client for interacting with the AllTypes builders.
+	AllTypes *AllTypesClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
 	// Pet is the client for interacting with the Pet builders.
@@ -42,6 +45,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.AllTypes = NewAllTypesClient(c.config)
 	c.Category = NewCategoryClient(c.config)
 	c.Pet = NewPetClient(c.config)
 	c.User = NewUserClient(c.config)
@@ -78,6 +82,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:      ctx,
 		config:   cfg,
+		AllTypes: NewAllTypesClient(cfg),
 		Category: NewCategoryClient(cfg),
 		Pet:      NewPetClient(cfg),
 		User:     NewUserClient(cfg),
@@ -100,6 +105,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:      ctx,
 		config:   cfg,
+		AllTypes: NewAllTypesClient(cfg),
 		Category: NewCategoryClient(cfg),
 		Pet:      NewPetClient(cfg),
 		User:     NewUserClient(cfg),
@@ -109,7 +115,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Category.
+//		AllTypes.
 //		Query().
 //		Count(ctx)
 //
@@ -132,9 +138,100 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.AllTypes.Use(hooks...)
 	c.Category.Use(hooks...)
 	c.Pet.Use(hooks...)
 	c.User.Use(hooks...)
+}
+
+// AllTypesClient is a client for the AllTypes schema.
+type AllTypesClient struct {
+	config
+}
+
+// NewAllTypesClient returns a client for the AllTypes from the given config.
+func NewAllTypesClient(c config) *AllTypesClient {
+	return &AllTypesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `alltypes.Hooks(f(g(h())))`.
+func (c *AllTypesClient) Use(hooks ...Hook) {
+	c.hooks.AllTypes = append(c.hooks.AllTypes, hooks...)
+}
+
+// Create returns a create builder for AllTypes.
+func (c *AllTypesClient) Create() *AllTypesCreate {
+	mutation := newAllTypesMutation(c.config, OpCreate)
+	return &AllTypesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AllTypes entities.
+func (c *AllTypesClient) CreateBulk(builders ...*AllTypesCreate) *AllTypesCreateBulk {
+	return &AllTypesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AllTypes.
+func (c *AllTypesClient) Update() *AllTypesUpdate {
+	mutation := newAllTypesMutation(c.config, OpUpdate)
+	return &AllTypesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AllTypesClient) UpdateOne(at *AllTypes) *AllTypesUpdateOne {
+	mutation := newAllTypesMutation(c.config, OpUpdateOne, withAllTypes(at))
+	return &AllTypesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AllTypesClient) UpdateOneID(id int) *AllTypesUpdateOne {
+	mutation := newAllTypesMutation(c.config, OpUpdateOne, withAllTypesID(id))
+	return &AllTypesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AllTypes.
+func (c *AllTypesClient) Delete() *AllTypesDelete {
+	mutation := newAllTypesMutation(c.config, OpDelete)
+	return &AllTypesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *AllTypesClient) DeleteOne(at *AllTypes) *AllTypesDeleteOne {
+	return c.DeleteOneID(at.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *AllTypesClient) DeleteOneID(id int) *AllTypesDeleteOne {
+	builder := c.Delete().Where(alltypes.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AllTypesDeleteOne{builder}
+}
+
+// Query returns a query builder for AllTypes.
+func (c *AllTypesClient) Query() *AllTypesQuery {
+	return &AllTypesQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a AllTypes entity by its id.
+func (c *AllTypesClient) Get(ctx context.Context, id int) (*AllTypes, error) {
+	return c.Query().Where(alltypes.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AllTypesClient) GetX(ctx context.Context, id int) *AllTypes {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AllTypesClient) Hooks() []Hook {
+	return c.hooks.AllTypes
 }
 
 // CategoryClient is a client for the Category schema.

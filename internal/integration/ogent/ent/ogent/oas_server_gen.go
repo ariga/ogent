@@ -72,6 +72,12 @@ var (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// CreateAllTypes implements createAllTypes operation.
+	//
+	// Creates a new AllTypes and persists it to storage.
+	//
+	// POST /all-types
+	CreateAllTypes(ctx context.Context, req CreateAllTypesReq) (CreateAllTypesRes, error)
 	// CreateCategory implements createCategory operation.
 	//
 	// Creates a new Category and persists it to storage.
@@ -90,6 +96,12 @@ type Handler interface {
 	//
 	// POST /users
 	CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error)
+	// DeleteAllTypes implements deleteAllTypes operation.
+	//
+	// Deletes the AllTypes with the requested ID.
+	//
+	// DELETE /all-types/{id}
+	DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error)
 	// DeleteCategory implements deleteCategory operation.
 	//
 	// Deletes the Category with the requested ID.
@@ -108,6 +120,12 @@ type Handler interface {
 	//
 	// DELETE /users/{id}
 	DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error)
+	// ListAllTypes implements listAllTypes operation.
+	//
+	// List AllTypes.
+	//
+	// GET /all-types
+	ListAllTypes(ctx context.Context, params ListAllTypesParams) (ListAllTypesRes, error)
 	// ListCategory implements listCategory operation.
 	//
 	// List Categories.
@@ -150,6 +168,12 @@ type Handler interface {
 	//
 	// GET /users/{id}/pets
 	ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error)
+	// ReadAllTypes implements readAllTypes operation.
+	//
+	// Finds the AllTypes with the requested ID and returns it.
+	//
+	// GET /all-types/{id}
+	ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error)
 	// ReadCategory implements readCategory operation.
 	//
 	// Finds the Category with the requested ID and returns it.
@@ -180,6 +204,12 @@ type Handler interface {
 	//
 	// GET /users/{id}/best-friend
 	ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error)
+	// UpdateAllTypes implements updateAllTypes operation.
+	//
+	// Updates a AllTypes and persists changes to storage.
+	//
+	// PATCH /all-types/{id}
+	UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error)
 	// UpdateCategory implements updateCategory operation.
 	//
 	// Updates a Category and persists changes to storage.

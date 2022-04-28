@@ -8,6 +8,35 @@ import (
 )
 
 var (
+	// AllTypesColumns holds the columns for the "all_types" table.
+	AllTypesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "int", Type: field.TypeInt},
+		{Name: "int8", Type: field.TypeInt8},
+		{Name: "int16", Type: field.TypeInt16},
+		{Name: "int32", Type: field.TypeInt32},
+		{Name: "int64", Type: field.TypeInt64},
+		{Name: "uint", Type: field.TypeUint},
+		{Name: "uint8", Type: field.TypeUint8},
+		{Name: "uint16", Type: field.TypeUint16},
+		{Name: "uint32", Type: field.TypeUint32},
+		{Name: "uint64", Type: field.TypeUint64},
+		{Name: "float32", Type: field.TypeFloat32},
+		{Name: "float64", Type: field.TypeFloat64},
+		{Name: "string_type", Type: field.TypeString},
+		{Name: "bool", Type: field.TypeBool},
+		{Name: "uuid", Type: field.TypeUUID},
+		{Name: "time", Type: field.TypeTime},
+		{Name: "text", Type: field.TypeString, Size: 2147483647},
+		{Name: "state", Type: field.TypeEnum, Enums: []string{"on", "off"}},
+		{Name: "bytes", Type: field.TypeBytes},
+	}
+	// AllTypesTable holds the schema information for the "all_types" table.
+	AllTypesTable = &schema.Table{
+		Name:       "all_types",
+		Columns:    AllTypesColumns,
+		PrimaryKey: []*schema.Column{AllTypesColumns[0]},
+	}
 	// CategoriesColumns holds the columns for the "categories" table.
 	CategoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -121,6 +150,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AllTypesTable,
 		CategoriesTable,
 		PetsTable,
 		UsersTable,

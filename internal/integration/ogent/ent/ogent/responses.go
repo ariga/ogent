@@ -4,6 +4,190 @@ package ogent
 
 import "ariga.io/ogent/internal/integration/ogent/ent"
 
+func NewAllTypesCreate(e *ent.AllTypes) *AllTypesCreate {
+	if e == nil {
+		return nil
+	}
+	var ret AllTypesCreate
+	ret.ID = e.ID
+	ret.Int = e.Int
+	ret.Int8 = int32(e.Int8)
+	ret.Int16 = int32(e.Int16)
+	ret.Int32 = e.Int32
+	ret.Int64 = e.Int64
+	ret.Uint = int(e.Uint)
+	ret.Uint8 = int32(e.Uint8)
+	ret.Uint16 = int32(e.Uint16)
+	ret.Uint32 = int32(e.Uint32)
+	ret.Uint64 = int64(e.Uint64)
+	ret.Float32 = e.Float32
+	ret.Float64 = e.Float64
+	ret.StringType = e.StringType
+	ret.Bool = e.Bool
+	ret.UUID = e.UUID
+	ret.Time = e.Time
+	ret.Text = e.Text
+	ret.State = AllTypesCreateState(e.State)
+	ret.Bytes = e.Bytes
+	return &ret
+}
+
+func NewAllTypesCreates(es []*ent.AllTypes) []AllTypesCreate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]AllTypesCreate, len(es))
+	for i, e := range es {
+		r[i] = NewAllTypesCreate(e).Elem()
+	}
+	return r
+}
+
+func (at *AllTypesCreate) Elem() AllTypesCreate {
+	if at == nil {
+		return AllTypesCreate{}
+	}
+	return *at
+}
+
+func NewAllTypesList(e *ent.AllTypes) *AllTypesList {
+	if e == nil {
+		return nil
+	}
+	var ret AllTypesList
+	ret.ID = e.ID
+	ret.Int = e.Int
+	ret.Int8 = int32(e.Int8)
+	ret.Int16 = int32(e.Int16)
+	ret.Int32 = e.Int32
+	ret.Int64 = e.Int64
+	ret.Uint = int(e.Uint)
+	ret.Uint8 = int32(e.Uint8)
+	ret.Uint16 = int32(e.Uint16)
+	ret.Uint32 = int32(e.Uint32)
+	ret.Uint64 = int64(e.Uint64)
+	ret.Float32 = e.Float32
+	ret.Float64 = e.Float64
+	ret.StringType = e.StringType
+	ret.Bool = e.Bool
+	ret.UUID = e.UUID
+	ret.Time = e.Time
+	ret.Text = e.Text
+	ret.State = AllTypesListState(e.State)
+	ret.Bytes = e.Bytes
+	return &ret
+}
+
+func NewAllTypesLists(es []*ent.AllTypes) []AllTypesList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]AllTypesList, len(es))
+	for i, e := range es {
+		r[i] = NewAllTypesList(e).Elem()
+	}
+	return r
+}
+
+func (at *AllTypesList) Elem() AllTypesList {
+	if at == nil {
+		return AllTypesList{}
+	}
+	return *at
+}
+
+func NewAllTypesRead(e *ent.AllTypes) *AllTypesRead {
+	if e == nil {
+		return nil
+	}
+	var ret AllTypesRead
+	ret.ID = e.ID
+	ret.Int = e.Int
+	ret.Int8 = int32(e.Int8)
+	ret.Int16 = int32(e.Int16)
+	ret.Int32 = e.Int32
+	ret.Int64 = e.Int64
+	ret.Uint = int(e.Uint)
+	ret.Uint8 = int32(e.Uint8)
+	ret.Uint16 = int32(e.Uint16)
+	ret.Uint32 = int32(e.Uint32)
+	ret.Uint64 = int64(e.Uint64)
+	ret.Float32 = e.Float32
+	ret.Float64 = e.Float64
+	ret.StringType = e.StringType
+	ret.Bool = e.Bool
+	ret.UUID = e.UUID
+	ret.Time = e.Time
+	ret.Text = e.Text
+	ret.State = AllTypesReadState(e.State)
+	ret.Bytes = e.Bytes
+	return &ret
+}
+
+func NewAllTypesReads(es []*ent.AllTypes) []AllTypesRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]AllTypesRead, len(es))
+	for i, e := range es {
+		r[i] = NewAllTypesRead(e).Elem()
+	}
+	return r
+}
+
+func (at *AllTypesRead) Elem() AllTypesRead {
+	if at == nil {
+		return AllTypesRead{}
+	}
+	return *at
+}
+
+func NewAllTypesUpdate(e *ent.AllTypes) *AllTypesUpdate {
+	if e == nil {
+		return nil
+	}
+	var ret AllTypesUpdate
+	ret.ID = e.ID
+	ret.Int = e.Int
+	ret.Int8 = int32(e.Int8)
+	ret.Int16 = int32(e.Int16)
+	ret.Int32 = e.Int32
+	ret.Int64 = e.Int64
+	ret.Uint = int(e.Uint)
+	ret.Uint8 = int32(e.Uint8)
+	ret.Uint16 = int32(e.Uint16)
+	ret.Uint32 = int32(e.Uint32)
+	ret.Uint64 = int64(e.Uint64)
+	ret.Float32 = e.Float32
+	ret.Float64 = e.Float64
+	ret.StringType = e.StringType
+	ret.Bool = e.Bool
+	ret.UUID = e.UUID
+	ret.Time = e.Time
+	ret.Text = e.Text
+	ret.State = AllTypesUpdateState(e.State)
+	ret.Bytes = e.Bytes
+	return &ret
+}
+
+func NewAllTypesUpdates(es []*ent.AllTypes) []AllTypesUpdate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]AllTypesUpdate, len(es))
+	for i, e := range es {
+		r[i] = NewAllTypesUpdate(e).Elem()
+	}
+	return r
+}
+
+func (at *AllTypesUpdate) Elem() AllTypesUpdate {
+	if at == nil {
+		return AllTypesUpdate{}
+	}
+	return *at
+}
+
 func NewCategoryCreate(e *ent.Category) *CategoryCreate {
 	if e == nil {
 		return nil

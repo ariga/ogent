@@ -9,6 +9,19 @@ import (
 	"ariga.io/ogent/internal/integration/ogent/ent"
 )
 
+// The AllTypesFunc type is an adapter to allow the use of ordinary
+// function as AllTypes mutator.
+type AllTypesFunc func(context.Context, *ent.AllTypesMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AllTypesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.AllTypesMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AllTypesMutation", m)
+	}
+	return f(ctx, mv)
+}
+
 // The CategoryFunc type is an adapter to allow the use of ordinary
 // function as Category mutator.
 type CategoryFunc func(context.Context, *ent.CategoryMutation) (ent.Value, error)

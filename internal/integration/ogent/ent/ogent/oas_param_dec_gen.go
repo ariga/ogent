@@ -70,6 +70,44 @@ var (
 	_ = codes.Unset
 )
 
+func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (DeleteAllTypesParams, error) {
+	var (
+		params DeleteAllTypesParams
+	)
+	// Decode path: id.
+	{
+		param := args[0]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New("path: id: not specified")
+		}
+	}
+	return params, nil
+}
+
 func decodeDeleteCategoryParams(args [1]string, r *http.Request) (DeleteCategoryParams, error) {
 	var (
 		params DeleteCategoryParams
@@ -179,6 +217,84 @@ func decodeDeleteUserParams(args [1]string, r *http.Request) (DeleteUserParams, 
 			}
 		} else {
 			return params, errors.New("path: id: not specified")
+		}
+	}
+	return params, nil
+}
+
+func decodeListAllTypesParams(args [0]string, r *http.Request) (ListAllTypesParams, error) {
+	var (
+		params    ListAllTypesParams
+		queryArgs = r.URL.Query()
+	)
+	// Decode query: page.
+	{
+		values, ok := queryArgs["page"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotPageVal int
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: page: parse")
+			}
+		}
+	}
+	// Decode query: itemsPerPage.
+	{
+		values, ok := queryArgs["itemsPerPage"]
+		if ok {
+			d := uri.NewQueryDecoder(uri.QueryDecoderConfig{
+				Values:  values,
+				Style:   uri.QueryStyleForm,
+				Explode: true,
+			})
+
+			if err := func() error {
+				var paramsDotItemsPerPageVal int
+				if err := func() error {
+					s, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(s)
+					if err != nil {
+						return err
+					}
+
+					paramsDotItemsPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
+				return nil
+			}(); err != nil {
+				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+			}
 		}
 	}
 	return params, nil
@@ -854,6 +970,44 @@ func decodeListUserPetsParams(args [1]string, r *http.Request) (ListUserPetsPara
 	return params, nil
 }
 
+func decodeReadAllTypesParams(args [1]string, r *http.Request) (ReadAllTypesParams, error) {
+	var (
+		params ReadAllTypesParams
+	)
+	// Decode path: id.
+	{
+		param := args[0]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New("path: id: not specified")
+		}
+	}
+	return params, nil
+}
+
 func decodeReadCategoryParams(args [1]string, r *http.Request) (ReadCategoryParams, error) {
 	var (
 		params ReadCategoryParams
@@ -1009,6 +1163,44 @@ func decodeReadUserParams(args [1]string, r *http.Request) (ReadUserParams, erro
 func decodeReadUserBestFriendParams(args [1]string, r *http.Request) (ReadUserBestFriendParams, error) {
 	var (
 		params ReadUserBestFriendParams
+	)
+	// Decode path: id.
+	{
+		param := args[0]
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "id",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				s, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(s)
+				if err != nil {
+					return err
+				}
+
+				params.ID = c
+				return nil
+			}(); err != nil {
+				return params, err
+			}
+		} else {
+			return params, errors.New("path: id: not specified")
+		}
+	}
+	return params, nil
+}
+
+func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (UpdateAllTypesParams, error) {
+	var (
+		params UpdateAllTypesParams
 	)
 	// Decode path: id.
 	{

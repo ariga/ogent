@@ -70,6 +70,61 @@ var (
 	_ = codes.Unset
 )
 
+func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *AllTypesCreate:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R400:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R409:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(409)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R500:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	default:
+		return errors.Errorf("/all-types"+`: unexpected response type: %T`, response)
+	}
+}
+
 func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *CategoryCreate:
@@ -232,6 +287,64 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 		return nil
 	default:
 		return errors.Errorf("/users"+`: unexpected response type: %T`, response)
+	}
+}
+
+func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *DeleteAllTypesNoContent:
+		w.WriteHeader(204)
+		return nil
+	case *R400:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R409:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(409)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R500:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	default:
+		return errors.Errorf("/all-types/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -406,6 +519,73 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 		return nil
 	default:
 		return errors.Errorf("/users/{id}"+`: unexpected response type: %T`, response)
+	}
+}
+
+func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *ListAllTypesOKApplicationJSON:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R400:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R409:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(409)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R500:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	default:
+		return errors.Errorf("/all-types"+`: unexpected response type: %T`, response)
 	}
 }
 
@@ -878,6 +1058,73 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 	}
 }
 
+func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *AllTypesRead:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R400:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R409:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(409)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R500:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	default:
+		return errors.Errorf("/all-types/{id}"+`: unexpected response type: %T`, response)
+	}
+}
+
 func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *CategoryRead:
@@ -1210,6 +1457,73 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		return nil
 	default:
 		return errors.Errorf("/users/{id}/best-friend"+`: unexpected response type: %T`, response)
+	}
+}
+
+func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *AllTypesUpdate:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R400:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(400)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R404:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(404)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R409:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(409)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	case *R500:
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(500)
+		e := jx.GetWriter()
+		defer jx.PutWriter(e)
+
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+	default:
+		return errors.Errorf("/all-types/{id}"+`: unexpected response type: %T`, response)
 	}
 }
 
