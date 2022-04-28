@@ -75,6 +75,15 @@ var _ Handler = UnimplementedHandler{}
 // UnimplementedHandler is no-op Handler which returns http.ErrNotImplemented.
 type UnimplementedHandler struct{}
 
+// CreateAllTypes implements createAllTypes operation.
+//
+// Creates a new AllTypes and persists it to storage.
+//
+// POST /all-types
+func (UnimplementedHandler) CreateAllTypes(ctx context.Context, req CreateAllTypesReq) (r CreateAllTypesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // CreateCategory implements createCategory operation.
 //
 // Creates a new Category and persists it to storage.
@@ -102,6 +111,15 @@ func (UnimplementedHandler) CreateUser(ctx context.Context, req CreateUserReq) (
 	return r, ht.ErrNotImplemented
 }
 
+// DeleteAllTypes implements deleteAllTypes operation.
+//
+// Deletes the AllTypes with the requested ID.
+//
+// DELETE /all-types/{id}
+func (UnimplementedHandler) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (r DeleteAllTypesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DeleteCategory implements deleteCategory operation.
 //
 // Deletes the Category with the requested ID.
@@ -126,6 +144,15 @@ func (UnimplementedHandler) DeletePet(ctx context.Context, params DeletePetParam
 //
 // DELETE /users/{id}
 func (UnimplementedHandler) DeleteUser(ctx context.Context, params DeleteUserParams) (r DeleteUserRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListAllTypes implements listAllTypes operation.
+//
+// List AllTypes.
+//
+// GET /all-types
+func (UnimplementedHandler) ListAllTypes(ctx context.Context, params ListAllTypesParams) (r ListAllTypesRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -192,6 +219,15 @@ func (UnimplementedHandler) ListUserPets(ctx context.Context, params ListUserPet
 	return r, ht.ErrNotImplemented
 }
 
+// ReadAllTypes implements readAllTypes operation.
+//
+// Finds the AllTypes with the requested ID and returns it.
+//
+// GET /all-types/{id}
+func (UnimplementedHandler) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (r ReadAllTypesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ReadCategory implements readCategory operation.
 //
 // Finds the Category with the requested ID and returns it.
@@ -234,6 +270,15 @@ func (UnimplementedHandler) ReadUser(ctx context.Context, params ReadUserParams)
 //
 // GET /users/{id}/best-friend
 func (UnimplementedHandler) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (r ReadUserBestFriendRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateAllTypes implements updateAllTypes operation.
+//
+// Updates a AllTypes and persists changes to storage.
+//
+// PATCH /all-types/{id}
+func (UnimplementedHandler) UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (r UpdateAllTypesRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

@@ -6,6 +6,419 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/all-types": {
+      "get": {
+        "tags": [
+          "AllTypes"
+        ],
+        "summary": "List AllTypes",
+        "description": "List AllTypes.",
+        "operationId": "listAllTypes",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "what page to render",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "item count to render per page",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result AllTypes list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AllTypesList"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AllTypes"
+        ],
+        "summary": "Create a new AllTypes",
+        "description": "Creates a new AllTypes and persists it to storage.",
+        "operationId": "createAllTypes",
+        "requestBody": {
+          "description": "AllTypes to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "int": {
+                    "type": "integer"
+                  },
+                  "int8": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int16": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int32": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int64": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "uint": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "uint8": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint16": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint32": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint64": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  },
+                  "float32": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "float64": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "string_type": {
+                    "type": "string"
+                  },
+                  "bool": {
+                    "type": "boolean"
+                  },
+                  "uuid": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "time": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "on",
+                      "off"
+                    ]
+                  },
+                  "bytes": {
+                    "type": "string",
+                    "format": "byte"
+                  }
+                },
+                "required": [
+                  "int",
+                  "int8",
+                  "int16",
+                  "int32",
+                  "int64",
+                  "uint",
+                  "uint8",
+                  "uint16",
+                  "uint32",
+                  "uint64",
+                  "float32",
+                  "float64",
+                  "string_type",
+                  "bool",
+                  "uuid",
+                  "time",
+                  "text",
+                  "state",
+                  "bytes"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "AllTypes created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllTypesCreate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/all-types/{id}": {
+      "get": {
+        "tags": [
+          "AllTypes"
+        ],
+        "summary": "Find a AllTypes by ID",
+        "description": "Finds the AllTypes with the requested ID and returns it.",
+        "operationId": "readAllTypes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the AllTypes",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AllTypes with requested ID was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllTypesRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AllTypes"
+        ],
+        "summary": "Deletes a AllTypes by ID",
+        "description": "Deletes the AllTypes with the requested ID.",
+        "operationId": "deleteAllTypes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the AllTypes",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "AllTypes with requested ID was deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "AllTypes"
+        ],
+        "summary": "Updates a AllTypes",
+        "description": "Updates a AllTypes and persists changes to storage.",
+        "operationId": "updateAllTypes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the AllTypes",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "AllTypes properties to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "int": {
+                    "type": "integer"
+                  },
+                  "int8": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int16": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int32": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "int64": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "uint": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "uint8": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint16": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint32": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  },
+                  "uint64": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  },
+                  "float32": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "float64": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "string_type": {
+                    "type": "string"
+                  },
+                  "bool": {
+                    "type": "boolean"
+                  },
+                  "uuid": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "time": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "on",
+                      "off"
+                    ]
+                  },
+                  "bytes": {
+                    "type": "string",
+                    "format": "byte"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "AllTypes updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllTypesUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": [
@@ -1241,6 +1654,551 @@
   },
   "components": {
     "schemas": {
+      "AllTypes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "int8": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int16": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int32": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int64": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "uint": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uint8": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint16": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint32": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint64": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "float32": {
+            "type": "number",
+            "format": "float"
+          },
+          "float64": {
+            "type": "number",
+            "format": "double"
+          },
+          "string_type": {
+            "type": "string"
+          },
+          "bool": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "bytes": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": [
+          "id",
+          "int",
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float32",
+          "float64",
+          "string_type",
+          "bool",
+          "uuid",
+          "time",
+          "text",
+          "state",
+          "bytes"
+        ]
+      },
+      "AllTypesCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "int8": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int16": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int32": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int64": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "uint": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uint8": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint16": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint32": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint64": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "float32": {
+            "type": "number",
+            "format": "float"
+          },
+          "float64": {
+            "type": "number",
+            "format": "double"
+          },
+          "string_type": {
+            "type": "string"
+          },
+          "bool": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "bytes": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": [
+          "id",
+          "int",
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float32",
+          "float64",
+          "string_type",
+          "bool",
+          "uuid",
+          "time",
+          "text",
+          "state",
+          "bytes"
+        ]
+      },
+      "AllTypesList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "int8": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int16": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int32": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int64": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "uint": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uint8": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint16": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint32": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint64": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "float32": {
+            "type": "number",
+            "format": "float"
+          },
+          "float64": {
+            "type": "number",
+            "format": "double"
+          },
+          "string_type": {
+            "type": "string"
+          },
+          "bool": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "bytes": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": [
+          "id",
+          "int",
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float32",
+          "float64",
+          "string_type",
+          "bool",
+          "uuid",
+          "time",
+          "text",
+          "state",
+          "bytes"
+        ]
+      },
+      "AllTypesRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "int8": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int16": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int32": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int64": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "uint": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uint8": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint16": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint32": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint64": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "float32": {
+            "type": "number",
+            "format": "float"
+          },
+          "float64": {
+            "type": "number",
+            "format": "double"
+          },
+          "string_type": {
+            "type": "string"
+          },
+          "bool": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "bytes": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": [
+          "id",
+          "int",
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float32",
+          "float64",
+          "string_type",
+          "bool",
+          "uuid",
+          "time",
+          "text",
+          "state",
+          "bytes"
+        ]
+      },
+      "AllTypesUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "int8": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int16": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int32": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "int64": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "uint": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "uint8": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint16": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint32": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "uint64": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "float32": {
+            "type": "number",
+            "format": "float"
+          },
+          "float64": {
+            "type": "number",
+            "format": "double"
+          },
+          "string_type": {
+            "type": "string"
+          },
+          "bool": {
+            "type": "boolean"
+          },
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "text": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "on",
+              "off"
+            ]
+          },
+          "bytes": {
+            "type": "string",
+            "format": "byte"
+          }
+        },
+        "required": [
+          "id",
+          "int",
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float32",
+          "float64",
+          "string_type",
+          "bool",
+          "uuid",
+          "time",
+          "text",
+          "state",
+          "bytes"
+        ]
+      },
       "Category": {
         "type": "object",
         "properties": {

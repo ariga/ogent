@@ -70,6 +70,49 @@ var (
 	_ = codes.Unset
 )
 
+// HandleCreateAllTypesRequest handles createAllTypes operation.
+//
+// POST /all-types
+func (s *Server) handleCreateAllTypesRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("createAllTypes"),
+	}
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "CreateAllTypes",
+		trace.WithAttributes(otelAttrs...),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	s.requests.Add(ctx, 1, otelAttrs...)
+	defer span.End()
+	request, err := decodeCreateAllTypesRequest(r, span)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.CreateAllTypes(ctx, request)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeCreateAllTypesResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		return
+	}
+	span.SetStatus(codes.Ok, "Ok")
+	elapsedDuration := time.Since(startTime)
+	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+}
+
 // HandleCreateCategoryRequest handles createCategory operation.
 //
 // POST /categories
@@ -199,6 +242,49 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 }
 
+// HandleDeleteAllTypesRequest handles deleteAllTypes operation.
+//
+// DELETE /all-types/{id}
+func (s *Server) handleDeleteAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("deleteAllTypes"),
+	}
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "DeleteAllTypes",
+		trace.WithAttributes(otelAttrs...),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	s.requests.Add(ctx, 1, otelAttrs...)
+	defer span.End()
+	params, err := decodeDeleteAllTypesParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.DeleteAllTypes(ctx, params)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeDeleteAllTypesResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		return
+	}
+	span.SetStatus(codes.Ok, "Ok")
+	elapsedDuration := time.Since(startTime)
+	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+}
+
 // HandleDeleteCategoryRequest handles deleteCategory operation.
 //
 // DELETE /categories/{id}
@@ -318,6 +404,49 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 	}
 
 	if err := encodeDeleteUserResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		return
+	}
+	span.SetStatus(codes.Ok, "Ok")
+	elapsedDuration := time.Since(startTime)
+	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+}
+
+// HandleListAllTypesRequest handles listAllTypes operation.
+//
+// GET /all-types
+func (s *Server) handleListAllTypesRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("listAllTypes"),
+	}
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ListAllTypes",
+		trace.WithAttributes(otelAttrs...),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	s.requests.Add(ctx, 1, otelAttrs...)
+	defer span.End()
+	params, err := decodeListAllTypesParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.ListAllTypes(ctx, params)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeListAllTypesResponse(response, w, span); err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, "Response")
 		s.errors.Add(ctx, 1, otelAttrs...)
@@ -629,6 +758,49 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
 }
 
+// HandleReadAllTypesRequest handles readAllTypes operation.
+//
+// GET /all-types/{id}
+func (s *Server) handleReadAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("readAllTypes"),
+	}
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "ReadAllTypes",
+		trace.WithAttributes(otelAttrs...),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	s.requests.Add(ctx, 1, otelAttrs...)
+	defer span.End()
+	params, err := decodeReadAllTypesParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.ReadAllTypes(ctx, params)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeReadAllTypesResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		return
+	}
+	span.SetStatus(codes.Ok, "Ok")
+	elapsedDuration := time.Since(startTime)
+	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+}
+
 // HandleReadCategoryRequest handles readCategory operation.
 //
 // GET /categories/{id}
@@ -834,6 +1006,57 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 	}
 
 	if err := encodeReadUserBestFriendResponse(response, w, span); err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Response")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		return
+	}
+	span.SetStatus(codes.Ok, "Ok")
+	elapsedDuration := time.Since(startTime)
+	s.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+}
+
+// HandleUpdateAllTypesRequest handles updateAllTypes operation.
+//
+// PATCH /all-types/{id}
+func (s *Server) handleUpdateAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
+	startTime := time.Now()
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateAllTypes"),
+	}
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "UpdateAllTypes",
+		trace.WithAttributes(otelAttrs...),
+		trace.WithSpanKind(trace.SpanKindServer),
+	)
+	s.requests.Add(ctx, 1, otelAttrs...)
+	defer span.End()
+	params, err := decodeUpdateAllTypesParams(args, r)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+	request, err := decodeUpdateAllTypesRequest(r, span)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "BadRequest")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	response, err := s.h.UpdateAllTypes(ctx, request, params)
+	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, "Internal")
+		s.errors.Add(ctx, 1, otelAttrs...)
+		respondError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := encodeUpdateAllTypesResponse(response, w, span); err != nil {
 		span.RecordError(err)
 		span.SetStatus(codes.Error, "Response")
 		s.errors.Add(ctx, 1, otelAttrs...)

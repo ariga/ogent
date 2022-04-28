@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"ariga.io/ogent/internal/integration/ogent/ent"
+	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
@@ -27,6 +28,243 @@ func rawError(err error) jx.Raw {
 	var e jx.Encoder
 	e.Str(err.Error())
 	return e.Bytes()
+}
+
+// CreateAllTypes handles POST /all-types-slice requests.
+func (h *OgentHandler) CreateAllTypes(ctx context.Context, req CreateAllTypesReq) (CreateAllTypesRes, error) {
+	b := h.client.AllTypes.Create()
+	// Add all fields.
+	b.SetInt(req.Int)
+	b.SetInt8(int8(req.Int8))
+	b.SetInt16(int16(req.Int16))
+	b.SetInt32(req.Int32)
+	b.SetInt64(req.Int64)
+	b.SetUint(uint(req.Uint))
+	b.SetUint8(uint8(req.Uint8))
+	b.SetUint16(uint16(req.Uint16))
+	b.SetUint32(uint32(req.Uint32))
+	b.SetUint64(uint64(req.Uint64))
+	b.SetFloat32(req.Float32)
+	b.SetFloat64(req.Float64)
+	b.SetStringType(req.StringType)
+	b.SetBool(req.Bool)
+	b.SetUUID(req.UUID)
+	b.SetTime(req.Time)
+	b.SetText(req.Text)
+	b.SetState(alltypes.State(req.State))
+	b.SetBytes(req.Bytes)
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.AllTypes.Query().Where(alltypes.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewAllTypesCreate(e), nil
+}
+
+// ReadAllTypes handles GET /all-types-slice/{id} requests.
+func (h *OgentHandler) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error) {
+	q := h.client.AllTypes.Query().Where(alltypes.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewAllTypesRead(e), nil
+}
+
+// UpdateAllTypes handles PATCH /all-types-slice/{id} requests.
+func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
+	b := h.client.AllTypes.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Int.Get(); ok {
+		b.SetInt(v)
+	}
+	if v, ok := req.Int8.Get(); ok {
+		b.SetInt8(int8(v))
+	}
+	if v, ok := req.Int16.Get(); ok {
+		b.SetInt16(int16(v))
+	}
+	if v, ok := req.Int32.Get(); ok {
+		b.SetInt32(v)
+	}
+	if v, ok := req.Int64.Get(); ok {
+		b.SetInt64(v)
+	}
+	if v, ok := req.Uint.Get(); ok {
+		b.SetUint(uint(v))
+	}
+	if v, ok := req.Uint8.Get(); ok {
+		b.SetUint8(uint8(v))
+	}
+	if v, ok := req.Uint16.Get(); ok {
+		b.SetUint16(uint16(v))
+	}
+	if v, ok := req.Uint32.Get(); ok {
+		b.SetUint32(uint32(v))
+	}
+	if v, ok := req.Uint64.Get(); ok {
+		b.SetUint64(uint64(v))
+	}
+	if v, ok := req.Float32.Get(); ok {
+		b.SetFloat32(v)
+	}
+	if v, ok := req.Float64.Get(); ok {
+		b.SetFloat64(v)
+	}
+	if v, ok := req.StringType.Get(); ok {
+		b.SetStringType(v)
+	}
+	if v, ok := req.Bool.Get(); ok {
+		b.SetBool(v)
+	}
+	if v, ok := req.UUID.Get(); ok {
+		b.SetUUID(v)
+	}
+	if v, ok := req.Time.Get(); ok {
+		b.SetTime(v)
+	}
+	if v, ok := req.Text.Get(); ok {
+		b.SetText(v)
+	}
+	if v, ok := req.State.Get(); ok {
+		b.SetState(alltypes.State(v))
+	}
+	if req.Bytes != nil {
+		b.SetBytes(req.Bytes)
+	}
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.AllTypes.Query().Where(alltypes.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewAllTypesUpdate(e), nil
+}
+
+// DeleteAllTypes handles DELETE /all-types-slice/{id} requests.
+func (h *OgentHandler) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error) {
+	err := h.client.AllTypes.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteAllTypesNoContent), nil
+
+}
+
+// ListAllTypes handles GET /all-types-slice requests.
+func (h *OgentHandler) ListAllTypes(ctx context.Context, params ListAllTypesParams) (ListAllTypesRes, error) {
+	q := h.client.AllTypes.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewAllTypesLists(es)
+	return (*ListAllTypesOKApplicationJSON)(&r), nil
 }
 
 // CreateCategory handles POST /categories requests.

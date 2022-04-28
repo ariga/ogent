@@ -71,6 +71,1906 @@ var (
 )
 
 // Encode implements json.Marshaler.
+func (s AllTypesCreate) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"id\"" + ":")
+		e.Int(s.ID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int\"" + ":")
+		e.Int(s.Int)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int8\"" + ":")
+		e.Int32(s.Int8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int16\"" + ":")
+		e.Int32(s.Int16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int32\"" + ":")
+		e.Int32(s.Int32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int64\"" + ":")
+		e.Int64(s.Int64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint\"" + ":")
+		e.Int(s.Uint)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint8\"" + ":")
+		e.Int32(s.Uint8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint16\"" + ":")
+		e.Int32(s.Uint16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint32\"" + ":")
+		e.Int32(s.Uint32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint64\"" + ":")
+		e.Int64(s.Uint64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float32\"" + ":")
+		e.Float32(s.Float32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float64\"" + ":")
+		e.Float64(s.Float64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"string_type\"" + ":")
+		e.Str(s.StringType)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bool\"" + ":")
+		e.Bool(s.Bool)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uuid\"" + ":")
+		json.EncodeUUID(e, s.UUID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"time\"" + ":")
+		json.EncodeDateTime(e, s.Time)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"text\"" + ":")
+		e.Str(s.Text)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"state\"" + ":")
+		s.State.Encode(e)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfAllTypesCreate = [20]string{
+	0:  "id",
+	1:  "int",
+	2:  "int8",
+	3:  "int16",
+	4:  "int32",
+	5:  "int64",
+	6:  "uint",
+	7:  "uint8",
+	8:  "uint16",
+	9:  "uint32",
+	10: "uint64",
+	11: "float32",
+	12: "float64",
+	13: "string_type",
+	14: "bool",
+	15: "uuid",
+	16: "time",
+	17: "text",
+	18: "state",
+	19: "bytes",
+}
+
+// Decode decodes AllTypesCreate from json.
+func (s *AllTypesCreate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesCreate to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "int":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.Int = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int64()
+				s.Int64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.Uint = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Uint64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float32()
+				s.Float32 = float32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.Float64 = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.StringType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Bool()
+				s.Bool = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.UUID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.Time = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Text = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			requiredBitSet[2] |= 1 << 3
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AllTypesCreate")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAllTypesCreate) {
+					name = jsonFieldsNameOfAllTypesCreate[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes AllTypesCreateState as json.
+func (s AllTypesCreateState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes AllTypesCreateState from json.
+func (s *AllTypesCreateState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesCreateState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AllTypesCreateState(v) {
+	case AllTypesCreateStateOn:
+		*s = AllTypesCreateStateOn
+	case AllTypesCreateStateOff:
+		*s = AllTypesCreateStateOff
+	default:
+		*s = AllTypesCreateState(v)
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
+func (s AllTypesList) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"id\"" + ":")
+		e.Int(s.ID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int\"" + ":")
+		e.Int(s.Int)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int8\"" + ":")
+		e.Int32(s.Int8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int16\"" + ":")
+		e.Int32(s.Int16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int32\"" + ":")
+		e.Int32(s.Int32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int64\"" + ":")
+		e.Int64(s.Int64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint\"" + ":")
+		e.Int(s.Uint)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint8\"" + ":")
+		e.Int32(s.Uint8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint16\"" + ":")
+		e.Int32(s.Uint16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint32\"" + ":")
+		e.Int32(s.Uint32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint64\"" + ":")
+		e.Int64(s.Uint64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float32\"" + ":")
+		e.Float32(s.Float32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float64\"" + ":")
+		e.Float64(s.Float64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"string_type\"" + ":")
+		e.Str(s.StringType)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bool\"" + ":")
+		e.Bool(s.Bool)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uuid\"" + ":")
+		json.EncodeUUID(e, s.UUID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"time\"" + ":")
+		json.EncodeDateTime(e, s.Time)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"text\"" + ":")
+		e.Str(s.Text)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"state\"" + ":")
+		s.State.Encode(e)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfAllTypesList = [20]string{
+	0:  "id",
+	1:  "int",
+	2:  "int8",
+	3:  "int16",
+	4:  "int32",
+	5:  "int64",
+	6:  "uint",
+	7:  "uint8",
+	8:  "uint16",
+	9:  "uint32",
+	10: "uint64",
+	11: "float32",
+	12: "float64",
+	13: "string_type",
+	14: "bool",
+	15: "uuid",
+	16: "time",
+	17: "text",
+	18: "state",
+	19: "bytes",
+}
+
+// Decode decodes AllTypesList from json.
+func (s *AllTypesList) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesList to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "int":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.Int = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int64()
+				s.Int64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.Uint = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Uint64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float32()
+				s.Float32 = float32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.Float64 = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.StringType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Bool()
+				s.Bool = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.UUID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.Time = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Text = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			requiredBitSet[2] |= 1 << 3
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AllTypesList")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAllTypesList) {
+					name = jsonFieldsNameOfAllTypesList[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes AllTypesListState as json.
+func (s AllTypesListState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes AllTypesListState from json.
+func (s *AllTypesListState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesListState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AllTypesListState(v) {
+	case AllTypesListStateOn:
+		*s = AllTypesListStateOn
+	case AllTypesListStateOff:
+		*s = AllTypesListStateOff
+	default:
+		*s = AllTypesListState(v)
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
+func (s AllTypesRead) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"id\"" + ":")
+		e.Int(s.ID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int\"" + ":")
+		e.Int(s.Int)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int8\"" + ":")
+		e.Int32(s.Int8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int16\"" + ":")
+		e.Int32(s.Int16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int32\"" + ":")
+		e.Int32(s.Int32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int64\"" + ":")
+		e.Int64(s.Int64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint\"" + ":")
+		e.Int(s.Uint)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint8\"" + ":")
+		e.Int32(s.Uint8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint16\"" + ":")
+		e.Int32(s.Uint16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint32\"" + ":")
+		e.Int32(s.Uint32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint64\"" + ":")
+		e.Int64(s.Uint64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float32\"" + ":")
+		e.Float32(s.Float32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float64\"" + ":")
+		e.Float64(s.Float64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"string_type\"" + ":")
+		e.Str(s.StringType)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bool\"" + ":")
+		e.Bool(s.Bool)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uuid\"" + ":")
+		json.EncodeUUID(e, s.UUID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"time\"" + ":")
+		json.EncodeDateTime(e, s.Time)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"text\"" + ":")
+		e.Str(s.Text)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"state\"" + ":")
+		s.State.Encode(e)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfAllTypesRead = [20]string{
+	0:  "id",
+	1:  "int",
+	2:  "int8",
+	3:  "int16",
+	4:  "int32",
+	5:  "int64",
+	6:  "uint",
+	7:  "uint8",
+	8:  "uint16",
+	9:  "uint32",
+	10: "uint64",
+	11: "float32",
+	12: "float64",
+	13: "string_type",
+	14: "bool",
+	15: "uuid",
+	16: "time",
+	17: "text",
+	18: "state",
+	19: "bytes",
+}
+
+// Decode decodes AllTypesRead from json.
+func (s *AllTypesRead) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesRead to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "int":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.Int = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int64()
+				s.Int64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.Uint = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Uint64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float32()
+				s.Float32 = float32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.Float64 = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.StringType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Bool()
+				s.Bool = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.UUID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.Time = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Text = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			requiredBitSet[2] |= 1 << 3
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AllTypesRead")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAllTypesRead) {
+					name = jsonFieldsNameOfAllTypesRead[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes AllTypesReadState as json.
+func (s AllTypesReadState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes AllTypesReadState from json.
+func (s *AllTypesReadState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesReadState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AllTypesReadState(v) {
+	case AllTypesReadStateOn:
+		*s = AllTypesReadStateOn
+	case AllTypesReadStateOff:
+		*s = AllTypesReadStateOff
+	default:
+		*s = AllTypesReadState(v)
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
+func (s AllTypesUpdate) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"id\"" + ":")
+		e.Int(s.ID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int\"" + ":")
+		e.Int(s.Int)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int8\"" + ":")
+		e.Int32(s.Int8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int16\"" + ":")
+		e.Int32(s.Int16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int32\"" + ":")
+		e.Int32(s.Int32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int64\"" + ":")
+		e.Int64(s.Int64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint\"" + ":")
+		e.Int(s.Uint)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint8\"" + ":")
+		e.Int32(s.Uint8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint16\"" + ":")
+		e.Int32(s.Uint16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint32\"" + ":")
+		e.Int32(s.Uint32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint64\"" + ":")
+		e.Int64(s.Uint64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float32\"" + ":")
+		e.Float32(s.Float32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float64\"" + ":")
+		e.Float64(s.Float64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"string_type\"" + ":")
+		e.Str(s.StringType)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bool\"" + ":")
+		e.Bool(s.Bool)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uuid\"" + ":")
+		json.EncodeUUID(e, s.UUID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"time\"" + ":")
+		json.EncodeDateTime(e, s.Time)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"text\"" + ":")
+		e.Str(s.Text)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"state\"" + ":")
+		s.State.Encode(e)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfAllTypesUpdate = [20]string{
+	0:  "id",
+	1:  "int",
+	2:  "int8",
+	3:  "int16",
+	4:  "int32",
+	5:  "int64",
+	6:  "uint",
+	7:  "uint8",
+	8:  "uint16",
+	9:  "uint32",
+	10: "uint64",
+	11: "float32",
+	12: "float64",
+	13: "string_type",
+	14: "bool",
+	15: "uuid",
+	16: "time",
+	17: "text",
+	18: "state",
+	19: "bytes",
+}
+
+// Decode decodes AllTypesUpdate from json.
+func (s *AllTypesUpdate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesUpdate to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "int":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.Int = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int64()
+				s.Int64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.Uint = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Uint64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float32()
+				s.Float32 = float32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Float64()
+				s.Float64 = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Str()
+				s.StringType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := d.Bool()
+				s.Bool = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.UUID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.Time = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Text = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			requiredBitSet[2] |= 1 << 3
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AllTypesUpdate")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfAllTypesUpdate) {
+					name = jsonFieldsNameOfAllTypesUpdate[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes AllTypesUpdateState as json.
+func (s AllTypesUpdateState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes AllTypesUpdateState from json.
+func (s *AllTypesUpdateState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AllTypesUpdateState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AllTypesUpdateState(v) {
+	case AllTypesUpdateStateOn:
+		*s = AllTypesUpdateStateOn
+	case AllTypesUpdateStateOff:
+		*s = AllTypesUpdateStateOff
+	default:
+		*s = AllTypesUpdateState(v)
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
 func (s CategoryCreate) Encode(e *jx.Writer) {
 	e.ObjStart()
 	var (
@@ -753,6 +2653,462 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
+func (s CreateAllTypesReq) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"int\"" + ":")
+		e.Int(s.Int)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int8\"" + ":")
+		e.Int32(s.Int8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int16\"" + ":")
+		e.Int32(s.Int16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int32\"" + ":")
+		e.Int32(s.Int32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"int64\"" + ":")
+		e.Int64(s.Int64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint\"" + ":")
+		e.Int(s.Uint)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint8\"" + ":")
+		e.Int32(s.Uint8)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint16\"" + ":")
+		e.Int32(s.Uint16)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint32\"" + ":")
+		e.Int32(s.Uint32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uint64\"" + ":")
+		e.Int64(s.Uint64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float32\"" + ":")
+		e.Float32(s.Float32)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"float64\"" + ":")
+		e.Float64(s.Float64)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"string_type\"" + ":")
+		e.Str(s.StringType)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bool\"" + ":")
+		e.Bool(s.Bool)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"uuid\"" + ":")
+		json.EncodeUUID(e, s.UUID)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"time\"" + ":")
+		json.EncodeDateTime(e, s.Time)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"text\"" + ":")
+		e.Str(s.Text)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"state\"" + ":")
+		s.State.Encode(e)
+	}
+	{
+		e.Comma()
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfCreateAllTypesReq = [19]string{
+	0:  "int",
+	1:  "int8",
+	2:  "int16",
+	3:  "int32",
+	4:  "int64",
+	5:  "uint",
+	6:  "uint8",
+	7:  "uint16",
+	8:  "uint32",
+	9:  "uint64",
+	10: "float32",
+	11: "float64",
+	12: "string_type",
+	13: "bool",
+	14: "uuid",
+	15: "time",
+	16: "text",
+	17: "state",
+	18: "bytes",
+}
+
+// Decode decodes CreateAllTypesReq from json.
+func (s *CreateAllTypesReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateAllTypesReq to nil")
+	}
+	var requiredBitSet [3]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "int":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.Int = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Int32()
+				s.Int32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				v, err := d.Int64()
+				s.Int64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Int()
+				s.Uint = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint8 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint16 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int32()
+				s.Uint32 = int32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			requiredBitSet[1] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int64()
+				s.Uint64 = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			requiredBitSet[1] |= 1 << 2
+			if err := func() error {
+				v, err := d.Float32()
+				s.Float32 = float32(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			requiredBitSet[1] |= 1 << 3
+			if err := func() error {
+				v, err := d.Float64()
+				s.Float64 = float64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			requiredBitSet[1] |= 1 << 4
+			if err := func() error {
+				v, err := d.Str()
+				s.StringType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			requiredBitSet[1] |= 1 << 5
+			if err := func() error {
+				v, err := d.Bool()
+				s.Bool = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			requiredBitSet[1] |= 1 << 6
+			if err := func() error {
+				v, err := json.DecodeUUID(d)
+				s.UUID = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			requiredBitSet[1] |= 1 << 7
+			if err := func() error {
+				v, err := json.DecodeDateTime(d)
+				s.Time = v
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			requiredBitSet[2] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Text = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			requiredBitSet[2] |= 1 << 1
+			if err := func() error {
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			requiredBitSet[2] |= 1 << 2
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateAllTypesReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [3]uint8{
+		0b11111111,
+		0b11111111,
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCreateAllTypesReq) {
+					name = jsonFieldsNameOfCreateAllTypesReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode encodes CreateAllTypesReqState as json.
+func (s CreateAllTypesReqState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes CreateAllTypesReqState from json.
+func (s *CreateAllTypesReqState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateAllTypesReqState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CreateAllTypesReqState(v) {
+	case CreateAllTypesReqStateOn:
+		*s = CreateAllTypesReqStateOn
+	case CreateAllTypesReqStateOff:
+		*s = CreateAllTypesReqStateOff
+	default:
+		*s = CreateAllTypesReqState(v)
 	}
 
 	return nil
@@ -1485,6 +3841,50 @@ func (s *CreateUserReqFavoriteFishBreed) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// Encode encodes ListAllTypesOKApplicationJSON as json.
+func (s ListAllTypesOKApplicationJSON) Encode(e *jx.Writer) {
+	unwrapped := []AllTypesList(s)
+	e.ArrStart()
+	if len(unwrapped) >= 1 {
+		// Encode first element without comma.
+		{
+			elem := unwrapped[0]
+			elem.Encode(e)
+		}
+		for _, elem := range unwrapped[1:] {
+			e.Comma()
+			elem.Encode(e)
+		}
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes ListAllTypesOKApplicationJSON from json.
+func (s *ListAllTypesOKApplicationJSON) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListAllTypesOKApplicationJSON to nil")
+	}
+	var unwrapped []AllTypesList
+	if err := func() error {
+		unwrapped = make([]AllTypesList, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem AllTypesList
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = ListAllTypesOKApplicationJSON(unwrapped)
+	return nil
+}
+
 // Encode encodes ListCategoryOKApplicationJSON as json.
 func (s ListCategoryOKApplicationJSON) Encode(e *jx.Writer) {
 	unwrapped := []CategoryList(s)
@@ -1793,6 +4193,28 @@ func (s *ListUserPetsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// Encode encodes bool as json.
+func (o OptBool) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Bool(bool(o.Value))
+}
+
+// Decode decodes bool from json.
+func (o *OptBool) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptBool to nil")
+	}
+	o.Set = true
+	v, err := d.Bool()
+	if err != nil {
+		return err
+	}
+	o.Value = bool(v)
+	return nil
+}
+
 // Encode encodes CreateUserReqFavoriteDogBreed as json.
 func (o OptCreateUserReqFavoriteDogBreed) Encode(e *jx.Writer) {
 	if !o.Set {
@@ -1855,6 +4277,50 @@ func (o *OptDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time,
 	return nil
 }
 
+// Encode encodes float32 as json.
+func (o OptFloat32) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Float32(float32(o.Value))
+}
+
+// Decode decodes float32 from json.
+func (o *OptFloat32) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptFloat32 to nil")
+	}
+	o.Set = true
+	v, err := d.Float32()
+	if err != nil {
+		return err
+	}
+	o.Value = float32(v)
+	return nil
+}
+
+// Encode encodes float64 as json.
+func (o OptFloat64) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Float64(float64(o.Value))
+}
+
+// Decode decodes float64 from json.
+func (o *OptFloat64) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptFloat64 to nil")
+	}
+	o.Set = true
+	v, err := d.Float64()
+	if err != nil {
+		return err
+	}
+	o.Value = float64(v)
+	return nil
+}
+
 // Encode encodes int as json.
 func (o OptInt) Encode(e *jx.Writer) {
 	if !o.Set {
@@ -1874,6 +4340,50 @@ func (o *OptInt) Decode(d *jx.Decoder) error {
 		return err
 	}
 	o.Value = int(v)
+	return nil
+}
+
+// Encode encodes int32 as json.
+func (o OptInt32) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Int32(int32(o.Value))
+}
+
+// Decode decodes int32 from json.
+func (o *OptInt32) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt32 to nil")
+	}
+	o.Set = true
+	v, err := d.Int32()
+	if err != nil {
+		return err
+	}
+	o.Value = int32(v)
+	return nil
+}
+
+// Encode encodes int64 as json.
+func (o OptInt64) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Int64(int64(o.Value))
+}
+
+// Decode decodes int64 from json.
+func (o *OptInt64) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInt64 to nil")
+	}
+	o.Set = true
+	v, err := d.Int64()
+	if err != nil {
+		return err
+	}
+	o.Value = int64(v)
 	return nil
 }
 
@@ -1976,6 +4486,48 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 		return err
 	}
 	o.Value = string(v)
+	return nil
+}
+
+// Encode encodes uuid.UUID as json.
+func (o OptUUID) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	json.EncodeUUID(e, o.Value)
+}
+
+// Decode decodes uuid.UUID from json.
+func (o *OptUUID) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUUID to nil")
+	}
+	o.Set = true
+	v, err := json.DecodeUUID(d)
+	if err != nil {
+		return err
+	}
+	o.Value = v
+	return nil
+}
+
+// Encode encodes UpdateAllTypesReqState as json.
+func (o OptUpdateAllTypesReqState) Encode(e *jx.Writer) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes UpdateAllTypesReqState from json.
+func (o *OptUpdateAllTypesReqState) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptUpdateAllTypesReqState to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -4556,6 +7108,500 @@ func (s *R500) Decode(d *jx.Decoder) error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// Encode implements json.Marshaler.
+func (s UpdateAllTypesReq) Encode(e *jx.Writer) {
+	e.ObjStart()
+	var (
+		first = true
+		_     = first
+	)
+	{
+		if s.Int.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Int.Set {
+			e.RawStr("\"int\"" + ":")
+			s.Int.Encode(e)
+		}
+	}
+	{
+		if s.Int8.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Int8.Set {
+			e.RawStr("\"int8\"" + ":")
+			s.Int8.Encode(e)
+		}
+	}
+	{
+		if s.Int16.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Int16.Set {
+			e.RawStr("\"int16\"" + ":")
+			s.Int16.Encode(e)
+		}
+	}
+	{
+		if s.Int32.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Int32.Set {
+			e.RawStr("\"int32\"" + ":")
+			s.Int32.Encode(e)
+		}
+	}
+	{
+		if s.Int64.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Int64.Set {
+			e.RawStr("\"int64\"" + ":")
+			s.Int64.Encode(e)
+		}
+	}
+	{
+		if s.Uint.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Uint.Set {
+			e.RawStr("\"uint\"" + ":")
+			s.Uint.Encode(e)
+		}
+	}
+	{
+		if s.Uint8.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Uint8.Set {
+			e.RawStr("\"uint8\"" + ":")
+			s.Uint8.Encode(e)
+		}
+	}
+	{
+		if s.Uint16.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Uint16.Set {
+			e.RawStr("\"uint16\"" + ":")
+			s.Uint16.Encode(e)
+		}
+	}
+	{
+		if s.Uint32.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Uint32.Set {
+			e.RawStr("\"uint32\"" + ":")
+			s.Uint32.Encode(e)
+		}
+	}
+	{
+		if s.Uint64.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Uint64.Set {
+			e.RawStr("\"uint64\"" + ":")
+			s.Uint64.Encode(e)
+		}
+	}
+	{
+		if s.Float32.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Float32.Set {
+			e.RawStr("\"float32\"" + ":")
+			s.Float32.Encode(e)
+		}
+	}
+	{
+		if s.Float64.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Float64.Set {
+			e.RawStr("\"float64\"" + ":")
+			s.Float64.Encode(e)
+		}
+	}
+	{
+		if s.StringType.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.StringType.Set {
+			e.RawStr("\"string_type\"" + ":")
+			s.StringType.Encode(e)
+		}
+	}
+	{
+		if s.Bool.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Bool.Set {
+			e.RawStr("\"bool\"" + ":")
+			s.Bool.Encode(e)
+		}
+	}
+	{
+		if s.UUID.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.UUID.Set {
+			e.RawStr("\"uuid\"" + ":")
+			s.UUID.Encode(e)
+		}
+	}
+	{
+		if s.Time.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Time.Set {
+			e.RawStr("\"time\"" + ":")
+			s.Time.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+		if s.Text.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.Text.Set {
+			e.RawStr("\"text\"" + ":")
+			s.Text.Encode(e)
+		}
+	}
+	{
+		if s.State.Set {
+			if !first {
+				e.Comma()
+			}
+			first = false
+		}
+		if s.State.Set {
+			e.RawStr("\"state\"" + ":")
+			s.State.Encode(e)
+		}
+	}
+	{
+		if !first {
+			e.Comma()
+		}
+		first = false
+
+		e.RawStr("\"bytes\"" + ":")
+		e.Base64(s.Bytes)
+	}
+	e.ObjEnd()
+}
+
+var jsonFieldsNameOfUpdateAllTypesReq = [19]string{
+	0:  "int",
+	1:  "int8",
+	2:  "int16",
+	3:  "int32",
+	4:  "int64",
+	5:  "uint",
+	6:  "uint8",
+	7:  "uint16",
+	8:  "uint32",
+	9:  "uint64",
+	10: "float32",
+	11: "float64",
+	12: "string_type",
+	13: "bool",
+	14: "uuid",
+	15: "time",
+	16: "text",
+	17: "state",
+	18: "bytes",
+}
+
+// Decode decodes UpdateAllTypesReq from json.
+func (s *UpdateAllTypesReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateAllTypesReq to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "int":
+			if err := func() error {
+				s.Int.Reset()
+				if err := s.Int.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int\"")
+			}
+		case "int8":
+			if err := func() error {
+				s.Int8.Reset()
+				if err := s.Int8.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int8\"")
+			}
+		case "int16":
+			if err := func() error {
+				s.Int16.Reset()
+				if err := s.Int16.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int16\"")
+			}
+		case "int32":
+			if err := func() error {
+				s.Int32.Reset()
+				if err := s.Int32.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int32\"")
+			}
+		case "int64":
+			if err := func() error {
+				s.Int64.Reset()
+				if err := s.Int64.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"int64\"")
+			}
+		case "uint":
+			if err := func() error {
+				s.Uint.Reset()
+				if err := s.Uint.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint\"")
+			}
+		case "uint8":
+			if err := func() error {
+				s.Uint8.Reset()
+				if err := s.Uint8.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint8\"")
+			}
+		case "uint16":
+			if err := func() error {
+				s.Uint16.Reset()
+				if err := s.Uint16.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint16\"")
+			}
+		case "uint32":
+			if err := func() error {
+				s.Uint32.Reset()
+				if err := s.Uint32.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint32\"")
+			}
+		case "uint64":
+			if err := func() error {
+				s.Uint64.Reset()
+				if err := s.Uint64.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uint64\"")
+			}
+		case "float32":
+			if err := func() error {
+				s.Float32.Reset()
+				if err := s.Float32.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float32\"")
+			}
+		case "float64":
+			if err := func() error {
+				s.Float64.Reset()
+				if err := s.Float64.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"float64\"")
+			}
+		case "string_type":
+			if err := func() error {
+				s.StringType.Reset()
+				if err := s.StringType.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"string_type\"")
+			}
+		case "bool":
+			if err := func() error {
+				s.Bool.Reset()
+				if err := s.Bool.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bool\"")
+			}
+		case "uuid":
+			if err := func() error {
+				s.UUID.Reset()
+				if err := s.UUID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "time":
+			if err := func() error {
+				s.Time.Reset()
+				if err := s.Time.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"time\"")
+			}
+		case "text":
+			if err := func() error {
+				s.Text.Reset()
+				if err := s.Text.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"text\"")
+			}
+		case "state":
+			if err := func() error {
+				s.State.Reset()
+				if err := s.State.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"state\"")
+			}
+		case "bytes":
+			if err := func() error {
+				v, err := d.Base64()
+				s.Bytes = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UpdateAllTypesReq")
+	}
+
+	return nil
+}
+
+// Encode encodes UpdateAllTypesReqState as json.
+func (s UpdateAllTypesReqState) Encode(e *jx.Writer) {
+	e.Str(string(s))
+}
+
+// Decode decodes UpdateAllTypesReqState from json.
+func (s *UpdateAllTypesReqState) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateAllTypesReqState to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UpdateAllTypesReqState(v) {
+	case UpdateAllTypesReqStateOn:
+		*s = UpdateAllTypesReqStateOn
+	case UpdateAllTypesReqStateOff:
+		*s = UpdateAllTypesReqStateOff
+	default:
+		*s = UpdateAllTypesReqState(v)
 	}
 
 	return nil

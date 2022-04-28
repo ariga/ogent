@@ -70,6 +70,11 @@ var (
 	_ = codes.Unset
 )
 
+type DeleteAllTypesParams struct {
+	// ID of the AllTypes.
+	ID int
+}
+
 type DeleteCategoryParams struct {
 	// ID of the Category.
 	ID int
@@ -83,6 +88,13 @@ type DeletePetParams struct {
 type DeleteUserParams struct {
 	// ID of the User.
 	ID int
+}
+
+type ListAllTypesParams struct {
+	// What page to render.
+	Page OptInt
+	// Item count to render per page.
+	ItemsPerPage OptInt
 }
 
 type ListCategoryParams struct {
@@ -142,6 +154,11 @@ type ListUserPetsParams struct {
 	ItemsPerPage OptInt
 }
 
+type ReadAllTypesParams struct {
+	// ID of the AllTypes.
+	ID int
+}
+
 type ReadCategoryParams struct {
 	// ID of the Category.
 	ID int
@@ -164,6 +181,11 @@ type ReadUserParams struct {
 
 type ReadUserBestFriendParams struct {
 	// ID of the User.
+	ID int
+}
+
+type UpdateAllTypesParams struct {
+	// ID of the AllTypes.
 	ID int
 }
 
