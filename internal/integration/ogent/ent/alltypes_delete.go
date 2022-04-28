@@ -72,7 +72,7 @@ func (atd *AllTypesDelete) sqlExec(ctx context.Context) (int, error) {
 		Node: &sqlgraph.NodeSpec{
 			Table: alltypes.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: alltypes.FieldID,
 			},
 		},

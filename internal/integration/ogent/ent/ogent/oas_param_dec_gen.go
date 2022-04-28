@@ -91,7 +91,7 @@ func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (DeleteAllTypes
 					return err
 				}
 
-				c, err := conv.ToInt(s)
+				c, err := conv.ToInt64(s)
 				if err != nil {
 					return err
 				}
@@ -991,7 +991,7 @@ func decodeReadAllTypesParams(args [1]string, r *http.Request) (ReadAllTypesPara
 					return err
 				}
 
-				c, err := conv.ToInt(s)
+				c, err := conv.ToInt64(s)
 				if err != nil {
 					return err
 				}
@@ -1219,7 +1219,7 @@ func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (UpdateAllTypes
 					return err
 				}
 
-				c, err := conv.ToInt(s)
+				c, err := conv.ToInt64(s)
 				if err != nil {
 					return err
 				}

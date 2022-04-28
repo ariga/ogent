@@ -3,7 +3,7 @@ module ariga.io/ogent
 go 1.17
 
 require (
-	entgo.io/contrib v0.2.1-0.20220421093944-3186275bff87
+	entgo.io/contrib v0.2.1-0.20220429104139-20a58de87e74
 	entgo.io/ent v0.10.2-0.20220407165443-5dd5acc08d0e
 	github.com/go-faster/errors v0.5.0
 	github.com/go-faster/jx v0.33.0

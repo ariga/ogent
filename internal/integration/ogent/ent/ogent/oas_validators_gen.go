@@ -76,8 +76,68 @@ func (s AllTypesCreate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.ID)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "id",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -128,
+			MaxSet:        true,
+			Max:           127,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int8)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -32768,
+			MaxSet:        true,
+			Max:           32767,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int16)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -96,8 +156,8 @@ func (s AllTypesCreate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           255,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -116,8 +176,8 @@ func (s AllTypesCreate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           65535,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -136,8 +196,8 @@ func (s AllTypesCreate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -226,8 +286,68 @@ func (s AllTypesList) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.ID)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "id",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -128,
+			MaxSet:        true,
+			Max:           127,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int8)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -32768,
+			MaxSet:        true,
+			Max:           32767,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int16)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -246,8 +366,8 @@ func (s AllTypesList) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           255,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -266,8 +386,8 @@ func (s AllTypesList) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           65535,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -286,8 +406,8 @@ func (s AllTypesList) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -376,8 +496,68 @@ func (s AllTypesRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.ID)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "id",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -128,
+			MaxSet:        true,
+			Max:           127,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int8)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -32768,
+			MaxSet:        true,
+			Max:           32767,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int16)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -396,8 +576,8 @@ func (s AllTypesRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           255,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -416,8 +596,8 @@ func (s AllTypesRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           65535,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -436,8 +616,8 @@ func (s AllTypesRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -526,8 +706,68 @@ func (s AllTypesUpdate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.ID)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "id",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -128,
+			MaxSet:        true,
+			Max:           127,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int8)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -32768,
+			MaxSet:        true,
+			Max:           32767,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int16)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -546,8 +786,8 @@ func (s AllTypesUpdate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           255,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -566,8 +806,8 @@ func (s AllTypesUpdate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           65535,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -586,8 +826,8 @@ func (s AllTypesUpdate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -675,9 +915,49 @@ func (s CreateAllTypesReq) Validate() error {
 	if err := func() error {
 		if err := (validate.Int{
 			MinSet:        true,
+			Min:           -128,
+			MaxSet:        true,
+			Max:           127,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int8)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           -32768,
+			MaxSet:        true,
+			Max:           32767,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Int16)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -696,8 +976,8 @@ func (s CreateAllTypesReq) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           255,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -716,8 +996,8 @@ func (s CreateAllTypesReq) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           65535,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -736,8 +1016,8 @@ func (s CreateAllTypesReq) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -826,8 +1106,8 @@ func (s CreateUserReq) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -848,8 +1128,8 @@ func (s CreateUserReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1069,8 +1349,8 @@ func (s PetCreateOwner) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -1091,8 +1371,8 @@ func (s PetCreateOwner) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1211,8 +1491,8 @@ func (s PetOwnerRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -1233,8 +1513,8 @@ func (s PetOwnerRead) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1350,13 +1630,69 @@ func (s PetOwnerReadFavoriteFishBreed) Validate() error {
 func (s UpdateAllTypesReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
+		if s.Int8.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           -128,
+					MaxSet:        true,
+					Max:           127,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Int8.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int8",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Int16.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           -32768,
+					MaxSet:        true,
+					Max:           32767,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Int16.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "int16",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.Uint.Set {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1383,8 +1719,8 @@ func (s UpdateAllTypesReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           255,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1411,8 +1747,8 @@ func (s UpdateAllTypesReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           65535,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1439,8 +1775,8 @@ func (s UpdateAllTypesReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1569,8 +1905,8 @@ func (s UpdateUserReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1597,8 +1933,8 @@ func (s UpdateUserReq) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1725,8 +2061,8 @@ func (s UserBestFriendRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -1747,8 +2083,8 @@ func (s UserBestFriendRead) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -1867,8 +2203,8 @@ func (s UserCreate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -1889,8 +2225,8 @@ func (s UserCreate) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -2009,8 +2345,8 @@ func (s UserList) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -2031,8 +2367,8 @@ func (s UserList) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -2151,8 +2487,8 @@ func (s UserRead) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -2173,8 +2509,8 @@ func (s UserRead) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,
@@ -2293,8 +2629,8 @@ func (s UserUpdate) Validate() error {
 		if err := (validate.Int{
 			MinSet:        true,
 			Min:           0,
-			MaxSet:        false,
-			Max:           0,
+			MaxSet:        true,
+			Max:           4294967295,
 			MinExclusive:  false,
 			MaxExclusive:  false,
 			MultipleOfSet: false,
@@ -2315,8 +2651,8 @@ func (s UserUpdate) Validate() error {
 				if err := (validate.Int{
 					MinSet:        true,
 					Min:           0,
-					MaxSet:        false,
-					Max:           0,
+					MaxSet:        true,
+					Max:           4294967295,
 					MinExclusive:  false,
 					MaxExclusive:  false,
 					MultipleOfSet: false,

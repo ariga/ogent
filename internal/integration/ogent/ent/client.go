@@ -184,7 +184,7 @@ func (c *AllTypesClient) UpdateOne(at *AllTypes) *AllTypesUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AllTypesClient) UpdateOneID(id int) *AllTypesUpdateOne {
+func (c *AllTypesClient) UpdateOneID(id uint32) *AllTypesUpdateOne {
 	mutation := newAllTypesMutation(c.config, OpUpdateOne, withAllTypesID(id))
 	return &AllTypesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -201,7 +201,7 @@ func (c *AllTypesClient) DeleteOne(at *AllTypes) *AllTypesDeleteOne {
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *AllTypesClient) DeleteOneID(id int) *AllTypesDeleteOne {
+func (c *AllTypesClient) DeleteOneID(id uint32) *AllTypesDeleteOne {
 	builder := c.Delete().Where(alltypes.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -216,12 +216,12 @@ func (c *AllTypesClient) Query() *AllTypesQuery {
 }
 
 // Get returns a AllTypes entity by its id.
-func (c *AllTypesClient) Get(ctx context.Context, id int) (*AllTypes, error) {
+func (c *AllTypesClient) Get(ctx context.Context, id uint32) (*AllTypes, error) {
 	return c.Query().Where(alltypes.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AllTypesClient) GetX(ctx context.Context, id int) *AllTypes {
+func (c *AllTypesClient) GetX(ctx context.Context, id uint32) *AllTypes {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

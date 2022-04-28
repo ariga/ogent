@@ -135,6 +135,12 @@ func (atc *AllTypesCreate) SetBytes(b []byte) *AllTypesCreate {
 	return atc
 }
 
+// SetID sets the "id" field.
+func (atc *AllTypesCreate) SetID(u uint32) *AllTypesCreate {
+	atc.mutation.SetID(u)
+	return atc
+}
+
 // Mutation returns the AllTypesMutation object of the builder.
 func (atc *AllTypesCreate) Mutation() *AllTypesMutation {
 	return atc.mutation
@@ -278,8 +284,10 @@ func (atc *AllTypesCreate) sqlSave(ctx context.Context) (*AllTypes, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = uint32(id)
+	}
 	return _node, nil
 }
 
@@ -289,11 +297,15 @@ func (atc *AllTypesCreate) createSpec() (*AllTypes, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: alltypes.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: alltypes.FieldID,
 			},
 		}
 	)
+	if id, ok := atc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := atc.mutation.Int(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
@@ -490,9 +502,9 @@ func (atcb *AllTypesCreateBulk) Save(ctx context.Context) ([]*AllTypes, error) {
 				}
 				mutation.id = &nodes[i].ID
 				mutation.done = true
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
+					nodes[i].ID = uint32(id)
 				}
 				return nodes[i], nil
 			})

@@ -388,7 +388,7 @@ func (c *Client) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
+			return e.EncodeValue(conv.Int64ToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1324,7 +1324,7 @@ func (c *Client) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (r
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
+			return e.EncodeValue(conv.Int64ToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1700,7 +1700,7 @@ func (c *Client) UpdateAllTypes(ctx context.Context, request UpdateAllTypesReq, 
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.ID))
+			return e.EncodeValue(conv.Int64ToString(params.ID))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}

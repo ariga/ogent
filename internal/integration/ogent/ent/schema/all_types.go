@@ -18,6 +18,7 @@ type AllTypes struct {
 // Fields of the AllTypes.
 func (AllTypes) Fields() []ent.Field {
 	return []ent.Field{
+		field.Uint32("id"),
 		field.Int("int"),
 		field.Int8("int8"),
 		field.Int16("int16"),

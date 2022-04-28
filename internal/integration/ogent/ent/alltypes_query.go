@@ -83,8 +83,8 @@ func (atq *AllTypesQuery) FirstX(ctx context.Context) *AllTypes {
 
 // FirstID returns the first AllTypes ID from the query.
 // Returns a *NotFoundError when no AllTypes ID was found.
-func (atq *AllTypesQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (atq *AllTypesQuery) FirstID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = atq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -96,7 +96,7 @@ func (atq *AllTypesQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (atq *AllTypesQuery) FirstIDX(ctx context.Context) int {
+func (atq *AllTypesQuery) FirstIDX(ctx context.Context) uint32 {
 	id, err := atq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -134,8 +134,8 @@ func (atq *AllTypesQuery) OnlyX(ctx context.Context) *AllTypes {
 // OnlyID is like Only, but returns the only AllTypes ID in the query.
 // Returns a *NotSingularError when more than one AllTypes ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (atq *AllTypesQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (atq *AllTypesQuery) OnlyID(ctx context.Context) (id uint32, err error) {
+	var ids []uint32
 	if ids, err = atq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -151,7 +151,7 @@ func (atq *AllTypesQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (atq *AllTypesQuery) OnlyIDX(ctx context.Context) int {
+func (atq *AllTypesQuery) OnlyIDX(ctx context.Context) uint32 {
 	id, err := atq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -177,8 +177,8 @@ func (atq *AllTypesQuery) AllX(ctx context.Context) []*AllTypes {
 }
 
 // IDs executes the query and returns a list of AllTypes IDs.
-func (atq *AllTypesQuery) IDs(ctx context.Context) ([]int, error) {
-	var ids []int
+func (atq *AllTypesQuery) IDs(ctx context.Context) ([]uint32, error) {
+	var ids []uint32
 	if err := atq.Select(alltypes.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (atq *AllTypesQuery) IDs(ctx context.Context) ([]int, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (atq *AllTypesQuery) IDsX(ctx context.Context) []int {
+func (atq *AllTypesQuery) IDsX(ctx context.Context) []uint32 {
 	ids, err := atq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -361,7 +361,7 @@ func (atq *AllTypesQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   alltypes.Table,
 			Columns: alltypes.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: alltypes.FieldID,
 			},
 		},

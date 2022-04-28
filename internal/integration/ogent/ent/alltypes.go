@@ -16,7 +16,7 @@ import (
 type AllTypes struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uint32 `json:"id,omitempty"`
 	// Int holds the value of the "int" field.
 	Int int `json:"int,omitempty"`
 	// Int8 holds the value of the "int8" field.
@@ -96,7 +96,7 @@ func (at *AllTypes) assignValues(columns []string, values []interface{}) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			at.ID = int(value.Int64)
+			at.ID = uint32(value.Int64)
 		case alltypes.FieldInt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field int", values[i])

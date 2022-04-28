@@ -84,7 +84,7 @@ func (s AllTypesCreate) Encode(e *jx.Writer) {
 		first = false
 
 		e.RawStr("\"id\"" + ":")
-		e.Int(s.ID)
+		e.Int64(s.ID)
 	}
 	{
 		e.Comma()
@@ -120,7 +120,7 @@ func (s AllTypesCreate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint\"" + ":")
-		e.Int(s.Uint)
+		e.Int64(s.Uint)
 	}
 	{
 		e.Comma()
@@ -138,7 +138,7 @@ func (s AllTypesCreate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint32\"" + ":")
-		e.Int32(s.Uint32)
+		e.Int64(s.Uint32)
 	}
 	{
 		e.Comma()
@@ -238,8 +238,8 @@ func (s *AllTypesCreate) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
+				v, err := d.Int64()
+				s.ID = int64(v)
 				if err != nil {
 					return err
 				}
@@ -310,8 +310,8 @@ func (s *AllTypesCreate) Decode(d *jx.Decoder) error {
 		case "uint":
 			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
-				v, err := d.Int()
-				s.Uint = int(v)
+				v, err := d.Int64()
+				s.Uint = int64(v)
 				if err != nil {
 					return err
 				}
@@ -346,8 +346,8 @@ func (s *AllTypesCreate) Decode(d *jx.Decoder) error {
 		case "uint32":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int32()
-				s.Uint32 = int32(v)
+				v, err := d.Int64()
+				s.Uint32 = int64(v)
 				if err != nil {
 					return err
 				}
@@ -559,7 +559,7 @@ func (s AllTypesList) Encode(e *jx.Writer) {
 		first = false
 
 		e.RawStr("\"id\"" + ":")
-		e.Int(s.ID)
+		e.Int64(s.ID)
 	}
 	{
 		e.Comma()
@@ -595,7 +595,7 @@ func (s AllTypesList) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint\"" + ":")
-		e.Int(s.Uint)
+		e.Int64(s.Uint)
 	}
 	{
 		e.Comma()
@@ -613,7 +613,7 @@ func (s AllTypesList) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint32\"" + ":")
-		e.Int32(s.Uint32)
+		e.Int64(s.Uint32)
 	}
 	{
 		e.Comma()
@@ -713,8 +713,8 @@ func (s *AllTypesList) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
+				v, err := d.Int64()
+				s.ID = int64(v)
 				if err != nil {
 					return err
 				}
@@ -785,8 +785,8 @@ func (s *AllTypesList) Decode(d *jx.Decoder) error {
 		case "uint":
 			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
-				v, err := d.Int()
-				s.Uint = int(v)
+				v, err := d.Int64()
+				s.Uint = int64(v)
 				if err != nil {
 					return err
 				}
@@ -821,8 +821,8 @@ func (s *AllTypesList) Decode(d *jx.Decoder) error {
 		case "uint32":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int32()
-				s.Uint32 = int32(v)
+				v, err := d.Int64()
+				s.Uint32 = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1034,7 +1034,7 @@ func (s AllTypesRead) Encode(e *jx.Writer) {
 		first = false
 
 		e.RawStr("\"id\"" + ":")
-		e.Int(s.ID)
+		e.Int64(s.ID)
 	}
 	{
 		e.Comma()
@@ -1070,7 +1070,7 @@ func (s AllTypesRead) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint\"" + ":")
-		e.Int(s.Uint)
+		e.Int64(s.Uint)
 	}
 	{
 		e.Comma()
@@ -1088,7 +1088,7 @@ func (s AllTypesRead) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint32\"" + ":")
-		e.Int32(s.Uint32)
+		e.Int64(s.Uint32)
 	}
 	{
 		e.Comma()
@@ -1188,8 +1188,8 @@ func (s *AllTypesRead) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
+				v, err := d.Int64()
+				s.ID = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1260,8 +1260,8 @@ func (s *AllTypesRead) Decode(d *jx.Decoder) error {
 		case "uint":
 			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
-				v, err := d.Int()
-				s.Uint = int(v)
+				v, err := d.Int64()
+				s.Uint = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1296,8 +1296,8 @@ func (s *AllTypesRead) Decode(d *jx.Decoder) error {
 		case "uint32":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int32()
-				s.Uint32 = int32(v)
+				v, err := d.Int64()
+				s.Uint32 = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1509,7 +1509,7 @@ func (s AllTypesUpdate) Encode(e *jx.Writer) {
 		first = false
 
 		e.RawStr("\"id\"" + ":")
-		e.Int(s.ID)
+		e.Int64(s.ID)
 	}
 	{
 		e.Comma()
@@ -1545,7 +1545,7 @@ func (s AllTypesUpdate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint\"" + ":")
-		e.Int(s.Uint)
+		e.Int64(s.Uint)
 	}
 	{
 		e.Comma()
@@ -1563,7 +1563,7 @@ func (s AllTypesUpdate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint32\"" + ":")
-		e.Int32(s.Uint32)
+		e.Int64(s.Uint32)
 	}
 	{
 		e.Comma()
@@ -1663,8 +1663,8 @@ func (s *AllTypesUpdate) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int()
-				s.ID = int(v)
+				v, err := d.Int64()
+				s.ID = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1735,8 +1735,8 @@ func (s *AllTypesUpdate) Decode(d *jx.Decoder) error {
 		case "uint":
 			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
-				v, err := d.Int()
-				s.Uint = int(v)
+				v, err := d.Int64()
+				s.Uint = int64(v)
 				if err != nil {
 					return err
 				}
@@ -1771,8 +1771,8 @@ func (s *AllTypesUpdate) Decode(d *jx.Decoder) error {
 		case "uint32":
 			requiredBitSet[1] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int32()
-				s.Uint32 = int32(v)
+				v, err := d.Int64()
+				s.Uint32 = int64(v)
 				if err != nil {
 					return err
 				}
@@ -2702,7 +2702,7 @@ func (s CreateAllTypesReq) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint\"" + ":")
-		e.Int(s.Uint)
+		e.Int64(s.Uint)
 	}
 	{
 		e.Comma()
@@ -2720,7 +2720,7 @@ func (s CreateAllTypesReq) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"uint32\"" + ":")
-		e.Int32(s.Uint32)
+		e.Int64(s.Uint32)
 	}
 	{
 		e.Comma()
@@ -2879,8 +2879,8 @@ func (s *CreateAllTypesReq) Decode(d *jx.Decoder) error {
 		case "uint":
 			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
-				v, err := d.Int()
-				s.Uint = int(v)
+				v, err := d.Int64()
+				s.Uint = int64(v)
 				if err != nil {
 					return err
 				}
@@ -2915,8 +2915,8 @@ func (s *CreateAllTypesReq) Decode(d *jx.Decoder) error {
 		case "uint32":
 			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				v, err := d.Int32()
-				s.Uint32 = int32(v)
+				v, err := d.Int64()
+				s.Uint32 = int64(v)
 				if err != nil {
 					return err
 				}
@@ -3528,7 +3528,7 @@ func (s CreateUserReq) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -3631,8 +3631,8 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -5309,7 +5309,7 @@ func (s PetCreateOwner) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -5393,8 +5393,8 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -5968,7 +5968,7 @@ func (s PetOwnerRead) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -6052,8 +6052,8 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -8302,7 +8302,7 @@ func (s UserBestFriendRead) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -8386,8 +8386,8 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -8593,7 +8593,7 @@ func (s UserCreate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -8677,8 +8677,8 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -8884,7 +8884,7 @@ func (s UserList) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -8968,8 +8968,8 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -9359,7 +9359,7 @@ func (s UserRead) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -9443,8 +9443,8 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}
@@ -9650,7 +9650,7 @@ func (s UserUpdate) Encode(e *jx.Writer) {
 		e.Comma()
 
 		e.RawStr("\"age\"" + ":")
-		e.Int(s.Age)
+		e.Int64(s.Age)
 	}
 	{
 		if s.Height.Set {
@@ -9734,8 +9734,8 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 		case "age":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Int()
-				s.Age = int(v)
+				v, err := d.Int64()
+				s.Age = int64(v)
 				if err != nil {
 					return err
 				}

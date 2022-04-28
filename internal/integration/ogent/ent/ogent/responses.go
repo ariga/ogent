@@ -9,16 +9,16 @@ func NewAllTypesCreate(e *ent.AllTypes) *AllTypesCreate {
 		return nil
 	}
 	var ret AllTypesCreate
-	ret.ID = e.ID
+	ret.ID = int64(e.ID)
 	ret.Int = e.Int
 	ret.Int8 = int32(e.Int8)
 	ret.Int16 = int32(e.Int16)
 	ret.Int32 = e.Int32
 	ret.Int64 = e.Int64
-	ret.Uint = int(e.Uint)
+	ret.Uint = int64(e.Uint)
 	ret.Uint8 = int32(e.Uint8)
 	ret.Uint16 = int32(e.Uint16)
-	ret.Uint32 = int32(e.Uint32)
+	ret.Uint32 = int64(e.Uint32)
 	ret.Uint64 = int64(e.Uint64)
 	ret.Float32 = e.Float32
 	ret.Float64 = e.Float64
@@ -55,16 +55,16 @@ func NewAllTypesList(e *ent.AllTypes) *AllTypesList {
 		return nil
 	}
 	var ret AllTypesList
-	ret.ID = e.ID
+	ret.ID = int64(e.ID)
 	ret.Int = e.Int
 	ret.Int8 = int32(e.Int8)
 	ret.Int16 = int32(e.Int16)
 	ret.Int32 = e.Int32
 	ret.Int64 = e.Int64
-	ret.Uint = int(e.Uint)
+	ret.Uint = int64(e.Uint)
 	ret.Uint8 = int32(e.Uint8)
 	ret.Uint16 = int32(e.Uint16)
-	ret.Uint32 = int32(e.Uint32)
+	ret.Uint32 = int64(e.Uint32)
 	ret.Uint64 = int64(e.Uint64)
 	ret.Float32 = e.Float32
 	ret.Float64 = e.Float64
@@ -101,16 +101,16 @@ func NewAllTypesRead(e *ent.AllTypes) *AllTypesRead {
 		return nil
 	}
 	var ret AllTypesRead
-	ret.ID = e.ID
+	ret.ID = int64(e.ID)
 	ret.Int = e.Int
 	ret.Int8 = int32(e.Int8)
 	ret.Int16 = int32(e.Int16)
 	ret.Int32 = e.Int32
 	ret.Int64 = e.Int64
-	ret.Uint = int(e.Uint)
+	ret.Uint = int64(e.Uint)
 	ret.Uint8 = int32(e.Uint8)
 	ret.Uint16 = int32(e.Uint16)
-	ret.Uint32 = int32(e.Uint32)
+	ret.Uint32 = int64(e.Uint32)
 	ret.Uint64 = int64(e.Uint64)
 	ret.Float32 = e.Float32
 	ret.Float64 = e.Float64
@@ -147,16 +147,16 @@ func NewAllTypesUpdate(e *ent.AllTypes) *AllTypesUpdate {
 		return nil
 	}
 	var ret AllTypesUpdate
-	ret.ID = e.ID
+	ret.ID = int64(e.ID)
 	ret.Int = e.Int
 	ret.Int8 = int32(e.Int8)
 	ret.Int16 = int32(e.Int16)
 	ret.Int32 = e.Int32
 	ret.Int64 = e.Int64
-	ret.Uint = int(e.Uint)
+	ret.Uint = int64(e.Uint)
 	ret.Uint8 = int32(e.Uint8)
 	ret.Uint16 = int32(e.Uint16)
-	ret.Uint32 = int32(e.Uint32)
+	ret.Uint32 = int64(e.Uint32)
 	ret.Uint64 = int64(e.Uint64)
 	ret.Float32 = e.Float32
 	ret.Float64 = e.Float64
@@ -412,8 +412,8 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 	var ret PetCreateOwner
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = PetCreateOwnerFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptPetCreateOwnerFavoriteDogBreed(PetCreateOwnerFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetCreateOwnerFavoriteFishBreed(PetCreateOwnerFavoriteFishBreed(e.FavoriteFishBreed))
@@ -614,8 +614,8 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 	var ret PetOwnerRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = PetOwnerReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptPetOwnerReadFavoriteDogBreed(PetOwnerReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetOwnerReadFavoriteFishBreed(PetOwnerReadFavoriteFishBreed(e.FavoriteFishBreed))
@@ -647,8 +647,8 @@ func NewUserCreate(e *ent.User) *UserCreate {
 	var ret UserCreate
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserCreateFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserCreateFavoriteDogBreed(UserCreateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserCreateFavoriteFishBreed(UserCreateFavoriteFishBreed(e.FavoriteFishBreed))
@@ -680,8 +680,8 @@ func NewUserList(e *ent.User) *UserList {
 	var ret UserList
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserListFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserListFavoriteDogBreed(UserListFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserListFavoriteFishBreed(UserListFavoriteFishBreed(e.FavoriteFishBreed))
@@ -713,8 +713,8 @@ func NewUserRead(e *ent.User) *UserRead {
 	var ret UserRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserReadFavoriteDogBreed(UserReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserReadFavoriteFishBreed(UserReadFavoriteFishBreed(e.FavoriteFishBreed))
@@ -746,8 +746,8 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 	var ret UserUpdate
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserUpdateFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserUpdateFavoriteDogBreed(UserUpdateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserUpdateFavoriteFishBreed(UserUpdateFavoriteFishBreed(e.FavoriteFishBreed))
@@ -779,8 +779,8 @@ func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 	var ret UserBestFriendRead
 	ret.ID = e.ID
 	ret.Name = e.Name
-	ret.Age = int(e.Age)
-	ret.Height = NewOptInt(int(e.Height))
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserBestFriendReadFavoriteCatBreed(e.FavoriteCatBreed)
 	NewOptUserBestFriendReadFavoriteDogBreed(UserBestFriendReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserBestFriendReadFavoriteFishBreed(UserBestFriendReadFavoriteFishBreed(e.FavoriteFishBreed))
