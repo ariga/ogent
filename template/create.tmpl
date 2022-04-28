@@ -5,7 +5,7 @@
 		{{- $a := fieldAnnotation $f }}
 		{{- if or (not $a) (not $a.ReadOnly) }}
 			{{- if $f.Optional }}
-				{{- if or $f.IsBytes }}
+				{{- if $f.IsBytes }}
 					if req.{{ $f.StructField }} != nil {
 						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
 					}
