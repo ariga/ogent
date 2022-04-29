@@ -1,7 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/update" }}
-	b := h.client.{{ $.Name }}.UpdateOneID(params.{{ $.ID.StructField }})
+	b := h.client.{{ $.Name }}.UpdateOneID({{ ogenToEnt $.ID (print "params." $.ID.StructField) }})
 	// Add all fields.
 	{{- range $f := $.Fields }}
 		{{- $a := fieldAnnotation $f }}

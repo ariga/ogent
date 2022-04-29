@@ -10,7 +10,7 @@ import (
 var (
 	// AllTypesColumns holds the columns for the "all_types" table.
 	AllTypesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUint32, Increment: true},
 		{Name: "int", Type: field.TypeInt},
 		{Name: "int8", Type: field.TypeInt8},
 		{Name: "int16", Type: field.TypeInt16},

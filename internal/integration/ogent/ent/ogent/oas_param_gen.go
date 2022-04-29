@@ -72,7 +72,7 @@ var (
 
 type DeleteAllTypesParams struct {
 	// ID of the AllTypes.
-	ID int
+	ID int64
 }
 
 type DeleteCategoryParams struct {
@@ -156,7 +156,7 @@ type ListUserPetsParams struct {
 
 type ReadAllTypesParams struct {
 	// ID of the AllTypes.
-	ID int
+	ID int64
 }
 
 type ReadCategoryParams struct {
@@ -186,7 +186,7 @@ type ReadUserBestFriendParams struct {
 
 type UpdateAllTypesParams struct {
 	// ID of the AllTypes.
-	ID int
+	ID int64
 }
 
 type UpdateCategoryParams struct {

@@ -308,7 +308,7 @@ func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   alltypes.Table,
 			Columns: alltypes.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: alltypes.FieldID,
 			},
 		},
@@ -842,7 +842,7 @@ func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, er
 			Table:   alltypes.Table,
 			Columns: alltypes.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
+				Type:   field.TypeUint32,
 				Column: alltypes.FieldID,
 			},
 		},

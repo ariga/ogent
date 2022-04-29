@@ -1,7 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/delete" }}
-	err := h.client.{{ $.Name }}.DeleteOneID(params.{{ $.ID.StructField }}).Exec(ctx)
+	err := h.client.{{ $.Name }}.DeleteOneID({{ ogenToEnt $.ID (print "params." $.ID.StructField) }}).Exec(ctx)
 	{{-
 		template "ogent/ogent/helper/error"
 		extend $

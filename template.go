@@ -299,13 +299,10 @@ func ogenToEnt(f *gen.Field, expr string) string {
 func entToOgen(f *gen.Field, expr string) string {
 	switch f.Type.Type {
 	case field.TypeInt8, field.TypeUint8,
-		field.TypeInt16, field.TypeUint16,
-		field.TypeUint32:
+		field.TypeInt16, field.TypeUint16:
 		return fmt.Sprintf("int32(%s)", expr)
-	case field.TypeUint:
-		return fmt.Sprintf("int(%s)", expr)
-	case field.TypeUint64:
-		return fmt.Sprintf("int64(%s)", expr) // TODO: possibly losing information here
+	case field.TypeUint64, field.TypeUint32, field.TypeUint:
+		return fmt.Sprintf("int64(%s)", expr) // TODO: possibly losing information here for uint64
 	default:
 		return expr
 	}

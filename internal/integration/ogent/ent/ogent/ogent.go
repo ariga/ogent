@@ -87,7 +87,7 @@ func (h *OgentHandler) CreateAllTypes(ctx context.Context, req CreateAllTypesReq
 
 // ReadAllTypes handles GET /all-types-slice/{id} requests.
 func (h *OgentHandler) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error) {
-	q := h.client.AllTypes.Query().Where(alltypes.IDEQ(params.ID))
+	q := h.client.AllTypes.Query().Where(alltypes.IDEQ(uint32(params.ID)))
 	e, err := q.Only(ctx)
 	if err != nil {
 		switch {
@@ -113,7 +113,7 @@ func (h *OgentHandler) ReadAllTypes(ctx context.Context, params ReadAllTypesPara
 
 // UpdateAllTypes handles PATCH /all-types-slice/{id} requests.
 func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
-	b := h.client.AllTypes.UpdateOneID(params.ID)
+	b := h.client.AllTypes.UpdateOneID(uint32(params.ID))
 	// Add all fields.
 	if v, ok := req.Int.Get(); ok {
 		b.SetInt(v)
@@ -206,7 +206,7 @@ func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq
 
 // DeleteAllTypes handles DELETE /all-types-slice/{id} requests.
 func (h *OgentHandler) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error) {
-	err := h.client.AllTypes.DeleteOneID(params.ID).Exec(ctx)
+	err := h.client.AllTypes.DeleteOneID(uint32(params.ID)).Exec(ctx)
 	if err != nil {
 		switch {
 		case ent.IsNotFound(err):

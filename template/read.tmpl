@@ -1,7 +1,8 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "ogent/ogent/helper/read" }}
-	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ(params.{{ $.ID.StructField }}))
+	{{- $id := ogenToEnt $.ID (print "params." $.ID.StructField) }}
+	q := h.client.{{ $.Name }}.Query().Where({{ $.Package }}.IDEQ({{ $id }}))
 	{{- with eagerLoad $ "read" }}{{ . }}{{- end }}
 	e, err := q.Only(ctx)
 	{{-
@@ -13,7 +14,8 @@
 {{- end }}
 
 {{ define "ogent/ogent/helper/read/sub" }}{{/* gotype: entgo.io/ent/entc/gen.typeScope */}}
-	q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ(params.{{ $.Type.ID.StructField }})).Query{{ $.Scope.Edge.Name | pascal }}()
+	{{- $id := ogenToEnt $.Type.ID (print "params." $.Type.ID.StructField) }}
+	q := h.client.{{ $.Type.Name }}.Query().Where({{ $.Type.Package }}.IDEQ({{ $id }})).Query{{ $.Scope.Edge.Name | pascal }}()
 	{{- with eagerLoad $.Scope.Edge.Type "read" }}{{ . }}{{- end }}
 	e, err := q.Only(ctx)
 	{{-
