@@ -20,7 +20,7 @@
 			{{- else }}
 				{{- $x := print "req." $f.StructField }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
-				if p.IsAllowed(PrivIdRead{{ $.Name }}Res{{ $f.StructField }}) {
+				if p.IsAllowed(PrivIdList{{ $.Name }}Res{{ $f.StructField }}) {
 					o.{{ $f.StructField }} = c.{{ $f.StructField }}
 				}
 			{{- end }}
@@ -52,7 +52,7 @@
 			{{- else }}
 				{{- $x := print "req." $f.StructField }}
 				{{- if $f.IsEnum }}{{ $x = convertTo $f.Type.String $x }}{{ end }}
-				if p.IsAllowed(PrivIdRead{{ $.Scope.Edge.Type.Name }}Res{{ $f.StructField }}) {
+				if p.IsAllowed(PrivIdList{{ $.Scope.Edge.Type.Name }}Res{{ $f.StructField }}) {
 					o.{{ $f.StructField }} = c.{{ $f.StructField }}
 				}
 			{{- end }}

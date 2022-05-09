@@ -17,7 +17,7 @@
 	}
 
 	type PolicyIdProvider interface {
-		GetPrivId(value ...string) int
+		GetPrivId(value string) int
 	}
 
 	type PolicyInit struct{
@@ -30,14 +30,14 @@
 				{{- range $op := nodeOperations $n }}
 					{{- $opID := print ($op | toString | pascal) $n.Name }}
 					// {{ $opID }}
-					PrivId{{ $opID }} = p.GetPrivId("{{ $op }}", "{{ lower $n.Name }}")
+					PrivId{{ $opID }} = p.GetPrivId("{{ $op }} {{ lower $n.Name }}")
 					{{- range $f := $n.Fields }}
-						PrivId{{ $opID }}Req{{ $f.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "req", "{{lower $f.StructField }}")
-						PrivId{{ $opID }}Res{{ $f.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "res", "{{lower $f.StructField }}")
+						PrivId{{ $opID }}Req{{ $f.StructField }} = p.GetPrivId("{{ $op }} {{lower $n.Name }} req {{lower $f.StructField }}")
+						PrivId{{ $opID }}Res{{ $f.StructField }} = p.GetPrivId("{{ $op }} {{lower $n.Name }} res {{lower $f.StructField }}")
 					{{- end }}
 					{{- range $e := $n.Edges }}
-						PrivId{{ $opID }}Req{{ $e.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "req", "{{lower $e.StructField }}")
-						PrivId{{ $opID }}Res{{ $e.StructField }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "res", "{{lower $e.StructField }}")
+						PrivId{{ $opID }}Req{{ $e.StructField }} = p.GetPrivId("{{ $op }} {{lower $n.Name }} req {{lower $e.StructField }}")
+						PrivId{{ $opID }}Res{{ $e.StructField }} = p.GetPrivId("{{ $op }} {{lower $n.Name }} res {{lower $e.StructField }}")
 					{{- end }}
 				{{- end }}
 				{{- range $e := $n.Edges }}
@@ -45,7 +45,7 @@
 						{{- if or (isRead $op) (isList $op) }}
 							{{- $opID := print ($op | toString | pascal) $n.Name ($e.Name | pascal) }}
 							// {{ $opID }}
-							PrivId{{ $opID }} = p.GetPrivId("{{ $op }}", "{{lower $n.Name }}", "{{lower $e.Name }}")
+							PrivId{{ $opID }} = p.GetPrivId("{{ $op }} {{lower $n.Name }} {{lower $e.Name }}")
 						{{- end }}
 					{{ end }}
 				{{ end }}
