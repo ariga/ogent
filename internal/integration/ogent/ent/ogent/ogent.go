@@ -339,7 +339,9 @@ func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq
 		b.SetName(v)
 	}
 	// Add all edges.
-	b.ClearPets().AddPetIDs(req.Pets...)
+	if v := req.Pets; v != nil {
+		b.ClearPets().AddPetIDs(v...)
+	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -633,11 +635,15 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params U
 		b.SetHeight(v)
 	}
 	// Add all edges.
-	b.ClearCategories().AddCategoryIDs(req.Categories...)
+	if v := req.Categories; v != nil {
+		b.ClearCategories().AddCategoryIDs(v...)
+	}
 	if v, ok := req.Owner.Get(); ok {
 		b.SetOwnerID(v)
 	}
-	b.ClearFriends().AddFriendIDs(req.Friends...)
+	if v := req.Friends; v != nil {
+		b.ClearFriends().AddFriendIDs(v...)
+	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -868,7 +874,9 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params
 		b.SetFavoriteFishBreed(schema.FishBreed(v))
 	}
 	// Add all edges.
-	b.ClearPets().AddPetIDs(req.Pets...)
+	if v := req.Pets; v != nil {
+		b.ClearPets().AddPetIDs(v...)
+	}
 	if v, ok := req.BestFriend.Get(); ok {
 		b.SetBestFriendID(v)
 	}
