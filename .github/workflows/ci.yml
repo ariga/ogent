@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.goversion }}
-      - uses: actions/cache@v3.0.2
+      - uses: actions/cache@v3.0.5
         with:
           path: |
             ~/go/pkg/mod
@@ -48,7 +48,7 @@ jobs:
       - uses: actions/setup-go@v3
         with:
           go-version: '1.17'
-      - uses: actions/cache@v3.0.2
+      - uses: actions/cache@v3.0.5
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
