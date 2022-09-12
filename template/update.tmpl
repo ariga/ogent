@@ -25,7 +25,11 @@
 	{{- end }}
 	// Add all edges.
 	{{- range $e := $.Edges }}
-		{{- if $e.Unique }}
+		{{- if not $e.Unique }}
+		    if v, ok := req.{{ $e.StructField }}.Get(); ok {
+			    b.{{ $e.MutationClear }}().{{ $e.MutationAdd }}(req.{{ $e.StructField }}...)
+			}
+		{{- else }}
 			if v, ok := req.{{ $e.StructField }}.Get(); ok {
 				b.{{ $e.MutationSet }}(v)
 			}
