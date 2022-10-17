@@ -371,7 +371,6 @@ func (pq *PetQuery) WithFriends(opts ...func(*PetQuery)) *PetQuery {
 //		GroupBy(pet.FieldName).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-//
 func (pq *PetQuery) GroupBy(field string, fields ...string) *PetGroupBy {
 	grbuild := &PetGroupBy{config: pq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -398,7 +397,6 @@ func (pq *PetQuery) GroupBy(field string, fields ...string) *PetGroupBy {
 //	client.Pet.Query().
 //		Select(pet.FieldName).
 //		Scan(ctx, &v)
-//
 func (pq *PetQuery) Select(fields ...string) *PetSelect {
 	pq.fields = append(pq.fields, fields...)
 	selbuild := &PetSelect{PetQuery: pq}

@@ -261,7 +261,6 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 //		GroupBy(alltypes.FieldInt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-//
 func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroupBy {
 	grbuild := &AllTypesGroupBy{config: atq.config}
 	grbuild.fields = append([]string{field}, fields...)
@@ -288,7 +287,6 @@ func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroup
 //	client.AllTypes.Query().
 //		Select(alltypes.FieldInt).
 //		Scan(ctx, &v)
-//
 func (atq *AllTypesQuery) Select(fields ...string) *AllTypesSelect {
 	atq.fields = append(atq.fields, fields...)
 	selbuild := &AllTypesSelect{AllTypesQuery: atq}
