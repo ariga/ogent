@@ -1,6 +1,6 @@
 module ariga.io/ogent
 
-go 1.17
+go 1.18
 
 require (
 	entgo.io/contrib v0.2.1-0.20220429104139-20a58de87e74
