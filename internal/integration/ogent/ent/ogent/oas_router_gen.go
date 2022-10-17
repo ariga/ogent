@@ -3,89 +3,41 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
 	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
 	"strings"
-	"sync"
-	"time"
-
-	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 func (s *Server) notFound(w http.ResponseWriter, r *http.Request) {
 	s.cfg.NotFound(w, r)
 }
 
+func (s *Server) notAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
+	s.cfg.MethodNotAllowed(w, r, allowed)
+}
+
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
 // calling handler that matches the path or returning not found error.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	elem := r.URL.Path
+	if prefix := s.cfg.Prefix; len(prefix) > 0 {
+		if strings.HasPrefix(elem, prefix) {
+			// Cut prefix from the path.
+			elem = strings.TrimPrefix(elem, prefix)
+		} else {
+			// Prefix doesn't match.
+			s.notFound(w, r)
+			return
+		}
+	}
 	if len(elem) == 0 {
 		s.notFound(w, r)
 		return
 	}
 	args := [1]string{}
+
 	// Static code generated router with unwrapped path search.
-	switch r.Method {
-	case "DELETE":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -98,111 +50,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if len(elem) == 0 {
-				s.handleDeleteCategoryRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types/"
-				if l := len("all-types/"); len(elem) >= l && elem[0:l] == "all-types/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteAllTypes
-					s.handleDeleteAllTypesRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "categories/"
-				if l := len("categories/"); len(elem) >= l && elem[0:l] == "categories/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteCategory
-					s.handleDeleteCategoryRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "pets/"
-				if l := len("pets/"); len(elem) >= l && elem[0:l] == "pets/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeletePet
-					s.handleDeletePetRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteUser
-					s.handleDeleteUserRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			}
-		}
-	case "GET":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
 				break
-			}
-
-			if len(elem) == 0 {
-				s.handleListCategoryRequest([0]string{}, w, r)
-
-				return
 			}
 			switch elem[0] {
 			case 'a': // Prefix: "all-types"
@@ -213,7 +61,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListAllTypesRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListAllTypesRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateAllTypesRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -231,10 +86,23 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = ""
 
 					if len(elem) == 0 {
-						// Leaf: ReadAllTypes
-						s.handleReadAllTypesRequest([1]string{
-							args[0],
-						}, w, r)
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteAllTypesRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadAllTypesRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateAllTypesRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -247,7 +115,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListCategoryRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListCategoryRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateCategoryRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -269,9 +144,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadCategoryRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteCategoryRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadCategoryRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateCategoryRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -284,10 +172,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							// Leaf: ListCategoryPets
-							s.handleListCategoryPetsRequest([1]string{
-								args[0],
-							}, w, r)
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleListCategoryPetsRequest([1]string{
+									args[0],
+								}, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
 
 							return
 						}
@@ -301,7 +194,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListPetRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListPetRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreatePetRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -323,9 +223,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadPetRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeletePetRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadPetRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdatePetRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -338,11 +251,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							s.handleListPetFriendsRequest([1]string{
-								args[0],
-							}, w, r)
-
-							return
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "categories"
@@ -353,10 +262,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListPetCategories
-								s.handleListPetCategoriesRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListPetCategoriesRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -368,10 +282,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListPetFriends
-								s.handleListPetFriendsRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListPetFriendsRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -383,10 +302,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadPetOwner
-								s.handleReadPetOwnerRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleReadPetOwnerRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -401,7 +325,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					s.handleListUserRequest([0]string{}, w, r)
+					switch r.Method {
+					case "GET":
+						s.handleListUserRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateUserRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
 
 					return
 				}
@@ -423,9 +354,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						s.handleReadUserRequest([1]string{
-							args[0],
-						}, w, r)
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteUserRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadUserRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateUserRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
 
 						return
 					}
@@ -438,11 +382,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						if len(elem) == 0 {
-							s.handleReadUserBestFriendRequest([1]string{
-								args[0],
-							}, w, r)
-
-							return
+							break
 						}
 						switch elem[0] {
 						case 'b': // Prefix: "best-friend"
@@ -453,10 +393,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadUserBestFriend
-								s.handleReadUserBestFriendRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleReadUserBestFriendRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
@@ -468,189 +413,20 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserPets
-								s.handleListUserPetsRequest([1]string{
-									args[0],
-								}, w, r)
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListUserPetsRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
 
 								return
 							}
 						}
 					}
-				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				s.handleUpdateCategoryRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types/"
-				if l := len("all-types/"); len(elem) >= l && elem[0:l] == "all-types/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateAllTypes
-					s.handleUpdateAllTypesRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "categories/"
-				if l := len("categories/"); len(elem) >= l && elem[0:l] == "categories/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateCategory
-					s.handleUpdateCategoryRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "pets/"
-				if l := len("pets/"); len(elem) >= l && elem[0:l] == "pets/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdatePet
-					s.handleUpdatePetRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateUser
-					s.handleUpdateUserRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				s.handleCreateCategoryRequest([0]string{}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types"
-				if l := len("all-types"); len(elem) >= l && elem[0:l] == "all-types" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateAllTypes
-					s.handleCreateAllTypesRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'c': // Prefix: "categories"
-				if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateCategory
-					s.handleCreateCategoryRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'p': // Prefix: "pets"
-				if l := len("pets"); len(elem) >= l && elem[0:l] == "pets" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreatePet
-					s.handleCreatePetRequest([0]string{}, w, r)
-
-					return
-				}
-			case 'u': // Prefix: "users"
-				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateUser
-					s.handleCreateUserRequest([0]string{}, w, r)
-
-					return
 				}
 			}
 		}
@@ -660,14 +436,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name  string
-	count int
-	args  [1]string
+	name        string
+	operationID string
+	count       int
+	args        [1]string
+}
+
+// Name returns ogen operation name.
+//
+// It is guaranteed to be unique and not empty.
+func (r Route) Name() string {
+	return r.name
 }
 
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
-	return r.name
+	return r.operationID
 }
 
 // Args returns parsed arguments.
@@ -682,10 +466,13 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 		elem = path
 	)
 	r.args = args
+	if elem == "" {
+		return r, false
+	}
 
 	// Static code generated router with unwrapped path search.
-	switch method {
-	case "DELETE":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -698,107 +485,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 			}
 
 			if len(elem) == 0 {
-				r.name = "DeleteCategory"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types/"
-				if l := len("all-types/"); len(elem) >= l && elem[0:l] == "all-types/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteAllTypes
-					r.name = "DeleteAllTypes"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'c': // Prefix: "categories/"
-				if l := len("categories/"); len(elem) >= l && elem[0:l] == "categories/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteCategory
-					r.name = "DeleteCategory"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'p': // Prefix: "pets/"
-				if l := len("pets/"); len(elem) >= l && elem[0:l] == "pets/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeletePet
-					r.name = "DeletePet"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: DeleteUser
-					r.name = "DeleteUser"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			}
-		}
-	case "GET":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
 				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "ListCategory"
-				r.args = args
-				r.count = 0
-				return r, true
 			}
 			switch elem[0] {
 			case 'a': // Prefix: "all-types"
@@ -809,10 +496,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListAllTypes"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListAllTypes"
+						r.operationID = "listAllTypes"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateAllTypes"
+						r.operationID = "createAllTypes"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -828,11 +527,31 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = ""
 
 					if len(elem) == 0 {
-						// Leaf: ReadAllTypes
-						r.name = "ReadAllTypes"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							// Leaf: DeleteAllTypes
+							r.name = "DeleteAllTypes"
+							r.operationID = "deleteAllTypes"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							// Leaf: ReadAllTypes
+							r.name = "ReadAllTypes"
+							r.operationID = "readAllTypes"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							// Leaf: UpdateAllTypes
+							r.name = "UpdateAllTypes"
+							r.operationID = "updateAllTypes"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 				}
 			case 'c': // Prefix: "categories"
@@ -843,10 +562,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListCategory"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListCategory"
+						r.operationID = "listCategory"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateCategory"
+						r.operationID = "createCategory"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -866,10 +597,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadCategory"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeleteCategory"
+							r.operationID = "deleteCategory"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadCategory"
+							r.operationID = "readCategory"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateCategory"
+							r.operationID = "updateCategory"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/pets"
@@ -880,11 +629,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							// Leaf: ListCategoryPets
-							r.name = "ListCategoryPets"
-							r.args = args
-							r.count = 1
-							return r, true
+							switch method {
+							case "GET":
+								// Leaf: ListCategoryPets
+								r.name = "ListCategoryPets"
+								r.operationID = "listCategoryPets"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 					}
 				}
@@ -896,10 +651,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListPet"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListPet"
+						r.operationID = "listPet"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreatePet"
+						r.operationID = "createPet"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -919,10 +686,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadPet"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeletePet"
+							r.operationID = "deletePet"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadPet"
+							r.operationID = "readPet"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdatePet"
+							r.operationID = "updatePet"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -933,10 +718,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							r.name = "ListPetFriends"
-							r.args = args
-							r.count = 1
-							return r, true
+							break
 						}
 						switch elem[0] {
 						case 'c': // Prefix: "categories"
@@ -947,11 +729,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListPetCategories
-								r.name = "ListPetCategories"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ListPetCategories
+									r.name = "ListPetCategories"
+									r.operationID = "listPetCategories"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						case 'f': // Prefix: "friends"
 							if l := len("friends"); len(elem) >= l && elem[0:l] == "friends" {
@@ -961,11 +749,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListPetFriends
-								r.name = "ListPetFriends"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ListPetFriends
+									r.name = "ListPetFriends"
+									r.operationID = "listPetFriends"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						case 'o': // Prefix: "owner"
 							if l := len("owner"); len(elem) >= l && elem[0:l] == "owner" {
@@ -975,11 +769,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadPetOwner
-								r.name = "ReadPetOwner"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ReadPetOwner
+									r.name = "ReadPetOwner"
+									r.operationID = "readPetOwner"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						}
 					}
@@ -992,10 +792,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					r.name = "ListUser"
-					r.args = args
-					r.count = 0
-					return r, true
+					switch method {
+					case "GET":
+						r.name = "ListUser"
+						r.operationID = "listUser"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateUser"
+						r.operationID = "createUser"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -1015,10 +827,28 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						r.name = "ReadUser"
-						r.args = args
-						r.count = 1
-						return r, true
+						switch method {
+						case "DELETE":
+							r.name = "DeleteUser"
+							r.operationID = "deleteUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadUser"
+							r.operationID = "readUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateUser"
+							r.operationID = "updateUser"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
 					}
 					switch elem[0] {
 					case '/': // Prefix: "/"
@@ -1029,10 +859,7 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 						}
 
 						if len(elem) == 0 {
-							r.name = "ReadUserBestFriend"
-							r.args = args
-							r.count = 1
-							return r, true
+							break
 						}
 						switch elem[0] {
 						case 'b': // Prefix: "best-friend"
@@ -1043,11 +870,17 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ReadUserBestFriend
-								r.name = "ReadUserBestFriend"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ReadUserBestFriend
+									r.name = "ReadUserBestFriend"
+									r.operationID = "readUserBestFriend"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						case 'p': // Prefix: "pets"
 							if l := len("pets"); len(elem) >= l && elem[0:l] == "pets" {
@@ -1057,188 +890,20 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
-								// Leaf: ListUserPets
-								r.name = "ListUserPets"
-								r.args = args
-								r.count = 1
-								return r, true
+								switch method {
+								case "GET":
+									// Leaf: ListUserPets
+									r.name = "ListUserPets"
+									r.operationID = "listUserPets"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 						}
 					}
-				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "UpdateCategory"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types/"
-				if l := len("all-types/"); len(elem) >= l && elem[0:l] == "all-types/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateAllTypes
-					r.name = "UpdateAllTypes"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'c': // Prefix: "categories/"
-				if l := len("categories/"); len(elem) >= l && elem[0:l] == "categories/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateCategory
-					r.name = "UpdateCategory"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'p': // Prefix: "pets/"
-				if l := len("pets/"); len(elem) >= l && elem[0:l] == "pets/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdatePet
-					r.name = "UpdatePet"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			case 'u': // Prefix: "users/"
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf: UpdateUser
-					r.name = "UpdateUser"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/"
-			if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				r.name = "CreateCategory"
-				r.args = args
-				r.count = 0
-				return r, true
-			}
-			switch elem[0] {
-			case 'a': // Prefix: "all-types"
-				if l := len("all-types"); len(elem) >= l && elem[0:l] == "all-types" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateAllTypes
-					r.name = "CreateAllTypes"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'c': // Prefix: "categories"
-				if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateCategory
-					r.name = "CreateCategory"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'p': // Prefix: "pets"
-				if l := len("pets"); len(elem) >= l && elem[0:l] == "pets" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreatePet
-					r.name = "CreatePet"
-					r.args = args
-					r.count = 0
-					return r, true
-				}
-			case 'u': // Prefix: "users"
-				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf: CreateUser
-					r.name = "CreateUser"
-					r.args = args
-					r.count = 0
-					return r, true
 				}
 			}
 		}

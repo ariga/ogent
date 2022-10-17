@@ -1,0 +1,7 @@
+issues:
+  exclude-rules:
+    # It's okay to use strings.Title.
+    - path: \.go
+      linters:
+        - staticcheck
+      text: 'SA1019: strings.Title'

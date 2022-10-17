@@ -3,95 +3,234 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
 	"time"
 
-	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
 	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 // Ref: #/components/schemas/AllTypesCreate
 type AllTypesCreate struct {
-	ID         int64               "json:\"id\""
-	Int        int                 "json:\"int\""
-	Int8       int32               "json:\"int8\""
-	Int16      int32               "json:\"int16\""
-	Int32      int32               "json:\"int32\""
-	Int64      int64               "json:\"int64\""
-	Uint       int64               "json:\"uint\""
-	Uint8      int32               "json:\"uint8\""
-	Uint16     int32               "json:\"uint16\""
-	Uint32     int64               "json:\"uint32\""
-	Uint64     int64               "json:\"uint64\""
-	Float32    float32             "json:\"float32\""
-	Float64    float64             "json:\"float64\""
-	StringType string              "json:\"string_type\""
-	Bool       bool                "json:\"bool\""
-	UUID       uuid.UUID           "json:\"uuid\""
-	Time       time.Time           "json:\"time\""
-	Text       string              "json:\"text\""
-	State      AllTypesCreateState "json:\"state\""
-	Bytes      []byte              "json:\"bytes\""
+	ID         int64               `json:"id"`
+	Int        int                 `json:"int"`
+	Int8       int32               `json:"int8"`
+	Int16      int32               `json:"int16"`
+	Int32      int32               `json:"int32"`
+	Int64      int64               `json:"int64"`
+	Uint       int64               `json:"uint"`
+	Uint8      int32               `json:"uint8"`
+	Uint16     int32               `json:"uint16"`
+	Uint32     int64               `json:"uint32"`
+	Uint64     int64               `json:"uint64"`
+	Float32    float32             `json:"float32"`
+	Float64    float64             `json:"float64"`
+	StringType string              `json:"string_type"`
+	Bool       bool                `json:"bool"`
+	UUID       uuid.UUID           `json:"uuid"`
+	Time       time.Time           `json:"time"`
+	Text       string              `json:"text"`
+	State      AllTypesCreateState `json:"state"`
+	Bytes      []byte              `json:"bytes"`
+}
+
+// GetID returns the value of ID.
+func (s AllTypesCreate) GetID() int64 {
+	return s.ID
+}
+
+// GetInt returns the value of Int.
+func (s AllTypesCreate) GetInt() int {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s AllTypesCreate) GetInt8() int32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s AllTypesCreate) GetInt16() int32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s AllTypesCreate) GetInt32() int32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s AllTypesCreate) GetInt64() int64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s AllTypesCreate) GetUint() int64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s AllTypesCreate) GetUint8() int32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s AllTypesCreate) GetUint16() int32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s AllTypesCreate) GetUint32() int64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s AllTypesCreate) GetUint64() int64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s AllTypesCreate) GetFloat32() float32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s AllTypesCreate) GetFloat64() float64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s AllTypesCreate) GetStringType() string {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s AllTypesCreate) GetBool() bool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s AllTypesCreate) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s AllTypesCreate) GetTime() time.Time {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s AllTypesCreate) GetText() string {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s AllTypesCreate) GetState() AllTypesCreateState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s AllTypesCreate) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetID sets the value of ID.
+func (s *AllTypesCreate) SetID(val int64) {
+	s.ID = val
+}
+
+// SetInt sets the value of Int.
+func (s *AllTypesCreate) SetInt(val int) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *AllTypesCreate) SetInt8(val int32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *AllTypesCreate) SetInt16(val int32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *AllTypesCreate) SetInt32(val int32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *AllTypesCreate) SetInt64(val int64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *AllTypesCreate) SetUint(val int64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *AllTypesCreate) SetUint8(val int32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *AllTypesCreate) SetUint16(val int32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *AllTypesCreate) SetUint32(val int64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *AllTypesCreate) SetUint64(val int64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *AllTypesCreate) SetFloat32(val float32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *AllTypesCreate) SetFloat64(val float64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *AllTypesCreate) SetStringType(val string) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *AllTypesCreate) SetBool(val bool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *AllTypesCreate) SetUUID(val uuid.UUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *AllTypesCreate) SetTime(val time.Time) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *AllTypesCreate) SetText(val string) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *AllTypesCreate) SetState(val AllTypesCreateState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *AllTypesCreate) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 func (*AllTypesCreate) createAllTypesRes() {}
@@ -105,26 +244,226 @@ const (
 
 // Ref: #/components/schemas/AllTypesList
 type AllTypesList struct {
-	ID         int64             "json:\"id\""
-	Int        int               "json:\"int\""
-	Int8       int32             "json:\"int8\""
-	Int16      int32             "json:\"int16\""
-	Int32      int32             "json:\"int32\""
-	Int64      int64             "json:\"int64\""
-	Uint       int64             "json:\"uint\""
-	Uint8      int32             "json:\"uint8\""
-	Uint16     int32             "json:\"uint16\""
-	Uint32     int64             "json:\"uint32\""
-	Uint64     int64             "json:\"uint64\""
-	Float32    float32           "json:\"float32\""
-	Float64    float64           "json:\"float64\""
-	StringType string            "json:\"string_type\""
-	Bool       bool              "json:\"bool\""
-	UUID       uuid.UUID         "json:\"uuid\""
-	Time       time.Time         "json:\"time\""
-	Text       string            "json:\"text\""
-	State      AllTypesListState "json:\"state\""
-	Bytes      []byte            "json:\"bytes\""
+	ID         int64             `json:"id"`
+	Int        int               `json:"int"`
+	Int8       int32             `json:"int8"`
+	Int16      int32             `json:"int16"`
+	Int32      int32             `json:"int32"`
+	Int64      int64             `json:"int64"`
+	Uint       int64             `json:"uint"`
+	Uint8      int32             `json:"uint8"`
+	Uint16     int32             `json:"uint16"`
+	Uint32     int64             `json:"uint32"`
+	Uint64     int64             `json:"uint64"`
+	Float32    float32           `json:"float32"`
+	Float64    float64           `json:"float64"`
+	StringType string            `json:"string_type"`
+	Bool       bool              `json:"bool"`
+	UUID       uuid.UUID         `json:"uuid"`
+	Time       time.Time         `json:"time"`
+	Text       string            `json:"text"`
+	State      AllTypesListState `json:"state"`
+	Bytes      []byte            `json:"bytes"`
+}
+
+// GetID returns the value of ID.
+func (s AllTypesList) GetID() int64 {
+	return s.ID
+}
+
+// GetInt returns the value of Int.
+func (s AllTypesList) GetInt() int {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s AllTypesList) GetInt8() int32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s AllTypesList) GetInt16() int32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s AllTypesList) GetInt32() int32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s AllTypesList) GetInt64() int64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s AllTypesList) GetUint() int64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s AllTypesList) GetUint8() int32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s AllTypesList) GetUint16() int32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s AllTypesList) GetUint32() int64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s AllTypesList) GetUint64() int64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s AllTypesList) GetFloat32() float32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s AllTypesList) GetFloat64() float64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s AllTypesList) GetStringType() string {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s AllTypesList) GetBool() bool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s AllTypesList) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s AllTypesList) GetTime() time.Time {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s AllTypesList) GetText() string {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s AllTypesList) GetState() AllTypesListState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s AllTypesList) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetID sets the value of ID.
+func (s *AllTypesList) SetID(val int64) {
+	s.ID = val
+}
+
+// SetInt sets the value of Int.
+func (s *AllTypesList) SetInt(val int) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *AllTypesList) SetInt8(val int32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *AllTypesList) SetInt16(val int32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *AllTypesList) SetInt32(val int32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *AllTypesList) SetInt64(val int64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *AllTypesList) SetUint(val int64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *AllTypesList) SetUint8(val int32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *AllTypesList) SetUint16(val int32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *AllTypesList) SetUint32(val int64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *AllTypesList) SetUint64(val int64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *AllTypesList) SetFloat32(val float32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *AllTypesList) SetFloat64(val float64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *AllTypesList) SetStringType(val string) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *AllTypesList) SetBool(val bool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *AllTypesList) SetUUID(val uuid.UUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *AllTypesList) SetTime(val time.Time) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *AllTypesList) SetText(val string) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *AllTypesList) SetState(val AllTypesListState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *AllTypesList) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 type AllTypesListState string
@@ -136,26 +475,226 @@ const (
 
 // Ref: #/components/schemas/AllTypesRead
 type AllTypesRead struct {
-	ID         int64             "json:\"id\""
-	Int        int               "json:\"int\""
-	Int8       int32             "json:\"int8\""
-	Int16      int32             "json:\"int16\""
-	Int32      int32             "json:\"int32\""
-	Int64      int64             "json:\"int64\""
-	Uint       int64             "json:\"uint\""
-	Uint8      int32             "json:\"uint8\""
-	Uint16     int32             "json:\"uint16\""
-	Uint32     int64             "json:\"uint32\""
-	Uint64     int64             "json:\"uint64\""
-	Float32    float32           "json:\"float32\""
-	Float64    float64           "json:\"float64\""
-	StringType string            "json:\"string_type\""
-	Bool       bool              "json:\"bool\""
-	UUID       uuid.UUID         "json:\"uuid\""
-	Time       time.Time         "json:\"time\""
-	Text       string            "json:\"text\""
-	State      AllTypesReadState "json:\"state\""
-	Bytes      []byte            "json:\"bytes\""
+	ID         int64             `json:"id"`
+	Int        int               `json:"int"`
+	Int8       int32             `json:"int8"`
+	Int16      int32             `json:"int16"`
+	Int32      int32             `json:"int32"`
+	Int64      int64             `json:"int64"`
+	Uint       int64             `json:"uint"`
+	Uint8      int32             `json:"uint8"`
+	Uint16     int32             `json:"uint16"`
+	Uint32     int64             `json:"uint32"`
+	Uint64     int64             `json:"uint64"`
+	Float32    float32           `json:"float32"`
+	Float64    float64           `json:"float64"`
+	StringType string            `json:"string_type"`
+	Bool       bool              `json:"bool"`
+	UUID       uuid.UUID         `json:"uuid"`
+	Time       time.Time         `json:"time"`
+	Text       string            `json:"text"`
+	State      AllTypesReadState `json:"state"`
+	Bytes      []byte            `json:"bytes"`
+}
+
+// GetID returns the value of ID.
+func (s AllTypesRead) GetID() int64 {
+	return s.ID
+}
+
+// GetInt returns the value of Int.
+func (s AllTypesRead) GetInt() int {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s AllTypesRead) GetInt8() int32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s AllTypesRead) GetInt16() int32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s AllTypesRead) GetInt32() int32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s AllTypesRead) GetInt64() int64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s AllTypesRead) GetUint() int64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s AllTypesRead) GetUint8() int32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s AllTypesRead) GetUint16() int32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s AllTypesRead) GetUint32() int64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s AllTypesRead) GetUint64() int64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s AllTypesRead) GetFloat32() float32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s AllTypesRead) GetFloat64() float64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s AllTypesRead) GetStringType() string {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s AllTypesRead) GetBool() bool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s AllTypesRead) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s AllTypesRead) GetTime() time.Time {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s AllTypesRead) GetText() string {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s AllTypesRead) GetState() AllTypesReadState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s AllTypesRead) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetID sets the value of ID.
+func (s *AllTypesRead) SetID(val int64) {
+	s.ID = val
+}
+
+// SetInt sets the value of Int.
+func (s *AllTypesRead) SetInt(val int) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *AllTypesRead) SetInt8(val int32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *AllTypesRead) SetInt16(val int32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *AllTypesRead) SetInt32(val int32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *AllTypesRead) SetInt64(val int64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *AllTypesRead) SetUint(val int64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *AllTypesRead) SetUint8(val int32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *AllTypesRead) SetUint16(val int32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *AllTypesRead) SetUint32(val int64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *AllTypesRead) SetUint64(val int64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *AllTypesRead) SetFloat32(val float32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *AllTypesRead) SetFloat64(val float64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *AllTypesRead) SetStringType(val string) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *AllTypesRead) SetBool(val bool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *AllTypesRead) SetUUID(val uuid.UUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *AllTypesRead) SetTime(val time.Time) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *AllTypesRead) SetText(val string) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *AllTypesRead) SetState(val AllTypesReadState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *AllTypesRead) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 func (*AllTypesRead) readAllTypesRes() {}
@@ -169,26 +708,226 @@ const (
 
 // Ref: #/components/schemas/AllTypesUpdate
 type AllTypesUpdate struct {
-	ID         int64               "json:\"id\""
-	Int        int                 "json:\"int\""
-	Int8       int32               "json:\"int8\""
-	Int16      int32               "json:\"int16\""
-	Int32      int32               "json:\"int32\""
-	Int64      int64               "json:\"int64\""
-	Uint       int64               "json:\"uint\""
-	Uint8      int32               "json:\"uint8\""
-	Uint16     int32               "json:\"uint16\""
-	Uint32     int64               "json:\"uint32\""
-	Uint64     int64               "json:\"uint64\""
-	Float32    float32             "json:\"float32\""
-	Float64    float64             "json:\"float64\""
-	StringType string              "json:\"string_type\""
-	Bool       bool                "json:\"bool\""
-	UUID       uuid.UUID           "json:\"uuid\""
-	Time       time.Time           "json:\"time\""
-	Text       string              "json:\"text\""
-	State      AllTypesUpdateState "json:\"state\""
-	Bytes      []byte              "json:\"bytes\""
+	ID         int64               `json:"id"`
+	Int        int                 `json:"int"`
+	Int8       int32               `json:"int8"`
+	Int16      int32               `json:"int16"`
+	Int32      int32               `json:"int32"`
+	Int64      int64               `json:"int64"`
+	Uint       int64               `json:"uint"`
+	Uint8      int32               `json:"uint8"`
+	Uint16     int32               `json:"uint16"`
+	Uint32     int64               `json:"uint32"`
+	Uint64     int64               `json:"uint64"`
+	Float32    float32             `json:"float32"`
+	Float64    float64             `json:"float64"`
+	StringType string              `json:"string_type"`
+	Bool       bool                `json:"bool"`
+	UUID       uuid.UUID           `json:"uuid"`
+	Time       time.Time           `json:"time"`
+	Text       string              `json:"text"`
+	State      AllTypesUpdateState `json:"state"`
+	Bytes      []byte              `json:"bytes"`
+}
+
+// GetID returns the value of ID.
+func (s AllTypesUpdate) GetID() int64 {
+	return s.ID
+}
+
+// GetInt returns the value of Int.
+func (s AllTypesUpdate) GetInt() int {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s AllTypesUpdate) GetInt8() int32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s AllTypesUpdate) GetInt16() int32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s AllTypesUpdate) GetInt32() int32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s AllTypesUpdate) GetInt64() int64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s AllTypesUpdate) GetUint() int64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s AllTypesUpdate) GetUint8() int32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s AllTypesUpdate) GetUint16() int32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s AllTypesUpdate) GetUint32() int64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s AllTypesUpdate) GetUint64() int64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s AllTypesUpdate) GetFloat32() float32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s AllTypesUpdate) GetFloat64() float64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s AllTypesUpdate) GetStringType() string {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s AllTypesUpdate) GetBool() bool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s AllTypesUpdate) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s AllTypesUpdate) GetTime() time.Time {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s AllTypesUpdate) GetText() string {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s AllTypesUpdate) GetState() AllTypesUpdateState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s AllTypesUpdate) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetID sets the value of ID.
+func (s *AllTypesUpdate) SetID(val int64) {
+	s.ID = val
+}
+
+// SetInt sets the value of Int.
+func (s *AllTypesUpdate) SetInt(val int) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *AllTypesUpdate) SetInt8(val int32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *AllTypesUpdate) SetInt16(val int32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *AllTypesUpdate) SetInt32(val int32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *AllTypesUpdate) SetInt64(val int64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *AllTypesUpdate) SetUint(val int64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *AllTypesUpdate) SetUint8(val int32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *AllTypesUpdate) SetUint16(val int32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *AllTypesUpdate) SetUint32(val int64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *AllTypesUpdate) SetUint64(val int64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *AllTypesUpdate) SetFloat32(val float32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *AllTypesUpdate) SetFloat64(val float64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *AllTypesUpdate) SetStringType(val string) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *AllTypesUpdate) SetBool(val bool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *AllTypesUpdate) SetUUID(val uuid.UUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *AllTypesUpdate) SetTime(val time.Time) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *AllTypesUpdate) SetText(val string) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *AllTypesUpdate) SetState(val AllTypesUpdateState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *AllTypesUpdate) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 func (*AllTypesUpdate) updateAllTypesRes() {}
@@ -202,68 +941,438 @@ const (
 
 // Ref: #/components/schemas/CategoryCreate
 type CategoryCreate struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s CategoryCreate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s CategoryCreate) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s CategoryCreate) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *CategoryCreate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *CategoryCreate) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *CategoryCreate) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 func (*CategoryCreate) createCategoryRes() {}
 
 // Ref: #/components/schemas/CategoryList
 type CategoryList struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s CategoryList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s CategoryList) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s CategoryList) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *CategoryList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *CategoryList) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *CategoryList) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 // Ref: #/components/schemas/Category_PetsList
 type CategoryPetsList struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s CategoryPetsList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s CategoryPetsList) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s CategoryPetsList) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s CategoryPetsList) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s CategoryPetsList) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s CategoryPetsList) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *CategoryPetsList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *CategoryPetsList) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *CategoryPetsList) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *CategoryPetsList) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *CategoryPetsList) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *CategoryPetsList) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 // Ref: #/components/schemas/CategoryRead
 type CategoryRead struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s CategoryRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s CategoryRead) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s CategoryRead) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *CategoryRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *CategoryRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *CategoryRead) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 func (*CategoryRead) readCategoryRes() {}
 
 // Ref: #/components/schemas/CategoryUpdate
 type CategoryUpdate struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s CategoryUpdate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s CategoryUpdate) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s CategoryUpdate) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *CategoryUpdate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *CategoryUpdate) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *CategoryUpdate) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 func (*CategoryUpdate) updateCategoryRes() {}
 
 type CreateAllTypesReq struct {
-	Int        int                    "json:\"int\""
-	Int8       int32                  "json:\"int8\""
-	Int16      int32                  "json:\"int16\""
-	Int32      int32                  "json:\"int32\""
-	Int64      int64                  "json:\"int64\""
-	Uint       int64                  "json:\"uint\""
-	Uint8      int32                  "json:\"uint8\""
-	Uint16     int32                  "json:\"uint16\""
-	Uint32     int64                  "json:\"uint32\""
-	Uint64     int64                  "json:\"uint64\""
-	Float32    float32                "json:\"float32\""
-	Float64    float64                "json:\"float64\""
-	StringType string                 "json:\"string_type\""
-	Bool       bool                   "json:\"bool\""
-	UUID       uuid.UUID              "json:\"uuid\""
-	Time       time.Time              "json:\"time\""
-	Text       string                 "json:\"text\""
-	State      CreateAllTypesReqState "json:\"state\""
-	Bytes      []byte                 "json:\"bytes\""
+	Int        int                    `json:"int"`
+	Int8       int32                  `json:"int8"`
+	Int16      int32                  `json:"int16"`
+	Int32      int32                  `json:"int32"`
+	Int64      int64                  `json:"int64"`
+	Uint       int64                  `json:"uint"`
+	Uint8      int32                  `json:"uint8"`
+	Uint16     int32                  `json:"uint16"`
+	Uint32     int64                  `json:"uint32"`
+	Uint64     int64                  `json:"uint64"`
+	Float32    float32                `json:"float32"`
+	Float64    float64                `json:"float64"`
+	StringType string                 `json:"string_type"`
+	Bool       bool                   `json:"bool"`
+	UUID       uuid.UUID              `json:"uuid"`
+	Time       time.Time              `json:"time"`
+	Text       string                 `json:"text"`
+	State      CreateAllTypesReqState `json:"state"`
+	Bytes      []byte                 `json:"bytes"`
+}
+
+// GetInt returns the value of Int.
+func (s CreateAllTypesReq) GetInt() int {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s CreateAllTypesReq) GetInt8() int32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s CreateAllTypesReq) GetInt16() int32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s CreateAllTypesReq) GetInt32() int32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s CreateAllTypesReq) GetInt64() int64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s CreateAllTypesReq) GetUint() int64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s CreateAllTypesReq) GetUint8() int32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s CreateAllTypesReq) GetUint16() int32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s CreateAllTypesReq) GetUint32() int64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s CreateAllTypesReq) GetUint64() int64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s CreateAllTypesReq) GetFloat32() float32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s CreateAllTypesReq) GetFloat64() float64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s CreateAllTypesReq) GetStringType() string {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s CreateAllTypesReq) GetBool() bool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s CreateAllTypesReq) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s CreateAllTypesReq) GetTime() time.Time {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s CreateAllTypesReq) GetText() string {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s CreateAllTypesReq) GetState() CreateAllTypesReqState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s CreateAllTypesReq) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetInt sets the value of Int.
+func (s *CreateAllTypesReq) SetInt(val int) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *CreateAllTypesReq) SetInt8(val int32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *CreateAllTypesReq) SetInt16(val int32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *CreateAllTypesReq) SetInt32(val int32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *CreateAllTypesReq) SetInt64(val int64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *CreateAllTypesReq) SetUint(val int64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *CreateAllTypesReq) SetUint8(val int32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *CreateAllTypesReq) SetUint16(val int32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *CreateAllTypesReq) SetUint32(val int64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *CreateAllTypesReq) SetUint64(val int64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *CreateAllTypesReq) SetFloat32(val float32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *CreateAllTypesReq) SetFloat64(val float64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *CreateAllTypesReq) SetStringType(val string) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *CreateAllTypesReq) SetBool(val bool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *CreateAllTypesReq) SetUUID(val uuid.UUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *CreateAllTypesReq) SetTime(val time.Time) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *CreateAllTypesReq) SetText(val string) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *CreateAllTypesReq) SetState(val CreateAllTypesReqState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *CreateAllTypesReq) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 type CreateAllTypesReqState string
@@ -274,30 +1383,210 @@ const (
 )
 
 type CreateCategoryReq struct {
-	Name string "json:\"name\""
-	Pets []int  "json:\"pets\""
+	Name string `json:"name"`
+	Pets []int  `json:"pets"`
+}
+
+// GetName returns the value of Name.
+func (s CreateCategoryReq) GetName() string {
+	return s.Name
+}
+
+// GetPets returns the value of Pets.
+func (s CreateCategoryReq) GetPets() []int {
+	return s.Pets
+}
+
+// SetName sets the value of Name.
+func (s *CreateCategoryReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetPets sets the value of Pets.
+func (s *CreateCategoryReq) SetPets(val []int) {
+	s.Pets = val
 }
 
 type CreatePetReq struct {
-	Name       string      "json:\"name\""
-	Weight     OptInt      "json:\"weight\""
-	Birthday   OptDateTime "json:\"birthday\""
-	TagID      []byte      "json:\"tag_id\""
-	Height     OptInt      "json:\"height\""
-	Categories []int       "json:\"categories\""
-	Owner      int         "json:\"owner\""
-	Friends    []int       "json:\"friends\""
+	Name       string      `json:"name"`
+	Weight     OptInt      `json:"weight"`
+	Birthday   OptDateTime `json:"birthday"`
+	TagID      []byte      `json:"tag_id"`
+	Height     OptInt      `json:"height"`
+	Categories []int       `json:"categories"`
+	Owner      int         `json:"owner"`
+	Friends    []int       `json:"friends"`
+}
+
+// GetName returns the value of Name.
+func (s CreatePetReq) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s CreatePetReq) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s CreatePetReq) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s CreatePetReq) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s CreatePetReq) GetHeight() OptInt {
+	return s.Height
+}
+
+// GetCategories returns the value of Categories.
+func (s CreatePetReq) GetCategories() []int {
+	return s.Categories
+}
+
+// GetOwner returns the value of Owner.
+func (s CreatePetReq) GetOwner() int {
+	return s.Owner
+}
+
+// GetFriends returns the value of Friends.
+func (s CreatePetReq) GetFriends() []int {
+	return s.Friends
+}
+
+// SetName sets the value of Name.
+func (s *CreatePetReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *CreatePetReq) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *CreatePetReq) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *CreatePetReq) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *CreatePetReq) SetHeight(val OptInt) {
+	s.Height = val
+}
+
+// SetCategories sets the value of Categories.
+func (s *CreatePetReq) SetCategories(val []int) {
+	s.Categories = val
+}
+
+// SetOwner sets the value of Owner.
+func (s *CreatePetReq) SetOwner(val int) {
+	s.Owner = val
+}
+
+// SetFriends sets the value of Friends.
+func (s *CreatePetReq) SetFriends(val []int) {
+	s.Friends = val
 }
 
 type CreateUserReq struct {
-	Name              string                            "json:\"name\""
-	Age               int64                             "json:\"age\""
-	Height            OptInt64                          "json:\"height\""
-	FavoriteCatBreed  CreateUserReqFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptCreateUserReqFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptCreateUserReqFavoriteFishBreed "json:\"favorite_fish_breed\""
-	Pets              []int                             "json:\"pets\""
-	BestFriend        OptInt                            "json:\"best_friend\""
+	Name              string                            `json:"name"`
+	Age               int64                             `json:"age"`
+	Height            OptInt64                          `json:"height"`
+	FavoriteCatBreed  CreateUserReqFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptCreateUserReqFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptCreateUserReqFavoriteFishBreed `json:"favorite_fish_breed"`
+	Pets              []int                             `json:"pets"`
+	BestFriend        OptInt                            `json:"best_friend"`
+}
+
+// GetName returns the value of Name.
+func (s CreateUserReq) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s CreateUserReq) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s CreateUserReq) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s CreateUserReq) GetFavoriteCatBreed() CreateUserReqFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s CreateUserReq) GetFavoriteDogBreed() OptCreateUserReqFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s CreateUserReq) GetFavoriteFishBreed() OptCreateUserReqFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// GetPets returns the value of Pets.
+func (s CreateUserReq) GetPets() []int {
+	return s.Pets
+}
+
+// GetBestFriend returns the value of BestFriend.
+func (s CreateUserReq) GetBestFriend() OptInt {
+	return s.BestFriend
+}
+
+// SetName sets the value of Name.
+func (s *CreateUserReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *CreateUserReq) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *CreateUserReq) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *CreateUserReq) SetFavoriteCatBreed(val CreateUserReqFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *CreateUserReq) SetFavoriteDogBreed(val OptCreateUserReqFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *CreateUserReq) SetFavoriteFishBreed(val OptCreateUserReqFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
+}
+
+// SetPets sets the value of Pets.
+func (s *CreateUserReq) SetPets(val []int) {
+	s.Pets = val
+}
+
+// SetBestFriend sets the value of BestFriend.
+func (s *CreateUserReq) SetBestFriend(val OptInt) {
+	s.BestFriend = val
 }
 
 type CreateUserReqFavoriteCatBreed string
@@ -1713,41 +3002,251 @@ func (o OptUserUpdateFavoriteFishBreed) Or(d UserUpdateFavoriteFishBreed) UserUp
 
 // Ref: #/components/schemas/Pet_CategoriesList
 type PetCategoriesList struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s PetCategoriesList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetCategoriesList) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s PetCategoriesList) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *PetCategoriesList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetCategoriesList) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *PetCategoriesList) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 // Ref: #/components/schemas/PetCreate
 type PetCreate struct {
-	ID         int                   "json:\"id\""
-	Name       string                "json:\"name\""
-	Weight     OptInt                "json:\"weight\""
-	Birthday   OptDateTime           "json:\"birthday\""
-	TagID      []byte                "json:\"tag_id\""
-	Height     OptInt                "json:\"height\""
-	Categories []PetCreateCategories "json:\"categories\""
-	Owner      PetCreateOwner        "json:\"owner\""
+	ID         int                   `json:"id"`
+	Name       string                `json:"name"`
+	Weight     OptInt                `json:"weight"`
+	Birthday   OptDateTime           `json:"birthday"`
+	TagID      []byte                `json:"tag_id"`
+	Height     OptInt                `json:"height"`
+	Categories []PetCreateCategories `json:"categories"`
+	Owner      PetCreateOwner        `json:"owner"`
+}
+
+// GetID returns the value of ID.
+func (s PetCreate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetCreate) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s PetCreate) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s PetCreate) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s PetCreate) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s PetCreate) GetHeight() OptInt {
+	return s.Height
+}
+
+// GetCategories returns the value of Categories.
+func (s PetCreate) GetCategories() []PetCreateCategories {
+	return s.Categories
+}
+
+// GetOwner returns the value of Owner.
+func (s PetCreate) GetOwner() PetCreateOwner {
+	return s.Owner
+}
+
+// SetID sets the value of ID.
+func (s *PetCreate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetCreate) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *PetCreate) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *PetCreate) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *PetCreate) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetCreate) SetHeight(val OptInt) {
+	s.Height = val
+}
+
+// SetCategories sets the value of Categories.
+func (s *PetCreate) SetCategories(val []PetCreateCategories) {
+	s.Categories = val
+}
+
+// SetOwner sets the value of Owner.
+func (s *PetCreate) SetOwner(val PetCreateOwner) {
+	s.Owner = val
 }
 
 func (*PetCreate) createPetRes() {}
 
 // Ref: #/components/schemas/PetCreate_Categories
 type PetCreateCategories struct {
-	ID       int       "json:\"id\""
-	Name     string    "json:\"name\""
-	Readonly OptString "json:\"readonly\""
+	ID       int       `json:"id"`
+	Name     string    `json:"name"`
+	Readonly OptString `json:"readonly"`
+}
+
+// GetID returns the value of ID.
+func (s PetCreateCategories) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetCreateCategories) GetName() string {
+	return s.Name
+}
+
+// GetReadonly returns the value of Readonly.
+func (s PetCreateCategories) GetReadonly() OptString {
+	return s.Readonly
+}
+
+// SetID sets the value of ID.
+func (s *PetCreateCategories) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetCreateCategories) SetName(val string) {
+	s.Name = val
+}
+
+// SetReadonly sets the value of Readonly.
+func (s *PetCreateCategories) SetReadonly(val OptString) {
+	s.Readonly = val
 }
 
 // Ref: #/components/schemas/PetCreate_Owner
 type PetCreateOwner struct {
-	ID                int                                "json:\"id\""
-	Name              string                             "json:\"name\""
-	Age               int64                              "json:\"age\""
-	Height            OptInt64                           "json:\"height\""
-	FavoriteCatBreed  PetCreateOwnerFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptPetCreateOwnerFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptPetCreateOwnerFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                                `json:"id"`
+	Name              string                             `json:"name"`
+	Age               int64                              `json:"age"`
+	Height            OptInt64                           `json:"height"`
+	FavoriteCatBreed  PetCreateOwnerFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptPetCreateOwnerFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptPetCreateOwnerFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s PetCreateOwner) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetCreateOwner) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s PetCreateOwner) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s PetCreateOwner) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s PetCreateOwner) GetFavoriteCatBreed() PetCreateOwnerFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s PetCreateOwner) GetFavoriteDogBreed() OptPetCreateOwnerFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s PetCreateOwner) GetFavoriteFishBreed() OptPetCreateOwnerFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *PetCreateOwner) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetCreateOwner) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *PetCreateOwner) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetCreateOwner) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *PetCreateOwner) SetFavoriteCatBreed(val PetCreateOwnerFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *PetCreateOwner) SetFavoriteDogBreed(val OptPetCreateOwnerFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *PetCreateOwner) SetFavoriteFishBreed(val OptPetCreateOwnerFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 type PetCreateOwnerFavoriteCatBreed string
@@ -1777,33 +3276,223 @@ const (
 
 // Ref: #/components/schemas/Pet_FriendsList
 type PetFriendsList struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s PetFriendsList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetFriendsList) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s PetFriendsList) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s PetFriendsList) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s PetFriendsList) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s PetFriendsList) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *PetFriendsList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetFriendsList) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *PetFriendsList) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *PetFriendsList) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *PetFriendsList) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetFriendsList) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 // Ref: #/components/schemas/PetList
 type PetList struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s PetList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetList) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s PetList) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s PetList) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s PetList) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s PetList) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *PetList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetList) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *PetList) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *PetList) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *PetList) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetList) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 // Ref: #/components/schemas/Pet_OwnerRead
 type PetOwnerRead struct {
-	ID                int                              "json:\"id\""
-	Name              string                           "json:\"name\""
-	Age               int64                            "json:\"age\""
-	Height            OptInt64                         "json:\"height\""
-	FavoriteCatBreed  PetOwnerReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptPetOwnerReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptPetOwnerReadFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                              `json:"id"`
+	Name              string                           `json:"name"`
+	Age               int64                            `json:"age"`
+	Height            OptInt64                         `json:"height"`
+	FavoriteCatBreed  PetOwnerReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptPetOwnerReadFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptPetOwnerReadFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s PetOwnerRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetOwnerRead) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s PetOwnerRead) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s PetOwnerRead) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s PetOwnerRead) GetFavoriteCatBreed() PetOwnerReadFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s PetOwnerRead) GetFavoriteDogBreed() OptPetOwnerReadFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s PetOwnerRead) GetFavoriteFishBreed() OptPetOwnerReadFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *PetOwnerRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetOwnerRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *PetOwnerRead) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetOwnerRead) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *PetOwnerRead) SetFavoriteCatBreed(val PetOwnerReadFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *PetOwnerRead) SetFavoriteDogBreed(val OptPetOwnerReadFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *PetOwnerRead) SetFavoriteFishBreed(val OptPetOwnerReadFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 func (*PetOwnerRead) readPetOwnerRes() {}
@@ -1835,32 +3524,182 @@ const (
 
 // Ref: #/components/schemas/PetRead
 type PetRead struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s PetRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetRead) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s PetRead) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s PetRead) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s PetRead) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s PetRead) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *PetRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *PetRead) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *PetRead) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *PetRead) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetRead) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 func (*PetRead) readPetRes() {}
 
 // Ref: #/components/schemas/PetUpdate
 type PetUpdate struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s PetUpdate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s PetUpdate) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s PetUpdate) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s PetUpdate) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s PetUpdate) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s PetUpdate) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *PetUpdate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetUpdate) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *PetUpdate) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *PetUpdate) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *PetUpdate) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetUpdate) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 func (*PetUpdate) updatePetRes() {}
 
 type R400 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s R400) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s R400) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s R400) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R400) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R400) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R400) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R400) createAllTypesRes()     {}
@@ -1891,9 +3730,39 @@ func (*R400) updatePetRes()          {}
 func (*R400) updateUserRes()         {}
 
 type R404 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s R404) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s R404) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s R404) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R404) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R404) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R404) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R404) deleteAllTypesRes()     {}
@@ -1920,9 +3789,39 @@ func (*R404) updatePetRes()          {}
 func (*R404) updateUserRes()         {}
 
 type R409 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s R409) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s R409) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s R409) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R409) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R409) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R409) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R409) createAllTypesRes()     {}
@@ -1953,9 +3852,39 @@ func (*R409) updatePetRes()          {}
 func (*R409) updateUserRes()         {}
 
 type R500 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s R500) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s R500) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s R500) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R500) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R500) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R500) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R500) createAllTypesRes()     {}
@@ -1986,25 +3915,215 @@ func (*R500) updatePetRes()          {}
 func (*R500) updateUserRes()         {}
 
 type UpdateAllTypesReq struct {
-	Int        OptInt                    "json:\"int\""
-	Int8       OptInt32                  "json:\"int8\""
-	Int16      OptInt32                  "json:\"int16\""
-	Int32      OptInt32                  "json:\"int32\""
-	Int64      OptInt64                  "json:\"int64\""
-	Uint       OptInt64                  "json:\"uint\""
-	Uint8      OptInt32                  "json:\"uint8\""
-	Uint16     OptInt32                  "json:\"uint16\""
-	Uint32     OptInt64                  "json:\"uint32\""
-	Uint64     OptInt64                  "json:\"uint64\""
-	Float32    OptFloat32                "json:\"float32\""
-	Float64    OptFloat64                "json:\"float64\""
-	StringType OptString                 "json:\"string_type\""
-	Bool       OptBool                   "json:\"bool\""
-	UUID       OptUUID                   "json:\"uuid\""
-	Time       OptDateTime               "json:\"time\""
-	Text       OptString                 "json:\"text\""
-	State      OptUpdateAllTypesReqState "json:\"state\""
-	Bytes      []byte                    "json:\"bytes\""
+	Int        OptInt                    `json:"int"`
+	Int8       OptInt32                  `json:"int8"`
+	Int16      OptInt32                  `json:"int16"`
+	Int32      OptInt32                  `json:"int32"`
+	Int64      OptInt64                  `json:"int64"`
+	Uint       OptInt64                  `json:"uint"`
+	Uint8      OptInt32                  `json:"uint8"`
+	Uint16     OptInt32                  `json:"uint16"`
+	Uint32     OptInt64                  `json:"uint32"`
+	Uint64     OptInt64                  `json:"uint64"`
+	Float32    OptFloat32                `json:"float32"`
+	Float64    OptFloat64                `json:"float64"`
+	StringType OptString                 `json:"string_type"`
+	Bool       OptBool                   `json:"bool"`
+	UUID       OptUUID                   `json:"uuid"`
+	Time       OptDateTime               `json:"time"`
+	Text       OptString                 `json:"text"`
+	State      OptUpdateAllTypesReqState `json:"state"`
+	Bytes      []byte                    `json:"bytes"`
+}
+
+// GetInt returns the value of Int.
+func (s UpdateAllTypesReq) GetInt() OptInt {
+	return s.Int
+}
+
+// GetInt8 returns the value of Int8.
+func (s UpdateAllTypesReq) GetInt8() OptInt32 {
+	return s.Int8
+}
+
+// GetInt16 returns the value of Int16.
+func (s UpdateAllTypesReq) GetInt16() OptInt32 {
+	return s.Int16
+}
+
+// GetInt32 returns the value of Int32.
+func (s UpdateAllTypesReq) GetInt32() OptInt32 {
+	return s.Int32
+}
+
+// GetInt64 returns the value of Int64.
+func (s UpdateAllTypesReq) GetInt64() OptInt64 {
+	return s.Int64
+}
+
+// GetUint returns the value of Uint.
+func (s UpdateAllTypesReq) GetUint() OptInt64 {
+	return s.Uint
+}
+
+// GetUint8 returns the value of Uint8.
+func (s UpdateAllTypesReq) GetUint8() OptInt32 {
+	return s.Uint8
+}
+
+// GetUint16 returns the value of Uint16.
+func (s UpdateAllTypesReq) GetUint16() OptInt32 {
+	return s.Uint16
+}
+
+// GetUint32 returns the value of Uint32.
+func (s UpdateAllTypesReq) GetUint32() OptInt64 {
+	return s.Uint32
+}
+
+// GetUint64 returns the value of Uint64.
+func (s UpdateAllTypesReq) GetUint64() OptInt64 {
+	return s.Uint64
+}
+
+// GetFloat32 returns the value of Float32.
+func (s UpdateAllTypesReq) GetFloat32() OptFloat32 {
+	return s.Float32
+}
+
+// GetFloat64 returns the value of Float64.
+func (s UpdateAllTypesReq) GetFloat64() OptFloat64 {
+	return s.Float64
+}
+
+// GetStringType returns the value of StringType.
+func (s UpdateAllTypesReq) GetStringType() OptString {
+	return s.StringType
+}
+
+// GetBool returns the value of Bool.
+func (s UpdateAllTypesReq) GetBool() OptBool {
+	return s.Bool
+}
+
+// GetUUID returns the value of UUID.
+func (s UpdateAllTypesReq) GetUUID() OptUUID {
+	return s.UUID
+}
+
+// GetTime returns the value of Time.
+func (s UpdateAllTypesReq) GetTime() OptDateTime {
+	return s.Time
+}
+
+// GetText returns the value of Text.
+func (s UpdateAllTypesReq) GetText() OptString {
+	return s.Text
+}
+
+// GetState returns the value of State.
+func (s UpdateAllTypesReq) GetState() OptUpdateAllTypesReqState {
+	return s.State
+}
+
+// GetBytes returns the value of Bytes.
+func (s UpdateAllTypesReq) GetBytes() []byte {
+	return s.Bytes
+}
+
+// SetInt sets the value of Int.
+func (s *UpdateAllTypesReq) SetInt(val OptInt) {
+	s.Int = val
+}
+
+// SetInt8 sets the value of Int8.
+func (s *UpdateAllTypesReq) SetInt8(val OptInt32) {
+	s.Int8 = val
+}
+
+// SetInt16 sets the value of Int16.
+func (s *UpdateAllTypesReq) SetInt16(val OptInt32) {
+	s.Int16 = val
+}
+
+// SetInt32 sets the value of Int32.
+func (s *UpdateAllTypesReq) SetInt32(val OptInt32) {
+	s.Int32 = val
+}
+
+// SetInt64 sets the value of Int64.
+func (s *UpdateAllTypesReq) SetInt64(val OptInt64) {
+	s.Int64 = val
+}
+
+// SetUint sets the value of Uint.
+func (s *UpdateAllTypesReq) SetUint(val OptInt64) {
+	s.Uint = val
+}
+
+// SetUint8 sets the value of Uint8.
+func (s *UpdateAllTypesReq) SetUint8(val OptInt32) {
+	s.Uint8 = val
+}
+
+// SetUint16 sets the value of Uint16.
+func (s *UpdateAllTypesReq) SetUint16(val OptInt32) {
+	s.Uint16 = val
+}
+
+// SetUint32 sets the value of Uint32.
+func (s *UpdateAllTypesReq) SetUint32(val OptInt64) {
+	s.Uint32 = val
+}
+
+// SetUint64 sets the value of Uint64.
+func (s *UpdateAllTypesReq) SetUint64(val OptInt64) {
+	s.Uint64 = val
+}
+
+// SetFloat32 sets the value of Float32.
+func (s *UpdateAllTypesReq) SetFloat32(val OptFloat32) {
+	s.Float32 = val
+}
+
+// SetFloat64 sets the value of Float64.
+func (s *UpdateAllTypesReq) SetFloat64(val OptFloat64) {
+	s.Float64 = val
+}
+
+// SetStringType sets the value of StringType.
+func (s *UpdateAllTypesReq) SetStringType(val OptString) {
+	s.StringType = val
+}
+
+// SetBool sets the value of Bool.
+func (s *UpdateAllTypesReq) SetBool(val OptBool) {
+	s.Bool = val
+}
+
+// SetUUID sets the value of UUID.
+func (s *UpdateAllTypesReq) SetUUID(val OptUUID) {
+	s.UUID = val
+}
+
+// SetTime sets the value of Time.
+func (s *UpdateAllTypesReq) SetTime(val OptDateTime) {
+	s.Time = val
+}
+
+// SetText sets the value of Text.
+func (s *UpdateAllTypesReq) SetText(val OptString) {
+	s.Text = val
+}
+
+// SetState sets the value of State.
+func (s *UpdateAllTypesReq) SetState(val OptUpdateAllTypesReqState) {
+	s.State = val
+}
+
+// SetBytes sets the value of Bytes.
+func (s *UpdateAllTypesReq) SetBytes(val []byte) {
+	s.Bytes = val
 }
 
 type UpdateAllTypesReqState string
@@ -2015,30 +4134,210 @@ const (
 )
 
 type UpdateCategoryReq struct {
-	Name OptString "json:\"name\""
-	Pets []int     "json:\"pets\""
+	Name OptString `json:"name"`
+	Pets []int     `json:"pets"`
+}
+
+// GetName returns the value of Name.
+func (s UpdateCategoryReq) GetName() OptString {
+	return s.Name
+}
+
+// GetPets returns the value of Pets.
+func (s UpdateCategoryReq) GetPets() []int {
+	return s.Pets
+}
+
+// SetName sets the value of Name.
+func (s *UpdateCategoryReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetPets sets the value of Pets.
+func (s *UpdateCategoryReq) SetPets(val []int) {
+	s.Pets = val
 }
 
 type UpdatePetReq struct {
-	Name       OptString   "json:\"name\""
-	Weight     OptInt      "json:\"weight\""
-	Birthday   OptDateTime "json:\"birthday\""
-	TagID      []byte      "json:\"tag_id\""
-	Height     OptInt      "json:\"height\""
-	Categories []int       "json:\"categories\""
-	Owner      OptInt      "json:\"owner\""
-	Friends    []int       "json:\"friends\""
+	Name       OptString   `json:"name"`
+	Weight     OptInt      `json:"weight"`
+	Birthday   OptDateTime `json:"birthday"`
+	TagID      []byte      `json:"tag_id"`
+	Height     OptInt      `json:"height"`
+	Categories []int       `json:"categories"`
+	Owner      OptInt      `json:"owner"`
+	Friends    []int       `json:"friends"`
+}
+
+// GetName returns the value of Name.
+func (s UpdatePetReq) GetName() OptString {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s UpdatePetReq) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s UpdatePetReq) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s UpdatePetReq) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s UpdatePetReq) GetHeight() OptInt {
+	return s.Height
+}
+
+// GetCategories returns the value of Categories.
+func (s UpdatePetReq) GetCategories() []int {
+	return s.Categories
+}
+
+// GetOwner returns the value of Owner.
+func (s UpdatePetReq) GetOwner() OptInt {
+	return s.Owner
+}
+
+// GetFriends returns the value of Friends.
+func (s UpdatePetReq) GetFriends() []int {
+	return s.Friends
+}
+
+// SetName sets the value of Name.
+func (s *UpdatePetReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *UpdatePetReq) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *UpdatePetReq) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *UpdatePetReq) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UpdatePetReq) SetHeight(val OptInt) {
+	s.Height = val
+}
+
+// SetCategories sets the value of Categories.
+func (s *UpdatePetReq) SetCategories(val []int) {
+	s.Categories = val
+}
+
+// SetOwner sets the value of Owner.
+func (s *UpdatePetReq) SetOwner(val OptInt) {
+	s.Owner = val
+}
+
+// SetFriends sets the value of Friends.
+func (s *UpdatePetReq) SetFriends(val []int) {
+	s.Friends = val
 }
 
 type UpdateUserReq struct {
-	Name              OptString                         "json:\"name\""
-	Age               OptInt64                          "json:\"age\""
-	Height            OptInt64                          "json:\"height\""
-	FavoriteCatBreed  OptUpdateUserReqFavoriteCatBreed  "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUpdateUserReqFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUpdateUserReqFavoriteFishBreed "json:\"favorite_fish_breed\""
-	Pets              []int                             "json:\"pets\""
-	BestFriend        OptInt                            "json:\"best_friend\""
+	Name              OptString                         `json:"name"`
+	Age               OptInt64                          `json:"age"`
+	Height            OptInt64                          `json:"height"`
+	FavoriteCatBreed  OptUpdateUserReqFavoriteCatBreed  `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUpdateUserReqFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUpdateUserReqFavoriteFishBreed `json:"favorite_fish_breed"`
+	Pets              []int                             `json:"pets"`
+	BestFriend        OptInt                            `json:"best_friend"`
+}
+
+// GetName returns the value of Name.
+func (s UpdateUserReq) GetName() OptString {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UpdateUserReq) GetAge() OptInt64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UpdateUserReq) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UpdateUserReq) GetFavoriteCatBreed() OptUpdateUserReqFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UpdateUserReq) GetFavoriteDogBreed() OptUpdateUserReqFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UpdateUserReq) GetFavoriteFishBreed() OptUpdateUserReqFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// GetPets returns the value of Pets.
+func (s UpdateUserReq) GetPets() []int {
+	return s.Pets
+}
+
+// GetBestFriend returns the value of BestFriend.
+func (s UpdateUserReq) GetBestFriend() OptInt {
+	return s.BestFriend
+}
+
+// SetName sets the value of Name.
+func (s *UpdateUserReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UpdateUserReq) SetAge(val OptInt64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UpdateUserReq) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UpdateUserReq) SetFavoriteCatBreed(val OptUpdateUserReqFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UpdateUserReq) SetFavoriteDogBreed(val OptUpdateUserReqFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UpdateUserReq) SetFavoriteFishBreed(val OptUpdateUserReqFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
+}
+
+// SetPets sets the value of Pets.
+func (s *UpdateUserReq) SetPets(val []int) {
+	s.Pets = val
+}
+
+// SetBestFriend sets the value of BestFriend.
+func (s *UpdateUserReq) SetBestFriend(val OptInt) {
+	s.BestFriend = val
 }
 
 type UpdateUserReqFavoriteCatBreed string
@@ -2068,13 +4367,83 @@ const (
 
 // Ref: #/components/schemas/User_BestFriendRead
 type UserBestFriendRead struct {
-	ID                int                                    "json:\"id\""
-	Name              string                                 "json:\"name\""
-	Age               int64                                  "json:\"age\""
-	Height            OptInt64                               "json:\"height\""
-	FavoriteCatBreed  UserBestFriendReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUserBestFriendReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUserBestFriendReadFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                                    `json:"id"`
+	Name              string                                 `json:"name"`
+	Age               int64                                  `json:"age"`
+	Height            OptInt64                               `json:"height"`
+	FavoriteCatBreed  UserBestFriendReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUserBestFriendReadFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUserBestFriendReadFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s UserBestFriendRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserBestFriendRead) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UserBestFriendRead) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UserBestFriendRead) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UserBestFriendRead) GetFavoriteCatBreed() UserBestFriendReadFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UserBestFriendRead) GetFavoriteDogBreed() OptUserBestFriendReadFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UserBestFriendRead) GetFavoriteFishBreed() OptUserBestFriendReadFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *UserBestFriendRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserBestFriendRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UserBestFriendRead) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserBestFriendRead) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UserBestFriendRead) SetFavoriteCatBreed(val UserBestFriendReadFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UserBestFriendRead) SetFavoriteDogBreed(val OptUserBestFriendReadFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UserBestFriendRead) SetFavoriteFishBreed(val OptUserBestFriendReadFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 func (*UserBestFriendRead) readUserBestFriendRes() {}
@@ -2106,13 +4475,83 @@ const (
 
 // Ref: #/components/schemas/UserCreate
 type UserCreate struct {
-	ID                int                            "json:\"id\""
-	Name              string                         "json:\"name\""
-	Age               int64                          "json:\"age\""
-	Height            OptInt64                       "json:\"height\""
-	FavoriteCatBreed  UserCreateFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUserCreateFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUserCreateFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                            `json:"id"`
+	Name              string                         `json:"name"`
+	Age               int64                          `json:"age"`
+	Height            OptInt64                       `json:"height"`
+	FavoriteCatBreed  UserCreateFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUserCreateFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUserCreateFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s UserCreate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserCreate) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UserCreate) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UserCreate) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UserCreate) GetFavoriteCatBreed() UserCreateFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UserCreate) GetFavoriteDogBreed() OptUserCreateFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UserCreate) GetFavoriteFishBreed() OptUserCreateFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *UserCreate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserCreate) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UserCreate) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserCreate) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UserCreate) SetFavoriteCatBreed(val UserCreateFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UserCreate) SetFavoriteDogBreed(val OptUserCreateFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UserCreate) SetFavoriteFishBreed(val OptUserCreateFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 func (*UserCreate) createUserRes() {}
@@ -2144,13 +4583,83 @@ const (
 
 // Ref: #/components/schemas/UserList
 type UserList struct {
-	ID                int                          "json:\"id\""
-	Name              string                       "json:\"name\""
-	Age               int64                        "json:\"age\""
-	Height            OptInt64                     "json:\"height\""
-	FavoriteCatBreed  UserListFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUserListFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUserListFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                          `json:"id"`
+	Name              string                       `json:"name"`
+	Age               int64                        `json:"age"`
+	Height            OptInt64                     `json:"height"`
+	FavoriteCatBreed  UserListFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUserListFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUserListFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s UserList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserList) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UserList) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UserList) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UserList) GetFavoriteCatBreed() UserListFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UserList) GetFavoriteDogBreed() OptUserListFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UserList) GetFavoriteFishBreed() OptUserListFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *UserList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserList) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UserList) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserList) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UserList) SetFavoriteCatBreed(val UserListFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UserList) SetFavoriteDogBreed(val OptUserListFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UserList) SetFavoriteFishBreed(val OptUserListFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 type UserListFavoriteCatBreed string
@@ -2180,23 +4689,153 @@ const (
 
 // Ref: #/components/schemas/User_PetsList
 type UserPetsList struct {
-	ID       int         "json:\"id\""
-	Name     string      "json:\"name\""
-	Weight   OptInt      "json:\"weight\""
-	Birthday OptDateTime "json:\"birthday\""
-	TagID    []byte      "json:\"tag_id\""
-	Height   OptInt      "json:\"height\""
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s UserPetsList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserPetsList) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s UserPetsList) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s UserPetsList) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s UserPetsList) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s UserPetsList) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *UserPetsList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserPetsList) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *UserPetsList) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *UserPetsList) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *UserPetsList) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserPetsList) SetHeight(val OptInt) {
+	s.Height = val
 }
 
 // Ref: #/components/schemas/UserRead
 type UserRead struct {
-	ID                int                          "json:\"id\""
-	Name              string                       "json:\"name\""
-	Age               int64                        "json:\"age\""
-	Height            OptInt64                     "json:\"height\""
-	FavoriteCatBreed  UserReadFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUserReadFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUserReadFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                          `json:"id"`
+	Name              string                       `json:"name"`
+	Age               int64                        `json:"age"`
+	Height            OptInt64                     `json:"height"`
+	FavoriteCatBreed  UserReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUserReadFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUserReadFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s UserRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserRead) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UserRead) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UserRead) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UserRead) GetFavoriteCatBreed() UserReadFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UserRead) GetFavoriteDogBreed() OptUserReadFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UserRead) GetFavoriteFishBreed() OptUserReadFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *UserRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UserRead) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserRead) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UserRead) SetFavoriteCatBreed(val UserReadFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UserRead) SetFavoriteDogBreed(val OptUserReadFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UserRead) SetFavoriteFishBreed(val OptUserReadFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 func (*UserRead) readUserRes() {}
@@ -2228,13 +4867,83 @@ const (
 
 // Ref: #/components/schemas/UserUpdate
 type UserUpdate struct {
-	ID                int                            "json:\"id\""
-	Name              string                         "json:\"name\""
-	Age               int64                          "json:\"age\""
-	Height            OptInt64                       "json:\"height\""
-	FavoriteCatBreed  UserUpdateFavoriteCatBreed     "json:\"favorite_cat_breed\""
-	FavoriteDogBreed  OptUserUpdateFavoriteDogBreed  "json:\"favorite_dog_breed\""
-	FavoriteFishBreed OptUserUpdateFavoriteFishBreed "json:\"favorite_fish_breed\""
+	ID                int                            `json:"id"`
+	Name              string                         `json:"name"`
+	Age               int64                          `json:"age"`
+	Height            OptInt64                       `json:"height"`
+	FavoriteCatBreed  UserUpdateFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteDogBreed  OptUserUpdateFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptUserUpdateFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s UserUpdate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s UserUpdate) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s UserUpdate) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s UserUpdate) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s UserUpdate) GetFavoriteCatBreed() UserUpdateFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s UserUpdate) GetFavoriteDogBreed() OptUserUpdateFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s UserUpdate) GetFavoriteFishBreed() OptUserUpdateFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *UserUpdate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserUpdate) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *UserUpdate) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserUpdate) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *UserUpdate) SetFavoriteCatBreed(val UserUpdateFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *UserUpdate) SetFavoriteDogBreed(val OptUserUpdateFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *UserUpdate) SetFavoriteFishBreed(val OptUserUpdateFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
 }
 
 func (*UserUpdate) updateUserRes() {}

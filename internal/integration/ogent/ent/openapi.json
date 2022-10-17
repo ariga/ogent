@@ -225,13 +225,13 @@
             "name": "id",
             "in": "path",
             "description": "ID of the AllTypes",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int64",
               "maximum": 4294967295,
               "minimum": 0
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -271,13 +271,13 @@
             "name": "id",
             "in": "path",
             "description": "ID of the AllTypes",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int64",
               "maximum": 4294967295,
               "minimum": 0
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -310,13 +310,13 @@
             "name": "id",
             "in": "path",
             "description": "ID of the AllTypes",
+            "required": true,
             "schema": {
               "type": "integer",
               "format": "int64",
               "maximum": 4294967295,
               "minimum": 0
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -568,10 +568,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Category",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -611,10 +611,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Category",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -647,10 +647,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Category",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -714,10 +714,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Category",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -911,10 +911,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -954,10 +954,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -990,10 +990,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -1080,10 +1080,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -1144,10 +1144,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",
@@ -1208,10 +1208,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Pet",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1404,10 +1404,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1447,10 +1447,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1483,10 +1483,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -1590,10 +1590,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -1635,10 +1635,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the User",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           },
           {
             "name": "page",

@@ -3,98 +3,33 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
 	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
 
-	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
+
+	ht "github.com/ogen-go/ogen/http"
+	"github.com/ogen-go/ogen/middleware"
+	"github.com/ogen-go/ogen/ogenerrors"
+	"github.com/ogen-go/ogen/otelogen"
 )
 
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
-)
-
-// bufPool is pool of bytes.Buffer for encoding and decoding.
-var bufPool = &sync.Pool{
-	New: func() interface{} {
-		return new(bytes.Buffer)
-	},
-}
-
-// getBuf returns buffer from pool.
-func getBuf() *bytes.Buffer {
-	return bufPool.Get().(*bytes.Buffer)
-}
-
-// putBuf puts buffer to pool.
-func putBuf(b *bytes.Buffer) {
-	b.Reset()
-	bufPool.Put(b)
-}
+// ErrorHandler is error handler.
+type ErrorHandler = ogenerrors.ErrorHandler
 
 type config struct {
-	TracerProvider trace.TracerProvider
-	Tracer         trace.Tracer
-	MeterProvider  metric.MeterProvider
-	Meter          metric.Meter
-	Client         ht.Client
-	NotFound       http.HandlerFunc
+	TracerProvider     trace.TracerProvider
+	Tracer             trace.Tracer
+	MeterProvider      metric.MeterProvider
+	Meter              metric.Meter
+	Client             ht.Client
+	NotFound           http.HandlerFunc
+	MethodNotAllowed   func(w http.ResponseWriter, r *http.Request, allowed string)
+	ErrorHandler       ErrorHandler
+	Prefix             string
+	Middleware         Middleware
+	MaxMultipartMemory int64
 }
 
 func newConfig(opts ...Option) config {
@@ -103,6 +38,13 @@ func newConfig(opts ...Option) config {
 		MeterProvider:  metric.NewNoopMeterProvider(),
 		Client:         http.DefaultClient,
 		NotFound:       http.NotFound,
+		MethodNotAllowed: func(w http.ResponseWriter, r *http.Request, allowed string) {
+			w.Header().Set("Allow", allowed)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		},
+		ErrorHandler:       ogenerrors.DefaultErrorHandler,
+		Middleware:         nil,
+		MaxMultipartMemory: 32 << 20, // 32 MB
 	}
 	for _, opt := range opts {
 		opt.apply(&cfg)
@@ -155,11 +97,60 @@ func WithClient(client ht.Client) Option {
 	})
 }
 
-// WithNotFound specifies http handler to use.
+// WithNotFound specifies Not Found handler to use.
 func WithNotFound(notFound http.HandlerFunc) Option {
 	return optionFunc(func(cfg *config) {
 		if notFound != nil {
 			cfg.NotFound = notFound
+		}
+	})
+}
+
+// WithMethodNotAllowed specifies Method Not Allowed handler to use.
+func WithMethodNotAllowed(methodNotAllowed func(w http.ResponseWriter, r *http.Request, allowed string)) Option {
+	return optionFunc(func(cfg *config) {
+		if methodNotAllowed != nil {
+			cfg.MethodNotAllowed = methodNotAllowed
+		}
+	})
+}
+
+// WithErrorHandler specifies error handler to use.
+func WithErrorHandler(h ErrorHandler) Option {
+	return optionFunc(func(cfg *config) {
+		if h != nil {
+			cfg.ErrorHandler = h
+		}
+	})
+}
+
+// WithPathPrefix specifies server path prefix.
+func WithPathPrefix(prefix string) Option {
+	return optionFunc(func(cfg *config) {
+		cfg.Prefix = prefix
+	})
+}
+
+// WithMiddleware specifies middlewares to use.
+func WithMiddleware(m ...Middleware) Option {
+	return optionFunc(func(cfg *config) {
+		switch len(m) {
+		case 0:
+			cfg.Middleware = nil
+		case 1:
+			cfg.Middleware = m[0]
+		default:
+			cfg.Middleware = middleware.ChainMiddlewares(m...)
+		}
+	})
+}
+
+// WithMaxMultipartMemory specifies limit of memory for storing file parts.
+// File parts which can't be stored in memory will be stored on disk in temporary files.
+func WithMaxMultipartMemory(max int64) Option {
+	return optionFunc(func(cfg *config) {
+		if max > 0 {
+			cfg.MaxMultipartMemory = max
 		}
 	})
 }
