@@ -11,10 +11,10 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.15
 	github.com/ogen-go/ogen v0.52.1
 	github.com/stoewer/go-strcase v1.2.0
-	github.com/stretchr/testify v1.8.0
-	go.opentelemetry.io/otel v1.11.0
-	go.opentelemetry.io/otel/metric v0.32.3
-	go.opentelemetry.io/otel/trace v1.11.0
+	github.com/stretchr/testify v1.8.1
+	go.opentelemetry.io/otel v1.11.2
+	go.opentelemetry.io/otel/metric v0.34.0
+	go.opentelemetry.io/otel/trace v1.11.2
 	go.uber.org/multierr v1.8.0
 )
 
@@ -29,7 +29,7 @@ require (
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect
-	github.com/google/go-cmp v0.5.8 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/hashicorp/hcl/v2 v2.13.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
