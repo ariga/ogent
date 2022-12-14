@@ -3,12 +3,12 @@ module ariga.io/ogent
 go 1.18
 
 require (
-	entgo.io/contrib v0.3.3
-	entgo.io/ent v0.11.4-0.20221001062602-1029a2d3ba2a
+	entgo.io/contrib v0.3.4
+	entgo.io/ent v0.11.5-0.20221031135557-521f9b57bc3d
 	github.com/go-faster/errors v0.6.1
 	github.com/go-faster/jx v0.40.0
 	github.com/google/uuid v1.3.0
-	github.com/mattn/go-sqlite3 v1.14.15
+	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/ogen-go/ogen v0.52.1
 	github.com/stoewer/go-strcase v1.2.0
 	github.com/stretchr/testify v1.8.1
@@ -19,7 +19,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.7.2-0.20220927111110-867ee0cca56a // indirect
+	ariga.io/atlas v0.7.3-0.20221011160332-3ca609863edd // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
