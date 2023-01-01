@@ -125,10 +125,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Todo",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -168,10 +168,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Todo",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "responses": {
@@ -204,10 +204,10 @@
             "name": "id",
             "in": "path",
             "description": "ID of the Todo",
+            "required": true,
             "schema": {
               "type": "integer"
-            },
-            "required": true
+            }
           }
         ],
         "requestBody": {
@@ -273,10 +273,10 @@
         {
           "name": "id",
           "in": "path",
+          "required": true,
           "schema": {
             "type": "integer"
-          },
-          "required": true
+          }
         }
       ]
     }

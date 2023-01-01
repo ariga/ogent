@@ -5,6 +5,6 @@ package runtime
 // The schema-stitching logic is generated in ariga.io/ogent/internal/integration/ogent/ent/runtime.go
 
 const (
-	Version = "v0.11.4-0.20221001062602-1029a2d3ba2a"           // Version of ent codegen.
-	Sum     = "h1:T28WZZUdeJb7DQVQNnZkr3pasIdDrDVC41eQIV0hvTU=" // Sum of ent codegen.
+	Version = "v0.11.5-0.20230101065352-c07eff2260ef"           // Version of ent codegen.
+	Sum     = "h1:Dqi/7NRMc4NWhzoyWfCUImBtxX7PVOoVG8ESTrztNCM=" // Sum of ent codegen.
 )

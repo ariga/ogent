@@ -22,6 +22,7 @@ type AllTypesQuery struct {
 	unique     *bool
 	order      []OrderFunc
 	fields     []string
+	inters     []Interceptor
 	predicates []predicate.AllTypes
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -34,13 +35,13 @@ func (atq *AllTypesQuery) Where(ps ...predicate.AllTypes) *AllTypesQuery {
 	return atq
 }
 
-// Limit adds a limit step to the query.
+// Limit the number of records to be returned by this query.
 func (atq *AllTypesQuery) Limit(limit int) *AllTypesQuery {
 	atq.limit = &limit
 	return atq
 }
 
-// Offset adds an offset step to the query.
+// Offset to start from.
 func (atq *AllTypesQuery) Offset(offset int) *AllTypesQuery {
 	atq.offset = &offset
 	return atq
@@ -53,7 +54,7 @@ func (atq *AllTypesQuery) Unique(unique bool) *AllTypesQuery {
 	return atq
 }
 
-// Order adds an order step to the query.
+// Order specifies how the records should be ordered.
 func (atq *AllTypesQuery) Order(o ...OrderFunc) *AllTypesQuery {
 	atq.order = append(atq.order, o...)
 	return atq
@@ -62,7 +63,7 @@ func (atq *AllTypesQuery) Order(o ...OrderFunc) *AllTypesQuery {
 // First returns the first AllTypes entity from the query.
 // Returns a *NotFoundError when no AllTypes was found.
 func (atq *AllTypesQuery) First(ctx context.Context) (*AllTypes, error) {
-	nodes, err := atq.Limit(1).All(ctx)
+	nodes, err := atq.Limit(1).All(newQueryContext(ctx, TypeAllTypes, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +86,7 @@ func (atq *AllTypesQuery) FirstX(ctx context.Context) *AllTypes {
 // Returns a *NotFoundError when no AllTypes ID was found.
 func (atq *AllTypesQuery) FirstID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = atq.Limit(1).IDs(ctx); err != nil {
+	if ids, err = atq.Limit(1).IDs(newQueryContext(ctx, TypeAllTypes, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -108,7 +109,7 @@ func (atq *AllTypesQuery) FirstIDX(ctx context.Context) uint32 {
 // Returns a *NotSingularError when more than one AllTypes entity is found.
 // Returns a *NotFoundError when no AllTypes entities are found.
 func (atq *AllTypesQuery) Only(ctx context.Context) (*AllTypes, error) {
-	nodes, err := atq.Limit(2).All(ctx)
+	nodes, err := atq.Limit(2).All(newQueryContext(ctx, TypeAllTypes, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +137,7 @@ func (atq *AllTypesQuery) OnlyX(ctx context.Context) *AllTypes {
 // Returns a *NotFoundError when no entities are found.
 func (atq *AllTypesQuery) OnlyID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = atq.Limit(2).IDs(ctx); err != nil {
+	if ids, err = atq.Limit(2).IDs(newQueryContext(ctx, TypeAllTypes, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -161,10 +162,12 @@ func (atq *AllTypesQuery) OnlyIDX(ctx context.Context) uint32 {
 
 // All executes the query and returns a list of AllTypesSlice.
 func (atq *AllTypesQuery) All(ctx context.Context) ([]*AllTypes, error) {
+	ctx = newQueryContext(ctx, TypeAllTypes, "All")
 	if err := atq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	return atq.sqlAll(ctx)
+	qr := querierAll[[]*AllTypes, *AllTypesQuery]()
+	return withInterceptors[[]*AllTypes](ctx, atq, qr, atq.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
@@ -179,6 +182,7 @@ func (atq *AllTypesQuery) AllX(ctx context.Context) []*AllTypes {
 // IDs executes the query and returns a list of AllTypes IDs.
 func (atq *AllTypesQuery) IDs(ctx context.Context) ([]uint32, error) {
 	var ids []uint32
+	ctx = newQueryContext(ctx, TypeAllTypes, "IDs")
 	if err := atq.Select(alltypes.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -196,10 +200,11 @@ func (atq *AllTypesQuery) IDsX(ctx context.Context) []uint32 {
 
 // Count returns the count of the given query.
 func (atq *AllTypesQuery) Count(ctx context.Context) (int, error) {
+	ctx = newQueryContext(ctx, TypeAllTypes, "Count")
 	if err := atq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return atq.sqlCount(ctx)
+	return withInterceptors[int](ctx, atq, querierCount[*AllTypesQuery](), atq.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
@@ -213,10 +218,15 @@ func (atq *AllTypesQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (atq *AllTypesQuery) Exist(ctx context.Context) (bool, error) {
-	if err := atq.prepareQuery(ctx); err != nil {
-		return false, err
+	ctx = newQueryContext(ctx, TypeAllTypes, "Exist")
+	switch _, err := atq.FirstID(ctx); {
+	case IsNotFound(err):
+		return false, nil
+	case err != nil:
+		return false, fmt.Errorf("ent: check existence: %w", err)
+	default:
+		return true, nil
 	}
-	return atq.sqlExist(ctx)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
@@ -239,6 +249,7 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 		limit:      atq.limit,
 		offset:     atq.offset,
 		order:      append([]OrderFunc{}, atq.order...),
+		inters:     append([]Interceptor{}, atq.inters...),
 		predicates: append([]predicate.AllTypes{}, atq.predicates...),
 		// clone intermediate query.
 		sql:    atq.sql.Clone(),
@@ -262,16 +273,11 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroupBy {
-	grbuild := &AllTypesGroupBy{config: atq.config}
-	grbuild.fields = append([]string{field}, fields...)
-	grbuild.path = func(ctx context.Context) (prev *sql.Selector, err error) {
-		if err := atq.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		return atq.sqlQuery(ctx), nil
-	}
+	atq.fields = append([]string{field}, fields...)
+	grbuild := &AllTypesGroupBy{build: atq}
+	grbuild.flds = &atq.fields
 	grbuild.label = alltypes.Label
-	grbuild.flds, grbuild.scan = &grbuild.fields, grbuild.Scan
+	grbuild.scan = grbuild.Scan
 	return grbuild
 }
 
@@ -289,13 +295,28 @@ func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroup
 //		Scan(ctx, &v)
 func (atq *AllTypesQuery) Select(fields ...string) *AllTypesSelect {
 	atq.fields = append(atq.fields, fields...)
-	selbuild := &AllTypesSelect{AllTypesQuery: atq}
-	selbuild.label = alltypes.Label
-	selbuild.flds, selbuild.scan = &atq.fields, selbuild.Scan
-	return selbuild
+	sbuild := &AllTypesSelect{AllTypesQuery: atq}
+	sbuild.label = alltypes.Label
+	sbuild.flds, sbuild.scan = &atq.fields, sbuild.Scan
+	return sbuild
+}
+
+// Aggregate returns a AllTypesSelect configured with the given aggregations.
+func (atq *AllTypesQuery) Aggregate(fns ...AggregateFunc) *AllTypesSelect {
+	return atq.Select().Aggregate(fns...)
 }
 
 func (atq *AllTypesQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range atq.inters {
+		if inter == nil {
+			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
+		}
+		if trv, ok := inter.(Traverser); ok {
+			if err := trv.Traverse(ctx, atq); err != nil {
+				return err
+			}
+		}
+	}
 	for _, f := range atq.fields {
 		if !alltypes.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
@@ -343,17 +364,6 @@ func (atq *AllTypesQuery) sqlCount(ctx context.Context) (int, error) {
 		_spec.Unique = atq.unique != nil && *atq.unique
 	}
 	return sqlgraph.CountNodes(ctx, atq.driver, _spec)
-}
-
-func (atq *AllTypesQuery) sqlExist(ctx context.Context) (bool, error) {
-	switch _, err := atq.FirstID(ctx); {
-	case IsNotFound(err):
-		return false, nil
-	case err != nil:
-		return false, fmt.Errorf("ent: check existence: %w", err)
-	default:
-		return true, nil
-	}
 }
 
 func (atq *AllTypesQuery) querySpec() *sqlgraph.QuerySpec {
@@ -438,13 +448,8 @@ func (atq *AllTypesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 
 // AllTypesGroupBy is the group-by builder for AllTypes entities.
 type AllTypesGroupBy struct {
-	config
 	selector
-	fields []string
-	fns    []AggregateFunc
-	// intermediate query (i.e. traversal path).
-	sql  *sql.Selector
-	path func(context.Context) (*sql.Selector, error)
+	build *AllTypesQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
@@ -453,74 +458,77 @@ func (atgb *AllTypesGroupBy) Aggregate(fns ...AggregateFunc) *AllTypesGroupBy {
 	return atgb
 }
 
-// Scan applies the group-by query and scans the result into the given value.
+// Scan applies the selector query and scans the result into the given value.
 func (atgb *AllTypesGroupBy) Scan(ctx context.Context, v any) error {
-	query, err := atgb.path(ctx)
-	if err != nil {
+	ctx = newQueryContext(ctx, TypeAllTypes, "GroupBy")
+	if err := atgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	atgb.sql = query
-	return atgb.sqlScan(ctx, v)
+	return scanWithInterceptors[*AllTypesQuery, *AllTypesGroupBy](ctx, atgb.build, atgb, atgb.build.inters, v)
 }
 
-func (atgb *AllTypesGroupBy) sqlScan(ctx context.Context, v any) error {
-	for _, f := range atgb.fields {
-		if !alltypes.ValidColumn(f) {
-			return &ValidationError{Name: f, err: fmt.Errorf("invalid field %q for group-by", f)}
-		}
+func (atgb *AllTypesGroupBy) sqlScan(ctx context.Context, root *AllTypesQuery, v any) error {
+	selector := root.sqlQuery(ctx).Select()
+	aggregation := make([]string, 0, len(atgb.fns))
+	for _, fn := range atgb.fns {
+		aggregation = append(aggregation, fn(selector))
 	}
-	selector := atgb.sqlQuery()
+	if len(selector.SelectedColumns()) == 0 {
+		columns := make([]string, 0, len(*atgb.flds)+len(atgb.fns))
+		for _, f := range *atgb.flds {
+			columns = append(columns, selector.C(f))
+		}
+		columns = append(columns, aggregation...)
+		selector.Select(columns...)
+	}
+	selector.GroupBy(selector.Columns(*atgb.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := atgb.driver.Query(ctx, query, args, rows); err != nil {
+	if err := atgb.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
 }
 
-func (atgb *AllTypesGroupBy) sqlQuery() *sql.Selector {
-	selector := atgb.sql.Select()
-	aggregation := make([]string, 0, len(atgb.fns))
-	for _, fn := range atgb.fns {
-		aggregation = append(aggregation, fn(selector))
-	}
-	// If no columns were selected in a custom aggregation function, the default
-	// selection is the fields used for "group-by", and the aggregation functions.
-	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(atgb.fields)+len(atgb.fns))
-		for _, f := range atgb.fields {
-			columns = append(columns, selector.C(f))
-		}
-		columns = append(columns, aggregation...)
-		selector.Select(columns...)
-	}
-	return selector.GroupBy(selector.Columns(atgb.fields...)...)
-}
-
 // AllTypesSelect is the builder for selecting fields of AllTypes entities.
 type AllTypesSelect struct {
 	*AllTypesQuery
 	selector
-	// intermediate query (i.e. traversal path).
-	sql *sql.Selector
+}
+
+// Aggregate adds the given aggregation functions to the selector query.
+func (ats *AllTypesSelect) Aggregate(fns ...AggregateFunc) *AllTypesSelect {
+	ats.fns = append(ats.fns, fns...)
+	return ats
 }
 
 // Scan applies the selector query and scans the result into the given value.
 func (ats *AllTypesSelect) Scan(ctx context.Context, v any) error {
+	ctx = newQueryContext(ctx, TypeAllTypes, "Select")
 	if err := ats.prepareQuery(ctx); err != nil {
 		return err
 	}
-	ats.sql = ats.AllTypesQuery.sqlQuery(ctx)
-	return ats.sqlScan(ctx, v)
+	return scanWithInterceptors[*AllTypesQuery, *AllTypesSelect](ctx, ats.AllTypesQuery, ats, ats.inters, v)
 }
 
-func (ats *AllTypesSelect) sqlScan(ctx context.Context, v any) error {
+func (ats *AllTypesSelect) sqlScan(ctx context.Context, root *AllTypesQuery, v any) error {
+	selector := root.sqlQuery(ctx)
+	aggregation := make([]string, 0, len(ats.fns))
+	for _, fn := range ats.fns {
+		aggregation = append(aggregation, fn(selector))
+	}
+	switch n := len(*ats.selector.flds); {
+	case n == 0 && len(aggregation) > 0:
+		selector.Select(aggregation...)
+	case n != 0 && len(aggregation) > 0:
+		selector.AppendSelect(aggregation...)
+	}
 	rows := &sql.Rows{}
-	query, args := ats.sql.Query()
+	query, args := selector.Query()
 	if err := ats.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}

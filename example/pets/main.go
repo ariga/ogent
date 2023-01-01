@@ -13,7 +13,6 @@ import (
 	"ariga.io/ogent/example/pets/ent/ogent"
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/schema"
 	"github.com/go-faster/jx"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -26,7 +25,7 @@ type handler struct {
 }
 
 // DBHealth sends a ping to the database and returns either HTTP 503 when it is not reachable or HTTP 204 when it is.
-func (h handler) DBHealth(_ context.Context) (ogent.DBHealthRes, error) {
+func (h handler) DBHealth(context.Context) (ogent.DBHealthRes, error) {
 	if err := h.db.Ping(); err != nil {
 		return &ogent.DBHealthServiceUnavailable{}, nil
 	}
@@ -34,7 +33,7 @@ func (h handler) DBHealth(_ context.Context) (ogent.DBHealthRes, error) {
 }
 
 // CreateCategory "overrides" the generated ogent generated CreateCategory method.
-func (h handler) CreateCategory(ctx context.Context, req ogent.CreateCategoryReq) (ogent.CreateCategoryRes, error) {
+func (h handler) CreateCategory(ctx context.Context, req *ogent.CreateCategoryReq) (ogent.CreateCategoryRes, error) {
 	b := h.client.Category.Create()
 	// Add the name field. Sanitize it beforehand.
 	b.SetName(strings.TrimSpace(req.Name))
@@ -81,15 +80,18 @@ func main() {
 	}
 	client := ent.NewClient(ent.Driver(drv))
 	// Run the migrations.
-	if err := client.Schema.Create(context.Background(), schema.WithAtlas(true)); err != nil {
+	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 	// Start listening.
-	srv := ogent.NewServer(handler{
+	srv, err := ogent.NewServer(handler{
 		OgentHandler: ogent.NewOgentHandler(client),
 		db:           drv.DB(),
 		client:       client,
 	})
+	if err != nil {
+		log.Fatal(err)
+	}
 	if err := http.ListenAndServe(args.Addr, srv); err != nil {
 		log.Fatal(err)
 	}

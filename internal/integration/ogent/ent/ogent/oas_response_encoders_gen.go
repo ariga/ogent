@@ -17,8 +17,8 @@ func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -29,8 +29,8 @@ func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -41,8 +41,8 @@ func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -53,8 +53,8 @@ func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -65,14 +65,15 @@ func encodeCreateAllTypesResponse(response CreateAllTypesRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *CategoryCreate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -83,8 +84,8 @@ func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -95,8 +96,8 @@ func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -107,8 +108,8 @@ func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -119,14 +120,15 @@ func encodeCreateCategoryResponse(response CreateCategoryRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *PetCreate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -137,8 +139,8 @@ func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -149,8 +151,8 @@ func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -161,8 +163,8 @@ func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -173,14 +175,15 @@ func encodeCreatePetResponse(response CreatePetRes, w http.ResponseWriter, span 
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *UserCreate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -191,8 +194,8 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -203,8 +206,8 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -215,8 +218,8 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -227,19 +230,21 @@ func encodeCreateUserResponse(response CreateUserRes, w http.ResponseWriter, spa
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *DeleteAllTypesNoContent:
 		w.WriteHeader(204)
 		span.SetStatus(codes.Ok, http.StatusText(204))
+
 		return nil
 
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -250,8 +255,8 @@ func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -262,8 +267,8 @@ func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -274,8 +279,8 @@ func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -286,19 +291,21 @@ func encodeDeleteAllTypesResponse(response DeleteAllTypesRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *DeleteCategoryNoContent:
 		w.WriteHeader(204)
 		span.SetStatus(codes.Ok, http.StatusText(204))
+
 		return nil
 
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -309,8 +316,8 @@ func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -321,8 +328,8 @@ func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -333,8 +340,8 @@ func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -345,19 +352,21 @@ func encodeDeleteCategoryResponse(response DeleteCategoryRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *DeletePetNoContent:
 		w.WriteHeader(204)
 		span.SetStatus(codes.Ok, http.StatusText(204))
+
 		return nil
 
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -368,8 +377,8 @@ func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -380,8 +389,8 @@ func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -392,8 +401,8 @@ func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -404,19 +413,21 @@ func encodeDeletePetResponse(response DeletePetRes, w http.ResponseWriter, span 
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *DeleteUserNoContent:
 		w.WriteHeader(204)
 		span.SetStatus(codes.Ok, http.StatusText(204))
+
 		return nil
 
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -427,8 +438,8 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -439,8 +450,8 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -451,8 +462,8 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -463,14 +474,15 @@ func encodeDeleteUserResponse(response DeleteUserRes, w http.ResponseWriter, spa
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListAllTypesOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -481,8 +493,8 @@ func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -493,8 +505,8 @@ func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -505,8 +517,8 @@ func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -517,8 +529,8 @@ func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -529,14 +541,15 @@ func encodeListAllTypesResponse(response ListAllTypesRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListCategoryOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -547,8 +560,8 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -559,8 +572,8 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -571,8 +584,8 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -583,8 +596,8 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -595,14 +608,15 @@ func encodeListCategoryResponse(response ListCategoryRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListCategoryPetsOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -613,8 +627,8 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -625,8 +639,8 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -637,8 +651,8 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -649,8 +663,8 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -661,14 +675,15 @@ func encodeListCategoryPetsResponse(response ListCategoryPetsRes, w http.Respons
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListPetOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -679,8 +694,8 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -691,8 +706,8 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -703,8 +718,8 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -715,8 +730,8 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -727,14 +742,15 @@ func encodeListPetResponse(response ListPetRes, w http.ResponseWriter, span trac
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListPetCategoriesOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -745,8 +761,8 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -757,8 +773,8 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -769,8 +785,8 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -781,8 +797,8 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -793,14 +809,15 @@ func encodeListPetCategoriesResponse(response ListPetCategoriesRes, w http.Respo
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListPetFriendsOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -811,8 +828,8 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -823,8 +840,8 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -835,8 +852,8 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -847,8 +864,8 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -859,14 +876,15 @@ func encodeListPetFriendsResponse(response ListPetFriendsRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListUserOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -877,8 +895,8 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -889,8 +907,8 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -901,8 +919,8 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -913,8 +931,8 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -925,14 +943,15 @@ func encodeListUserResponse(response ListUserRes, w http.ResponseWriter, span tr
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *ListUserPetsOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -943,8 +962,8 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -955,8 +974,8 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -967,8 +986,8 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -979,8 +998,8 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -991,14 +1010,15 @@ func encodeListUserPetsResponse(response ListUserPetsRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *AllTypesRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1009,8 +1029,8 @@ func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1021,8 +1041,8 @@ func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1033,8 +1053,8 @@ func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1045,8 +1065,8 @@ func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1057,14 +1077,15 @@ func encodeReadAllTypesResponse(response ReadAllTypesRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *CategoryRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1075,8 +1096,8 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1087,8 +1108,8 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1099,8 +1120,8 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1111,8 +1132,8 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1123,14 +1144,15 @@ func encodeReadCategoryResponse(response ReadCategoryRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *PetRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1141,8 +1163,8 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1153,8 +1175,8 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1165,8 +1187,8 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1177,8 +1199,8 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1189,14 +1211,15 @@ func encodeReadPetResponse(response ReadPetRes, w http.ResponseWriter, span trac
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *PetOwnerRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1207,8 +1230,8 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1219,8 +1242,8 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1231,8 +1254,8 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1243,8 +1266,8 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1255,14 +1278,15 @@ func encodeReadPetOwnerResponse(response ReadPetOwnerRes, w http.ResponseWriter,
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *UserRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1273,8 +1297,8 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1285,8 +1309,8 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1297,8 +1321,8 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1309,8 +1333,8 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1321,14 +1345,15 @@ func encodeReadUserResponse(response ReadUserRes, w http.ResponseWriter, span tr
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *UserBestFriendRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1339,8 +1364,8 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1351,8 +1376,8 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1363,8 +1388,8 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1375,8 +1400,8 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1387,14 +1412,15 @@ func encodeReadUserBestFriendResponse(response ReadUserBestFriendRes, w http.Res
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *AllTypesUpdate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1405,8 +1431,8 @@ func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1417,8 +1443,8 @@ func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1429,8 +1455,8 @@ func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1441,8 +1467,8 @@ func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1453,14 +1479,15 @@ func encodeUpdateAllTypesResponse(response UpdateAllTypesRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *CategoryUpdate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1471,8 +1498,8 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1483,8 +1510,8 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1495,8 +1522,8 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1507,8 +1534,8 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1519,14 +1546,15 @@ func encodeUpdateCategoryResponse(response UpdateCategoryRes, w http.ResponseWri
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *PetUpdate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1537,8 +1565,8 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1549,8 +1577,8 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1561,8 +1589,8 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1573,8 +1601,8 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1585,14 +1613,15 @@ func encodeUpdatePetResponse(response UpdatePetRes, w http.ResponseWriter, span 
 		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
+
 func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *UserUpdate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1603,8 +1632,8 @@ func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
 		span.SetStatus(codes.Error, http.StatusText(400))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1615,8 +1644,8 @@ func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
 		span.SetStatus(codes.Error, http.StatusText(404))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1627,8 +1656,8 @@ func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
@@ -1639,8 +1668,8 @@ func encodeUpdateUserResponse(response UpdateUserRes, w http.ResponseWriter, spa
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
 		span.SetStatus(codes.Error, http.StatusText(500))
-		e := jx.GetEncoder()
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")

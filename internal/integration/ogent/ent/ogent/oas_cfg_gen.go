@@ -7,6 +7,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/metric/instrument/syncint64"
 	"go.opentelemetry.io/otel/trace"
 
 	ht "github.com/ogen-go/ogen/http"
@@ -15,15 +16,43 @@ import (
 	"github.com/ogen-go/ogen/otelogen"
 )
 
+var (
+	// Allocate option closure once.
+	clientSpanKind = trace.WithSpanKind(trace.SpanKindClient)
+	// Allocate option closure once.
+	serverSpanKind = trace.WithSpanKind(trace.SpanKindServer)
+)
+
+type (
+	optionFunc[C any] func(*C)
+	otelOptionFunc    func(*otelConfig)
+)
+
+type otelConfig struct {
+	TracerProvider trace.TracerProvider
+	Tracer         trace.Tracer
+	MeterProvider  metric.MeterProvider
+	Meter          metric.Meter
+}
+
+func (cfg *otelConfig) initOTEL() {
+	if cfg.TracerProvider == nil {
+		cfg.TracerProvider = otel.GetTracerProvider()
+	}
+	if cfg.MeterProvider == nil {
+		cfg.MeterProvider = metric.NewNoopMeterProvider()
+	}
+	cfg.Tracer = cfg.TracerProvider.Tracer(otelogen.Name,
+		trace.WithInstrumentationVersion(otelogen.SemVersion()),
+	)
+	cfg.Meter = cfg.MeterProvider.Meter(otelogen.Name)
+}
+
 // ErrorHandler is error handler.
 type ErrorHandler = ogenerrors.ErrorHandler
 
-type config struct {
-	TracerProvider     trace.TracerProvider
-	Tracer             trace.Tracer
-	MeterProvider      metric.MeterProvider
-	Meter              metric.Meter
-	Client             ht.Client
+type serverConfig struct {
+	otelConfig
 	NotFound           http.HandlerFunc
 	MethodNotAllowed   func(w http.ResponseWriter, r *http.Request, allowed string)
 	ErrorHandler       ErrorHandler
@@ -32,12 +61,27 @@ type config struct {
 	MaxMultipartMemory int64
 }
 
-func newConfig(opts ...Option) config {
-	cfg := config{
-		TracerProvider: otel.GetTracerProvider(),
-		MeterProvider:  metric.NewNoopMeterProvider(),
-		Client:         http.DefaultClient,
-		NotFound:       http.NotFound,
+// ServerOption is server config option.
+type ServerOption interface {
+	applyServer(*serverConfig)
+}
+
+var _ = []ServerOption{
+	(optionFunc[serverConfig])(nil),
+	(otelOptionFunc)(nil),
+}
+
+func (o optionFunc[C]) applyServer(c *C) {
+	o(c)
+}
+
+func (o otelOptionFunc) applyServer(c *serverConfig) {
+	o(&c.otelConfig)
+}
+
+func newServerConfig(opts ...ServerOption) serverConfig {
+	cfg := serverConfig{
+		NotFound: http.NotFound,
 		MethodNotAllowed: func(w http.ResponseWriter, r *http.Request, allowed string) {
 			w.Header().Set("Allow", allowed)
 			w.WriteHeader(http.StatusMethodNotAllowed)
@@ -47,30 +91,107 @@ func newConfig(opts ...Option) config {
 		MaxMultipartMemory: 32 << 20, // 32 MB
 	}
 	for _, opt := range opts {
-		opt.apply(&cfg)
+		opt.applyServer(&cfg)
 	}
-	cfg.Tracer = cfg.TracerProvider.Tracer(otelogen.Name,
-		trace.WithInstrumentationVersion(otelogen.SemVersion()),
-	)
-	cfg.Meter = cfg.MeterProvider.Meter(otelogen.Name)
+	cfg.initOTEL()
 	return cfg
 }
 
-type Option interface {
-	apply(*config)
+type baseServer struct {
+	cfg      serverConfig
+	requests syncint64.Counter
+	errors   syncint64.Counter
+	duration syncint64.Histogram
 }
 
-type optionFunc func(*config)
+func (s baseServer) notFound(w http.ResponseWriter, r *http.Request) {
+	s.cfg.NotFound(w, r)
+}
 
-func (o optionFunc) apply(c *config) {
+func (s baseServer) notAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
+	s.cfg.MethodNotAllowed(w, r, allowed)
+}
+
+func (cfg serverConfig) baseServer() (s baseServer, err error) {
+	s = baseServer{cfg: cfg}
+	if s.requests, err = s.cfg.Meter.SyncInt64().Counter(otelogen.ServerRequestCount); err != nil {
+		return s, err
+	}
+	if s.errors, err = s.cfg.Meter.SyncInt64().Counter(otelogen.ServerErrorsCount); err != nil {
+		return s, err
+	}
+	if s.duration, err = s.cfg.Meter.SyncInt64().Histogram(otelogen.ServerDuration); err != nil {
+		return s, err
+	}
+	return s, nil
+}
+
+type clientConfig struct {
+	otelConfig
+	Client ht.Client
+}
+
+// ClientOption is client config option.
+type ClientOption interface {
+	applyClient(*clientConfig)
+}
+
+var _ = []ClientOption{
+	(optionFunc[clientConfig])(nil),
+	(otelOptionFunc)(nil),
+}
+
+func (o optionFunc[C]) applyClient(c *C) {
 	o(c)
+}
+
+func (o otelOptionFunc) applyClient(c *clientConfig) {
+	o(&c.otelConfig)
+}
+
+func newClientConfig(opts ...ClientOption) clientConfig {
+	cfg := clientConfig{
+		Client: http.DefaultClient,
+	}
+	for _, opt := range opts {
+		opt.applyClient(&cfg)
+	}
+	cfg.initOTEL()
+	return cfg
+}
+
+type baseClient struct {
+	cfg      clientConfig
+	requests syncint64.Counter
+	errors   syncint64.Counter
+	duration syncint64.Histogram
+}
+
+func (cfg clientConfig) baseClient() (c baseClient, err error) {
+	c = baseClient{cfg: cfg}
+	if c.requests, err = c.cfg.Meter.SyncInt64().Counter(otelogen.ClientRequestCount); err != nil {
+		return c, err
+	}
+	if c.errors, err = c.cfg.Meter.SyncInt64().Counter(otelogen.ClientErrorsCount); err != nil {
+		return c, err
+	}
+	if c.duration, err = c.cfg.Meter.SyncInt64().Histogram(otelogen.ClientDuration); err != nil {
+		return c, err
+	}
+	return c, nil
+}
+
+// Option is config option.
+type Option interface {
+	ServerOption
+	ClientOption
 }
 
 // WithTracerProvider specifies a tracer provider to use for creating a tracer.
 //
 // If none is specified, the global provider is used.
 func WithTracerProvider(provider trace.TracerProvider) Option {
-	return optionFunc(func(cfg *config) {
+	return otelOptionFunc(func(cfg *otelConfig) {
 		if provider != nil {
 			cfg.TracerProvider = provider
 		}
@@ -81,7 +202,7 @@ func WithTracerProvider(provider trace.TracerProvider) Option {
 //
 // If none is specified, the metric.NewNoopMeterProvider is used.
 func WithMeterProvider(provider metric.MeterProvider) Option {
-	return optionFunc(func(cfg *config) {
+	return otelOptionFunc(func(cfg *otelConfig) {
 		if provider != nil {
 			cfg.MeterProvider = provider
 		}
@@ -89,8 +210,8 @@ func WithMeterProvider(provider metric.MeterProvider) Option {
 }
 
 // WithClient specifies http client to use.
-func WithClient(client ht.Client) Option {
-	return optionFunc(func(cfg *config) {
+func WithClient(client ht.Client) ClientOption {
+	return optionFunc[clientConfig](func(cfg *clientConfig) {
 		if client != nil {
 			cfg.Client = client
 		}
@@ -98,8 +219,8 @@ func WithClient(client ht.Client) Option {
 }
 
 // WithNotFound specifies Not Found handler to use.
-func WithNotFound(notFound http.HandlerFunc) Option {
-	return optionFunc(func(cfg *config) {
+func WithNotFound(notFound http.HandlerFunc) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		if notFound != nil {
 			cfg.NotFound = notFound
 		}
@@ -107,8 +228,8 @@ func WithNotFound(notFound http.HandlerFunc) Option {
 }
 
 // WithMethodNotAllowed specifies Method Not Allowed handler to use.
-func WithMethodNotAllowed(methodNotAllowed func(w http.ResponseWriter, r *http.Request, allowed string)) Option {
-	return optionFunc(func(cfg *config) {
+func WithMethodNotAllowed(methodNotAllowed func(w http.ResponseWriter, r *http.Request, allowed string)) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		if methodNotAllowed != nil {
 			cfg.MethodNotAllowed = methodNotAllowed
 		}
@@ -116,8 +237,8 @@ func WithMethodNotAllowed(methodNotAllowed func(w http.ResponseWriter, r *http.R
 }
 
 // WithErrorHandler specifies error handler to use.
-func WithErrorHandler(h ErrorHandler) Option {
-	return optionFunc(func(cfg *config) {
+func WithErrorHandler(h ErrorHandler) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		if h != nil {
 			cfg.ErrorHandler = h
 		}
@@ -125,15 +246,15 @@ func WithErrorHandler(h ErrorHandler) Option {
 }
 
 // WithPathPrefix specifies server path prefix.
-func WithPathPrefix(prefix string) Option {
-	return optionFunc(func(cfg *config) {
+func WithPathPrefix(prefix string) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		cfg.Prefix = prefix
 	})
 }
 
 // WithMiddleware specifies middlewares to use.
-func WithMiddleware(m ...Middleware) Option {
-	return optionFunc(func(cfg *config) {
+func WithMiddleware(m ...Middleware) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		switch len(m) {
 		case 0:
 			cfg.Middleware = nil
@@ -147,8 +268,8 @@ func WithMiddleware(m ...Middleware) Option {
 
 // WithMaxMultipartMemory specifies limit of memory for storing file parts.
 // File parts which can't be stored in memory will be stored on disk in temporary files.
-func WithMaxMultipartMemory(max int64) Option {
-	return optionFunc(func(cfg *config) {
+func WithMaxMultipartMemory(max int64) ServerOption {
+	return optionFunc[serverConfig](func(cfg *serverConfig) {
 		if max > 0 {
 			cfg.MaxMultipartMemory = max
 		}

@@ -3,71 +3,12 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
 	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 func encodeCreateTodoResponse(response CreateTodoRes, w http.ResponseWriter, span trace.Span) error {
@@ -75,53 +16,53 @@ func encodeCreateTodoResponse(response CreateTodoRes, w http.ResponseWriter, spa
 	case *TodoCreate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Ok, http.StatusText(200))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(400))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(409))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R500:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(500))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	default:
-		return errors.Errorf("/todos"+`: unexpected response type: %T`, response)
+		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
 
@@ -129,57 +70,60 @@ func encodeDeleteTodoResponse(response DeleteTodoRes, w http.ResponseWriter, spa
 	switch response := response.(type) {
 	case *DeleteTodoNoContent:
 		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
+
 		return nil
+
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(400))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R404:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(404))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(409))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R500:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(500))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	default:
-		return errors.Errorf("/todos/{id}"+`: unexpected response type: %T`, response)
+		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
 
@@ -188,70 +132,72 @@ func encodeListTodoResponse(response ListTodoRes, w http.ResponseWriter, span tr
 	case *ListTodoOKApplicationJSON:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Ok, http.StatusText(200))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(400))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R404:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(404))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(409))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R500:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(500))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	default:
-		return errors.Errorf("/todos"+`: unexpected response type: %T`, response)
+		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
 
-func encodeMarkDoneResponse(response MarkDoneNoContent, w http.ResponseWriter, span trace.Span) error {
+func encodeMarkDoneResponse(response *MarkDoneNoContent, w http.ResponseWriter, span trace.Span) error {
 	w.WriteHeader(204)
+	span.SetStatus(codes.Ok, http.StatusText(204))
+
 	return nil
 }
 
@@ -260,65 +206,65 @@ func encodeReadTodoResponse(response ReadTodoRes, w http.ResponseWriter, span tr
 	case *TodoRead:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Ok, http.StatusText(200))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(400))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R404:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(404))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(409))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R500:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(500))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	default:
-		return errors.Errorf("/todos/{id}"+`: unexpected response type: %T`, response)
+		return errors.Errorf("unexpected response type: %T", response)
 	}
 }
 
@@ -327,64 +273,64 @@ func encodeUpdateTodoResponse(response UpdateTodoRes, w http.ResponseWriter, spa
 	case *TodoUpdate:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Ok, http.StatusText(200))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R400:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(400)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(400))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R404:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(404)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(404))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R409:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(409)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(409))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	case *R500:
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500)
-		e := jx.GetWriter()
-		defer jx.PutWriter(e)
+		span.SetStatus(codes.Error, http.StatusText(500))
 
+		e := jx.GetEncoder()
 		response.Encode(e)
 		if _, err := e.WriteTo(w); err != nil {
 			return errors.Wrap(err, "write")
 		}
-
 		return nil
+
 	default:
-		return errors.Errorf("/todos/{id}"+`: unexpected response type: %T`, response)
+		return errors.Errorf("unexpected response type: %T", response)
 	}
 }

@@ -5,6 +5,7 @@ package ogent
 import (
 	"time"
 
+	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
 	"github.com/google/uuid"
 )
@@ -34,102 +35,102 @@ type AllTypesCreate struct {
 }
 
 // GetID returns the value of ID.
-func (s AllTypesCreate) GetID() int64 {
+func (s *AllTypesCreate) GetID() int64 {
 	return s.ID
 }
 
 // GetInt returns the value of Int.
-func (s AllTypesCreate) GetInt() int {
+func (s *AllTypesCreate) GetInt() int {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s AllTypesCreate) GetInt8() int32 {
+func (s *AllTypesCreate) GetInt8() int32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s AllTypesCreate) GetInt16() int32 {
+func (s *AllTypesCreate) GetInt16() int32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s AllTypesCreate) GetInt32() int32 {
+func (s *AllTypesCreate) GetInt32() int32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s AllTypesCreate) GetInt64() int64 {
+func (s *AllTypesCreate) GetInt64() int64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s AllTypesCreate) GetUint() int64 {
+func (s *AllTypesCreate) GetUint() int64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s AllTypesCreate) GetUint8() int32 {
+func (s *AllTypesCreate) GetUint8() int32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s AllTypesCreate) GetUint16() int32 {
+func (s *AllTypesCreate) GetUint16() int32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s AllTypesCreate) GetUint32() int64 {
+func (s *AllTypesCreate) GetUint32() int64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s AllTypesCreate) GetUint64() int64 {
+func (s *AllTypesCreate) GetUint64() int64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s AllTypesCreate) GetFloat32() float32 {
+func (s *AllTypesCreate) GetFloat32() float32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s AllTypesCreate) GetFloat64() float64 {
+func (s *AllTypesCreate) GetFloat64() float64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s AllTypesCreate) GetStringType() string {
+func (s *AllTypesCreate) GetStringType() string {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s AllTypesCreate) GetBool() bool {
+func (s *AllTypesCreate) GetBool() bool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s AllTypesCreate) GetUUID() uuid.UUID {
+func (s *AllTypesCreate) GetUUID() uuid.UUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s AllTypesCreate) GetTime() time.Time {
+func (s *AllTypesCreate) GetTime() time.Time {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s AllTypesCreate) GetText() string {
+func (s *AllTypesCreate) GetText() string {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s AllTypesCreate) GetState() AllTypesCreateState {
+func (s *AllTypesCreate) GetState() AllTypesCreateState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s AllTypesCreate) GetBytes() []byte {
+func (s *AllTypesCreate) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -242,6 +243,32 @@ const (
 	AllTypesCreateStateOff AllTypesCreateState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s AllTypesCreateState) MarshalText() ([]byte, error) {
+	switch s {
+	case AllTypesCreateStateOn:
+		return []byte(s), nil
+	case AllTypesCreateStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AllTypesCreateState) UnmarshalText(data []byte) error {
+	switch AllTypesCreateState(data) {
+	case AllTypesCreateStateOn:
+		*s = AllTypesCreateStateOn
+		return nil
+	case AllTypesCreateStateOff:
+		*s = AllTypesCreateStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/AllTypesList
 type AllTypesList struct {
 	ID         int64             `json:"id"`
@@ -267,102 +294,102 @@ type AllTypesList struct {
 }
 
 // GetID returns the value of ID.
-func (s AllTypesList) GetID() int64 {
+func (s *AllTypesList) GetID() int64 {
 	return s.ID
 }
 
 // GetInt returns the value of Int.
-func (s AllTypesList) GetInt() int {
+func (s *AllTypesList) GetInt() int {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s AllTypesList) GetInt8() int32 {
+func (s *AllTypesList) GetInt8() int32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s AllTypesList) GetInt16() int32 {
+func (s *AllTypesList) GetInt16() int32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s AllTypesList) GetInt32() int32 {
+func (s *AllTypesList) GetInt32() int32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s AllTypesList) GetInt64() int64 {
+func (s *AllTypesList) GetInt64() int64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s AllTypesList) GetUint() int64 {
+func (s *AllTypesList) GetUint() int64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s AllTypesList) GetUint8() int32 {
+func (s *AllTypesList) GetUint8() int32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s AllTypesList) GetUint16() int32 {
+func (s *AllTypesList) GetUint16() int32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s AllTypesList) GetUint32() int64 {
+func (s *AllTypesList) GetUint32() int64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s AllTypesList) GetUint64() int64 {
+func (s *AllTypesList) GetUint64() int64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s AllTypesList) GetFloat32() float32 {
+func (s *AllTypesList) GetFloat32() float32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s AllTypesList) GetFloat64() float64 {
+func (s *AllTypesList) GetFloat64() float64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s AllTypesList) GetStringType() string {
+func (s *AllTypesList) GetStringType() string {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s AllTypesList) GetBool() bool {
+func (s *AllTypesList) GetBool() bool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s AllTypesList) GetUUID() uuid.UUID {
+func (s *AllTypesList) GetUUID() uuid.UUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s AllTypesList) GetTime() time.Time {
+func (s *AllTypesList) GetTime() time.Time {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s AllTypesList) GetText() string {
+func (s *AllTypesList) GetText() string {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s AllTypesList) GetState() AllTypesListState {
+func (s *AllTypesList) GetState() AllTypesListState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s AllTypesList) GetBytes() []byte {
+func (s *AllTypesList) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -473,6 +500,32 @@ const (
 	AllTypesListStateOff AllTypesListState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s AllTypesListState) MarshalText() ([]byte, error) {
+	switch s {
+	case AllTypesListStateOn:
+		return []byte(s), nil
+	case AllTypesListStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AllTypesListState) UnmarshalText(data []byte) error {
+	switch AllTypesListState(data) {
+	case AllTypesListStateOn:
+		*s = AllTypesListStateOn
+		return nil
+	case AllTypesListStateOff:
+		*s = AllTypesListStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/AllTypesRead
 type AllTypesRead struct {
 	ID         int64             `json:"id"`
@@ -498,102 +551,102 @@ type AllTypesRead struct {
 }
 
 // GetID returns the value of ID.
-func (s AllTypesRead) GetID() int64 {
+func (s *AllTypesRead) GetID() int64 {
 	return s.ID
 }
 
 // GetInt returns the value of Int.
-func (s AllTypesRead) GetInt() int {
+func (s *AllTypesRead) GetInt() int {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s AllTypesRead) GetInt8() int32 {
+func (s *AllTypesRead) GetInt8() int32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s AllTypesRead) GetInt16() int32 {
+func (s *AllTypesRead) GetInt16() int32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s AllTypesRead) GetInt32() int32 {
+func (s *AllTypesRead) GetInt32() int32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s AllTypesRead) GetInt64() int64 {
+func (s *AllTypesRead) GetInt64() int64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s AllTypesRead) GetUint() int64 {
+func (s *AllTypesRead) GetUint() int64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s AllTypesRead) GetUint8() int32 {
+func (s *AllTypesRead) GetUint8() int32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s AllTypesRead) GetUint16() int32 {
+func (s *AllTypesRead) GetUint16() int32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s AllTypesRead) GetUint32() int64 {
+func (s *AllTypesRead) GetUint32() int64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s AllTypesRead) GetUint64() int64 {
+func (s *AllTypesRead) GetUint64() int64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s AllTypesRead) GetFloat32() float32 {
+func (s *AllTypesRead) GetFloat32() float32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s AllTypesRead) GetFloat64() float64 {
+func (s *AllTypesRead) GetFloat64() float64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s AllTypesRead) GetStringType() string {
+func (s *AllTypesRead) GetStringType() string {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s AllTypesRead) GetBool() bool {
+func (s *AllTypesRead) GetBool() bool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s AllTypesRead) GetUUID() uuid.UUID {
+func (s *AllTypesRead) GetUUID() uuid.UUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s AllTypesRead) GetTime() time.Time {
+func (s *AllTypesRead) GetTime() time.Time {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s AllTypesRead) GetText() string {
+func (s *AllTypesRead) GetText() string {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s AllTypesRead) GetState() AllTypesReadState {
+func (s *AllTypesRead) GetState() AllTypesReadState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s AllTypesRead) GetBytes() []byte {
+func (s *AllTypesRead) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -706,6 +759,32 @@ const (
 	AllTypesReadStateOff AllTypesReadState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s AllTypesReadState) MarshalText() ([]byte, error) {
+	switch s {
+	case AllTypesReadStateOn:
+		return []byte(s), nil
+	case AllTypesReadStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AllTypesReadState) UnmarshalText(data []byte) error {
+	switch AllTypesReadState(data) {
+	case AllTypesReadStateOn:
+		*s = AllTypesReadStateOn
+		return nil
+	case AllTypesReadStateOff:
+		*s = AllTypesReadStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/AllTypesUpdate
 type AllTypesUpdate struct {
 	ID         int64               `json:"id"`
@@ -731,102 +810,102 @@ type AllTypesUpdate struct {
 }
 
 // GetID returns the value of ID.
-func (s AllTypesUpdate) GetID() int64 {
+func (s *AllTypesUpdate) GetID() int64 {
 	return s.ID
 }
 
 // GetInt returns the value of Int.
-func (s AllTypesUpdate) GetInt() int {
+func (s *AllTypesUpdate) GetInt() int {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s AllTypesUpdate) GetInt8() int32 {
+func (s *AllTypesUpdate) GetInt8() int32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s AllTypesUpdate) GetInt16() int32 {
+func (s *AllTypesUpdate) GetInt16() int32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s AllTypesUpdate) GetInt32() int32 {
+func (s *AllTypesUpdate) GetInt32() int32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s AllTypesUpdate) GetInt64() int64 {
+func (s *AllTypesUpdate) GetInt64() int64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s AllTypesUpdate) GetUint() int64 {
+func (s *AllTypesUpdate) GetUint() int64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s AllTypesUpdate) GetUint8() int32 {
+func (s *AllTypesUpdate) GetUint8() int32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s AllTypesUpdate) GetUint16() int32 {
+func (s *AllTypesUpdate) GetUint16() int32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s AllTypesUpdate) GetUint32() int64 {
+func (s *AllTypesUpdate) GetUint32() int64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s AllTypesUpdate) GetUint64() int64 {
+func (s *AllTypesUpdate) GetUint64() int64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s AllTypesUpdate) GetFloat32() float32 {
+func (s *AllTypesUpdate) GetFloat32() float32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s AllTypesUpdate) GetFloat64() float64 {
+func (s *AllTypesUpdate) GetFloat64() float64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s AllTypesUpdate) GetStringType() string {
+func (s *AllTypesUpdate) GetStringType() string {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s AllTypesUpdate) GetBool() bool {
+func (s *AllTypesUpdate) GetBool() bool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s AllTypesUpdate) GetUUID() uuid.UUID {
+func (s *AllTypesUpdate) GetUUID() uuid.UUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s AllTypesUpdate) GetTime() time.Time {
+func (s *AllTypesUpdate) GetTime() time.Time {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s AllTypesUpdate) GetText() string {
+func (s *AllTypesUpdate) GetText() string {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s AllTypesUpdate) GetState() AllTypesUpdateState {
+func (s *AllTypesUpdate) GetState() AllTypesUpdateState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s AllTypesUpdate) GetBytes() []byte {
+func (s *AllTypesUpdate) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -939,6 +1018,32 @@ const (
 	AllTypesUpdateStateOff AllTypesUpdateState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s AllTypesUpdateState) MarshalText() ([]byte, error) {
+	switch s {
+	case AllTypesUpdateStateOn:
+		return []byte(s), nil
+	case AllTypesUpdateStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AllTypesUpdateState) UnmarshalText(data []byte) error {
+	switch AllTypesUpdateState(data) {
+	case AllTypesUpdateStateOn:
+		*s = AllTypesUpdateStateOn
+		return nil
+	case AllTypesUpdateStateOff:
+		*s = AllTypesUpdateStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/CategoryCreate
 type CategoryCreate struct {
 	ID       int       `json:"id"`
@@ -947,17 +1052,17 @@ type CategoryCreate struct {
 }
 
 // GetID returns the value of ID.
-func (s CategoryCreate) GetID() int {
+func (s *CategoryCreate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s CategoryCreate) GetName() string {
+func (s *CategoryCreate) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s CategoryCreate) GetReadonly() OptString {
+func (s *CategoryCreate) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -986,17 +1091,17 @@ type CategoryList struct {
 }
 
 // GetID returns the value of ID.
-func (s CategoryList) GetID() int {
+func (s *CategoryList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s CategoryList) GetName() string {
+func (s *CategoryList) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s CategoryList) GetReadonly() OptString {
+func (s *CategoryList) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -1026,32 +1131,32 @@ type CategoryPetsList struct {
 }
 
 // GetID returns the value of ID.
-func (s CategoryPetsList) GetID() int {
+func (s *CategoryPetsList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s CategoryPetsList) GetName() string {
+func (s *CategoryPetsList) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s CategoryPetsList) GetWeight() OptInt {
+func (s *CategoryPetsList) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s CategoryPetsList) GetBirthday() OptDateTime {
+func (s *CategoryPetsList) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s CategoryPetsList) GetTagID() []byte {
+func (s *CategoryPetsList) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s CategoryPetsList) GetHeight() OptInt {
+func (s *CategoryPetsList) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -1093,17 +1198,17 @@ type CategoryRead struct {
 }
 
 // GetID returns the value of ID.
-func (s CategoryRead) GetID() int {
+func (s *CategoryRead) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s CategoryRead) GetName() string {
+func (s *CategoryRead) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s CategoryRead) GetReadonly() OptString {
+func (s *CategoryRead) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -1132,17 +1237,17 @@ type CategoryUpdate struct {
 }
 
 // GetID returns the value of ID.
-func (s CategoryUpdate) GetID() int {
+func (s *CategoryUpdate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s CategoryUpdate) GetName() string {
+func (s *CategoryUpdate) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s CategoryUpdate) GetReadonly() OptString {
+func (s *CategoryUpdate) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -1186,97 +1291,97 @@ type CreateAllTypesReq struct {
 }
 
 // GetInt returns the value of Int.
-func (s CreateAllTypesReq) GetInt() int {
+func (s *CreateAllTypesReq) GetInt() int {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s CreateAllTypesReq) GetInt8() int32 {
+func (s *CreateAllTypesReq) GetInt8() int32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s CreateAllTypesReq) GetInt16() int32 {
+func (s *CreateAllTypesReq) GetInt16() int32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s CreateAllTypesReq) GetInt32() int32 {
+func (s *CreateAllTypesReq) GetInt32() int32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s CreateAllTypesReq) GetInt64() int64 {
+func (s *CreateAllTypesReq) GetInt64() int64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s CreateAllTypesReq) GetUint() int64 {
+func (s *CreateAllTypesReq) GetUint() int64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s CreateAllTypesReq) GetUint8() int32 {
+func (s *CreateAllTypesReq) GetUint8() int32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s CreateAllTypesReq) GetUint16() int32 {
+func (s *CreateAllTypesReq) GetUint16() int32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s CreateAllTypesReq) GetUint32() int64 {
+func (s *CreateAllTypesReq) GetUint32() int64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s CreateAllTypesReq) GetUint64() int64 {
+func (s *CreateAllTypesReq) GetUint64() int64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s CreateAllTypesReq) GetFloat32() float32 {
+func (s *CreateAllTypesReq) GetFloat32() float32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s CreateAllTypesReq) GetFloat64() float64 {
+func (s *CreateAllTypesReq) GetFloat64() float64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s CreateAllTypesReq) GetStringType() string {
+func (s *CreateAllTypesReq) GetStringType() string {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s CreateAllTypesReq) GetBool() bool {
+func (s *CreateAllTypesReq) GetBool() bool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s CreateAllTypesReq) GetUUID() uuid.UUID {
+func (s *CreateAllTypesReq) GetUUID() uuid.UUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s CreateAllTypesReq) GetTime() time.Time {
+func (s *CreateAllTypesReq) GetTime() time.Time {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s CreateAllTypesReq) GetText() string {
+func (s *CreateAllTypesReq) GetText() string {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s CreateAllTypesReq) GetState() CreateAllTypesReqState {
+func (s *CreateAllTypesReq) GetState() CreateAllTypesReqState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s CreateAllTypesReq) GetBytes() []byte {
+func (s *CreateAllTypesReq) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -1382,18 +1487,44 @@ const (
 	CreateAllTypesReqStateOff CreateAllTypesReqState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateAllTypesReqState) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateAllTypesReqStateOn:
+		return []byte(s), nil
+	case CreateAllTypesReqStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateAllTypesReqState) UnmarshalText(data []byte) error {
+	switch CreateAllTypesReqState(data) {
+	case CreateAllTypesReqStateOn:
+		*s = CreateAllTypesReqStateOn
+		return nil
+	case CreateAllTypesReqStateOff:
+		*s = CreateAllTypesReqStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type CreateCategoryReq struct {
 	Name string `json:"name"`
 	Pets []int  `json:"pets"`
 }
 
 // GetName returns the value of Name.
-func (s CreateCategoryReq) GetName() string {
+func (s *CreateCategoryReq) GetName() string {
 	return s.Name
 }
 
 // GetPets returns the value of Pets.
-func (s CreateCategoryReq) GetPets() []int {
+func (s *CreateCategoryReq) GetPets() []int {
 	return s.Pets
 }
 
@@ -1419,42 +1550,42 @@ type CreatePetReq struct {
 }
 
 // GetName returns the value of Name.
-func (s CreatePetReq) GetName() string {
+func (s *CreatePetReq) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s CreatePetReq) GetWeight() OptInt {
+func (s *CreatePetReq) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s CreatePetReq) GetBirthday() OptDateTime {
+func (s *CreatePetReq) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s CreatePetReq) GetTagID() []byte {
+func (s *CreatePetReq) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s CreatePetReq) GetHeight() OptInt {
+func (s *CreatePetReq) GetHeight() OptInt {
 	return s.Height
 }
 
 // GetCategories returns the value of Categories.
-func (s CreatePetReq) GetCategories() []int {
+func (s *CreatePetReq) GetCategories() []int {
 	return s.Categories
 }
 
 // GetOwner returns the value of Owner.
-func (s CreatePetReq) GetOwner() int {
+func (s *CreatePetReq) GetOwner() int {
 	return s.Owner
 }
 
 // GetFriends returns the value of Friends.
-func (s CreatePetReq) GetFriends() []int {
+func (s *CreatePetReq) GetFriends() []int {
 	return s.Friends
 }
 
@@ -1510,42 +1641,42 @@ type CreateUserReq struct {
 }
 
 // GetName returns the value of Name.
-func (s CreateUserReq) GetName() string {
+func (s *CreateUserReq) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s CreateUserReq) GetAge() int64 {
+func (s *CreateUserReq) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s CreateUserReq) GetHeight() OptInt64 {
+func (s *CreateUserReq) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s CreateUserReq) GetFavoriteCatBreed() CreateUserReqFavoriteCatBreed {
+func (s *CreateUserReq) GetFavoriteCatBreed() CreateUserReqFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s CreateUserReq) GetFavoriteDogBreed() OptCreateUserReqFavoriteDogBreed {
+func (s *CreateUserReq) GetFavoriteDogBreed() OptCreateUserReqFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s CreateUserReq) GetFavoriteFishBreed() OptCreateUserReqFavoriteFishBreed {
+func (s *CreateUserReq) GetFavoriteFishBreed() OptCreateUserReqFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
 // GetPets returns the value of Pets.
-func (s CreateUserReq) GetPets() []int {
+func (s *CreateUserReq) GetPets() []int {
 	return s.Pets
 }
 
 // GetBestFriend returns the value of BestFriend.
-func (s CreateUserReq) GetBestFriend() OptInt {
+func (s *CreateUserReq) GetBestFriend() OptInt {
 	return s.BestFriend
 }
 
@@ -1600,11 +1731,78 @@ const (
 	CreateUserReqFavoriteCatBreedOther   CreateUserReqFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateUserReqFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateUserReqFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case CreateUserReqFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case CreateUserReqFavoriteCatBreedLion:
+		return []byte(s), nil
+	case CreateUserReqFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case CreateUserReqFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case CreateUserReqFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateUserReqFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch CreateUserReqFavoriteCatBreed(data) {
+	case CreateUserReqFavoriteCatBreedSiamese:
+		*s = CreateUserReqFavoriteCatBreedSiamese
+		return nil
+	case CreateUserReqFavoriteCatBreedBengal:
+		*s = CreateUserReqFavoriteCatBreedBengal
+		return nil
+	case CreateUserReqFavoriteCatBreedLion:
+		*s = CreateUserReqFavoriteCatBreedLion
+		return nil
+	case CreateUserReqFavoriteCatBreedTiger:
+		*s = CreateUserReqFavoriteCatBreedTiger
+		return nil
+	case CreateUserReqFavoriteCatBreedLeopard:
+		*s = CreateUserReqFavoriteCatBreedLeopard
+		return nil
+	case CreateUserReqFavoriteCatBreedOther:
+		*s = CreateUserReqFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type CreateUserReqFavoriteDogBreed string
 
 const (
 	CreateUserReqFavoriteDogBreedKuro CreateUserReqFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateUserReqFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateUserReqFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateUserReqFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch CreateUserReqFavoriteDogBreed(data) {
+	case CreateUserReqFavoriteDogBreedKuro:
+		*s = CreateUserReqFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type CreateUserReqFavoriteFishBreed string
 
@@ -1613,6 +1811,37 @@ const (
 	CreateUserReqFavoriteFishBreedKoi   CreateUserReqFavoriteFishBreed = "koi"
 	CreateUserReqFavoriteFishBreedShark CreateUserReqFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateUserReqFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateUserReqFavoriteFishBreedGold:
+		return []byte(s), nil
+	case CreateUserReqFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case CreateUserReqFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateUserReqFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch CreateUserReqFavoriteFishBreed(data) {
+	case CreateUserReqFavoriteFishBreedGold:
+		*s = CreateUserReqFavoriteFishBreedGold
+		return nil
+	case CreateUserReqFavoriteFishBreedKoi:
+		*s = CreateUserReqFavoriteFishBreedKoi
+		return nil
+	case CreateUserReqFavoriteFishBreedShark:
+		*s = CreateUserReqFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // DeleteAllTypesNoContent is response for DeleteAllTypes operation.
 type DeleteAllTypesNoContent struct{}
@@ -3008,17 +3237,17 @@ type PetCategoriesList struct {
 }
 
 // GetID returns the value of ID.
-func (s PetCategoriesList) GetID() int {
+func (s *PetCategoriesList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetCategoriesList) GetName() string {
+func (s *PetCategoriesList) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s PetCategoriesList) GetReadonly() OptString {
+func (s *PetCategoriesList) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -3050,42 +3279,42 @@ type PetCreate struct {
 }
 
 // GetID returns the value of ID.
-func (s PetCreate) GetID() int {
+func (s *PetCreate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetCreate) GetName() string {
+func (s *PetCreate) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s PetCreate) GetWeight() OptInt {
+func (s *PetCreate) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s PetCreate) GetBirthday() OptDateTime {
+func (s *PetCreate) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s PetCreate) GetTagID() []byte {
+func (s *PetCreate) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s PetCreate) GetHeight() OptInt {
+func (s *PetCreate) GetHeight() OptInt {
 	return s.Height
 }
 
 // GetCategories returns the value of Categories.
-func (s PetCreate) GetCategories() []PetCreateCategories {
+func (s *PetCreate) GetCategories() []PetCreateCategories {
 	return s.Categories
 }
 
 // GetOwner returns the value of Owner.
-func (s PetCreate) GetOwner() PetCreateOwner {
+func (s *PetCreate) GetOwner() PetCreateOwner {
 	return s.Owner
 }
 
@@ -3139,17 +3368,17 @@ type PetCreateCategories struct {
 }
 
 // GetID returns the value of ID.
-func (s PetCreateCategories) GetID() int {
+func (s *PetCreateCategories) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetCreateCategories) GetName() string {
+func (s *PetCreateCategories) GetName() string {
 	return s.Name
 }
 
 // GetReadonly returns the value of Readonly.
-func (s PetCreateCategories) GetReadonly() OptString {
+func (s *PetCreateCategories) GetReadonly() OptString {
 	return s.Readonly
 }
 
@@ -3180,37 +3409,37 @@ type PetCreateOwner struct {
 }
 
 // GetID returns the value of ID.
-func (s PetCreateOwner) GetID() int {
+func (s *PetCreateOwner) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetCreateOwner) GetName() string {
+func (s *PetCreateOwner) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s PetCreateOwner) GetAge() int64 {
+func (s *PetCreateOwner) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s PetCreateOwner) GetHeight() OptInt64 {
+func (s *PetCreateOwner) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s PetCreateOwner) GetFavoriteCatBreed() PetCreateOwnerFavoriteCatBreed {
+func (s *PetCreateOwner) GetFavoriteCatBreed() PetCreateOwnerFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s PetCreateOwner) GetFavoriteDogBreed() OptPetCreateOwnerFavoriteDogBreed {
+func (s *PetCreateOwner) GetFavoriteDogBreed() OptPetCreateOwnerFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s PetCreateOwner) GetFavoriteFishBreed() OptPetCreateOwnerFavoriteFishBreed {
+func (s *PetCreateOwner) GetFavoriteFishBreed() OptPetCreateOwnerFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -3260,11 +3489,78 @@ const (
 	PetCreateOwnerFavoriteCatBreedOther   PetCreateOwnerFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s PetCreateOwnerFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetCreateOwnerFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteCatBreedLion:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetCreateOwnerFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch PetCreateOwnerFavoriteCatBreed(data) {
+	case PetCreateOwnerFavoriteCatBreedSiamese:
+		*s = PetCreateOwnerFavoriteCatBreedSiamese
+		return nil
+	case PetCreateOwnerFavoriteCatBreedBengal:
+		*s = PetCreateOwnerFavoriteCatBreedBengal
+		return nil
+	case PetCreateOwnerFavoriteCatBreedLion:
+		*s = PetCreateOwnerFavoriteCatBreedLion
+		return nil
+	case PetCreateOwnerFavoriteCatBreedTiger:
+		*s = PetCreateOwnerFavoriteCatBreedTiger
+		return nil
+	case PetCreateOwnerFavoriteCatBreedLeopard:
+		*s = PetCreateOwnerFavoriteCatBreedLeopard
+		return nil
+	case PetCreateOwnerFavoriteCatBreedOther:
+		*s = PetCreateOwnerFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type PetCreateOwnerFavoriteDogBreed string
 
 const (
 	PetCreateOwnerFavoriteDogBreedKuro PetCreateOwnerFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetCreateOwnerFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetCreateOwnerFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetCreateOwnerFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch PetCreateOwnerFavoriteDogBreed(data) {
+	case PetCreateOwnerFavoriteDogBreedKuro:
+		*s = PetCreateOwnerFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type PetCreateOwnerFavoriteFishBreed string
 
@@ -3273,6 +3569,37 @@ const (
 	PetCreateOwnerFavoriteFishBreedKoi   PetCreateOwnerFavoriteFishBreed = "koi"
 	PetCreateOwnerFavoriteFishBreedShark PetCreateOwnerFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetCreateOwnerFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetCreateOwnerFavoriteFishBreedGold:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetCreateOwnerFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch PetCreateOwnerFavoriteFishBreed(data) {
+	case PetCreateOwnerFavoriteFishBreedGold:
+		*s = PetCreateOwnerFavoriteFishBreedGold
+		return nil
+	case PetCreateOwnerFavoriteFishBreedKoi:
+		*s = PetCreateOwnerFavoriteFishBreedKoi
+		return nil
+	case PetCreateOwnerFavoriteFishBreedShark:
+		*s = PetCreateOwnerFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/Pet_FriendsList
 type PetFriendsList struct {
@@ -3285,32 +3612,32 @@ type PetFriendsList struct {
 }
 
 // GetID returns the value of ID.
-func (s PetFriendsList) GetID() int {
+func (s *PetFriendsList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetFriendsList) GetName() string {
+func (s *PetFriendsList) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s PetFriendsList) GetWeight() OptInt {
+func (s *PetFriendsList) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s PetFriendsList) GetBirthday() OptDateTime {
+func (s *PetFriendsList) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s PetFriendsList) GetTagID() []byte {
+func (s *PetFriendsList) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s PetFriendsList) GetHeight() OptInt {
+func (s *PetFriendsList) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -3355,32 +3682,32 @@ type PetList struct {
 }
 
 // GetID returns the value of ID.
-func (s PetList) GetID() int {
+func (s *PetList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetList) GetName() string {
+func (s *PetList) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s PetList) GetWeight() OptInt {
+func (s *PetList) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s PetList) GetBirthday() OptDateTime {
+func (s *PetList) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s PetList) GetTagID() []byte {
+func (s *PetList) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s PetList) GetHeight() OptInt {
+func (s *PetList) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -3426,37 +3753,37 @@ type PetOwnerRead struct {
 }
 
 // GetID returns the value of ID.
-func (s PetOwnerRead) GetID() int {
+func (s *PetOwnerRead) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetOwnerRead) GetName() string {
+func (s *PetOwnerRead) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s PetOwnerRead) GetAge() int64 {
+func (s *PetOwnerRead) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s PetOwnerRead) GetHeight() OptInt64 {
+func (s *PetOwnerRead) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s PetOwnerRead) GetFavoriteCatBreed() PetOwnerReadFavoriteCatBreed {
+func (s *PetOwnerRead) GetFavoriteCatBreed() PetOwnerReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s PetOwnerRead) GetFavoriteDogBreed() OptPetOwnerReadFavoriteDogBreed {
+func (s *PetOwnerRead) GetFavoriteDogBreed() OptPetOwnerReadFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s PetOwnerRead) GetFavoriteFishBreed() OptPetOwnerReadFavoriteFishBreed {
+func (s *PetOwnerRead) GetFavoriteFishBreed() OptPetOwnerReadFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -3508,11 +3835,78 @@ const (
 	PetOwnerReadFavoriteCatBreedOther   PetOwnerReadFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s PetOwnerReadFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetOwnerReadFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteCatBreedLion:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetOwnerReadFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch PetOwnerReadFavoriteCatBreed(data) {
+	case PetOwnerReadFavoriteCatBreedSiamese:
+		*s = PetOwnerReadFavoriteCatBreedSiamese
+		return nil
+	case PetOwnerReadFavoriteCatBreedBengal:
+		*s = PetOwnerReadFavoriteCatBreedBengal
+		return nil
+	case PetOwnerReadFavoriteCatBreedLion:
+		*s = PetOwnerReadFavoriteCatBreedLion
+		return nil
+	case PetOwnerReadFavoriteCatBreedTiger:
+		*s = PetOwnerReadFavoriteCatBreedTiger
+		return nil
+	case PetOwnerReadFavoriteCatBreedLeopard:
+		*s = PetOwnerReadFavoriteCatBreedLeopard
+		return nil
+	case PetOwnerReadFavoriteCatBreedOther:
+		*s = PetOwnerReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type PetOwnerReadFavoriteDogBreed string
 
 const (
 	PetOwnerReadFavoriteDogBreedKuro PetOwnerReadFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetOwnerReadFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetOwnerReadFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetOwnerReadFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch PetOwnerReadFavoriteDogBreed(data) {
+	case PetOwnerReadFavoriteDogBreedKuro:
+		*s = PetOwnerReadFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type PetOwnerReadFavoriteFishBreed string
 
@@ -3521,6 +3915,37 @@ const (
 	PetOwnerReadFavoriteFishBreedKoi   PetOwnerReadFavoriteFishBreed = "koi"
 	PetOwnerReadFavoriteFishBreedShark PetOwnerReadFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetOwnerReadFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetOwnerReadFavoriteFishBreedGold:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetOwnerReadFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch PetOwnerReadFavoriteFishBreed(data) {
+	case PetOwnerReadFavoriteFishBreedGold:
+		*s = PetOwnerReadFavoriteFishBreedGold
+		return nil
+	case PetOwnerReadFavoriteFishBreedKoi:
+		*s = PetOwnerReadFavoriteFishBreedKoi
+		return nil
+	case PetOwnerReadFavoriteFishBreedShark:
+		*s = PetOwnerReadFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/PetRead
 type PetRead struct {
@@ -3533,32 +3958,32 @@ type PetRead struct {
 }
 
 // GetID returns the value of ID.
-func (s PetRead) GetID() int {
+func (s *PetRead) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetRead) GetName() string {
+func (s *PetRead) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s PetRead) GetWeight() OptInt {
+func (s *PetRead) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s PetRead) GetBirthday() OptDateTime {
+func (s *PetRead) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s PetRead) GetTagID() []byte {
+func (s *PetRead) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s PetRead) GetHeight() OptInt {
+func (s *PetRead) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -3605,32 +4030,32 @@ type PetUpdate struct {
 }
 
 // GetID returns the value of ID.
-func (s PetUpdate) GetID() int {
+func (s *PetUpdate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s PetUpdate) GetName() string {
+func (s *PetUpdate) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s PetUpdate) GetWeight() OptInt {
+func (s *PetUpdate) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s PetUpdate) GetBirthday() OptDateTime {
+func (s *PetUpdate) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s PetUpdate) GetTagID() []byte {
+func (s *PetUpdate) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s PetUpdate) GetHeight() OptInt {
+func (s *PetUpdate) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -3673,17 +4098,17 @@ type R400 struct {
 }
 
 // GetCode returns the value of Code.
-func (s R400) GetCode() int {
+func (s *R400) GetCode() int {
 	return s.Code
 }
 
 // GetStatus returns the value of Status.
-func (s R400) GetStatus() string {
+func (s *R400) GetStatus() string {
 	return s.Status
 }
 
 // GetErrors returns the value of Errors.
-func (s R400) GetErrors() jx.Raw {
+func (s *R400) GetErrors() jx.Raw {
 	return s.Errors
 }
 
@@ -3736,17 +4161,17 @@ type R404 struct {
 }
 
 // GetCode returns the value of Code.
-func (s R404) GetCode() int {
+func (s *R404) GetCode() int {
 	return s.Code
 }
 
 // GetStatus returns the value of Status.
-func (s R404) GetStatus() string {
+func (s *R404) GetStatus() string {
 	return s.Status
 }
 
 // GetErrors returns the value of Errors.
-func (s R404) GetErrors() jx.Raw {
+func (s *R404) GetErrors() jx.Raw {
 	return s.Errors
 }
 
@@ -3795,17 +4220,17 @@ type R409 struct {
 }
 
 // GetCode returns the value of Code.
-func (s R409) GetCode() int {
+func (s *R409) GetCode() int {
 	return s.Code
 }
 
 // GetStatus returns the value of Status.
-func (s R409) GetStatus() string {
+func (s *R409) GetStatus() string {
 	return s.Status
 }
 
 // GetErrors returns the value of Errors.
-func (s R409) GetErrors() jx.Raw {
+func (s *R409) GetErrors() jx.Raw {
 	return s.Errors
 }
 
@@ -3858,17 +4283,17 @@ type R500 struct {
 }
 
 // GetCode returns the value of Code.
-func (s R500) GetCode() int {
+func (s *R500) GetCode() int {
 	return s.Code
 }
 
 // GetStatus returns the value of Status.
-func (s R500) GetStatus() string {
+func (s *R500) GetStatus() string {
 	return s.Status
 }
 
 // GetErrors returns the value of Errors.
-func (s R500) GetErrors() jx.Raw {
+func (s *R500) GetErrors() jx.Raw {
 	return s.Errors
 }
 
@@ -3937,97 +4362,97 @@ type UpdateAllTypesReq struct {
 }
 
 // GetInt returns the value of Int.
-func (s UpdateAllTypesReq) GetInt() OptInt {
+func (s *UpdateAllTypesReq) GetInt() OptInt {
 	return s.Int
 }
 
 // GetInt8 returns the value of Int8.
-func (s UpdateAllTypesReq) GetInt8() OptInt32 {
+func (s *UpdateAllTypesReq) GetInt8() OptInt32 {
 	return s.Int8
 }
 
 // GetInt16 returns the value of Int16.
-func (s UpdateAllTypesReq) GetInt16() OptInt32 {
+func (s *UpdateAllTypesReq) GetInt16() OptInt32 {
 	return s.Int16
 }
 
 // GetInt32 returns the value of Int32.
-func (s UpdateAllTypesReq) GetInt32() OptInt32 {
+func (s *UpdateAllTypesReq) GetInt32() OptInt32 {
 	return s.Int32
 }
 
 // GetInt64 returns the value of Int64.
-func (s UpdateAllTypesReq) GetInt64() OptInt64 {
+func (s *UpdateAllTypesReq) GetInt64() OptInt64 {
 	return s.Int64
 }
 
 // GetUint returns the value of Uint.
-func (s UpdateAllTypesReq) GetUint() OptInt64 {
+func (s *UpdateAllTypesReq) GetUint() OptInt64 {
 	return s.Uint
 }
 
 // GetUint8 returns the value of Uint8.
-func (s UpdateAllTypesReq) GetUint8() OptInt32 {
+func (s *UpdateAllTypesReq) GetUint8() OptInt32 {
 	return s.Uint8
 }
 
 // GetUint16 returns the value of Uint16.
-func (s UpdateAllTypesReq) GetUint16() OptInt32 {
+func (s *UpdateAllTypesReq) GetUint16() OptInt32 {
 	return s.Uint16
 }
 
 // GetUint32 returns the value of Uint32.
-func (s UpdateAllTypesReq) GetUint32() OptInt64 {
+func (s *UpdateAllTypesReq) GetUint32() OptInt64 {
 	return s.Uint32
 }
 
 // GetUint64 returns the value of Uint64.
-func (s UpdateAllTypesReq) GetUint64() OptInt64 {
+func (s *UpdateAllTypesReq) GetUint64() OptInt64 {
 	return s.Uint64
 }
 
 // GetFloat32 returns the value of Float32.
-func (s UpdateAllTypesReq) GetFloat32() OptFloat32 {
+func (s *UpdateAllTypesReq) GetFloat32() OptFloat32 {
 	return s.Float32
 }
 
 // GetFloat64 returns the value of Float64.
-func (s UpdateAllTypesReq) GetFloat64() OptFloat64 {
+func (s *UpdateAllTypesReq) GetFloat64() OptFloat64 {
 	return s.Float64
 }
 
 // GetStringType returns the value of StringType.
-func (s UpdateAllTypesReq) GetStringType() OptString {
+func (s *UpdateAllTypesReq) GetStringType() OptString {
 	return s.StringType
 }
 
 // GetBool returns the value of Bool.
-func (s UpdateAllTypesReq) GetBool() OptBool {
+func (s *UpdateAllTypesReq) GetBool() OptBool {
 	return s.Bool
 }
 
 // GetUUID returns the value of UUID.
-func (s UpdateAllTypesReq) GetUUID() OptUUID {
+func (s *UpdateAllTypesReq) GetUUID() OptUUID {
 	return s.UUID
 }
 
 // GetTime returns the value of Time.
-func (s UpdateAllTypesReq) GetTime() OptDateTime {
+func (s *UpdateAllTypesReq) GetTime() OptDateTime {
 	return s.Time
 }
 
 // GetText returns the value of Text.
-func (s UpdateAllTypesReq) GetText() OptString {
+func (s *UpdateAllTypesReq) GetText() OptString {
 	return s.Text
 }
 
 // GetState returns the value of State.
-func (s UpdateAllTypesReq) GetState() OptUpdateAllTypesReqState {
+func (s *UpdateAllTypesReq) GetState() OptUpdateAllTypesReqState {
 	return s.State
 }
 
 // GetBytes returns the value of Bytes.
-func (s UpdateAllTypesReq) GetBytes() []byte {
+func (s *UpdateAllTypesReq) GetBytes() []byte {
 	return s.Bytes
 }
 
@@ -4133,18 +4558,44 @@ const (
 	UpdateAllTypesReqStateOff UpdateAllTypesReqState = "off"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UpdateAllTypesReqState) MarshalText() ([]byte, error) {
+	switch s {
+	case UpdateAllTypesReqStateOn:
+		return []byte(s), nil
+	case UpdateAllTypesReqStateOff:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UpdateAllTypesReqState) UnmarshalText(data []byte) error {
+	switch UpdateAllTypesReqState(data) {
+	case UpdateAllTypesReqStateOn:
+		*s = UpdateAllTypesReqStateOn
+		return nil
+	case UpdateAllTypesReqStateOff:
+		*s = UpdateAllTypesReqStateOff
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UpdateCategoryReq struct {
 	Name OptString `json:"name"`
 	Pets []int     `json:"pets"`
 }
 
 // GetName returns the value of Name.
-func (s UpdateCategoryReq) GetName() OptString {
+func (s *UpdateCategoryReq) GetName() OptString {
 	return s.Name
 }
 
 // GetPets returns the value of Pets.
-func (s UpdateCategoryReq) GetPets() []int {
+func (s *UpdateCategoryReq) GetPets() []int {
 	return s.Pets
 }
 
@@ -4170,42 +4621,42 @@ type UpdatePetReq struct {
 }
 
 // GetName returns the value of Name.
-func (s UpdatePetReq) GetName() OptString {
+func (s *UpdatePetReq) GetName() OptString {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s UpdatePetReq) GetWeight() OptInt {
+func (s *UpdatePetReq) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s UpdatePetReq) GetBirthday() OptDateTime {
+func (s *UpdatePetReq) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s UpdatePetReq) GetTagID() []byte {
+func (s *UpdatePetReq) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s UpdatePetReq) GetHeight() OptInt {
+func (s *UpdatePetReq) GetHeight() OptInt {
 	return s.Height
 }
 
 // GetCategories returns the value of Categories.
-func (s UpdatePetReq) GetCategories() []int {
+func (s *UpdatePetReq) GetCategories() []int {
 	return s.Categories
 }
 
 // GetOwner returns the value of Owner.
-func (s UpdatePetReq) GetOwner() OptInt {
+func (s *UpdatePetReq) GetOwner() OptInt {
 	return s.Owner
 }
 
 // GetFriends returns the value of Friends.
-func (s UpdatePetReq) GetFriends() []int {
+func (s *UpdatePetReq) GetFriends() []int {
 	return s.Friends
 }
 
@@ -4261,42 +4712,42 @@ type UpdateUserReq struct {
 }
 
 // GetName returns the value of Name.
-func (s UpdateUserReq) GetName() OptString {
+func (s *UpdateUserReq) GetName() OptString {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UpdateUserReq) GetAge() OptInt64 {
+func (s *UpdateUserReq) GetAge() OptInt64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UpdateUserReq) GetHeight() OptInt64 {
+func (s *UpdateUserReq) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UpdateUserReq) GetFavoriteCatBreed() OptUpdateUserReqFavoriteCatBreed {
+func (s *UpdateUserReq) GetFavoriteCatBreed() OptUpdateUserReqFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UpdateUserReq) GetFavoriteDogBreed() OptUpdateUserReqFavoriteDogBreed {
+func (s *UpdateUserReq) GetFavoriteDogBreed() OptUpdateUserReqFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UpdateUserReq) GetFavoriteFishBreed() OptUpdateUserReqFavoriteFishBreed {
+func (s *UpdateUserReq) GetFavoriteFishBreed() OptUpdateUserReqFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
 // GetPets returns the value of Pets.
-func (s UpdateUserReq) GetPets() []int {
+func (s *UpdateUserReq) GetPets() []int {
 	return s.Pets
 }
 
 // GetBestFriend returns the value of BestFriend.
-func (s UpdateUserReq) GetBestFriend() OptInt {
+func (s *UpdateUserReq) GetBestFriend() OptInt {
 	return s.BestFriend
 }
 
@@ -4351,11 +4802,78 @@ const (
 	UpdateUserReqFavoriteCatBreedOther   UpdateUserReqFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UpdateUserReqFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UpdateUserReqFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UpdateUserReqFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UpdateUserReqFavoriteCatBreed(data) {
+	case UpdateUserReqFavoriteCatBreedSiamese:
+		*s = UpdateUserReqFavoriteCatBreedSiamese
+		return nil
+	case UpdateUserReqFavoriteCatBreedBengal:
+		*s = UpdateUserReqFavoriteCatBreedBengal
+		return nil
+	case UpdateUserReqFavoriteCatBreedLion:
+		*s = UpdateUserReqFavoriteCatBreedLion
+		return nil
+	case UpdateUserReqFavoriteCatBreedTiger:
+		*s = UpdateUserReqFavoriteCatBreedTiger
+		return nil
+	case UpdateUserReqFavoriteCatBreedLeopard:
+		*s = UpdateUserReqFavoriteCatBreedLeopard
+		return nil
+	case UpdateUserReqFavoriteCatBreedOther:
+		*s = UpdateUserReqFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UpdateUserReqFavoriteDogBreed string
 
 const (
 	UpdateUserReqFavoriteDogBreedKuro UpdateUserReqFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UpdateUserReqFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UpdateUserReqFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UpdateUserReqFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UpdateUserReqFavoriteDogBreed(data) {
+	case UpdateUserReqFavoriteDogBreedKuro:
+		*s = UpdateUserReqFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UpdateUserReqFavoriteFishBreed string
 
@@ -4364,6 +4882,37 @@ const (
 	UpdateUserReqFavoriteFishBreedKoi   UpdateUserReqFavoriteFishBreed = "koi"
 	UpdateUserReqFavoriteFishBreedShark UpdateUserReqFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UpdateUserReqFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UpdateUserReqFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UpdateUserReqFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UpdateUserReqFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UpdateUserReqFavoriteFishBreed(data) {
+	case UpdateUserReqFavoriteFishBreedGold:
+		*s = UpdateUserReqFavoriteFishBreedGold
+		return nil
+	case UpdateUserReqFavoriteFishBreedKoi:
+		*s = UpdateUserReqFavoriteFishBreedKoi
+		return nil
+	case UpdateUserReqFavoriteFishBreedShark:
+		*s = UpdateUserReqFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/User_BestFriendRead
 type UserBestFriendRead struct {
@@ -4377,37 +4926,37 @@ type UserBestFriendRead struct {
 }
 
 // GetID returns the value of ID.
-func (s UserBestFriendRead) GetID() int {
+func (s *UserBestFriendRead) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserBestFriendRead) GetName() string {
+func (s *UserBestFriendRead) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UserBestFriendRead) GetAge() int64 {
+func (s *UserBestFriendRead) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UserBestFriendRead) GetHeight() OptInt64 {
+func (s *UserBestFriendRead) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UserBestFriendRead) GetFavoriteCatBreed() UserBestFriendReadFavoriteCatBreed {
+func (s *UserBestFriendRead) GetFavoriteCatBreed() UserBestFriendReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UserBestFriendRead) GetFavoriteDogBreed() OptUserBestFriendReadFavoriteDogBreed {
+func (s *UserBestFriendRead) GetFavoriteDogBreed() OptUserBestFriendReadFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UserBestFriendRead) GetFavoriteFishBreed() OptUserBestFriendReadFavoriteFishBreed {
+func (s *UserBestFriendRead) GetFavoriteFishBreed() OptUserBestFriendReadFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -4459,11 +5008,78 @@ const (
 	UserBestFriendReadFavoriteCatBreedOther   UserBestFriendReadFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UserBestFriendReadFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserBestFriendReadFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserBestFriendReadFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UserBestFriendReadFavoriteCatBreed(data) {
+	case UserBestFriendReadFavoriteCatBreedSiamese:
+		*s = UserBestFriendReadFavoriteCatBreedSiamese
+		return nil
+	case UserBestFriendReadFavoriteCatBreedBengal:
+		*s = UserBestFriendReadFavoriteCatBreedBengal
+		return nil
+	case UserBestFriendReadFavoriteCatBreedLion:
+		*s = UserBestFriendReadFavoriteCatBreedLion
+		return nil
+	case UserBestFriendReadFavoriteCatBreedTiger:
+		*s = UserBestFriendReadFavoriteCatBreedTiger
+		return nil
+	case UserBestFriendReadFavoriteCatBreedLeopard:
+		*s = UserBestFriendReadFavoriteCatBreedLeopard
+		return nil
+	case UserBestFriendReadFavoriteCatBreedOther:
+		*s = UserBestFriendReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UserBestFriendReadFavoriteDogBreed string
 
 const (
 	UserBestFriendReadFavoriteDogBreedKuro UserBestFriendReadFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserBestFriendReadFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserBestFriendReadFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserBestFriendReadFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UserBestFriendReadFavoriteDogBreed(data) {
+	case UserBestFriendReadFavoriteDogBreedKuro:
+		*s = UserBestFriendReadFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UserBestFriendReadFavoriteFishBreed string
 
@@ -4472,6 +5088,37 @@ const (
 	UserBestFriendReadFavoriteFishBreedKoi   UserBestFriendReadFavoriteFishBreed = "koi"
 	UserBestFriendReadFavoriteFishBreedShark UserBestFriendReadFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserBestFriendReadFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserBestFriendReadFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserBestFriendReadFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UserBestFriendReadFavoriteFishBreed(data) {
+	case UserBestFriendReadFavoriteFishBreedGold:
+		*s = UserBestFriendReadFavoriteFishBreedGold
+		return nil
+	case UserBestFriendReadFavoriteFishBreedKoi:
+		*s = UserBestFriendReadFavoriteFishBreedKoi
+		return nil
+	case UserBestFriendReadFavoriteFishBreedShark:
+		*s = UserBestFriendReadFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/UserCreate
 type UserCreate struct {
@@ -4485,37 +5132,37 @@ type UserCreate struct {
 }
 
 // GetID returns the value of ID.
-func (s UserCreate) GetID() int {
+func (s *UserCreate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserCreate) GetName() string {
+func (s *UserCreate) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UserCreate) GetAge() int64 {
+func (s *UserCreate) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UserCreate) GetHeight() OptInt64 {
+func (s *UserCreate) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UserCreate) GetFavoriteCatBreed() UserCreateFavoriteCatBreed {
+func (s *UserCreate) GetFavoriteCatBreed() UserCreateFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UserCreate) GetFavoriteDogBreed() OptUserCreateFavoriteDogBreed {
+func (s *UserCreate) GetFavoriteDogBreed() OptUserCreateFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UserCreate) GetFavoriteFishBreed() OptUserCreateFavoriteFishBreed {
+func (s *UserCreate) GetFavoriteFishBreed() OptUserCreateFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -4567,11 +5214,78 @@ const (
 	UserCreateFavoriteCatBreedOther   UserCreateFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UserCreateFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserCreateFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UserCreateFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UserCreateFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UserCreateFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UserCreateFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UserCreateFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserCreateFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UserCreateFavoriteCatBreed(data) {
+	case UserCreateFavoriteCatBreedSiamese:
+		*s = UserCreateFavoriteCatBreedSiamese
+		return nil
+	case UserCreateFavoriteCatBreedBengal:
+		*s = UserCreateFavoriteCatBreedBengal
+		return nil
+	case UserCreateFavoriteCatBreedLion:
+		*s = UserCreateFavoriteCatBreedLion
+		return nil
+	case UserCreateFavoriteCatBreedTiger:
+		*s = UserCreateFavoriteCatBreedTiger
+		return nil
+	case UserCreateFavoriteCatBreedLeopard:
+		*s = UserCreateFavoriteCatBreedLeopard
+		return nil
+	case UserCreateFavoriteCatBreedOther:
+		*s = UserCreateFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UserCreateFavoriteDogBreed string
 
 const (
 	UserCreateFavoriteDogBreedKuro UserCreateFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserCreateFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserCreateFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserCreateFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UserCreateFavoriteDogBreed(data) {
+	case UserCreateFavoriteDogBreedKuro:
+		*s = UserCreateFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UserCreateFavoriteFishBreed string
 
@@ -4580,6 +5294,37 @@ const (
 	UserCreateFavoriteFishBreedKoi   UserCreateFavoriteFishBreed = "koi"
 	UserCreateFavoriteFishBreedShark UserCreateFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserCreateFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserCreateFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UserCreateFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UserCreateFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserCreateFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UserCreateFavoriteFishBreed(data) {
+	case UserCreateFavoriteFishBreedGold:
+		*s = UserCreateFavoriteFishBreedGold
+		return nil
+	case UserCreateFavoriteFishBreedKoi:
+		*s = UserCreateFavoriteFishBreedKoi
+		return nil
+	case UserCreateFavoriteFishBreedShark:
+		*s = UserCreateFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/UserList
 type UserList struct {
@@ -4593,37 +5338,37 @@ type UserList struct {
 }
 
 // GetID returns the value of ID.
-func (s UserList) GetID() int {
+func (s *UserList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserList) GetName() string {
+func (s *UserList) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UserList) GetAge() int64 {
+func (s *UserList) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UserList) GetHeight() OptInt64 {
+func (s *UserList) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UserList) GetFavoriteCatBreed() UserListFavoriteCatBreed {
+func (s *UserList) GetFavoriteCatBreed() UserListFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UserList) GetFavoriteDogBreed() OptUserListFavoriteDogBreed {
+func (s *UserList) GetFavoriteDogBreed() OptUserListFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UserList) GetFavoriteFishBreed() OptUserListFavoriteFishBreed {
+func (s *UserList) GetFavoriteFishBreed() OptUserListFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -4673,11 +5418,78 @@ const (
 	UserListFavoriteCatBreedOther   UserListFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UserListFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserListFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UserListFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UserListFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UserListFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UserListFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UserListFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserListFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UserListFavoriteCatBreed(data) {
+	case UserListFavoriteCatBreedSiamese:
+		*s = UserListFavoriteCatBreedSiamese
+		return nil
+	case UserListFavoriteCatBreedBengal:
+		*s = UserListFavoriteCatBreedBengal
+		return nil
+	case UserListFavoriteCatBreedLion:
+		*s = UserListFavoriteCatBreedLion
+		return nil
+	case UserListFavoriteCatBreedTiger:
+		*s = UserListFavoriteCatBreedTiger
+		return nil
+	case UserListFavoriteCatBreedLeopard:
+		*s = UserListFavoriteCatBreedLeopard
+		return nil
+	case UserListFavoriteCatBreedOther:
+		*s = UserListFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UserListFavoriteDogBreed string
 
 const (
 	UserListFavoriteDogBreedKuro UserListFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserListFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserListFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserListFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UserListFavoriteDogBreed(data) {
+	case UserListFavoriteDogBreedKuro:
+		*s = UserListFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UserListFavoriteFishBreed string
 
@@ -4686,6 +5498,37 @@ const (
 	UserListFavoriteFishBreedKoi   UserListFavoriteFishBreed = "koi"
 	UserListFavoriteFishBreedShark UserListFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserListFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserListFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UserListFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UserListFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserListFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UserListFavoriteFishBreed(data) {
+	case UserListFavoriteFishBreedGold:
+		*s = UserListFavoriteFishBreedGold
+		return nil
+	case UserListFavoriteFishBreedKoi:
+		*s = UserListFavoriteFishBreedKoi
+		return nil
+	case UserListFavoriteFishBreedShark:
+		*s = UserListFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/User_PetsList
 type UserPetsList struct {
@@ -4698,32 +5541,32 @@ type UserPetsList struct {
 }
 
 // GetID returns the value of ID.
-func (s UserPetsList) GetID() int {
+func (s *UserPetsList) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserPetsList) GetName() string {
+func (s *UserPetsList) GetName() string {
 	return s.Name
 }
 
 // GetWeight returns the value of Weight.
-func (s UserPetsList) GetWeight() OptInt {
+func (s *UserPetsList) GetWeight() OptInt {
 	return s.Weight
 }
 
 // GetBirthday returns the value of Birthday.
-func (s UserPetsList) GetBirthday() OptDateTime {
+func (s *UserPetsList) GetBirthday() OptDateTime {
 	return s.Birthday
 }
 
 // GetTagID returns the value of TagID.
-func (s UserPetsList) GetTagID() []byte {
+func (s *UserPetsList) GetTagID() []byte {
 	return s.TagID
 }
 
 // GetHeight returns the value of Height.
-func (s UserPetsList) GetHeight() OptInt {
+func (s *UserPetsList) GetHeight() OptInt {
 	return s.Height
 }
 
@@ -4769,37 +5612,37 @@ type UserRead struct {
 }
 
 // GetID returns the value of ID.
-func (s UserRead) GetID() int {
+func (s *UserRead) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserRead) GetName() string {
+func (s *UserRead) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UserRead) GetAge() int64 {
+func (s *UserRead) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UserRead) GetHeight() OptInt64 {
+func (s *UserRead) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UserRead) GetFavoriteCatBreed() UserReadFavoriteCatBreed {
+func (s *UserRead) GetFavoriteCatBreed() UserReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UserRead) GetFavoriteDogBreed() OptUserReadFavoriteDogBreed {
+func (s *UserRead) GetFavoriteDogBreed() OptUserReadFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UserRead) GetFavoriteFishBreed() OptUserReadFavoriteFishBreed {
+func (s *UserRead) GetFavoriteFishBreed() OptUserReadFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -4851,11 +5694,78 @@ const (
 	UserReadFavoriteCatBreedOther   UserReadFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UserReadFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserReadFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UserReadFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UserReadFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UserReadFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UserReadFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UserReadFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserReadFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UserReadFavoriteCatBreed(data) {
+	case UserReadFavoriteCatBreedSiamese:
+		*s = UserReadFavoriteCatBreedSiamese
+		return nil
+	case UserReadFavoriteCatBreedBengal:
+		*s = UserReadFavoriteCatBreedBengal
+		return nil
+	case UserReadFavoriteCatBreedLion:
+		*s = UserReadFavoriteCatBreedLion
+		return nil
+	case UserReadFavoriteCatBreedTiger:
+		*s = UserReadFavoriteCatBreedTiger
+		return nil
+	case UserReadFavoriteCatBreedLeopard:
+		*s = UserReadFavoriteCatBreedLeopard
+		return nil
+	case UserReadFavoriteCatBreedOther:
+		*s = UserReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UserReadFavoriteDogBreed string
 
 const (
 	UserReadFavoriteDogBreedKuro UserReadFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserReadFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserReadFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserReadFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UserReadFavoriteDogBreed(data) {
+	case UserReadFavoriteDogBreedKuro:
+		*s = UserReadFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UserReadFavoriteFishBreed string
 
@@ -4864,6 +5774,37 @@ const (
 	UserReadFavoriteFishBreedKoi   UserReadFavoriteFishBreed = "koi"
 	UserReadFavoriteFishBreedShark UserReadFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserReadFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserReadFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UserReadFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UserReadFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserReadFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UserReadFavoriteFishBreed(data) {
+	case UserReadFavoriteFishBreedGold:
+		*s = UserReadFavoriteFishBreedGold
+		return nil
+	case UserReadFavoriteFishBreedKoi:
+		*s = UserReadFavoriteFishBreedKoi
+		return nil
+	case UserReadFavoriteFishBreedShark:
+		*s = UserReadFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 // Ref: #/components/schemas/UserUpdate
 type UserUpdate struct {
@@ -4877,37 +5818,37 @@ type UserUpdate struct {
 }
 
 // GetID returns the value of ID.
-func (s UserUpdate) GetID() int {
+func (s *UserUpdate) GetID() int {
 	return s.ID
 }
 
 // GetName returns the value of Name.
-func (s UserUpdate) GetName() string {
+func (s *UserUpdate) GetName() string {
 	return s.Name
 }
 
 // GetAge returns the value of Age.
-func (s UserUpdate) GetAge() int64 {
+func (s *UserUpdate) GetAge() int64 {
 	return s.Age
 }
 
 // GetHeight returns the value of Height.
-func (s UserUpdate) GetHeight() OptInt64 {
+func (s *UserUpdate) GetHeight() OptInt64 {
 	return s.Height
 }
 
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
-func (s UserUpdate) GetFavoriteCatBreed() UserUpdateFavoriteCatBreed {
+func (s *UserUpdate) GetFavoriteCatBreed() UserUpdateFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
-func (s UserUpdate) GetFavoriteDogBreed() OptUserUpdateFavoriteDogBreed {
+func (s *UserUpdate) GetFavoriteDogBreed() OptUserUpdateFavoriteDogBreed {
 	return s.FavoriteDogBreed
 }
 
 // GetFavoriteFishBreed returns the value of FavoriteFishBreed.
-func (s UserUpdate) GetFavoriteFishBreed() OptUserUpdateFavoriteFishBreed {
+func (s *UserUpdate) GetFavoriteFishBreed() OptUserUpdateFavoriteFishBreed {
 	return s.FavoriteFishBreed
 }
 
@@ -4959,11 +5900,78 @@ const (
 	UserUpdateFavoriteCatBreedOther   UserUpdateFavoriteCatBreed = "other"
 )
 
+// MarshalText implements encoding.TextMarshaler.
+func (s UserUpdateFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserUpdateFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case UserUpdateFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case UserUpdateFavoriteCatBreedLion:
+		return []byte(s), nil
+	case UserUpdateFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case UserUpdateFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case UserUpdateFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserUpdateFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch UserUpdateFavoriteCatBreed(data) {
+	case UserUpdateFavoriteCatBreedSiamese:
+		*s = UserUpdateFavoriteCatBreedSiamese
+		return nil
+	case UserUpdateFavoriteCatBreedBengal:
+		*s = UserUpdateFavoriteCatBreedBengal
+		return nil
+	case UserUpdateFavoriteCatBreedLion:
+		*s = UserUpdateFavoriteCatBreedLion
+		return nil
+	case UserUpdateFavoriteCatBreedTiger:
+		*s = UserUpdateFavoriteCatBreedTiger
+		return nil
+	case UserUpdateFavoriteCatBreedLeopard:
+		*s = UserUpdateFavoriteCatBreedLeopard
+		return nil
+	case UserUpdateFavoriteCatBreedOther:
+		*s = UserUpdateFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type UserUpdateFavoriteDogBreed string
 
 const (
 	UserUpdateFavoriteDogBreedKuro UserUpdateFavoriteDogBreed = "Kuro"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserUpdateFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserUpdateFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserUpdateFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch UserUpdateFavoriteDogBreed(data) {
+	case UserUpdateFavoriteDogBreedKuro:
+		*s = UserUpdateFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type UserUpdateFavoriteFishBreed string
 
@@ -4972,3 +5980,34 @@ const (
 	UserUpdateFavoriteFishBreedKoi   UserUpdateFavoriteFishBreed = "koi"
 	UserUpdateFavoriteFishBreedShark UserUpdateFavoriteFishBreed = "shark"
 )
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserUpdateFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case UserUpdateFavoriteFishBreedGold:
+		return []byte(s), nil
+	case UserUpdateFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case UserUpdateFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserUpdateFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch UserUpdateFavoriteFishBreed(data) {
+	case UserUpdateFavoriteFishBreedGold:
+		*s = UserUpdateFavoriteFishBreedGold
+		return nil
+	case UserUpdateFavoriteFishBreedKoi:
+		*s = UserUpdateFavoriteFishBreedKoi
+		return nil
+	case UserUpdateFavoriteFishBreedShark:
+		*s = UserUpdateFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}

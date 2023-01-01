@@ -4,28 +4,41 @@ package ogent
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/go-faster/errors"
 
 	"github.com/ogen-go/ogen/conv"
+	"github.com/ogen-go/ogen/middleware"
+	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
 	"github.com/ogen-go/ogen/validate"
 )
 
+// DeleteAllTypesParams is parameters of deleteAllTypes operation.
 type DeleteAllTypesParams struct {
 	// ID of the AllTypes.
 	ID int64
 }
 
-func unpackDeleteAllTypesParams(packed map[string]any) (params DeleteAllTypesParams) {
-	params.ID = packed["id"].(int64)
+func unpackDeleteAllTypesParams(packed middleware.Parameters) (params DeleteAllTypesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int64)
+	}
 	return params
 }
 
 func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (params DeleteAllTypesParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -48,7 +61,7 @@ func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (params DeleteA
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 			if err := func() error {
 				if err := (validate.Int{
@@ -65,29 +78,46 @@ func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (params DeleteA
 				}
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: invalid")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// DeleteCategoryParams is parameters of deleteCategory operation.
 type DeleteCategoryParams struct {
 	// ID of the Category.
 	ID int
 }
 
-func unpackDeleteCategoryParams(packed map[string]any) (params DeleteCategoryParams) {
-	params.ID = packed["id"].(int)
+func unpackDeleteCategoryParams(packed middleware.Parameters) (params DeleteCategoryParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeDeleteCategoryParams(args [1]string, r *http.Request) (params DeleteCategoryParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -110,29 +140,46 @@ func decodeDeleteCategoryParams(args [1]string, r *http.Request) (params DeleteC
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// DeletePetParams is parameters of deletePet operation.
 type DeletePetParams struct {
 	// ID of the Pet.
 	ID int
 }
 
-func unpackDeletePetParams(packed map[string]any) (params DeletePetParams) {
-	params.ID = packed["id"].(int)
+func unpackDeletePetParams(packed middleware.Parameters) (params DeletePetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeDeletePetParams(args [1]string, r *http.Request) (params DeletePetParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -155,29 +202,46 @@ func decodeDeletePetParams(args [1]string, r *http.Request) (params DeletePetPar
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// DeleteUserParams is parameters of deleteUser operation.
 type DeleteUserParams struct {
 	// ID of the User.
 	ID int
 }
 
-func unpackDeleteUserParams(packed map[string]any) (params DeleteUserParams) {
-	params.ID = packed["id"].(int)
+func unpackDeleteUserParams(packed middleware.Parameters) (params DeleteUserParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeDeleteUserParams(args [1]string, r *http.Request) (params DeleteUserParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -200,15 +264,23 @@ func decodeDeleteUserParams(args [1]string, r *http.Request) (params DeleteUserP
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListAllTypesParams is parameters of listAllTypes operation.
 type ListAllTypesParams struct {
 	// What page to render.
 	Page OptInt
@@ -216,12 +288,24 @@ type ListAllTypesParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListAllTypesParams(packed map[string]any) (params ListAllTypesParams) {
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListAllTypesParams(packed middleware.Parameters) (params ListAllTypesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -229,7 +313,7 @@ func unpackListAllTypesParams(packed map[string]any) (params ListAllTypesParams)
 func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTypesParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -258,12 +342,19 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -292,13 +383,21 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListCategoryParams is parameters of listCategory operation.
 type ListCategoryParams struct {
 	// What page to render.
 	Page OptInt
@@ -306,12 +405,24 @@ type ListCategoryParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListCategoryParams(packed map[string]any) (params ListCategoryParams) {
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListCategoryParams(packed middleware.Parameters) (params ListCategoryParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -319,7 +430,7 @@ func unpackListCategoryParams(packed map[string]any) (params ListCategoryParams)
 func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCategoryParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -348,12 +459,19 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -382,13 +500,21 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListCategoryPetsParams is parameters of listCategoryPets operation.
 type ListCategoryPetsParams struct {
 	// ID of the Category.
 	ID int
@@ -398,13 +524,31 @@ type ListCategoryPetsParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListCategoryPetsParams(packed map[string]any) (params ListCategoryPetsParams) {
-	params.ID = packed["id"].(int)
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListCategoryPetsParams(packed middleware.Parameters) (params ListCategoryPetsParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -412,8 +556,11 @@ func unpackListCategoryPetsParams(packed map[string]any) (params ListCategoryPet
 func decodeListCategoryPetsParams(args [1]string, r *http.Request) (params ListCategoryPetsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -436,14 +583,21 @@ func decodeListCategoryPetsParams(args [1]string, r *http.Request) (params ListC
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -472,12 +626,19 @@ func decodeListCategoryPetsParams(args [1]string, r *http.Request) (params ListC
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -506,13 +667,21 @@ func decodeListCategoryPetsParams(args [1]string, r *http.Request) (params ListC
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListPetParams is parameters of listPet operation.
 type ListPetParams struct {
 	// What page to render.
 	Page OptInt
@@ -520,12 +689,24 @@ type ListPetParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListPetParams(packed map[string]any) (params ListPetParams) {
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListPetParams(packed middleware.Parameters) (params ListPetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -533,7 +714,7 @@ func unpackListPetParams(packed map[string]any) (params ListPetParams) {
 func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -562,12 +743,19 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -596,13 +784,21 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListPetCategoriesParams is parameters of listPetCategories operation.
 type ListPetCategoriesParams struct {
 	// ID of the Pet.
 	ID int
@@ -612,13 +808,31 @@ type ListPetCategoriesParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListPetCategoriesParams(packed map[string]any) (params ListPetCategoriesParams) {
-	params.ID = packed["id"].(int)
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListPetCategoriesParams(packed middleware.Parameters) (params ListPetCategoriesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -626,8 +840,11 @@ func unpackListPetCategoriesParams(packed map[string]any) (params ListPetCategor
 func decodeListPetCategoriesParams(args [1]string, r *http.Request) (params ListPetCategoriesParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -650,14 +867,21 @@ func decodeListPetCategoriesParams(args [1]string, r *http.Request) (params List
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -686,12 +910,19 @@ func decodeListPetCategoriesParams(args [1]string, r *http.Request) (params List
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -720,13 +951,21 @@ func decodeListPetCategoriesParams(args [1]string, r *http.Request) (params List
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListPetFriendsParams is parameters of listPetFriends operation.
 type ListPetFriendsParams struct {
 	// ID of the Pet.
 	ID int
@@ -736,13 +975,31 @@ type ListPetFriendsParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListPetFriendsParams(packed map[string]any) (params ListPetFriendsParams) {
-	params.ID = packed["id"].(int)
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListPetFriendsParams(packed middleware.Parameters) (params ListPetFriendsParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -750,8 +1007,11 @@ func unpackListPetFriendsParams(packed map[string]any) (params ListPetFriendsPar
 func decodeListPetFriendsParams(args [1]string, r *http.Request) (params ListPetFriendsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -774,14 +1034,21 @@ func decodeListPetFriendsParams(args [1]string, r *http.Request) (params ListPet
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -810,12 +1077,19 @@ func decodeListPetFriendsParams(args [1]string, r *http.Request) (params ListPet
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -844,13 +1118,21 @@ func decodeListPetFriendsParams(args [1]string, r *http.Request) (params ListPet
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListUserParams is parameters of listUser operation.
 type ListUserParams struct {
 	// What page to render.
 	Page OptInt
@@ -858,12 +1140,24 @@ type ListUserParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListUserParams(packed map[string]any) (params ListUserParams) {
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListUserParams(packed middleware.Parameters) (params ListUserParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -871,7 +1165,7 @@ func unpackListUserParams(packed map[string]any) (params ListUserParams) {
 func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -900,12 +1194,19 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -934,13 +1235,21 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ListUserPetsParams is parameters of listUserPets operation.
 type ListUserPetsParams struct {
 	// ID of the User.
 	ID int
@@ -950,13 +1259,31 @@ type ListUserPetsParams struct {
 	ItemsPerPage OptInt
 }
 
-func unpackListUserPetsParams(packed map[string]any) (params ListUserPetsParams) {
-	params.ID = packed["id"].(int)
-	if v, ok := packed["page"]; ok {
-		params.Page = v.(OptInt)
+func unpackListUserPetsParams(packed middleware.Parameters) (params ListUserPetsParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
 	}
-	if v, ok := packed["itemsPerPage"]; ok {
-		params.ItemsPerPage = v.(OptInt)
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "itemsPerPage",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.ItemsPerPage = v.(OptInt)
+		}
 	}
 	return params
 }
@@ -964,8 +1291,11 @@ func unpackListUserPetsParams(packed map[string]any) (params ListUserPetsParams)
 func decodeListUserPetsParams(args [1]string, r *http.Request) (params ListUserPetsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -988,14 +1318,21 @@ func decodeListUserPetsParams(args [1]string, r *http.Request) (params ListUserP
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	// Decode query: page.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "page",
 			Style:   uri.QueryStyleForm,
@@ -1024,12 +1361,19 @@ func decodeListUserPetsParams(args [1]string, r *http.Request) (params ListUserP
 				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: page: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	// Decode query: itemsPerPage.
-	{
+	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
 			Name:    "itemsPerPage",
 			Style:   uri.QueryStyleForm,
@@ -1058,27 +1402,44 @@ func decodeListUserPetsParams(args [1]string, r *http.Request) (params ListUserP
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
-				return params, errors.Wrap(err, "query: itemsPerPage: parse")
+				return err
 			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "itemsPerPage",
+			In:   "query",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadAllTypesParams is parameters of readAllTypes operation.
 type ReadAllTypesParams struct {
 	// ID of the AllTypes.
 	ID int64
 }
 
-func unpackReadAllTypesParams(packed map[string]any) (params ReadAllTypesParams) {
-	params.ID = packed["id"].(int64)
+func unpackReadAllTypesParams(packed middleware.Parameters) (params ReadAllTypesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int64)
+	}
 	return params
 }
 
 func decodeReadAllTypesParams(args [1]string, r *http.Request) (params ReadAllTypesParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1101,7 +1462,7 @@ func decodeReadAllTypesParams(args [1]string, r *http.Request) (params ReadAllTy
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 			if err := func() error {
 				if err := (validate.Int{
@@ -1118,29 +1479,46 @@ func decodeReadAllTypesParams(args [1]string, r *http.Request) (params ReadAllTy
 				}
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: invalid")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadCategoryParams is parameters of readCategory operation.
 type ReadCategoryParams struct {
 	// ID of the Category.
 	ID int
 }
 
-func unpackReadCategoryParams(packed map[string]any) (params ReadCategoryParams) {
-	params.ID = packed["id"].(int)
+func unpackReadCategoryParams(packed middleware.Parameters) (params ReadCategoryParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeReadCategoryParams(args [1]string, r *http.Request) (params ReadCategoryParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1163,29 +1541,46 @@ func decodeReadCategoryParams(args [1]string, r *http.Request) (params ReadCateg
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadPetParams is parameters of readPet operation.
 type ReadPetParams struct {
 	// ID of the Pet.
 	ID int
 }
 
-func unpackReadPetParams(packed map[string]any) (params ReadPetParams) {
-	params.ID = packed["id"].(int)
+func unpackReadPetParams(packed middleware.Parameters) (params ReadPetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeReadPetParams(args [1]string, r *http.Request) (params ReadPetParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1208,29 +1603,46 @@ func decodeReadPetParams(args [1]string, r *http.Request) (params ReadPetParams,
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadPetOwnerParams is parameters of readPetOwner operation.
 type ReadPetOwnerParams struct {
 	// ID of the Pet.
 	ID int
 }
 
-func unpackReadPetOwnerParams(packed map[string]any) (params ReadPetOwnerParams) {
-	params.ID = packed["id"].(int)
+func unpackReadPetOwnerParams(packed middleware.Parameters) (params ReadPetOwnerParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeReadPetOwnerParams(args [1]string, r *http.Request) (params ReadPetOwnerParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1253,29 +1665,46 @@ func decodeReadPetOwnerParams(args [1]string, r *http.Request) (params ReadPetOw
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadUserParams is parameters of readUser operation.
 type ReadUserParams struct {
 	// ID of the User.
 	ID int
 }
 
-func unpackReadUserParams(packed map[string]any) (params ReadUserParams) {
-	params.ID = packed["id"].(int)
+func unpackReadUserParams(packed middleware.Parameters) (params ReadUserParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeReadUserParams(args [1]string, r *http.Request) (params ReadUserParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1298,29 +1727,46 @@ func decodeReadUserParams(args [1]string, r *http.Request) (params ReadUserParam
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// ReadUserBestFriendParams is parameters of readUserBestFriend operation.
 type ReadUserBestFriendParams struct {
 	// ID of the User.
 	ID int
 }
 
-func unpackReadUserBestFriendParams(packed map[string]any) (params ReadUserBestFriendParams) {
-	params.ID = packed["id"].(int)
+func unpackReadUserBestFriendParams(packed middleware.Parameters) (params ReadUserBestFriendParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeReadUserBestFriendParams(args [1]string, r *http.Request) (params ReadUserBestFriendParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1343,29 +1789,46 @@ func decodeReadUserBestFriendParams(args [1]string, r *http.Request) (params Rea
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// UpdateAllTypesParams is parameters of updateAllTypes operation.
 type UpdateAllTypesParams struct {
 	// ID of the AllTypes.
 	ID int64
 }
 
-func unpackUpdateAllTypesParams(packed map[string]any) (params UpdateAllTypesParams) {
-	params.ID = packed["id"].(int64)
+func unpackUpdateAllTypesParams(packed middleware.Parameters) (params UpdateAllTypesParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int64)
+	}
 	return params
 }
 
 func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (params UpdateAllTypesParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1388,7 +1851,7 @@ func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (params UpdateA
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 			if err := func() error {
 				if err := (validate.Int{
@@ -1405,29 +1868,46 @@ func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (params UpdateA
 				}
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: invalid")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// UpdateCategoryParams is parameters of updateCategory operation.
 type UpdateCategoryParams struct {
 	// ID of the Category.
 	ID int
 }
 
-func unpackUpdateCategoryParams(packed map[string]any) (params UpdateCategoryParams) {
-	params.ID = packed["id"].(int)
+func unpackUpdateCategoryParams(packed middleware.Parameters) (params UpdateCategoryParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeUpdateCategoryParams(args [1]string, r *http.Request) (params UpdateCategoryParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1450,29 +1930,46 @@ func decodeUpdateCategoryParams(args [1]string, r *http.Request) (params UpdateC
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// UpdatePetParams is parameters of updatePet operation.
 type UpdatePetParams struct {
 	// ID of the Pet.
 	ID int
 }
 
-func unpackUpdatePetParams(packed map[string]any) (params UpdatePetParams) {
-	params.ID = packed["id"].(int)
+func unpackUpdatePetParams(packed middleware.Parameters) (params UpdatePetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeUpdatePetParams(args [1]string, r *http.Request) (params UpdatePetParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1495,29 +1992,46 @@ func decodeUpdatePetParams(args [1]string, r *http.Request) (params UpdatePetPar
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil
 }
 
+// UpdateUserParams is parameters of updateUser operation.
 type UpdateUserParams struct {
 	// ID of the User.
 	ID int
 }
 
-func unpackUpdateUserParams(packed map[string]any) (params UpdateUserParams) {
-	params.ID = packed["id"].(int)
+func unpackUpdateUserParams(packed middleware.Parameters) (params UpdateUserParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "id",
+			In:   "path",
+		}
+		params.ID = packed[key].(int)
+	}
 	return params
 }
 
 func decodeUpdateUserParams(args [1]string, r *http.Request) (params UpdateUserParams, _ error) {
 	// Decode path: id.
-	{
-		param := args[0]
+	if err := func() error {
+		param, err := url.PathUnescape(args[0])
+		if err != nil {
+			return errors.Wrap(err, "unescape path")
+		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
 				Param:   "id",
@@ -1540,10 +2054,17 @@ func decodeUpdateUserParams(args [1]string, r *http.Request) (params UpdateUserP
 				params.ID = c
 				return nil
 			}(); err != nil {
-				return params, errors.Wrap(err, "path: id: parse")
+				return err
 			}
 		} else {
-			return params, errors.New("path: id: not specified")
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "id",
+			In:   "path",
+			Err:  err,
 		}
 	}
 	return params, nil

@@ -8,7 +8,6 @@ import (
 	"ariga.io/ogent/example/todo/ent"
 	"ariga.io/ogent/example/todo/ent/ogent"
 	"entgo.io/ent/dialect"
-	"entgo.io/ent/dialect/sql/schema"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -17,8 +16,8 @@ type handler struct {
 	client *ent.Client
 }
 
-func (h handler) MarkDone(ctx context.Context, params ogent.MarkDoneParams) (ogent.MarkDoneNoContent, error) {
-	return ogent.MarkDoneNoContent{}, h.client.Todo.UpdateOneID(params.ID).SetDone(true).Exec(ctx)
+func (h handler) MarkDone(ctx context.Context, params ogent.MarkDoneParams) error {
+	return h.client.Todo.UpdateOneID(params.ID).SetDone(true).Exec(ctx)
 }
 
 func main() {
@@ -28,7 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 	// Run the migrations.
-	if err := client.Schema.Create(context.Background(), schema.WithAtlas(true)); err != nil {
+	if err := client.Schema.Create(context.Background()); err != nil {
 		log.Fatal(err)
 	}
 	// Create the handler.

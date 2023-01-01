@@ -189,40 +189,7 @@ func (uu *UserUpdate) ClearBestFriend() *UserUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (uu *UserUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(uu.hooks) == 0 {
-		if err = uu.check(); err != nil {
-			return 0, err
-		}
-		affected, err = uu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*UserMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = uu.check(); err != nil {
-				return 0, err
-			}
-			uu.mutation = mutation
-			affected, err = uu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(uu.hooks) - 1; i >= 0; i-- {
-			if uu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = uu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, uu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, UserMutation](ctx, uu.sqlSave, uu.mutation, uu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -268,6 +235,9 @@ func (uu *UserUpdate) check() error {
 }
 
 func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := uu.check(); err != nil {
+		return n, err
+	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   user.Table,
@@ -286,78 +256,37 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := uu.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldName,
-		})
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if value, ok := uu.mutation.Age(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldAge,
-		})
+		_spec.SetField(user.FieldAge, field.TypeUint, value)
 	}
 	if value, ok := uu.mutation.AddedAge(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldAge,
-		})
+		_spec.AddField(user.FieldAge, field.TypeUint, value)
 	}
 	if value, ok := uu.mutation.Height(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldHeight,
-		})
+		_spec.SetField(user.FieldHeight, field.TypeUint, value)
 	}
 	if value, ok := uu.mutation.AddedHeight(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldHeight,
-		})
+		_spec.AddField(user.FieldHeight, field.TypeUint, value)
 	}
 	if uu.mutation.HeightCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Column: user.FieldHeight,
-		})
+		_spec.ClearField(user.FieldHeight, field.TypeUint)
 	}
 	if value, ok := uu.mutation.FavoriteCatBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteCatBreed,
-		})
+		_spec.SetField(user.FieldFavoriteCatBreed, field.TypeEnum, value)
 	}
 	if value, ok := uu.mutation.FavoriteDogBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteDogBreed,
-		})
+		_spec.SetField(user.FieldFavoriteDogBreed, field.TypeEnum, value)
 	}
 	if uu.mutation.FavoriteDogBreedCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Column: user.FieldFavoriteDogBreed,
-		})
+		_spec.ClearField(user.FieldFavoriteDogBreed, field.TypeEnum)
 	}
 	if value, ok := uu.mutation.FavoriteFishBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteFishBreed,
-		})
+		_spec.SetField(user.FieldFavoriteFishBreed, field.TypeEnum, value)
 	}
 	if uu.mutation.FavoriteFishBreedCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Column: user.FieldFavoriteFishBreed,
-		})
+		_spec.ClearField(user.FieldFavoriteFishBreed, field.TypeEnum)
 	}
 	if uu.mutation.PetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -456,6 +385,7 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	uu.mutation.done = true
 	return n, nil
 }
 
@@ -634,46 +564,7 @@ func (uuo *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne 
 
 // Save executes the query and returns the updated User entity.
 func (uuo *UserUpdateOne) Save(ctx context.Context) (*User, error) {
-	var (
-		err  error
-		node *User
-	)
-	if len(uuo.hooks) == 0 {
-		if err = uuo.check(); err != nil {
-			return nil, err
-		}
-		node, err = uuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*UserMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = uuo.check(); err != nil {
-				return nil, err
-			}
-			uuo.mutation = mutation
-			node, err = uuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(uuo.hooks) - 1; i >= 0; i-- {
-			if uuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = uuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, uuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*User)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from UserMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*User, UserMutation](ctx, uuo.sqlSave, uuo.mutation, uuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -719,6 +610,9 @@ func (uuo *UserUpdateOne) check() error {
 }
 
 func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
+	if err := uuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   user.Table,
@@ -754,78 +648,37 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 	}
 	if value, ok := uuo.mutation.Name(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: user.FieldName,
-		})
+		_spec.SetField(user.FieldName, field.TypeString, value)
 	}
 	if value, ok := uuo.mutation.Age(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldAge,
-		})
+		_spec.SetField(user.FieldAge, field.TypeUint, value)
 	}
 	if value, ok := uuo.mutation.AddedAge(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldAge,
-		})
+		_spec.AddField(user.FieldAge, field.TypeUint, value)
 	}
 	if value, ok := uuo.mutation.Height(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldHeight,
-		})
+		_spec.SetField(user.FieldHeight, field.TypeUint, value)
 	}
 	if value, ok := uuo.mutation.AddedHeight(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: user.FieldHeight,
-		})
+		_spec.AddField(user.FieldHeight, field.TypeUint, value)
 	}
 	if uuo.mutation.HeightCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Column: user.FieldHeight,
-		})
+		_spec.ClearField(user.FieldHeight, field.TypeUint)
 	}
 	if value, ok := uuo.mutation.FavoriteCatBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteCatBreed,
-		})
+		_spec.SetField(user.FieldFavoriteCatBreed, field.TypeEnum, value)
 	}
 	if value, ok := uuo.mutation.FavoriteDogBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteDogBreed,
-		})
+		_spec.SetField(user.FieldFavoriteDogBreed, field.TypeEnum, value)
 	}
 	if uuo.mutation.FavoriteDogBreedCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Column: user.FieldFavoriteDogBreed,
-		})
+		_spec.ClearField(user.FieldFavoriteDogBreed, field.TypeEnum)
 	}
 	if value, ok := uuo.mutation.FavoriteFishBreed(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: user.FieldFavoriteFishBreed,
-		})
+		_spec.SetField(user.FieldFavoriteFishBreed, field.TypeEnum, value)
 	}
 	if uuo.mutation.FavoriteFishBreedCleared() {
-		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Column: user.FieldFavoriteFishBreed,
-		})
+		_spec.ClearField(user.FieldFavoriteFishBreed, field.TypeEnum)
 	}
 	if uuo.mutation.PetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -927,5 +780,6 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 		return nil, err
 	}
+	uuo.mutation.done = true
 	return _node, nil
 }

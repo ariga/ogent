@@ -31,7 +31,7 @@ func rawError(err error) jx.Raw {
 }
 
 // CreateAllTypes handles POST /all-types-slice requests.
-func (h *OgentHandler) CreateAllTypes(ctx context.Context, req CreateAllTypesReq) (CreateAllTypesRes, error) {
+func (h *OgentHandler) CreateAllTypes(ctx context.Context, req *CreateAllTypesReq) (CreateAllTypesRes, error) {
 	b := h.client.AllTypes.Create()
 	// Add all fields.
 	b.SetInt(req.Int)
@@ -112,7 +112,7 @@ func (h *OgentHandler) ReadAllTypes(ctx context.Context, params ReadAllTypesPara
 }
 
 // UpdateAllTypes handles PATCH /all-types-slice/{id} requests.
-func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
+func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req *UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
 	b := h.client.AllTypes.UpdateOneID(uint32(params.ID))
 	// Add all fields.
 	if v, ok := req.Int.Get(); ok {
@@ -268,7 +268,7 @@ func (h *OgentHandler) ListAllTypes(ctx context.Context, params ListAllTypesPara
 }
 
 // CreateCategory handles POST /categories requests.
-func (h *OgentHandler) CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error) {
+func (h *OgentHandler) CreateCategory(ctx context.Context, req *CreateCategoryReq) (CreateCategoryRes, error) {
 	b := h.client.Category.Create()
 	// Add all fields.
 	b.SetName(req.Name)
@@ -332,7 +332,7 @@ func (h *OgentHandler) ReadCategory(ctx context.Context, params ReadCategoryPara
 }
 
 // UpdateCategory handles PATCH /categories/{id} requests.
-func (h *OgentHandler) UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
+func (h *OgentHandler) UpdateCategory(ctx context.Context, req *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
 	b := h.client.Category.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {
@@ -471,7 +471,7 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 }
 
 // CreatePet handles POST /pets requests.
-func (h *OgentHandler) CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error) {
+func (h *OgentHandler) CreatePet(ctx context.Context, req *CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
 	// Add all fields.
 	b.SetName(req.Name)
@@ -614,7 +614,7 @@ func (h *OgentHandler) ReadPet(ctx context.Context, params ReadPetParams) (ReadP
 }
 
 // UpdatePet handles PATCH /pets/{id} requests.
-func (h *OgentHandler) UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
+func (h *OgentHandler) UpdatePet(ctx context.Context, req *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
 	b := h.client.Pet.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {
@@ -768,7 +768,7 @@ func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriends
 }
 
 // CreateUser handles POST /users requests.
-func (h *OgentHandler) CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error) {
+func (h *OgentHandler) CreateUser(ctx context.Context, req *CreateUserReq) (CreateUserRes, error) {
 	b := h.client.User.Create()
 	// Add all fields.
 	b.SetName(req.Name)
@@ -846,7 +846,7 @@ func (h *OgentHandler) ReadUser(ctx context.Context, params ReadUserParams) (Rea
 }
 
 // UpdateUser handles PATCH /users/{id} requests.
-func (h *OgentHandler) UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
+func (h *OgentHandler) UpdateUser(ctx context.Context, req *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
 	b := h.client.User.UpdateOneID(params.ID)
 	// Add all fields.
 	if v, ok := req.Name.Get(); ok {

@@ -4,10 +4,6 @@ package ogent
 
 import (
 	"context"
-
-	"go.opentelemetry.io/otel/metric/instrument/syncint64"
-
-	"github.com/ogen-go/ogen/otelogen"
 )
 
 // Handler handles operations described by OpenAPI v3 specification.
@@ -17,25 +13,25 @@ type Handler interface {
 	// Creates a new AllTypes and persists it to storage.
 	//
 	// POST /all-types
-	CreateAllTypes(ctx context.Context, req CreateAllTypesReq) (CreateAllTypesRes, error)
+	CreateAllTypes(ctx context.Context, req *CreateAllTypesReq) (CreateAllTypesRes, error)
 	// CreateCategory implements createCategory operation.
 	//
 	// Creates a new Category and persists it to storage.
 	//
 	// POST /categories
-	CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error)
+	CreateCategory(ctx context.Context, req *CreateCategoryReq) (CreateCategoryRes, error)
 	// CreatePet implements createPet operation.
 	//
 	// Creates a new Pet and persists it to storage.
 	//
 	// POST /pets
-	CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error)
+	CreatePet(ctx context.Context, req *CreatePetReq) (CreatePetRes, error)
 	// CreateUser implements createUser operation.
 	//
 	// Creates a new User and persists it to storage.
 	//
 	// POST /users
-	CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error)
+	CreateUser(ctx context.Context, req *CreateUserReq) (CreateUserRes, error)
 	// DeleteAllTypes implements deleteAllTypes operation.
 	//
 	// Deletes the AllTypes with the requested ID.
@@ -149,53 +145,42 @@ type Handler interface {
 	// Updates a AllTypes and persists changes to storage.
 	//
 	// PATCH /all-types/{id}
-	UpdateAllTypes(ctx context.Context, req UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error)
+	UpdateAllTypes(ctx context.Context, req *UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error)
 	// UpdateCategory implements updateCategory operation.
 	//
 	// Updates a Category and persists changes to storage.
 	//
 	// PATCH /categories/{id}
-	UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
+	UpdateCategory(ctx context.Context, req *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
 	// UpdatePet implements updatePet operation.
 	//
 	// Updates a Pet and persists changes to storage.
 	//
 	// PATCH /pets/{id}
-	UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
+	UpdatePet(ctx context.Context, req *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
 	// UpdateUser implements updateUser operation.
 	//
 	// Updates a User and persists changes to storage.
 	//
 	// PATCH /users/{id}
-	UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)
+	UpdateUser(ctx context.Context, req *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and
 // calls Handler to handle requests.
 type Server struct {
-	h   Handler
-	cfg config
-
-	requests syncint64.Counter
-	errors   syncint64.Counter
-	duration syncint64.Histogram
+	h Handler
+	baseServer
 }
 
 // NewServer creates new Server.
-func NewServer(h Handler, opts ...Option) (*Server, error) {
-	s := &Server{
-		h:   h,
-		cfg: newConfig(opts...),
-	}
-	var err error
-	if s.requests, err = s.cfg.Meter.SyncInt64().Counter(otelogen.ServerRequestCount); err != nil {
+func NewServer(h Handler, opts ...ServerOption) (*Server, error) {
+	s, err := newServerConfig(opts...).baseServer()
+	if err != nil {
 		return nil, err
 	}
-	if s.errors, err = s.cfg.Meter.SyncInt64().Counter(otelogen.ServerErrorsCount); err != nil {
-		return nil, err
-	}
-	if s.duration, err = s.cfg.Meter.SyncInt64().Histogram(otelogen.ServerDuration); err != nil {
-		return nil, err
-	}
-	return s, nil
+	return &Server{
+		h:          h,
+		baseServer: s,
+	}, nil
 }

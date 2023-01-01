@@ -10,7 +10,6 @@ import (
 	"github.com/go-faster/errors"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric/instrument/syncint64"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
@@ -19,42 +18,30 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+// Client implements OAS client.
+type Client struct {
+	serverURL *url.URL
+	baseClient
+}
+
 var _ Handler = struct {
 	*Client
 }{}
 
-// Allocate option closure once.
-var clientSpanKind = trace.WithSpanKind(trace.SpanKindClient)
-
-// Client implements OAS client.
-type Client struct {
-	serverURL *url.URL
-	cfg       config
-	requests  syncint64.Counter
-	errors    syncint64.Counter
-	duration  syncint64.Histogram
-}
-
 // NewClient initializes new Client defined by OAS.
-func NewClient(serverURL string, opts ...Option) (*Client, error) {
+func NewClient(serverURL string, opts ...ClientOption) (*Client, error) {
 	u, err := url.Parse(serverURL)
 	if err != nil {
 		return nil, err
 	}
-	c := &Client{
-		cfg:       newConfig(opts...),
-		serverURL: u,
-	}
-	if c.requests, err = c.cfg.Meter.SyncInt64().Counter(otelogen.ClientRequestCount); err != nil {
+	c, err := newClientConfig(opts...).baseClient()
+	if err != nil {
 		return nil, err
 	}
-	if c.errors, err = c.cfg.Meter.SyncInt64().Counter(otelogen.ClientErrorsCount); err != nil {
-		return nil, err
-	}
-	if c.duration, err = c.cfg.Meter.SyncInt64().Histogram(otelogen.ClientDuration); err != nil {
-		return nil, err
-	}
-	return c, nil
+	return &Client{
+		serverURL:  u,
+		baseClient: c,
+	}, nil
 }
 
 type serverURLKey struct{}
@@ -77,7 +64,13 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // Creates a new AllTypes and persists it to storage.
 //
 // POST /all-types
-func (c *Client) CreateAllTypes(ctx context.Context, request CreateAllTypesReq) (res CreateAllTypesRes, err error) {
+func (c *Client) CreateAllTypes(ctx context.Context, request *CreateAllTypesReq) (CreateAllTypesRes, error) {
+	res, err := c.sendCreateAllTypes(ctx, request)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendCreateAllTypes(ctx context.Context, request *CreateAllTypesReq) (res CreateAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createAllTypes"),
 	}
@@ -151,11 +144,16 @@ func (c *Client) CreateAllTypes(ctx context.Context, request CreateAllTypesReq) 
 // Creates a new Category and persists it to storage.
 //
 // POST /categories
-func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) (res CreateCategoryRes, err error) {
+func (c *Client) CreateCategory(ctx context.Context, request *CreateCategoryReq) (CreateCategoryRes, error) {
+	res, err := c.sendCreateCategory(ctx, request)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendCreateCategory(ctx context.Context, request *CreateCategoryReq) (res CreateCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createCategory"),
 	}
-	// Validate request before sending.
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -217,11 +215,16 @@ func (c *Client) CreateCategory(ctx context.Context, request CreateCategoryReq) 
 // Creates a new Pet and persists it to storage.
 //
 // POST /pets
-func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res CreatePetRes, err error) {
+func (c *Client) CreatePet(ctx context.Context, request *CreatePetReq) (CreatePetRes, error) {
+	res, err := c.sendCreatePet(ctx, request)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendCreatePet(ctx context.Context, request *CreatePetReq) (res CreatePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createPet"),
 	}
-	// Validate request before sending.
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -283,7 +286,13 @@ func (c *Client) CreatePet(ctx context.Context, request CreatePetReq) (res Creat
 // Creates a new User and persists it to storage.
 //
 // POST /users
-func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res CreateUserRes, err error) {
+func (c *Client) CreateUser(ctx context.Context, request *CreateUserReq) (CreateUserRes, error) {
+	res, err := c.sendCreateUser(ctx, request)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendCreateUser(ctx context.Context, request *CreateUserReq) (res CreateUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createUser"),
 	}
@@ -357,7 +366,13 @@ func (c *Client) CreateUser(ctx context.Context, request CreateUserReq) (res Cre
 // Deletes the AllTypes with the requested ID.
 //
 // DELETE /all-types/{id}
-func (c *Client) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (res DeleteAllTypesRes, err error) {
+func (c *Client) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error) {
+	res, err := c.sendDeleteAllTypes(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendDeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (res DeleteAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteAllTypes"),
 	}
@@ -433,7 +448,13 @@ func (c *Client) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams
 // Deletes the Category with the requested ID.
 //
 // DELETE /categories/{id}
-func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (res DeleteCategoryRes, err error) {
+func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error) {
+	res, err := c.sendDeleteCategory(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendDeleteCategory(ctx context.Context, params DeleteCategoryParams) (res DeleteCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteCategory"),
 	}
@@ -509,7 +530,13 @@ func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams
 // Deletes the Pet with the requested ID.
 //
 // DELETE /pets/{id}
-func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res DeletePetRes, err error) {
+func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
+	res, err := c.sendDeletePet(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendDeletePet(ctx context.Context, params DeletePetParams) (res DeletePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deletePet"),
 	}
@@ -585,7 +612,13 @@ func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (res Del
 // Deletes the User with the requested ID.
 //
 // DELETE /users/{id}
-func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res DeleteUserRes, err error) {
+func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error) {
+	res, err := c.sendDeleteUser(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendDeleteUser(ctx context.Context, params DeleteUserParams) (res DeleteUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteUser"),
 	}
@@ -661,7 +694,13 @@ func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (res D
 // List AllTypes.
 //
 // GET /all-types
-func (c *Client) ListAllTypes(ctx context.Context, params ListAllTypesParams) (res ListAllTypesRes, err error) {
+func (c *Client) ListAllTypes(ctx context.Context, params ListAllTypesParams) (ListAllTypesRes, error) {
+	res, err := c.sendListAllTypes(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListAllTypes(ctx context.Context, params ListAllTypesParams) (res ListAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listAllTypes"),
 	}
@@ -761,7 +800,13 @@ func (c *Client) ListAllTypes(ctx context.Context, params ListAllTypesParams) (r
 // List Categories.
 //
 // GET /categories
-func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (res ListCategoryRes, err error) {
+func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error) {
+	res, err := c.sendListCategory(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListCategory(ctx context.Context, params ListCategoryParams) (res ListCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listCategory"),
 	}
@@ -861,7 +906,13 @@ func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (r
 // List attached Pets.
 //
 // GET /categories/{id}/pets
-func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (res ListCategoryPetsRes, err error) {
+func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error) {
+	res, err := c.sendListCategoryPets(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (res ListCategoryPetsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listCategoryPets"),
 	}
@@ -976,7 +1027,13 @@ func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsPa
 // List Pets.
 //
 // GET /pets
-func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPetRes, err error) {
+func (c *Client) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
+	res, err := c.sendListPet(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListPet(ctx context.Context, params ListPetParams) (res ListPetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPet"),
 	}
@@ -1076,7 +1133,13 @@ func (c *Client) ListPet(ctx context.Context, params ListPetParams) (res ListPet
 // List attached Categories.
 //
 // GET /pets/{id}/categories
-func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (res ListPetCategoriesRes, err error) {
+func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
+	res, err := c.sendListPetCategories(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCategoriesParams) (res ListPetCategoriesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPetCategories"),
 	}
@@ -1191,7 +1254,13 @@ func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategories
 // List attached Friends.
 //
 // GET /pets/{id}/friends
-func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (res ListPetFriendsRes, err error) {
+func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error) {
+	res, err := c.sendListPetFriends(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsParams) (res ListPetFriendsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPetFriends"),
 	}
@@ -1306,7 +1375,13 @@ func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams
 // List Users.
 //
 // GET /users
-func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListUserRes, err error) {
+func (c *Client) ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error) {
+	res, err := c.sendListUser(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListUser(ctx context.Context, params ListUserParams) (res ListUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listUser"),
 	}
@@ -1406,7 +1481,13 @@ func (c *Client) ListUser(ctx context.Context, params ListUserParams) (res ListU
 // List attached Pets.
 //
 // GET /users/{id}/pets
-func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (res ListUserPetsRes, err error) {
+func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error) {
+	res, err := c.sendListUserPets(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams) (res ListUserPetsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listUserPets"),
 	}
@@ -1521,7 +1602,13 @@ func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (r
 // Finds the AllTypes with the requested ID and returns it.
 //
 // GET /all-types/{id}
-func (c *Client) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (res ReadAllTypesRes, err error) {
+func (c *Client) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error) {
+	res, err := c.sendReadAllTypes(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadAllTypes(ctx context.Context, params ReadAllTypesParams) (res ReadAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readAllTypes"),
 	}
@@ -1597,7 +1684,13 @@ func (c *Client) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (r
 // Finds the Category with the requested ID and returns it.
 //
 // GET /categories/{id}
-func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (res ReadCategoryRes, err error) {
+func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error) {
+	res, err := c.sendReadCategory(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadCategory(ctx context.Context, params ReadCategoryParams) (res ReadCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readCategory"),
 	}
@@ -1673,7 +1766,13 @@ func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (r
 // Finds the Pet with the requested ID and returns it.
 //
 // GET /pets/{id}
-func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPetRes, err error) {
+func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error) {
+	res, err := c.sendReadPet(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadPet(ctx context.Context, params ReadPetParams) (res ReadPetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readPet"),
 	}
@@ -1749,7 +1848,13 @@ func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (res ReadPet
 // Find the attached User of the Pet with the given ID.
 //
 // GET /pets/{id}/owner
-func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (res ReadPetOwnerRes, err error) {
+func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
+	res, err := c.sendReadPetOwner(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (res ReadPetOwnerRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readPetOwner"),
 	}
@@ -1826,7 +1931,13 @@ func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (r
 // Finds the User with the requested ID and returns it.
 //
 // GET /users/{id}
-func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadUserRes, err error) {
+func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error) {
+	res, err := c.sendReadUser(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadUser(ctx context.Context, params ReadUserParams) (res ReadUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readUser"),
 	}
@@ -1902,7 +2013,13 @@ func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (res ReadU
 // Find the attached User of the User with the given ID.
 //
 // GET /users/{id}/best-friend
-func (c *Client) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (res ReadUserBestFriendRes, err error) {
+func (c *Client) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error) {
+	res, err := c.sendReadUserBestFriend(ctx, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (res ReadUserBestFriendRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readUserBestFriend"),
 	}
@@ -1979,7 +2096,13 @@ func (c *Client) ReadUserBestFriend(ctx context.Context, params ReadUserBestFrie
 // Updates a AllTypes and persists changes to storage.
 //
 // PATCH /all-types/{id}
-func (c *Client) UpdateAllTypes(ctx context.Context, request UpdateAllTypesReq, params UpdateAllTypesParams) (res UpdateAllTypesRes, err error) {
+func (c *Client) UpdateAllTypes(ctx context.Context, request *UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
+	res, err := c.sendUpdateAllTypes(ctx, request, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendUpdateAllTypes(ctx context.Context, request *UpdateAllTypesReq, params UpdateAllTypesParams) (res UpdateAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateAllTypes"),
 	}
@@ -2067,11 +2190,16 @@ func (c *Client) UpdateAllTypes(ctx context.Context, request UpdateAllTypesReq, 
 // Updates a Category and persists changes to storage.
 //
 // PATCH /categories/{id}
-func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, params UpdateCategoryParams) (res UpdateCategoryRes, err error) {
+func (c *Client) UpdateCategory(ctx context.Context, request *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
+	res, err := c.sendUpdateCategory(ctx, request, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendUpdateCategory(ctx context.Context, request *UpdateCategoryReq, params UpdateCategoryParams) (res UpdateCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateCategory"),
 	}
-	// Validate request before sending.
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2147,11 +2275,16 @@ func (c *Client) UpdateCategory(ctx context.Context, request UpdateCategoryReq, 
 // Updates a Pet and persists changes to storage.
 //
 // PATCH /pets/{id}
-func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params UpdatePetParams) (res UpdatePetRes, err error) {
+func (c *Client) UpdatePet(ctx context.Context, request *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
+	res, err := c.sendUpdatePet(ctx, request, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendUpdatePet(ctx context.Context, request *UpdatePetReq, params UpdatePetParams) (res UpdatePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updatePet"),
 	}
-	// Validate request before sending.
 
 	// Run stopwatch.
 	startTime := time.Now()
@@ -2227,7 +2360,13 @@ func (c *Client) UpdatePet(ctx context.Context, request UpdatePetReq, params Upd
 // Updates a User and persists changes to storage.
 //
 // PATCH /users/{id}
-func (c *Client) UpdateUser(ctx context.Context, request UpdateUserReq, params UpdateUserParams) (res UpdateUserRes, err error) {
+func (c *Client) UpdateUser(ctx context.Context, request *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
+	res, err := c.sendUpdateUser(ctx, request, params)
+	_ = res
+	return res, err
+}
+
+func (c *Client) sendUpdateUser(ctx context.Context, request *UpdateUserReq, params UpdateUserParams) (res UpdateUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateUser"),
 	}

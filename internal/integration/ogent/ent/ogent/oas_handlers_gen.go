@@ -16,10 +16,9 @@ import (
 	"github.com/ogen-go/ogen/otelogen"
 )
 
-// Allocate option closure once.
-var serverSpanKind = trace.WithSpanKind(trace.SpanKindServer)
-
 // handleCreateAllTypesRequest handles createAllTypes operation.
+//
+// Creates a new AllTypes and persists it to storage.
 //
 // POST /all-types
 func (s *Server) handleCreateAllTypesRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -79,12 +78,12 @@ func (s *Server) handleCreateAllTypesRequest(args [0]string, w http.ResponseWrit
 			OperationName: "CreateAllTypes",
 			OperationID:   "createAllTypes",
 			Body:          request,
-			Params:        map[string]any{},
+			Params:        middleware.Parameters{},
 			Raw:           r,
 		}
 
 		type (
-			Request  = CreateAllTypesReq
+			Request  = *CreateAllTypesReq
 			Params   = struct{}
 			Response = CreateAllTypesRes
 		)
@@ -96,8 +95,9 @@ func (s *Server) handleCreateAllTypesRequest(args [0]string, w http.ResponseWrit
 			m,
 			mreq,
 			nil,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.CreateAllTypes(ctx, request)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.CreateAllTypes(ctx, request)
+				return response, err
 			},
 		)
 	} else {
@@ -117,6 +117,8 @@ func (s *Server) handleCreateAllTypesRequest(args [0]string, w http.ResponseWrit
 }
 
 // handleCreateCategoryRequest handles createCategory operation.
+//
+// Creates a new Category and persists it to storage.
 //
 // POST /categories
 func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -176,12 +178,12 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 			OperationName: "CreateCategory",
 			OperationID:   "createCategory",
 			Body:          request,
-			Params:        map[string]any{},
+			Params:        middleware.Parameters{},
 			Raw:           r,
 		}
 
 		type (
-			Request  = CreateCategoryReq
+			Request  = *CreateCategoryReq
 			Params   = struct{}
 			Response = CreateCategoryRes
 		)
@@ -193,8 +195,9 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 			m,
 			mreq,
 			nil,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.CreateCategory(ctx, request)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.CreateCategory(ctx, request)
+				return response, err
 			},
 		)
 	} else {
@@ -214,6 +217,8 @@ func (s *Server) handleCreateCategoryRequest(args [0]string, w http.ResponseWrit
 }
 
 // handleCreatePetRequest handles createPet operation.
+//
+// Creates a new Pet and persists it to storage.
 //
 // POST /pets
 func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -273,12 +278,12 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 			OperationName: "CreatePet",
 			OperationID:   "createPet",
 			Body:          request,
-			Params:        map[string]any{},
+			Params:        middleware.Parameters{},
 			Raw:           r,
 		}
 
 		type (
-			Request  = CreatePetReq
+			Request  = *CreatePetReq
 			Params   = struct{}
 			Response = CreatePetRes
 		)
@@ -290,8 +295,9 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 			m,
 			mreq,
 			nil,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.CreatePet(ctx, request)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.CreatePet(ctx, request)
+				return response, err
 			},
 		)
 	} else {
@@ -311,6 +317,8 @@ func (s *Server) handleCreatePetRequest(args [0]string, w http.ResponseWriter, r
 }
 
 // handleCreateUserRequest handles createUser operation.
+//
+// Creates a new User and persists it to storage.
 //
 // POST /users
 func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -370,12 +378,12 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 			OperationName: "CreateUser",
 			OperationID:   "createUser",
 			Body:          request,
-			Params:        map[string]any{},
+			Params:        middleware.Parameters{},
 			Raw:           r,
 		}
 
 		type (
-			Request  = CreateUserReq
+			Request  = *CreateUserReq
 			Params   = struct{}
 			Response = CreateUserRes
 		)
@@ -387,8 +395,9 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 			m,
 			mreq,
 			nil,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.CreateUser(ctx, request)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.CreateUser(ctx, request)
+				return response, err
 			},
 		)
 	} else {
@@ -408,6 +417,8 @@ func (s *Server) handleCreateUserRequest(args [0]string, w http.ResponseWriter, 
 }
 
 // handleDeleteAllTypesRequest handles deleteAllTypes operation.
+//
+// Deletes the AllTypes with the requested ID.
 //
 // DELETE /all-types/{id}
 func (s *Server) handleDeleteAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -462,8 +473,11 @@ func (s *Server) handleDeleteAllTypesRequest(args [1]string, w http.ResponseWrit
 			OperationName: "DeleteAllTypes",
 			OperationID:   "deleteAllTypes",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -481,8 +495,9 @@ func (s *Server) handleDeleteAllTypesRequest(args [1]string, w http.ResponseWrit
 			m,
 			mreq,
 			unpackDeleteAllTypesParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.DeleteAllTypes(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.DeleteAllTypes(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -502,6 +517,8 @@ func (s *Server) handleDeleteAllTypesRequest(args [1]string, w http.ResponseWrit
 }
 
 // handleDeleteCategoryRequest handles deleteCategory operation.
+//
+// Deletes the Category with the requested ID.
 //
 // DELETE /categories/{id}
 func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -556,8 +573,11 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 			OperationName: "DeleteCategory",
 			OperationID:   "deleteCategory",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -575,8 +595,9 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 			m,
 			mreq,
 			unpackDeleteCategoryParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.DeleteCategory(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.DeleteCategory(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -596,6 +617,8 @@ func (s *Server) handleDeleteCategoryRequest(args [1]string, w http.ResponseWrit
 }
 
 // handleDeletePetRequest handles deletePet operation.
+//
+// Deletes the Pet with the requested ID.
 //
 // DELETE /pets/{id}
 func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -650,8 +673,11 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 			OperationName: "DeletePet",
 			OperationID:   "deletePet",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -669,8 +695,9 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 			m,
 			mreq,
 			unpackDeletePetParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.DeletePet(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.DeletePet(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -690,6 +717,8 @@ func (s *Server) handleDeletePetRequest(args [1]string, w http.ResponseWriter, r
 }
 
 // handleDeleteUserRequest handles deleteUser operation.
+//
+// Deletes the User with the requested ID.
 //
 // DELETE /users/{id}
 func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -744,8 +773,11 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 			OperationName: "DeleteUser",
 			OperationID:   "deleteUser",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -763,8 +795,9 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 			m,
 			mreq,
 			unpackDeleteUserParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.DeleteUser(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.DeleteUser(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -784,6 +817,8 @@ func (s *Server) handleDeleteUserRequest(args [1]string, w http.ResponseWriter, 
 }
 
 // handleListAllTypesRequest handles listAllTypes operation.
+//
+// List AllTypes.
 //
 // GET /all-types
 func (s *Server) handleListAllTypesRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -838,9 +873,15 @@ func (s *Server) handleListAllTypesRequest(args [0]string, w http.ResponseWriter
 			OperationName: "ListAllTypes",
 			OperationID:   "listAllTypes",
 			Body:          nil,
-			Params: map[string]any{
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -858,8 +899,9 @@ func (s *Server) handleListAllTypesRequest(args [0]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackListAllTypesParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListAllTypes(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListAllTypes(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -879,6 +921,8 @@ func (s *Server) handleListAllTypesRequest(args [0]string, w http.ResponseWriter
 }
 
 // handleListCategoryRequest handles listCategory operation.
+//
+// List Categories.
 //
 // GET /categories
 func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -933,9 +977,15 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 			OperationName: "ListCategory",
 			OperationID:   "listCategory",
 			Body:          nil,
-			Params: map[string]any{
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -953,8 +1003,9 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackListCategoryParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListCategory(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListCategory(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -974,6 +1025,8 @@ func (s *Server) handleListCategoryRequest(args [0]string, w http.ResponseWriter
 }
 
 // handleListCategoryPetsRequest handles listCategoryPets operation.
+//
+// List attached Pets.
 //
 // GET /categories/{id}/pets
 func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1028,10 +1081,19 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 			OperationName: "ListCategoryPets",
 			OperationID:   "listCategoryPets",
 			Body:          nil,
-			Params: map[string]any{
-				"id":           params.ID,
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1049,8 +1111,9 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 			m,
 			mreq,
 			unpackListCategoryPetsParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListCategoryPets(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListCategoryPets(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1070,6 +1133,8 @@ func (s *Server) handleListCategoryPetsRequest(args [1]string, w http.ResponseWr
 }
 
 // handleListPetRequest handles listPet operation.
+//
+// List Pets.
 //
 // GET /pets
 func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -1124,9 +1189,15 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 			OperationName: "ListPet",
 			OperationID:   "listPet",
 			Body:          nil,
-			Params: map[string]any{
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1144,8 +1215,9 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 			m,
 			mreq,
 			unpackListPetParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListPet(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListPet(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1165,6 +1237,8 @@ func (s *Server) handleListPetRequest(args [0]string, w http.ResponseWriter, r *
 }
 
 // handleListPetCategoriesRequest handles listPetCategories operation.
+//
+// List attached Categories.
 //
 // GET /pets/{id}/categories
 func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1219,10 +1293,19 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 			OperationName: "ListPetCategories",
 			OperationID:   "listPetCategories",
 			Body:          nil,
-			Params: map[string]any{
-				"id":           params.ID,
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1240,8 +1323,9 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 			m,
 			mreq,
 			unpackListPetCategoriesParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListPetCategories(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListPetCategories(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1261,6 +1345,8 @@ func (s *Server) handleListPetCategoriesRequest(args [1]string, w http.ResponseW
 }
 
 // handleListPetFriendsRequest handles listPetFriends operation.
+//
+// List attached Friends.
 //
 // GET /pets/{id}/friends
 func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1315,10 +1401,19 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 			OperationName: "ListPetFriends",
 			OperationID:   "listPetFriends",
 			Body:          nil,
-			Params: map[string]any{
-				"id":           params.ID,
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1336,8 +1431,9 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 			m,
 			mreq,
 			unpackListPetFriendsParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListPetFriends(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListPetFriends(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1357,6 +1453,8 @@ func (s *Server) handleListPetFriendsRequest(args [1]string, w http.ResponseWrit
 }
 
 // handleListUserRequest handles listUser operation.
+//
+// List Users.
 //
 // GET /users
 func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
@@ -1411,9 +1509,15 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 			OperationName: "ListUser",
 			OperationID:   "listUser",
 			Body:          nil,
-			Params: map[string]any{
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1431,8 +1535,9 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 			m,
 			mreq,
 			unpackListUserParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListUser(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListUser(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1452,6 +1557,8 @@ func (s *Server) handleListUserRequest(args [0]string, w http.ResponseWriter, r 
 }
 
 // handleListUserPetsRequest handles listUserPets operation.
+//
+// List attached Pets.
 //
 // GET /users/{id}/pets
 func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1506,10 +1613,19 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 			OperationName: "ListUserPets",
 			OperationID:   "listUserPets",
 			Body:          nil,
-			Params: map[string]any{
-				"id":           params.ID,
-				"page":         params.Page,
-				"itemsPerPage": params.ItemsPerPage,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "itemsPerPage",
+					In:   "query",
+				}: params.ItemsPerPage,
 			},
 			Raw: r,
 		}
@@ -1527,8 +1643,9 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackListUserPetsParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ListUserPets(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ListUserPets(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1548,6 +1665,8 @@ func (s *Server) handleListUserPetsRequest(args [1]string, w http.ResponseWriter
 }
 
 // handleReadAllTypesRequest handles readAllTypes operation.
+//
+// Finds the AllTypes with the requested ID and returns it.
 //
 // GET /all-types/{id}
 func (s *Server) handleReadAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1602,8 +1721,11 @@ func (s *Server) handleReadAllTypesRequest(args [1]string, w http.ResponseWriter
 			OperationName: "ReadAllTypes",
 			OperationID:   "readAllTypes",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -1621,8 +1743,9 @@ func (s *Server) handleReadAllTypesRequest(args [1]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackReadAllTypesParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadAllTypes(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadAllTypes(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1642,6 +1765,8 @@ func (s *Server) handleReadAllTypesRequest(args [1]string, w http.ResponseWriter
 }
 
 // handleReadCategoryRequest handles readCategory operation.
+//
+// Finds the Category with the requested ID and returns it.
 //
 // GET /categories/{id}
 func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1696,8 +1821,11 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 			OperationName: "ReadCategory",
 			OperationID:   "readCategory",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -1715,8 +1843,9 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackReadCategoryParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadCategory(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadCategory(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1736,6 +1865,8 @@ func (s *Server) handleReadCategoryRequest(args [1]string, w http.ResponseWriter
 }
 
 // handleReadPetRequest handles readPet operation.
+//
+// Finds the Pet with the requested ID and returns it.
 //
 // GET /pets/{id}
 func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1790,8 +1921,11 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 			OperationName: "ReadPet",
 			OperationID:   "readPet",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -1809,8 +1943,9 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 			m,
 			mreq,
 			unpackReadPetParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadPet(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadPet(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1830,6 +1965,8 @@ func (s *Server) handleReadPetRequest(args [1]string, w http.ResponseWriter, r *
 }
 
 // handleReadPetOwnerRequest handles readPetOwner operation.
+//
+// Find the attached User of the Pet with the given ID.
 //
 // GET /pets/{id}/owner
 func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1884,8 +2021,11 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 			OperationName: "ReadPetOwner",
 			OperationID:   "readPetOwner",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -1903,8 +2043,9 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 			m,
 			mreq,
 			unpackReadPetOwnerParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadPetOwner(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadPetOwner(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -1924,6 +2065,8 @@ func (s *Server) handleReadPetOwnerRequest(args [1]string, w http.ResponseWriter
 }
 
 // handleReadUserRequest handles readUser operation.
+//
+// Finds the User with the requested ID and returns it.
 //
 // GET /users/{id}
 func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -1978,8 +2121,11 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 			OperationName: "ReadUser",
 			OperationID:   "readUser",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -1997,8 +2143,9 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 			m,
 			mreq,
 			unpackReadUserParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadUser(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadUser(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -2018,6 +2165,8 @@ func (s *Server) handleReadUserRequest(args [1]string, w http.ResponseWriter, r 
 }
 
 // handleReadUserBestFriendRequest handles readUserBestFriend operation.
+//
+// Find the attached User of the User with the given ID.
 //
 // GET /users/{id}/best-friend
 func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -2072,8 +2221,11 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 			OperationName: "ReadUserBestFriend",
 			OperationID:   "readUserBestFriend",
 			Body:          nil,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
@@ -2091,8 +2243,9 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 			m,
 			mreq,
 			unpackReadUserBestFriendParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.ReadUserBestFriend(ctx, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.ReadUserBestFriend(ctx, params)
+				return response, err
 			},
 		)
 	} else {
@@ -2112,6 +2265,8 @@ func (s *Server) handleReadUserBestFriendRequest(args [1]string, w http.Response
 }
 
 // handleUpdateAllTypesRequest handles updateAllTypes operation.
+//
+// Updates a AllTypes and persists changes to storage.
 //
 // PATCH /all-types/{id}
 func (s *Server) handleUpdateAllTypesRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -2181,14 +2336,17 @@ func (s *Server) handleUpdateAllTypesRequest(args [1]string, w http.ResponseWrit
 			OperationName: "UpdateAllTypes",
 			OperationID:   "updateAllTypes",
 			Body:          request,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = UpdateAllTypesReq
+			Request  = *UpdateAllTypesReq
 			Params   = UpdateAllTypesParams
 			Response = UpdateAllTypesRes
 		)
@@ -2200,8 +2358,9 @@ func (s *Server) handleUpdateAllTypesRequest(args [1]string, w http.ResponseWrit
 			m,
 			mreq,
 			unpackUpdateAllTypesParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.UpdateAllTypes(ctx, request, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.UpdateAllTypes(ctx, request, params)
+				return response, err
 			},
 		)
 	} else {
@@ -2221,6 +2380,8 @@ func (s *Server) handleUpdateAllTypesRequest(args [1]string, w http.ResponseWrit
 }
 
 // handleUpdateCategoryRequest handles updateCategory operation.
+//
+// Updates a Category and persists changes to storage.
 //
 // PATCH /categories/{id}
 func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -2290,14 +2451,17 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 			OperationName: "UpdateCategory",
 			OperationID:   "updateCategory",
 			Body:          request,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = UpdateCategoryReq
+			Request  = *UpdateCategoryReq
 			Params   = UpdateCategoryParams
 			Response = UpdateCategoryRes
 		)
@@ -2309,8 +2473,9 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 			m,
 			mreq,
 			unpackUpdateCategoryParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.UpdateCategory(ctx, request, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.UpdateCategory(ctx, request, params)
+				return response, err
 			},
 		)
 	} else {
@@ -2330,6 +2495,8 @@ func (s *Server) handleUpdateCategoryRequest(args [1]string, w http.ResponseWrit
 }
 
 // handleUpdatePetRequest handles updatePet operation.
+//
+// Updates a Pet and persists changes to storage.
 //
 // PATCH /pets/{id}
 func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -2399,14 +2566,17 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 			OperationName: "UpdatePet",
 			OperationID:   "updatePet",
 			Body:          request,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = UpdatePetReq
+			Request  = *UpdatePetReq
 			Params   = UpdatePetParams
 			Response = UpdatePetRes
 		)
@@ -2418,8 +2588,9 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 			m,
 			mreq,
 			unpackUpdatePetParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.UpdatePet(ctx, request, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.UpdatePet(ctx, request, params)
+				return response, err
 			},
 		)
 	} else {
@@ -2439,6 +2610,8 @@ func (s *Server) handleUpdatePetRequest(args [1]string, w http.ResponseWriter, r
 }
 
 // handleUpdateUserRequest handles updateUser operation.
+//
+// Updates a User and persists changes to storage.
 //
 // PATCH /users/{id}
 func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
@@ -2508,14 +2681,17 @@ func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, 
 			OperationName: "UpdateUser",
 			OperationID:   "updateUser",
 			Body:          request,
-			Params: map[string]any{
-				"id": params.ID,
+			Params: middleware.Parameters{
+				{
+					Name: "id",
+					In:   "path",
+				}: params.ID,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = UpdateUserReq
+			Request  = *UpdateUserReq
 			Params   = UpdateUserParams
 			Response = UpdateUserRes
 		)
@@ -2527,8 +2703,9 @@ func (s *Server) handleUpdateUserRequest(args [1]string, w http.ResponseWriter, 
 			m,
 			mreq,
 			unpackUpdateUserParams,
-			func(ctx context.Context, request Request, params Params) (Response, error) {
-				return s.h.UpdateUser(ctx, request, params)
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.UpdateUser(ctx, request, params)
+				return response, err
 			},
 		)
 	} else {

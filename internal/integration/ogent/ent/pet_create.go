@@ -124,49 +124,7 @@ func (pc *PetCreate) Mutation() *PetMutation {
 
 // Save creates the Pet in the database.
 func (pc *PetCreate) Save(ctx context.Context) (*Pet, error) {
-	var (
-		err  error
-		node *Pet
-	)
-	if len(pc.hooks) == 0 {
-		if err = pc.check(); err != nil {
-			return nil, err
-		}
-		node, err = pc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*PetMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = pc.check(); err != nil {
-				return nil, err
-			}
-			pc.mutation = mutation
-			if node, err = pc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(pc.hooks) - 1; i >= 0; i-- {
-			if pc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = pc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, pc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*Pet)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from PetMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*Pet, PetMutation](ctx, pc.sqlSave, pc.mutation, pc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -203,6 +161,9 @@ func (pc *PetCreate) check() error {
 }
 
 func (pc *PetCreate) sqlSave(ctx context.Context) (*Pet, error) {
+	if err := pc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := pc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, pc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -212,6 +173,8 @@ func (pc *PetCreate) sqlSave(ctx context.Context) (*Pet, error) {
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
+	pc.mutation.id = &_node.ID
+	pc.mutation.done = true
 	return _node, nil
 }
 
@@ -227,43 +190,23 @@ func (pc *PetCreate) createSpec() (*Pet, *sqlgraph.CreateSpec) {
 		}
 	)
 	if value, ok := pc.mutation.Name(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: pet.FieldName,
-		})
+		_spec.SetField(pet.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
 	if value, ok := pc.mutation.Weight(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: pet.FieldWeight,
-		})
+		_spec.SetField(pet.FieldWeight, field.TypeInt, value)
 		_node.Weight = value
 	}
 	if value, ok := pc.mutation.Birthday(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: pet.FieldBirthday,
-		})
+		_spec.SetField(pet.FieldBirthday, field.TypeTime, value)
 		_node.Birthday = value
 	}
 	if value, ok := pc.mutation.TagID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBytes,
-			Value:  value,
-			Column: pet.FieldTagID,
-		})
+		_spec.SetField(pet.FieldTagID, field.TypeBytes, value)
 		_node.TagID = value
 	}
 	if value, ok := pc.mutation.Height(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: pet.FieldHeight,
-		})
+		_spec.SetField(pet.FieldHeight, field.TypeInt, value)
 		_node.Height = &value
 	}
 	if nodes := pc.mutation.CategoriesIDs(); len(nodes) > 0 {

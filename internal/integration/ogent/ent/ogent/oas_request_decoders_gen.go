@@ -11,11 +11,12 @@ import (
 	"github.com/go-faster/jx"
 	"go.uber.org/multierr"
 
+	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/validate"
 )
 
 func (s *Server) decodeCreateAllTypesRequest(r *http.Request) (
-	req CreateAllTypesReq,
+	req *CreateAllTypesReq,
 	close func() error,
 	rerr error,
 ) {
@@ -59,12 +60,17 @@ func (s *Server) decodeCreateAllTypesRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
-		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
 		if err := func() error {
 			if err := request.Validate(); err != nil {
@@ -74,14 +80,14 @@ func (s *Server) decodeCreateAllTypesRequest(r *http.Request) (
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeCreateCategoryRequest(r *http.Request) (
-	req CreateCategoryReq,
+	req *CreateCategoryReq,
 	close func() error,
 	rerr error,
 ) {
@@ -125,21 +131,26 @@ func (s *Server) decodeCreateCategoryRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
-		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeCreatePetRequest(r *http.Request) (
-	req CreatePetReq,
+	req *CreatePetReq,
 	close func() error,
 	rerr error,
 ) {
@@ -183,21 +194,26 @@ func (s *Server) decodeCreatePetRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
-		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeCreateUserRequest(r *http.Request) (
-	req CreateUserReq,
+	req *CreateUserReq,
 	close func() error,
 	rerr error,
 ) {
@@ -241,12 +257,17 @@ func (s *Server) decodeCreateUserRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
-		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
 		if err := func() error {
 			if err := request.Validate(); err != nil {
@@ -256,14 +277,14 @@ func (s *Server) decodeCreateUserRequest(r *http.Request) (
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdateAllTypesRequest(r *http.Request) (
-	req UpdateAllTypesReq,
+	req *UpdateAllTypesReq,
 	close func() error,
 	rerr error,
 ) {
@@ -307,12 +328,17 @@ func (s *Server) decodeUpdateAllTypesRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
-		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
 		if err := func() error {
 			if err := request.Validate(); err != nil {
@@ -322,14 +348,14 @@ func (s *Server) decodeUpdateAllTypesRequest(r *http.Request) (
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdateCategoryRequest(r *http.Request) (
-	req UpdateCategoryReq,
+	req *UpdateCategoryReq,
 	close func() error,
 	rerr error,
 ) {
@@ -373,21 +399,26 @@ func (s *Server) decodeUpdateCategoryRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
-		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdatePetRequest(r *http.Request) (
-	req UpdatePetReq,
+	req *UpdatePetReq,
 	close func() error,
 	rerr error,
 ) {
@@ -431,21 +462,26 @@ func (s *Server) decodeUpdatePetRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
-		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeUpdateUserRequest(r *http.Request) (
-	req UpdateUserReq,
+	req *UpdateUserReq,
 	close func() error,
 	rerr error,
 ) {
@@ -489,12 +525,17 @@ func (s *Server) decodeUpdateUserRequest(r *http.Request) (
 			if err := request.Decode(d); err != nil {
 				return err
 			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
 			return nil
 		}(); err != nil {
-			return req, close, errors.Wrap(err, "decode \"application/json\"")
-		}
-		if err := d.Skip(); err != io.EOF {
-			return req, close, errors.New("unexpected trailing data")
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
 		}
 		if err := func() error {
 			if err := request.Validate(); err != nil {
@@ -504,7 +545,7 @@ func (s *Server) decodeUpdateUserRequest(r *http.Request) (
 		}(); err != nil {
 			return req, close, errors.Wrap(err, "validate")
 		}
-		return request, close, nil
+		return &request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}
