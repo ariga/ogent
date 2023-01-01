@@ -148,49 +148,7 @@ func (atc *AllTypesCreate) Mutation() *AllTypesMutation {
 
 // Save creates the AllTypes in the database.
 func (atc *AllTypesCreate) Save(ctx context.Context) (*AllTypes, error) {
-	var (
-		err  error
-		node *AllTypes
-	)
-	if len(atc.hooks) == 0 {
-		if err = atc.check(); err != nil {
-			return nil, err
-		}
-		node, err = atc.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*AllTypesMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = atc.check(); err != nil {
-				return nil, err
-			}
-			atc.mutation = mutation
-			if node, err = atc.sqlSave(ctx); err != nil {
-				return nil, err
-			}
-			mutation.id = &node.ID
-			mutation.done = true
-			return node, err
-		})
-		for i := len(atc.hooks) - 1; i >= 0; i-- {
-			if atc.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = atc.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, atc.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*AllTypes)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from AllTypesMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*AllTypes, AllTypesMutation](ctx, atc.sqlSave, atc.mutation, atc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -283,6 +241,9 @@ func (atc *AllTypesCreate) check() error {
 }
 
 func (atc *AllTypesCreate) sqlSave(ctx context.Context) (*AllTypes, error) {
+	if err := atc.check(); err != nil {
+		return nil, err
+	}
 	_node, _spec := atc.createSpec()
 	if err := sqlgraph.CreateNode(ctx, atc.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
@@ -294,6 +255,8 @@ func (atc *AllTypesCreate) sqlSave(ctx context.Context) (*AllTypes, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = uint32(id)
 	}
+	atc.mutation.id = &_node.ID
+	atc.mutation.done = true
 	return _node, nil
 }
 
@@ -313,155 +276,79 @@ func (atc *AllTypesCreate) createSpec() (*AllTypes, *sqlgraph.CreateSpec) {
 		_spec.ID.Value = id
 	}
 	if value, ok := atc.mutation.Int(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: alltypes.FieldInt,
-		})
+		_spec.SetField(alltypes.FieldInt, field.TypeInt, value)
 		_node.Int = value
 	}
 	if value, ok := atc.mutation.Int8(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: alltypes.FieldInt8,
-		})
+		_spec.SetField(alltypes.FieldInt8, field.TypeInt8, value)
 		_node.Int8 = value
 	}
 	if value, ok := atc.mutation.Int16(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt16,
-			Value:  value,
-			Column: alltypes.FieldInt16,
-		})
+		_spec.SetField(alltypes.FieldInt16, field.TypeInt16, value)
 		_node.Int16 = value
 	}
 	if value, ok := atc.mutation.Int32(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt32,
-			Value:  value,
-			Column: alltypes.FieldInt32,
-		})
+		_spec.SetField(alltypes.FieldInt32, field.TypeInt32, value)
 		_node.Int32 = value
 	}
 	if value, ok := atc.mutation.Int64(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: alltypes.FieldInt64,
-		})
+		_spec.SetField(alltypes.FieldInt64, field.TypeInt64, value)
 		_node.Int64 = value
 	}
 	if value, ok := atc.mutation.Uint(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: alltypes.FieldUint,
-		})
+		_spec.SetField(alltypes.FieldUint, field.TypeUint, value)
 		_node.Uint = value
 	}
 	if value, ok := atc.mutation.Uint8(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint8,
-			Value:  value,
-			Column: alltypes.FieldUint8,
-		})
+		_spec.SetField(alltypes.FieldUint8, field.TypeUint8, value)
 		_node.Uint8 = value
 	}
 	if value, ok := atc.mutation.Uint16(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint16,
-			Value:  value,
-			Column: alltypes.FieldUint16,
-		})
+		_spec.SetField(alltypes.FieldUint16, field.TypeUint16, value)
 		_node.Uint16 = value
 	}
 	if value, ok := atc.mutation.Uint32(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: alltypes.FieldUint32,
-		})
+		_spec.SetField(alltypes.FieldUint32, field.TypeUint32, value)
 		_node.Uint32 = value
 	}
 	if value, ok := atc.mutation.Uint64(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint64,
-			Value:  value,
-			Column: alltypes.FieldUint64,
-		})
+		_spec.SetField(alltypes.FieldUint64, field.TypeUint64, value)
 		_node.Uint64 = value
 	}
 	if value, ok := atc.mutation.Float32(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat32,
-			Value:  value,
-			Column: alltypes.FieldFloat32,
-		})
+		_spec.SetField(alltypes.FieldFloat32, field.TypeFloat32, value)
 		_node.Float32 = value
 	}
 	if value, ok := atc.mutation.Float64(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: alltypes.FieldFloat64,
-		})
+		_spec.SetField(alltypes.FieldFloat64, field.TypeFloat64, value)
 		_node.Float64 = value
 	}
 	if value, ok := atc.mutation.StringType(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldStringType,
-		})
+		_spec.SetField(alltypes.FieldStringType, field.TypeString, value)
 		_node.StringType = value
 	}
 	if value, ok := atc.mutation.Bool(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: alltypes.FieldBool,
-		})
+		_spec.SetField(alltypes.FieldBool, field.TypeBool, value)
 		_node.Bool = value
 	}
 	if value, ok := atc.mutation.UUID(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: alltypes.FieldUUID,
-		})
+		_spec.SetField(alltypes.FieldUUID, field.TypeUUID, value)
 		_node.UUID = value
 	}
 	if value, ok := atc.mutation.Time(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: alltypes.FieldTime,
-		})
+		_spec.SetField(alltypes.FieldTime, field.TypeTime, value)
 		_node.Time = value
 	}
 	if value, ok := atc.mutation.Text(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldText,
-		})
+		_spec.SetField(alltypes.FieldText, field.TypeString, value)
 		_node.Text = value
 	}
 	if value, ok := atc.mutation.State(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: alltypes.FieldState,
-		})
+		_spec.SetField(alltypes.FieldState, field.TypeEnum, value)
 		_node.State = value
 	}
 	if value, ok := atc.mutation.Bytes(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBytes,
-			Value:  value,
-			Column: alltypes.FieldBytes,
-		})
+		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
 		_node.Bytes = value
 	}
 	return _node, _spec

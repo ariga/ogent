@@ -15,11 +15,10 @@ type AllTypesFunc func(context.Context, *ent.AllTypesMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f AllTypesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.AllTypesMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AllTypesMutation", m)
+	if mv, ok := m.(*ent.AllTypesMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AllTypesMutation", m)
 }
 
 // The CategoryFunc type is an adapter to allow the use of ordinary
@@ -28,11 +27,10 @@ type CategoryFunc func(context.Context, *ent.CategoryMutation) (ent.Value, error
 
 // Mutate calls f(ctx, m).
 func (f CategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.CategoryMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
+	if mv, ok := m.(*ent.CategoryMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
 }
 
 // The PetFunc type is an adapter to allow the use of ordinary
@@ -41,11 +39,10 @@ type PetFunc func(context.Context, *ent.PetMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f PetFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.PetMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PetMutation", m)
+	if mv, ok := m.(*ent.PetMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.PetMutation", m)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary
@@ -54,11 +51,10 @@ type UserFunc func(context.Context, *ent.UserMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
 func (f UserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.UserMutation)
-	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
+	if mv, ok := m.(*ent.UserMutation); ok {
+		return f(ctx, mv)
 	}
-	return f(ctx, mv)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.UserMutation", m)
 }
 
 // Condition is a hook condition function.

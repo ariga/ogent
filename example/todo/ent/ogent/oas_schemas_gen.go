@@ -3,76 +3,32 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
-
-	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 type CreateTodoReq struct {
-	Title string  "json:\"title\""
-	Done  OptBool "json:\"done\""
+	Title string  `json:"title"`
+	Done  OptBool `json:"done"`
+}
+
+// GetTitle returns the value of Title.
+func (s *CreateTodoReq) GetTitle() string {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *CreateTodoReq) GetDone() OptBool {
+	return s.Done
+}
+
+// SetTitle sets the value of Title.
+func (s *CreateTodoReq) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *CreateTodoReq) SetDone(val OptBool) {
+	s.Done = val
 }
 
 // DeleteTodoNoContent is response for DeleteTodo operation.
@@ -226,9 +182,39 @@ func (o OptString) Or(d string) string {
 }
 
 type R400 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s *R400) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s *R400) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s *R400) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R400) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R400) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R400) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R400) createTodoRes() {}
@@ -238,9 +224,39 @@ func (*R400) readTodoRes()   {}
 func (*R400) updateTodoRes() {}
 
 type R404 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s *R404) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s *R404) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s *R404) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R404) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R404) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R404) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R404) deleteTodoRes() {}
@@ -249,9 +265,39 @@ func (*R404) readTodoRes()   {}
 func (*R404) updateTodoRes() {}
 
 type R409 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s *R409) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s *R409) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s *R409) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R409) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R409) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R409) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R409) createTodoRes() {}
@@ -261,9 +307,39 @@ func (*R409) readTodoRes()   {}
 func (*R409) updateTodoRes() {}
 
 type R500 struct {
-	Code   int    "json:\"code\""
-	Status string "json:\"status\""
-	Errors jx.Raw "json:\"errors\""
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Errors jx.Raw `json:"errors"`
+}
+
+// GetCode returns the value of Code.
+func (s *R500) GetCode() int {
+	return s.Code
+}
+
+// GetStatus returns the value of Status.
+func (s *R500) GetStatus() string {
+	return s.Status
+}
+
+// GetErrors returns the value of Errors.
+func (s *R500) GetErrors() jx.Raw {
+	return s.Errors
+}
+
+// SetCode sets the value of Code.
+func (s *R500) SetCode(val int) {
+	s.Code = val
+}
+
+// SetStatus sets the value of Status.
+func (s *R500) SetStatus(val string) {
+	s.Status = val
+}
+
+// SetErrors sets the value of Errors.
+func (s *R500) SetErrors(val jx.Raw) {
+	s.Errors = val
 }
 
 func (*R500) createTodoRes() {}
@@ -274,39 +350,179 @@ func (*R500) updateTodoRes() {}
 
 // Ref: #/components/schemas/TodoCreate
 type TodoCreate struct {
-	ID    int     "json:\"id\""
-	Title string  "json:\"title\""
-	Done  OptBool "json:\"done\""
+	ID    int     `json:"id"`
+	Title string  `json:"title"`
+	Done  OptBool `json:"done"`
+}
+
+// GetID returns the value of ID.
+func (s *TodoCreate) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *TodoCreate) GetTitle() string {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *TodoCreate) GetDone() OptBool {
+	return s.Done
+}
+
+// SetID sets the value of ID.
+func (s *TodoCreate) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *TodoCreate) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *TodoCreate) SetDone(val OptBool) {
+	s.Done = val
 }
 
 func (*TodoCreate) createTodoRes() {}
 
 // Ref: #/components/schemas/TodoList
 type TodoList struct {
-	ID    int     "json:\"id\""
-	Title string  "json:\"title\""
-	Done  OptBool "json:\"done\""
+	ID    int     `json:"id"`
+	Title string  `json:"title"`
+	Done  OptBool `json:"done"`
+}
+
+// GetID returns the value of ID.
+func (s *TodoList) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *TodoList) GetTitle() string {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *TodoList) GetDone() OptBool {
+	return s.Done
+}
+
+// SetID sets the value of ID.
+func (s *TodoList) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *TodoList) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *TodoList) SetDone(val OptBool) {
+	s.Done = val
 }
 
 // Ref: #/components/schemas/TodoRead
 type TodoRead struct {
-	ID    int     "json:\"id\""
-	Title string  "json:\"title\""
-	Done  OptBool "json:\"done\""
+	ID    int     `json:"id"`
+	Title string  `json:"title"`
+	Done  OptBool `json:"done"`
+}
+
+// GetID returns the value of ID.
+func (s *TodoRead) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *TodoRead) GetTitle() string {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *TodoRead) GetDone() OptBool {
+	return s.Done
+}
+
+// SetID sets the value of ID.
+func (s *TodoRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *TodoRead) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *TodoRead) SetDone(val OptBool) {
+	s.Done = val
 }
 
 func (*TodoRead) readTodoRes() {}
 
 // Ref: #/components/schemas/TodoUpdate
 type TodoUpdate struct {
-	ID    int     "json:\"id\""
-	Title string  "json:\"title\""
-	Done  OptBool "json:\"done\""
+	ID    int     `json:"id"`
+	Title string  `json:"title"`
+	Done  OptBool `json:"done"`
+}
+
+// GetID returns the value of ID.
+func (s *TodoUpdate) GetID() int {
+	return s.ID
+}
+
+// GetTitle returns the value of Title.
+func (s *TodoUpdate) GetTitle() string {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *TodoUpdate) GetDone() OptBool {
+	return s.Done
+}
+
+// SetID sets the value of ID.
+func (s *TodoUpdate) SetID(val int) {
+	s.ID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *TodoUpdate) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *TodoUpdate) SetDone(val OptBool) {
+	s.Done = val
 }
 
 func (*TodoUpdate) updateTodoRes() {}
 
 type UpdateTodoReq struct {
-	Title OptString "json:\"title\""
-	Done  OptBool   "json:\"done\""
+	Title OptString `json:"title"`
+	Done  OptBool   `json:"done"`
+}
+
+// GetTitle returns the value of Title.
+func (s *UpdateTodoReq) GetTitle() OptString {
+	return s.Title
+}
+
+// GetDone returns the value of Done.
+func (s *UpdateTodoReq) GetDone() OptBool {
+	return s.Done
+}
+
+// SetTitle sets the value of Title.
+func (s *UpdateTodoReq) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetDone sets the value of Done.
+func (s *UpdateTodoReq) SetDone(val OptBool) {
+	s.Done = val
 }

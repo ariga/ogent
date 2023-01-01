@@ -3,99 +3,35 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
 	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
 	"strconv"
-	"strings"
-	"sync"
-	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
 
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
+	"github.com/ogen-go/ogen/validate"
 )
 
 // Encode implements json.Marshaler.
-func (s CreateTodoReq) Encode(e *jx.Writer) {
+func (s *CreateTodoReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+	s.encodeFields(e)
+	e.ObjEnd()
+}
 
-		e.RawStr("\"title\"" + ":")
+// encodeFields encodes fields.
+func (s *CreateTodoReq) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("title")
 		e.Str(s.Title)
 	}
 	{
 		if s.Done.Set {
-			e.Comma()
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCreateTodoReq = [2]string{
@@ -177,20 +113,26 @@ func (s *CreateTodoReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateTodoReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateTodoReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListTodoOKApplicationJSON as json.
-func (s ListTodoOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListTodoOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []TodoList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -221,8 +163,21 @@ func (s *ListTodoOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListTodoOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListTodoOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes bool as json.
-func (o OptBool) Encode(e *jx.Writer) {
+func (o OptBool) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
@@ -243,8 +198,21 @@ func (o *OptBool) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptBool) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptBool) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes string as json.
-func (o OptString) Encode(e *jx.Writer) {
+func (o OptString) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
@@ -265,39 +233,45 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R400) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptString) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptString) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R400) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R400) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR400 = [3]string{
@@ -393,39 +367,45 @@ func (s *R400) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R404) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R400) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R400) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R404) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R404) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR404 = [3]string{
@@ -521,39 +501,45 @@ func (s *R404) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R409) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R404) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R404) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R409) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R409) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR409 = [3]string{
@@ -649,39 +635,45 @@ func (s *R409) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R500) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R409) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R409) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R500) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R500) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR500 = [3]string{
@@ -777,38 +769,44 @@ func (s *R500) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s TodoCreate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R500) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R500) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *TodoCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *TodoCreate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"title\"" + ":")
+		e.FieldStart("title")
 		e.Str(s.Title)
 	}
 	{
 		if s.Done.Set {
-			e.Comma()
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfTodoCreate = [3]string{
@@ -903,38 +901,44 @@ func (s *TodoCreate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s TodoList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *TodoCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *TodoCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *TodoList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *TodoList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"title\"" + ":")
+		e.FieldStart("title")
 		e.Str(s.Title)
 	}
 	{
 		if s.Done.Set {
-			e.Comma()
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfTodoList = [3]string{
@@ -1029,38 +1033,44 @@ func (s *TodoList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s TodoRead) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *TodoList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *TodoList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *TodoRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *TodoRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"title\"" + ":")
+		e.FieldStart("title")
 		e.Str(s.Title)
 	}
 	{
 		if s.Done.Set {
-			e.Comma()
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfTodoRead = [3]string{
@@ -1155,38 +1165,44 @@ func (s *TodoRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s TodoUpdate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *TodoRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *TodoRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *TodoUpdate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *TodoUpdate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"title\"" + ":")
+		e.FieldStart("title")
 		e.Str(s.Title)
 	}
 	{
 		if s.Done.Set {
-			e.Comma()
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfTodoUpdate = [3]string{
@@ -1281,38 +1297,40 @@ func (s *TodoUpdate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *TodoUpdate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *TodoUpdate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
-func (s UpdateTodoReq) Encode(e *jx.Writer) {
+func (s *UpdateTodoReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateTodoReq) encodeFields(e *jx.Encoder) {
 	{
 		if s.Title.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Title.Set {
-			e.RawStr("\"title\"" + ":")
+			e.FieldStart("title")
 			s.Title.Encode(e)
 		}
 	}
 	{
 		if s.Done.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Done.Set {
-			e.RawStr("\"done\"" + ":")
+			e.FieldStart("done")
 			s.Done.Encode(e)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUpdateTodoReq = [2]string{
@@ -1357,4 +1375,17 @@ func (s *UpdateTodoReq) Decode(d *jx.Decoder) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateTodoReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateTodoReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
 }

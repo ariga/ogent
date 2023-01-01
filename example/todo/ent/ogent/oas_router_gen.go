@@ -3,115 +3,41 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
 	"net/http"
 	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
 	"strings"
-	"sync"
-	"time"
 
-	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
 )
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
-)
-
-func (s *Server) notFound(w http.ResponseWriter, r *http.Request) {
-	s.cfg.NotFound(w, r)
-}
 
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
 // calling handler that matches the path or returning not found error.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	elem := r.URL.Path
+	if rawPath := r.URL.RawPath; rawPath != "" {
+		if normalized, ok := uri.NormalizeEscapedPath(rawPath); ok {
+			elem = normalized
+		}
+	}
+	if prefix := s.cfg.Prefix; len(prefix) > 0 {
+		if strings.HasPrefix(elem, prefix) {
+			// Cut prefix from the path.
+			elem = strings.TrimPrefix(elem, prefix)
+		} else {
+			// Prefix doesn't match.
+			s.notFound(w, r)
+			return
+		}
+	}
 	if len(elem) == 0 {
 		s.notFound(w, r)
 		return
 	}
 	args := [1]string{}
+
 	// Static code generated router with unwrapped path search.
-	switch r.Method {
-	case "DELETE":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos/"
-			if l := len("/todos/"); len(elem) >= l && elem[0:l] == "/todos/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			// Param: "id"
-			// Leaf parameter
-			args[0] = elem
-			elem = ""
-
-			if len(elem) == 0 {
-				// Leaf: DeleteTodo
-				s.handleDeleteTodoRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-		}
-	case "GET":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -124,7 +50,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if len(elem) == 0 {
-				s.handleListTodoRequest([0]string{}, w, r)
+				switch r.Method {
+				case "GET":
+					s.handleListTodoRequest([0]string{}, w, r)
+				case "POST":
+					s.handleCreateTodoRequest([0]string{}, w, r)
+				default:
+					s.notAllowed(w, r, "GET,POST")
+				}
 
 				return
 			}
@@ -137,83 +70,56 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
 
 				if len(elem) == 0 {
-					// Leaf: ReadTodo
-					s.handleReadTodoRequest([1]string{
-						args[0],
-					}, w, r)
+					switch r.Method {
+					case "DELETE":
+						s.handleDeleteTodoRequest([1]string{
+							args[0],
+						}, w, r)
+					case "GET":
+						s.handleReadTodoRequest([1]string{
+							args[0],
+						}, w, r)
+					case "PATCH":
+						s.handleUpdateTodoRequest([1]string{
+							args[0],
+						}, w, r)
+					default:
+						s.notAllowed(w, r, "DELETE,GET,PATCH")
+					}
 
 					return
 				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos/"
-			if l := len("/todos/"); len(elem) >= l && elem[0:l] == "/todos/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
+				switch elem[0] {
+				case '/': // Prefix: "/done"
+					if l := len("/done"); len(elem) >= l && elem[0:l] == "/done" {
+						elem = elem[l:]
+					} else {
+						break
+					}
 
-			// Param: "id"
-			// Match until "/"
-			idx := strings.IndexByte(elem, '/')
-			if idx < 0 {
-				idx = len(elem)
-			}
-			args[0] = elem[:idx]
-			elem = elem[idx:]
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "PATCH":
+							s.handleMarkDoneRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "PATCH")
+						}
 
-			if len(elem) == 0 {
-				s.handleUpdateTodoRequest([1]string{
-					args[0],
-				}, w, r)
-
-				return
-			}
-			switch elem[0] {
-			case '/': // Prefix: "/done"
-				if l := len("/done"); len(elem) >= l && elem[0:l] == "/done" {
-					elem = elem[l:]
-				} else {
-					break
+						return
+					}
 				}
-
-				if len(elem) == 0 {
-					// Leaf: MarkDone
-					s.handleMarkDoneRequest([1]string{
-						args[0],
-					}, w, r)
-
-					return
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos"
-			if l := len("/todos"); len(elem) >= l && elem[0:l] == "/todos" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				// Leaf: CreateTodo
-				s.handleCreateTodoRequest([0]string{}, w, r)
-
-				return
 			}
 		}
 	}
@@ -222,14 +128,22 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name  string
-	count int
-	args  [1]string
+	name        string
+	operationID string
+	count       int
+	args        [1]string
+}
+
+// Name returns ogen operation name.
+//
+// It is guaranteed to be unique and not empty.
+func (r Route) Name() string {
+	return r.name
 }
 
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
-	return r.name
+	return r.operationID
 }
 
 // Args returns parsed arguments.
@@ -238,41 +152,34 @@ func (r Route) Args() []string {
 }
 
 // FindRoute finds Route for given method and path.
-func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
+//
+// Note: this method does not unescape path or handle reserved characters in path properly. Use FindPath instead.
+func (s *Server) FindRoute(method, path string) (Route, bool) {
+	return s.FindPath(method, &url.URL{Path: path})
+}
+
+// FindPath finds Route for given method and URL.
+func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 	var (
-		args = [1]string{}
-		elem = path
+		elem = u.Path
+		args = r.args
 	)
-	r.args = args
+	if rawPath := u.RawPath; rawPath != "" {
+		if normalized, ok := uri.NormalizeEscapedPath(rawPath); ok {
+			elem = normalized
+		}
+		defer func() {
+			for i, arg := range r.args[:r.count] {
+				if unescaped, err := url.PathUnescape(arg); err == nil {
+					r.args[i] = unescaped
+				}
+			}
+		}()
+	}
 
 	// Static code generated router with unwrapped path search.
-	switch method {
-	case "DELETE":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos/"
-			if l := len("/todos/"); len(elem) >= l && elem[0:l] == "/todos/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			// Param: "id"
-			// Leaf parameter
-			args[0] = elem
-			elem = ""
-
-			if len(elem) == 0 {
-				// Leaf: DeleteTodo
-				r.name = "DeleteTodo"
-				r.args = args
-				r.count = 1
-				return r, true
-			}
-		}
-	case "GET":
+	switch {
+	default:
 		if len(elem) == 0 {
 			break
 		}
@@ -285,10 +192,22 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 			}
 
 			if len(elem) == 0 {
-				r.name = "ListTodo"
-				r.args = args
-				r.count = 0
-				return r, true
+				switch method {
+				case "GET":
+					r.name = "ListTodo"
+					r.operationID = "listTodo"
+					r.args = args
+					r.count = 0
+					return r, true
+				case "POST":
+					r.name = "CreateTodo"
+					r.operationID = "createTodo"
+					r.args = args
+					r.count = 0
+					return r, true
+				default:
+					return
+				}
 			}
 			switch elem[0] {
 			case '/': // Prefix: "/"
@@ -299,81 +218,60 @@ func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
 				}
 
 				// Param: "id"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
 
 				if len(elem) == 0 {
-					// Leaf: ReadTodo
-					r.name = "ReadTodo"
-					r.args = args
-					r.count = 1
-					return r, true
+					switch method {
+					case "DELETE":
+						r.name = "DeleteTodo"
+						r.operationID = "deleteTodo"
+						r.args = args
+						r.count = 1
+						return r, true
+					case "GET":
+						r.name = "ReadTodo"
+						r.operationID = "readTodo"
+						r.args = args
+						r.count = 1
+						return r, true
+					case "PATCH":
+						r.name = "UpdateTodo"
+						r.operationID = "updateTodo"
+						r.args = args
+						r.count = 1
+						return r, true
+					default:
+						return
+					}
 				}
-			}
-		}
-	case "PATCH":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos/"
-			if l := len("/todos/"); len(elem) >= l && elem[0:l] == "/todos/" {
-				elem = elem[l:]
-			} else {
-				break
-			}
+				switch elem[0] {
+				case '/': // Prefix: "/done"
+					if l := len("/done"); len(elem) >= l && elem[0:l] == "/done" {
+						elem = elem[l:]
+					} else {
+						break
+					}
 
-			// Param: "id"
-			// Match until "/"
-			idx := strings.IndexByte(elem, '/')
-			if idx < 0 {
-				idx = len(elem)
-			}
-			args[0] = elem[:idx]
-			elem = elem[idx:]
-
-			if len(elem) == 0 {
-				r.name = "UpdateTodo"
-				r.args = args
-				r.count = 1
-				return r, true
-			}
-			switch elem[0] {
-			case '/': // Prefix: "/done"
-				if l := len("/done"); len(elem) >= l && elem[0:l] == "/done" {
-					elem = elem[l:]
-				} else {
-					break
+					if len(elem) == 0 {
+						switch method {
+						case "PATCH":
+							// Leaf: MarkDone
+							r.name = "MarkDone"
+							r.operationID = "markDone"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
 				}
-
-				if len(elem) == 0 {
-					// Leaf: MarkDone
-					r.name = "MarkDone"
-					r.args = args
-					r.count = 1
-					return r, true
-				}
-			}
-		}
-	case "POST":
-		if len(elem) == 0 {
-			break
-		}
-		switch elem[0] {
-		case '/': // Prefix: "/todos"
-			if l := len("/todos"); len(elem) >= l && elem[0:l] == "/todos" {
-				elem = elem[l:]
-			} else {
-				break
-			}
-
-			if len(elem) == 0 {
-				// Leaf: CreateTodo
-				r.name = "CreateTodo"
-				r.args = args
-				r.count = 0
-				return r, true
 			}
 		}
 	}

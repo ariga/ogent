@@ -234,40 +234,7 @@ func (atu *AllTypesUpdate) Mutation() *AllTypesMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (atu *AllTypesUpdate) Save(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(atu.hooks) == 0 {
-		if err = atu.check(); err != nil {
-			return 0, err
-		}
-		affected, err = atu.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*AllTypesMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = atu.check(); err != nil {
-				return 0, err
-			}
-			atu.mutation = mutation
-			affected, err = atu.sqlSave(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(atu.hooks) - 1; i >= 0; i-- {
-			if atu.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = atu.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, atu.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, AllTypesMutation](ctx, atu.sqlSave, atu.mutation, atu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -303,6 +270,9 @@ func (atu *AllTypesUpdate) check() error {
 }
 
 func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
+	if err := atu.check(); err != nil {
+		return n, err
+	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   alltypes.Table,
@@ -321,221 +291,97 @@ func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := atu.mutation.Int(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: alltypes.FieldInt,
-		})
+		_spec.SetField(alltypes.FieldInt, field.TypeInt, value)
 	}
 	if value, ok := atu.mutation.AddedInt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: alltypes.FieldInt,
-		})
+		_spec.AddField(alltypes.FieldInt, field.TypeInt, value)
 	}
 	if value, ok := atu.mutation.Int8(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: alltypes.FieldInt8,
-		})
+		_spec.SetField(alltypes.FieldInt8, field.TypeInt8, value)
 	}
 	if value, ok := atu.mutation.AddedInt8(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: alltypes.FieldInt8,
-		})
+		_spec.AddField(alltypes.FieldInt8, field.TypeInt8, value)
 	}
 	if value, ok := atu.mutation.Int16(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt16,
-			Value:  value,
-			Column: alltypes.FieldInt16,
-		})
+		_spec.SetField(alltypes.FieldInt16, field.TypeInt16, value)
 	}
 	if value, ok := atu.mutation.AddedInt16(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt16,
-			Value:  value,
-			Column: alltypes.FieldInt16,
-		})
+		_spec.AddField(alltypes.FieldInt16, field.TypeInt16, value)
 	}
 	if value, ok := atu.mutation.Int32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt32,
-			Value:  value,
-			Column: alltypes.FieldInt32,
-		})
+		_spec.SetField(alltypes.FieldInt32, field.TypeInt32, value)
 	}
 	if value, ok := atu.mutation.AddedInt32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt32,
-			Value:  value,
-			Column: alltypes.FieldInt32,
-		})
+		_spec.AddField(alltypes.FieldInt32, field.TypeInt32, value)
 	}
 	if value, ok := atu.mutation.Int64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: alltypes.FieldInt64,
-		})
+		_spec.SetField(alltypes.FieldInt64, field.TypeInt64, value)
 	}
 	if value, ok := atu.mutation.AddedInt64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: alltypes.FieldInt64,
-		})
+		_spec.AddField(alltypes.FieldInt64, field.TypeInt64, value)
 	}
 	if value, ok := atu.mutation.Uint(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: alltypes.FieldUint,
-		})
+		_spec.SetField(alltypes.FieldUint, field.TypeUint, value)
 	}
 	if value, ok := atu.mutation.AddedUint(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: alltypes.FieldUint,
-		})
+		_spec.AddField(alltypes.FieldUint, field.TypeUint, value)
 	}
 	if value, ok := atu.mutation.Uint8(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint8,
-			Value:  value,
-			Column: alltypes.FieldUint8,
-		})
+		_spec.SetField(alltypes.FieldUint8, field.TypeUint8, value)
 	}
 	if value, ok := atu.mutation.AddedUint8(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint8,
-			Value:  value,
-			Column: alltypes.FieldUint8,
-		})
+		_spec.AddField(alltypes.FieldUint8, field.TypeUint8, value)
 	}
 	if value, ok := atu.mutation.Uint16(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint16,
-			Value:  value,
-			Column: alltypes.FieldUint16,
-		})
+		_spec.SetField(alltypes.FieldUint16, field.TypeUint16, value)
 	}
 	if value, ok := atu.mutation.AddedUint16(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint16,
-			Value:  value,
-			Column: alltypes.FieldUint16,
-		})
+		_spec.AddField(alltypes.FieldUint16, field.TypeUint16, value)
 	}
 	if value, ok := atu.mutation.Uint32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: alltypes.FieldUint32,
-		})
+		_spec.SetField(alltypes.FieldUint32, field.TypeUint32, value)
 	}
 	if value, ok := atu.mutation.AddedUint32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: alltypes.FieldUint32,
-		})
+		_spec.AddField(alltypes.FieldUint32, field.TypeUint32, value)
 	}
 	if value, ok := atu.mutation.Uint64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint64,
-			Value:  value,
-			Column: alltypes.FieldUint64,
-		})
+		_spec.SetField(alltypes.FieldUint64, field.TypeUint64, value)
 	}
 	if value, ok := atu.mutation.AddedUint64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint64,
-			Value:  value,
-			Column: alltypes.FieldUint64,
-		})
+		_spec.AddField(alltypes.FieldUint64, field.TypeUint64, value)
 	}
 	if value, ok := atu.mutation.Float32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat32,
-			Value:  value,
-			Column: alltypes.FieldFloat32,
-		})
+		_spec.SetField(alltypes.FieldFloat32, field.TypeFloat32, value)
 	}
 	if value, ok := atu.mutation.AddedFloat32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat32,
-			Value:  value,
-			Column: alltypes.FieldFloat32,
-		})
+		_spec.AddField(alltypes.FieldFloat32, field.TypeFloat32, value)
 	}
 	if value, ok := atu.mutation.Float64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: alltypes.FieldFloat64,
-		})
+		_spec.SetField(alltypes.FieldFloat64, field.TypeFloat64, value)
 	}
 	if value, ok := atu.mutation.AddedFloat64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: alltypes.FieldFloat64,
-		})
+		_spec.AddField(alltypes.FieldFloat64, field.TypeFloat64, value)
 	}
 	if value, ok := atu.mutation.StringType(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldStringType,
-		})
+		_spec.SetField(alltypes.FieldStringType, field.TypeString, value)
 	}
 	if value, ok := atu.mutation.Bool(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: alltypes.FieldBool,
-		})
+		_spec.SetField(alltypes.FieldBool, field.TypeBool, value)
 	}
 	if value, ok := atu.mutation.UUID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: alltypes.FieldUUID,
-		})
+		_spec.SetField(alltypes.FieldUUID, field.TypeUUID, value)
 	}
 	if value, ok := atu.mutation.Time(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: alltypes.FieldTime,
-		})
+		_spec.SetField(alltypes.FieldTime, field.TypeTime, value)
 	}
 	if value, ok := atu.mutation.Text(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldText,
-		})
+		_spec.SetField(alltypes.FieldText, field.TypeString, value)
 	}
 	if value, ok := atu.mutation.State(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: alltypes.FieldState,
-		})
+		_spec.SetField(alltypes.FieldState, field.TypeEnum, value)
 	}
 	if value, ok := atu.mutation.Bytes(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBytes,
-			Value:  value,
-			Column: alltypes.FieldBytes,
-		})
+		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, atu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -545,6 +391,7 @@ func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
+	atu.mutation.done = true
 	return n, nil
 }
 
@@ -768,46 +615,7 @@ func (atuo *AllTypesUpdateOne) Select(field string, fields ...string) *AllTypesU
 
 // Save executes the query and returns the updated AllTypes entity.
 func (atuo *AllTypesUpdateOne) Save(ctx context.Context) (*AllTypes, error) {
-	var (
-		err  error
-		node *AllTypes
-	)
-	if len(atuo.hooks) == 0 {
-		if err = atuo.check(); err != nil {
-			return nil, err
-		}
-		node, err = atuo.sqlSave(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*AllTypesMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = atuo.check(); err != nil {
-				return nil, err
-			}
-			atuo.mutation = mutation
-			node, err = atuo.sqlSave(ctx)
-			mutation.done = true
-			return node, err
-		})
-		for i := len(atuo.hooks) - 1; i >= 0; i-- {
-			if atuo.hooks[i] == nil {
-				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = atuo.hooks[i](mut)
-		}
-		v, err := mut.Mutate(ctx, atuo.mutation)
-		if err != nil {
-			return nil, err
-		}
-		nv, ok := v.(*AllTypes)
-		if !ok {
-			return nil, fmt.Errorf("unexpected node type %T returned from AllTypesMutation", v)
-		}
-		node = nv
-	}
-	return node, err
+	return withHooks[*AllTypes, AllTypesMutation](ctx, atuo.sqlSave, atuo.mutation, atuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -843,6 +651,9 @@ func (atuo *AllTypesUpdateOne) check() error {
 }
 
 func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, err error) {
+	if err := atuo.check(); err != nil {
+		return _node, err
+	}
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
 			Table:   alltypes.Table,
@@ -878,221 +689,97 @@ func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, er
 		}
 	}
 	if value, ok := atuo.mutation.Int(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: alltypes.FieldInt,
-		})
+		_spec.SetField(alltypes.FieldInt, field.TypeInt, value)
 	}
 	if value, ok := atuo.mutation.AddedInt(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt,
-			Value:  value,
-			Column: alltypes.FieldInt,
-		})
+		_spec.AddField(alltypes.FieldInt, field.TypeInt, value)
 	}
 	if value, ok := atuo.mutation.Int8(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: alltypes.FieldInt8,
-		})
+		_spec.SetField(alltypes.FieldInt8, field.TypeInt8, value)
 	}
 	if value, ok := atuo.mutation.AddedInt8(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt8,
-			Value:  value,
-			Column: alltypes.FieldInt8,
-		})
+		_spec.AddField(alltypes.FieldInt8, field.TypeInt8, value)
 	}
 	if value, ok := atuo.mutation.Int16(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt16,
-			Value:  value,
-			Column: alltypes.FieldInt16,
-		})
+		_spec.SetField(alltypes.FieldInt16, field.TypeInt16, value)
 	}
 	if value, ok := atuo.mutation.AddedInt16(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt16,
-			Value:  value,
-			Column: alltypes.FieldInt16,
-		})
+		_spec.AddField(alltypes.FieldInt16, field.TypeInt16, value)
 	}
 	if value, ok := atuo.mutation.Int32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt32,
-			Value:  value,
-			Column: alltypes.FieldInt32,
-		})
+		_spec.SetField(alltypes.FieldInt32, field.TypeInt32, value)
 	}
 	if value, ok := atuo.mutation.AddedInt32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt32,
-			Value:  value,
-			Column: alltypes.FieldInt32,
-		})
+		_spec.AddField(alltypes.FieldInt32, field.TypeInt32, value)
 	}
 	if value, ok := atuo.mutation.Int64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: alltypes.FieldInt64,
-		})
+		_spec.SetField(alltypes.FieldInt64, field.TypeInt64, value)
 	}
 	if value, ok := atuo.mutation.AddedInt64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
-			Value:  value,
-			Column: alltypes.FieldInt64,
-		})
+		_spec.AddField(alltypes.FieldInt64, field.TypeInt64, value)
 	}
 	if value, ok := atuo.mutation.Uint(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: alltypes.FieldUint,
-		})
+		_spec.SetField(alltypes.FieldUint, field.TypeUint, value)
 	}
 	if value, ok := atuo.mutation.AddedUint(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint,
-			Value:  value,
-			Column: alltypes.FieldUint,
-		})
+		_spec.AddField(alltypes.FieldUint, field.TypeUint, value)
 	}
 	if value, ok := atuo.mutation.Uint8(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint8,
-			Value:  value,
-			Column: alltypes.FieldUint8,
-		})
+		_spec.SetField(alltypes.FieldUint8, field.TypeUint8, value)
 	}
 	if value, ok := atuo.mutation.AddedUint8(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint8,
-			Value:  value,
-			Column: alltypes.FieldUint8,
-		})
+		_spec.AddField(alltypes.FieldUint8, field.TypeUint8, value)
 	}
 	if value, ok := atuo.mutation.Uint16(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint16,
-			Value:  value,
-			Column: alltypes.FieldUint16,
-		})
+		_spec.SetField(alltypes.FieldUint16, field.TypeUint16, value)
 	}
 	if value, ok := atuo.mutation.AddedUint16(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint16,
-			Value:  value,
-			Column: alltypes.FieldUint16,
-		})
+		_spec.AddField(alltypes.FieldUint16, field.TypeUint16, value)
 	}
 	if value, ok := atuo.mutation.Uint32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: alltypes.FieldUint32,
-		})
+		_spec.SetField(alltypes.FieldUint32, field.TypeUint32, value)
 	}
 	if value, ok := atuo.mutation.AddedUint32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: alltypes.FieldUint32,
-		})
+		_spec.AddField(alltypes.FieldUint32, field.TypeUint32, value)
 	}
 	if value, ok := atuo.mutation.Uint64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint64,
-			Value:  value,
-			Column: alltypes.FieldUint64,
-		})
+		_spec.SetField(alltypes.FieldUint64, field.TypeUint64, value)
 	}
 	if value, ok := atuo.mutation.AddedUint64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint64,
-			Value:  value,
-			Column: alltypes.FieldUint64,
-		})
+		_spec.AddField(alltypes.FieldUint64, field.TypeUint64, value)
 	}
 	if value, ok := atuo.mutation.Float32(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat32,
-			Value:  value,
-			Column: alltypes.FieldFloat32,
-		})
+		_spec.SetField(alltypes.FieldFloat32, field.TypeFloat32, value)
 	}
 	if value, ok := atuo.mutation.AddedFloat32(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat32,
-			Value:  value,
-			Column: alltypes.FieldFloat32,
-		})
+		_spec.AddField(alltypes.FieldFloat32, field.TypeFloat32, value)
 	}
 	if value, ok := atuo.mutation.Float64(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: alltypes.FieldFloat64,
-		})
+		_spec.SetField(alltypes.FieldFloat64, field.TypeFloat64, value)
 	}
 	if value, ok := atuo.mutation.AddedFloat64(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeFloat64,
-			Value:  value,
-			Column: alltypes.FieldFloat64,
-		})
+		_spec.AddField(alltypes.FieldFloat64, field.TypeFloat64, value)
 	}
 	if value, ok := atuo.mutation.StringType(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldStringType,
-		})
+		_spec.SetField(alltypes.FieldStringType, field.TypeString, value)
 	}
 	if value, ok := atuo.mutation.Bool(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
-			Value:  value,
-			Column: alltypes.FieldBool,
-		})
+		_spec.SetField(alltypes.FieldBool, field.TypeBool, value)
 	}
 	if value, ok := atuo.mutation.UUID(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUUID,
-			Value:  value,
-			Column: alltypes.FieldUUID,
-		})
+		_spec.SetField(alltypes.FieldUUID, field.TypeUUID, value)
 	}
 	if value, ok := atuo.mutation.Time(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeTime,
-			Value:  value,
-			Column: alltypes.FieldTime,
-		})
+		_spec.SetField(alltypes.FieldTime, field.TypeTime, value)
 	}
 	if value, ok := atuo.mutation.Text(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: alltypes.FieldText,
-		})
+		_spec.SetField(alltypes.FieldText, field.TypeString, value)
 	}
 	if value, ok := atuo.mutation.State(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
-			Value:  value,
-			Column: alltypes.FieldState,
-		})
+		_spec.SetField(alltypes.FieldState, field.TypeEnum, value)
 	}
 	if value, ok := atuo.mutation.Bytes(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBytes,
-			Value:  value,
-			Column: alltypes.FieldBytes,
-		})
+		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
 	}
 	_node = &AllTypes{config: atuo.config}
 	_spec.Assign = _node.assignValues
@@ -1105,5 +792,6 @@ func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, er
 		}
 		return nil, err
 	}
+	atuo.mutation.done = true
 	return _node, nil
 }

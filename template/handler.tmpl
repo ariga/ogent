@@ -32,7 +32,7 @@
 			{{- $opID := print ($op | toString | pascal) $n.Name }}
 			// {{ $opID }} handles {{ httpVerb $op }} {{ httpRoute $root $op }} requests.
 			func (h *OgentHandler) {{ $opID }}(ctx context.Context
-				{{- if hasRequestBody $op }}, req {{ $opID }}Req{{ end }}
+				{{- if hasRequestBody $op }}, req *{{ $opID }}Req{{ end }}
 				{{- if hasParams $op }}, params {{ $opID }}Params{{ end }}) ({{ $opID }}Res, error) {
 				{{- if isCreate $op }}
 					{{- template "ogent/ogent/helper/create" $n -}}

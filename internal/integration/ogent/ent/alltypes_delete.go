@@ -4,7 +4,6 @@ package ent
 
 import (
 	"context"
-	"fmt"
 
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
@@ -28,34 +27,7 @@ func (atd *AllTypesDelete) Where(ps ...predicate.AllTypes) *AllTypesDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (atd *AllTypesDelete) Exec(ctx context.Context) (int, error) {
-	var (
-		err      error
-		affected int
-	)
-	if len(atd.hooks) == 0 {
-		affected, err = atd.sqlExec(ctx)
-	} else {
-		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*AllTypesMutation)
-			if !ok {
-				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			atd.mutation = mutation
-			affected, err = atd.sqlExec(ctx)
-			mutation.done = true
-			return affected, err
-		})
-		for i := len(atd.hooks) - 1; i >= 0; i-- {
-			if atd.hooks[i] == nil {
-				return 0, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
-			}
-			mut = atd.hooks[i](mut)
-		}
-		if _, err := mut.Mutate(ctx, atd.mutation); err != nil {
-			return 0, err
-		}
-	}
-	return affected, err
+	return withHooks[int, AllTypesMutation](ctx, atd.sqlExec, atd.mutation, atd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
@@ -88,6 +60,7 @@ func (atd *AllTypesDelete) sqlExec(ctx context.Context) (int, error) {
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
+	atd.mutation.done = true
 	return affected, err
 }
 

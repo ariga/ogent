@@ -10,7 +10,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s AllTypesCreate) Validate() error {
+func (s *AllTypesCreate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -220,7 +220,7 @@ func (s AllTypesCreateState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s AllTypesList) Validate() error {
+func (s *AllTypesList) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -430,7 +430,7 @@ func (s AllTypesListState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s AllTypesRead) Validate() error {
+func (s *AllTypesRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -640,7 +640,7 @@ func (s AllTypesReadState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s AllTypesUpdate) Validate() error {
+func (s *AllTypesUpdate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -850,7 +850,7 @@ func (s AllTypesUpdateState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s CreateAllTypesReq) Validate() error {
+func (s *CreateAllTypesReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1040,7 +1040,7 @@ func (s CreateAllTypesReqState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s CreateUserReq) Validate() error {
+func (s *CreateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1262,7 +1262,7 @@ func (s ListUserPetsOKApplicationJSON) Validate() error {
 	return nil
 }
 
-func (s PetCreate) Validate() error {
+func (s *PetCreate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Owner.Validate(); err != nil {
@@ -1280,7 +1280,7 @@ func (s PetCreate) Validate() error {
 	}
 	return nil
 }
-func (s PetCreateOwner) Validate() error {
+func (s *PetCreateOwner) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1419,7 +1419,7 @@ func (s PetCreateOwnerFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s PetOwnerRead) Validate() error {
+func (s *PetOwnerRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1558,7 +1558,7 @@ func (s PetOwnerReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UpdateAllTypesReq) Validate() error {
+func (s *UpdateAllTypesReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if s.Int8.Set {
@@ -1818,7 +1818,7 @@ func (s UpdateAllTypesReqState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UpdateUserReq) Validate() error {
+func (s *UpdateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if s.Age.Set {
@@ -1971,7 +1971,7 @@ func (s UpdateUserReqFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserBestFriendRead) Validate() error {
+func (s *UserBestFriendRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2110,7 +2110,7 @@ func (s UserBestFriendReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserCreate) Validate() error {
+func (s *UserCreate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2249,7 +2249,7 @@ func (s UserCreateFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserList) Validate() error {
+func (s *UserList) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2388,7 +2388,7 @@ func (s UserListFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserRead) Validate() error {
+func (s *UserRead) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2527,7 +2527,7 @@ func (s UserReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
-func (s UserUpdate) Validate() error {
+func (s *UserUpdate) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{

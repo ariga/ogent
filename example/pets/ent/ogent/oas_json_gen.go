@@ -3,96 +3,36 @@
 package ogent
 
 import (
-	"bytes"
-	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
 	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
 	"strconv"
-	"strings"
-	"sync"
 	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
 
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
+	"github.com/ogen-go/ogen/json"
+	"github.com/ogen-go/ogen/validate"
 )
 
 // Encode implements json.Marshaler.
-func (s CategoryCreate) Encode(e *jx.Writer) {
+func (s *CategoryCreate) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+	s.encodeFields(e)
+	e.ObjEnd()
+}
 
-		e.RawStr("\"id\"" + ":")
+// encodeFields encodes fields.
+func (s *CategoryCreate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCategoryCreate = [2]string{
@@ -176,29 +116,38 @@ func (s *CategoryCreate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CategoryList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CategoryList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CategoryList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCategoryList = [2]string{
@@ -282,47 +231,50 @@ func (s *CategoryList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CategoryPetsList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CategoryPetsList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CategoryPetsList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCategoryPetsList = [4]string{
@@ -428,29 +380,38 @@ func (s *CategoryPetsList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CategoryRead) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryPetsList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryPetsList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CategoryRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CategoryRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCategoryRead = [2]string{
@@ -534,29 +495,38 @@ func (s *CategoryRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CategoryUpdate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CategoryUpdate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CategoryUpdate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCategoryUpdate = [2]string{
@@ -640,44 +610,43 @@ func (s *CategoryUpdate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CreateCategoryReq) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryUpdate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"name\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryUpdate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateCategoryReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateCategoryReq) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Pets != nil {
-			e.Comma()
-		}
-		if s.Pets != nil {
-			e.RawStr("\"pets\"" + ":")
+			e.FieldStart("pets")
 			e.ArrStart()
-			if len(s.Pets) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Pets[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Pets[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Pets {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCreateCategoryReq = [2]string{
@@ -768,89 +737,70 @@ func (s *CreateCategoryReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CreatePetReq) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateCategoryReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"name\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateCategoryReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreatePetReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
 	{
 		if s.Categories != nil {
-			e.Comma()
-		}
-		if s.Categories != nil {
-			e.RawStr("\"categories\"" + ":")
+			e.FieldStart("categories")
 			e.ArrStart()
-			if len(s.Categories) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Categories[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Categories[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Categories {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"owner\"" + ":")
+		e.FieldStart("owner")
 		e.Int(s.Owner)
 	}
 	{
 		if s.Friends != nil {
-			e.Comma()
-		}
-		if s.Friends != nil {
-			e.RawStr("\"friends\"" + ":")
+			e.FieldStart("friends")
 			e.ArrStart()
-			if len(s.Friends) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Friends[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Friends[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Friends {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCreatePetReq = [6]string{
@@ -996,50 +946,48 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s CreateUserReq) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreatePetReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"name\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreatePetReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateUserReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateUserReq) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
 	{
 		if s.Pets != nil {
-			e.Comma()
-		}
-		if s.Pets != nil {
-			e.RawStr("\"pets\"" + ":")
+			e.FieldStart("pets")
 			e.ArrStart()
-			if len(s.Pets) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Pets[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Pets[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Pets {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfCreateUserReq = [3]string{
@@ -1143,20 +1091,26 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateUserReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateUserReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListCategoryOKApplicationJSON as json.
-func (s ListCategoryOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListCategoryOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []CategoryList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1187,20 +1141,26 @@ func (s *ListCategoryOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListCategoryOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListCategoryOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListCategoryPetsOKApplicationJSON as json.
-func (s ListCategoryPetsOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListCategoryPetsOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []CategoryPetsList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1231,20 +1191,26 @@ func (s *ListCategoryPetsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListCategoryPetsOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListCategoryPetsOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListPetCategoriesOKApplicationJSON as json.
-func (s ListPetCategoriesOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListPetCategoriesOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []PetCategoriesList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1275,20 +1241,26 @@ func (s *ListPetCategoriesOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListPetCategoriesOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListPetCategoriesOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListPetFriendsOKApplicationJSON as json.
-func (s ListPetFriendsOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListPetFriendsOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []PetFriendsList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1319,20 +1291,26 @@ func (s *ListPetFriendsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListPetFriendsOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListPetFriendsOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListPetOKApplicationJSON as json.
-func (s ListPetOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListPetOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []PetList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1363,20 +1341,26 @@ func (s *ListPetOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListPetOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListPetOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListUserOKApplicationJSON as json.
-func (s ListUserOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListUserOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []UserList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1407,20 +1391,26 @@ func (s *ListUserOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListUserOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListUserOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListUserPetsOKApplicationJSON as json.
-func (s ListUserPetsOKApplicationJSON) Encode(e *jx.Writer) {
+func (s ListUserPetsOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []UserPetsList(s)
+
 	e.ArrStart()
-	if len(unwrapped) >= 1 {
-		// Encode first element without comma.
-		{
-			elem := unwrapped[0]
-			elem.Encode(e)
-		}
-		for _, elem := range unwrapped[1:] {
-			e.Comma()
-			elem.Encode(e)
-		}
+	for _, elem := range unwrapped {
+		elem.Encode(e)
 	}
 	e.ArrEnd()
 }
@@ -1451,8 +1441,21 @@ func (s *ListUserPetsOKApplicationJSON) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListUserPetsOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListUserPetsOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes time.Time as json.
-func (o OptDateTime) Encode(e *jx.Writer, format func(*jx.Writer, time.Time)) {
+func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
 	if !o.Set {
 		return
 	}
@@ -1473,8 +1476,21 @@ func (o *OptDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time,
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptDateTime) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e, json.EncodeDateTime)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptDateTime) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d, json.DecodeDateTime)
+}
+
 // Encode encodes int as json.
-func (o OptInt) Encode(e *jx.Writer) {
+func (o OptInt) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
@@ -1495,8 +1511,21 @@ func (o *OptInt) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInt) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInt) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes string as json.
-func (o OptString) Encode(e *jx.Writer) {
+func (o OptString) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
@@ -1517,29 +1546,38 @@ func (o *OptString) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetCategoriesList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptString) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptString) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetCategoriesList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetCategoriesList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetCategoriesList = [2]string{
@@ -1623,74 +1661,65 @@ func (s *PetCategoriesList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetCreate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetCategoriesList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetCategoriesList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetCreate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
 	{
 		if s.Categories != nil {
-			e.Comma()
-		}
-		if s.Categories != nil {
-			e.RawStr("\"categories\"" + ":")
+			e.FieldStart("categories")
 			e.ArrStart()
-			if len(s.Categories) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Categories[0]
-					elem.Encode(e)
-				}
-				for _, elem := range s.Categories[1:] {
-					e.Comma()
-					elem.Encode(e)
-				}
+			for _, elem := range s.Categories {
+				elem.Encode(e)
 			}
 			e.ArrEnd()
 		}
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"owner\"" + ":")
+		e.FieldStart("owner")
 		s.Owner.Encode(e)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetCreate = [6]string{
@@ -1825,29 +1854,38 @@ func (s *PetCreate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetCreateCategories) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetCreateCategories) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetCreateCategories) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetCreateCategories = [2]string{
@@ -1931,35 +1969,43 @@ func (s *PetCreateCategories) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetCreateOwner) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetCreateCategories) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetCreateCategories) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetCreateOwner) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetCreateOwner) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetCreateOwner = [3]string{
@@ -2056,47 +2102,50 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetFriendsList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetCreateOwner) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetCreateOwner) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetFriendsList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetFriendsList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetFriendsList = [4]string{
@@ -2202,47 +2251,50 @@ func (s *PetFriendsList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetFriendsList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetFriendsList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetList = [4]string{
@@ -2348,35 +2400,43 @@ func (s *PetList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetOwnerRead) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetOwnerRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetOwnerRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetOwnerRead = [3]string{
@@ -2473,47 +2533,50 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetRead) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetOwnerRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetOwnerRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetRead = [4]string{
@@ -2619,47 +2682,50 @@ func (s *PetRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s PetUpdate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetUpdate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetUpdate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfPetUpdate = [4]string{
@@ -2765,39 +2831,45 @@ func (s *PetUpdate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R400) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetUpdate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetUpdate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R400) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R400) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR400 = [3]string{
@@ -2893,39 +2965,45 @@ func (s *R400) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R404) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R400) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R400) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R404) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R404) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR404 = [3]string{
@@ -3021,39 +3099,45 @@ func (s *R404) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R409) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R404) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R404) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R409) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R409) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR409 = [3]string{
@@ -3149,39 +3233,45 @@ func (s *R409) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s R500) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R409) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"code\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R409) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *R500) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *R500) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"status\"" + ":")
+		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-		if len(s.Errors) != 0 {
-			e.Comma()
-		}
 
 		if len(s.Errors) != 0 {
-			e.RawStr("\"errors\"" + ":")
+			e.FieldStart("errors")
 			e.Raw(s.Errors)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfR500 = [3]string{
@@ -3277,50 +3367,44 @@ func (s *R500) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *R500) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *R500) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
-func (s UpdateCategoryReq) Encode(e *jx.Writer) {
+func (s *UpdateCategoryReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateCategoryReq) encodeFields(e *jx.Encoder) {
 	{
 		if s.Name.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Name.Set {
-			e.RawStr("\"name\"" + ":")
+			e.FieldStart("name")
 			s.Name.Encode(e)
 		}
 	}
 	{
 		if s.Pets != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Pets != nil {
-			e.RawStr("\"pets\"" + ":")
+			e.FieldStart("pets")
 			e.ArrStart()
-			if len(s.Pets) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Pets[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Pets[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Pets {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUpdateCategoryReq = [2]string{
@@ -3376,110 +3460,72 @@ func (s *UpdateCategoryReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateCategoryReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateCategoryReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
-func (s UpdatePetReq) Encode(e *jx.Writer) {
+func (s *UpdatePetReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdatePetReq) encodeFields(e *jx.Encoder) {
 	{
 		if s.Name.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Name.Set {
-			e.RawStr("\"name\"" + ":")
+			e.FieldStart("name")
 			s.Name.Encode(e)
 		}
 	}
 	{
 		if s.Weight.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
 	{
 		if s.Categories != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Categories != nil {
-			e.RawStr("\"categories\"" + ":")
+			e.FieldStart("categories")
 			e.ArrStart()
-			if len(s.Categories) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Categories[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Categories[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Categories {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
 	{
 		if s.Owner.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Owner.Set {
-			e.RawStr("\"owner\"" + ":")
+			e.FieldStart("owner")
 			s.Owner.Encode(e)
 		}
 	}
 	{
 		if s.Friends != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Friends != nil {
-			e.RawStr("\"friends\"" + ":")
+			e.FieldStart("friends")
 			e.ArrStart()
-			if len(s.Friends) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Friends[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Friends[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Friends {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUpdatePetReq = [6]string{
@@ -3588,62 +3634,50 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdatePetReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdatePetReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
-func (s UpdateUserReq) Encode(e *jx.Writer) {
+func (s *UpdateUserReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateUserReq) encodeFields(e *jx.Encoder) {
 	{
 		if s.Name.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Name.Set {
-			e.RawStr("\"name\"" + ":")
+			e.FieldStart("name")
 			s.Name.Encode(e)
 		}
 	}
 	{
 		if s.Age.Set {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Age.Set {
-			e.RawStr("\"age\"" + ":")
+			e.FieldStart("age")
 			s.Age.Encode(e)
 		}
 	}
 	{
 		if s.Pets != nil {
-			if !first {
-				e.Comma()
-			}
-			first = false
-		}
-		if s.Pets != nil {
-			e.RawStr("\"pets\"" + ":")
+			e.FieldStart("pets")
 			e.ArrStart()
-			if len(s.Pets) >= 1 {
-				// Encode first element without comma.
-				{
-					elem := s.Pets[0]
-					e.Int(elem)
-				}
-				for _, elem := range s.Pets[1:] {
-					e.Comma()
-					e.Int(elem)
-				}
+			for _, elem := range s.Pets {
+				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUpdateUserReq = [3]string{
@@ -3710,35 +3744,43 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s UserCreate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateUserReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateUserReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UserCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserCreate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUserCreate = [3]string{
@@ -3835,35 +3877,43 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s UserList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UserList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUserList = [3]string{
@@ -3960,47 +4010,50 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s UserPetsList) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UserPetsList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserPetsList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
 		if s.Weight.Set {
-			e.Comma()
-		}
-		if s.Weight.Set {
-			e.RawStr("\"weight\"" + ":")
+			e.FieldStart("weight")
 			s.Weight.Encode(e)
 		}
 	}
 	{
 		if s.Birthday.Set {
-			e.Comma()
-		}
-		if s.Birthday.Set {
-			e.RawStr("\"birthday\"" + ":")
+			e.FieldStart("birthday")
 			s.Birthday.Encode(e, json.EncodeDateTime)
 		}
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUserPetsList = [4]string{
@@ -4106,35 +4159,43 @@ func (s *UserPetsList) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s UserRead) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserPetsList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserPetsList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UserRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUserRead = [3]string{
@@ -4231,35 +4292,43 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	return nil
 }
 
-// Encode implements json.Marshaler.
-func (s UserUpdate) Encode(e *jx.Writer) {
-	e.ObjStart()
-	var (
-		first = true
-		_     = first
-	)
-	{
-		if !first {
-			e.Comma()
-		}
-		first = false
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
 
-		e.RawStr("\"id\"" + ":")
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UserUpdate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserUpdate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"name\"" + ":")
+		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-		e.Comma()
 
-		e.RawStr("\"age\"" + ":")
+		e.FieldStart("age")
 		e.Int(s.Age)
 	}
-	e.ObjEnd()
 }
 
 var jsonFieldsNameOfUserUpdate = [3]string{
@@ -4354,4 +4423,17 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserUpdate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserUpdate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
 }

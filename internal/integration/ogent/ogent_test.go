@@ -35,13 +35,13 @@ func (t *testSuite) SetupTest() {
 
 func (t *testSuite) TestCreate() {
 	// R409
-	got, err := t.handler.CreatePet(context.Background(), ogent.CreatePetReq{})
+	got, err := t.handler.CreatePet(context.Background(), &ogent.CreatePetReq{})
 	t.Require().NoError(err)
 	t.reqErr(http.StatusConflict, got)
 
 	// OK
 	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
-	got, err = t.handler.CreatePet(context.Background(), ogent.CreatePetReq{
+	got, err = t.handler.CreatePet(context.Background(), &ogent.CreatePetReq{
 		Name:       "Ariels most loved Leopard",
 		Weight:     ogent.NewOptInt(10),
 		Birthday:   ogent.NewOptDateTime(time.Now()),
@@ -70,7 +70,7 @@ func (t *testSuite) TestRead() {
 
 func (t *testSuite) TestUpdate() {
 	// R404
-	got, err := t.handler.UpdatePet(context.Background(), ogent.UpdatePetReq{}, ogent.UpdatePetParams{ID: 2000})
+	got, err := t.handler.UpdatePet(context.Background(), &ogent.UpdatePetReq{}, ogent.UpdatePetParams{ID: 2000})
 	t.Require().NoError(err)
 	t.reqErr(http.StatusNotFound, got)
 
@@ -78,7 +78,7 @@ func (t *testSuite) TestUpdate() {
 	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	pet := t.client.Pet.Create().SetName("First Pet").SetOwner(owner).SaveX(context.Background())
 	pet.Edges.Owner = owner
-	got, err = t.handler.UpdatePet(context.Background(), ogent.UpdatePetReq{Name: ogent.NewOptString("The changed name")}, ogent.UpdatePetParams{ID: pet.ID})
+	got, err = t.handler.UpdatePet(context.Background(), &ogent.UpdatePetReq{Name: ogent.NewOptString("The changed name")}, ogent.UpdatePetParams{ID: pet.ID})
 	pet.Name = "The changed name"
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewPetUpdate(pet), got)
@@ -90,7 +90,6 @@ func (t *testSuite) TestDelete() {
 	t.Require().NoError(err)
 	t.reqErr(http.StatusNotFound, got)
 
-	// OK TODO(masseelch): This should fail with a foreign key exception once https://github.com/ent/ent/pull/1703 gets merged.
 	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
 	got, err = t.handler.DeleteUser(context.Background(), ogent.DeleteUserParams{ID: owner.ID})
 	t.Require().NoError(err)

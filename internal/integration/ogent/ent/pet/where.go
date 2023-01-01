@@ -12,519 +12,337 @@ import (
 
 // ID filters vertices based on their ID field.
 func ID(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
 func IDEQ(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
 func IDNEQ(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
 func IDIn(ids ...int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.In(s.C(FieldID), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
 func IDNotIn(ids ...int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		v := make([]any, len(ids))
-		for i := range v {
-			v[i] = ids[i]
-		}
-		s.Where(sql.NotIn(s.C(FieldID), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
 func IDGT(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
 func IDGTE(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
 func IDLT(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
 func IDLTE(id int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldID), id))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldID, id))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldName, v))
 }
 
 // Weight applies equality check predicate on the "weight" field. It's identical to WeightEQ.
 func Weight(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldWeight, v))
 }
 
 // Birthday applies equality check predicate on the "birthday" field. It's identical to BirthdayEQ.
 func Birthday(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldBirthday, v))
 }
 
 // TagID applies equality check predicate on the "tag_id" field. It's identical to TagIDEQ.
 func TagID(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldTagID, v))
 }
 
 // Height applies equality check predicate on the "height" field. It's identical to HeightEQ.
 func Height(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldHeight, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldName, v))
 }
 
 // NameNEQ applies the NEQ predicate on the "name" field.
 func NameNEQ(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldName, v))
 }
 
 // NameIn applies the In predicate on the "name" field.
 func NameIn(vs ...string) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldName), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldName, vs...))
 }
 
 // NameNotIn applies the NotIn predicate on the "name" field.
 func NameNotIn(vs ...string) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldName), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldName, vs...))
 }
 
 // NameGT applies the GT predicate on the "name" field.
 func NameGT(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldGT(FieldName, v))
 }
 
 // NameGTE applies the GTE predicate on the "name" field.
 func NameGTE(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldName, v))
 }
 
 // NameLT applies the LT predicate on the "name" field.
 func NameLT(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldLT(FieldName, v))
 }
 
 // NameLTE applies the LTE predicate on the "name" field.
 func NameLTE(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldName, v))
 }
 
 // NameContains applies the Contains predicate on the "name" field.
 func NameContains(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldContains(FieldName, v))
 }
 
 // NameHasPrefix applies the HasPrefix predicate on the "name" field.
 func NameHasPrefix(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldHasPrefix(FieldName, v))
 }
 
 // NameHasSuffix applies the HasSuffix predicate on the "name" field.
 func NameHasSuffix(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldHasSuffix(FieldName, v))
 }
 
 // NameEqualFold applies the EqualFold predicate on the "name" field.
 func NameEqualFold(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldEqualFold(FieldName, v))
 }
 
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldName), v))
-	})
+	return predicate.Pet(sql.FieldContainsFold(FieldName, v))
 }
 
 // WeightEQ applies the EQ predicate on the "weight" field.
 func WeightEQ(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldWeight, v))
 }
 
 // WeightNEQ applies the NEQ predicate on the "weight" field.
 func WeightNEQ(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldWeight, v))
 }
 
 // WeightIn applies the In predicate on the "weight" field.
 func WeightIn(vs ...int) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldWeight), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldWeight, vs...))
 }
 
 // WeightNotIn applies the NotIn predicate on the "weight" field.
 func WeightNotIn(vs ...int) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldWeight), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldWeight, vs...))
 }
 
 // WeightGT applies the GT predicate on the "weight" field.
 func WeightGT(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldGT(FieldWeight, v))
 }
 
 // WeightGTE applies the GTE predicate on the "weight" field.
 func WeightGTE(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldWeight, v))
 }
 
 // WeightLT applies the LT predicate on the "weight" field.
 func WeightLT(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldLT(FieldWeight, v))
 }
 
 // WeightLTE applies the LTE predicate on the "weight" field.
 func WeightLTE(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldWeight), v))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldWeight, v))
 }
 
 // WeightIsNil applies the IsNil predicate on the "weight" field.
 func WeightIsNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldWeight)))
-	})
+	return predicate.Pet(sql.FieldIsNull(FieldWeight))
 }
 
 // WeightNotNil applies the NotNil predicate on the "weight" field.
 func WeightNotNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldWeight)))
-	})
+	return predicate.Pet(sql.FieldNotNull(FieldWeight))
 }
 
 // BirthdayEQ applies the EQ predicate on the "birthday" field.
 func BirthdayEQ(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldBirthday, v))
 }
 
 // BirthdayNEQ applies the NEQ predicate on the "birthday" field.
 func BirthdayNEQ(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldBirthday, v))
 }
 
 // BirthdayIn applies the In predicate on the "birthday" field.
 func BirthdayIn(vs ...time.Time) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldBirthday), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldBirthday, vs...))
 }
 
 // BirthdayNotIn applies the NotIn predicate on the "birthday" field.
 func BirthdayNotIn(vs ...time.Time) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldBirthday), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldBirthday, vs...))
 }
 
 // BirthdayGT applies the GT predicate on the "birthday" field.
 func BirthdayGT(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldGT(FieldBirthday, v))
 }
 
 // BirthdayGTE applies the GTE predicate on the "birthday" field.
 func BirthdayGTE(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldBirthday, v))
 }
 
 // BirthdayLT applies the LT predicate on the "birthday" field.
 func BirthdayLT(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldLT(FieldBirthday, v))
 }
 
 // BirthdayLTE applies the LTE predicate on the "birthday" field.
 func BirthdayLTE(v time.Time) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldBirthday), v))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldBirthday, v))
 }
 
 // BirthdayIsNil applies the IsNil predicate on the "birthday" field.
 func BirthdayIsNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldBirthday)))
-	})
+	return predicate.Pet(sql.FieldIsNull(FieldBirthday))
 }
 
 // BirthdayNotNil applies the NotNil predicate on the "birthday" field.
 func BirthdayNotNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldBirthday)))
-	})
+	return predicate.Pet(sql.FieldNotNull(FieldBirthday))
 }
 
 // TagIDEQ applies the EQ predicate on the "tag_id" field.
 func TagIDEQ(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldTagID, v))
 }
 
 // TagIDNEQ applies the NEQ predicate on the "tag_id" field.
 func TagIDNEQ(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldTagID, v))
 }
 
 // TagIDIn applies the In predicate on the "tag_id" field.
 func TagIDIn(vs ...[]byte) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldTagID), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldTagID, vs...))
 }
 
 // TagIDNotIn applies the NotIn predicate on the "tag_id" field.
 func TagIDNotIn(vs ...[]byte) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldTagID), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldTagID, vs...))
 }
 
 // TagIDGT applies the GT predicate on the "tag_id" field.
 func TagIDGT(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldGT(FieldTagID, v))
 }
 
 // TagIDGTE applies the GTE predicate on the "tag_id" field.
 func TagIDGTE(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldTagID, v))
 }
 
 // TagIDLT applies the LT predicate on the "tag_id" field.
 func TagIDLT(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldLT(FieldTagID, v))
 }
 
 // TagIDLTE applies the LTE predicate on the "tag_id" field.
 func TagIDLTE(v []byte) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldTagID), v))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldTagID, v))
 }
 
 // TagIDIsNil applies the IsNil predicate on the "tag_id" field.
 func TagIDIsNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldTagID)))
-	})
+	return predicate.Pet(sql.FieldIsNull(FieldTagID))
 }
 
 // TagIDNotNil applies the NotNil predicate on the "tag_id" field.
 func TagIDNotNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldTagID)))
-	})
+	return predicate.Pet(sql.FieldNotNull(FieldTagID))
 }
 
 // HeightEQ applies the EQ predicate on the "height" field.
 func HeightEQ(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldEQ(FieldHeight, v))
 }
 
 // HeightNEQ applies the NEQ predicate on the "height" field.
 func HeightNEQ(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldNEQ(FieldHeight, v))
 }
 
 // HeightIn applies the In predicate on the "height" field.
 func HeightIn(vs ...int) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldHeight), v...))
-	})
+	return predicate.Pet(sql.FieldIn(FieldHeight, vs...))
 }
 
 // HeightNotIn applies the NotIn predicate on the "height" field.
 func HeightNotIn(vs ...int) predicate.Pet {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldHeight), v...))
-	})
+	return predicate.Pet(sql.FieldNotIn(FieldHeight, vs...))
 }
 
 // HeightGT applies the GT predicate on the "height" field.
 func HeightGT(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldGT(FieldHeight, v))
 }
 
 // HeightGTE applies the GTE predicate on the "height" field.
 func HeightGTE(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldGTE(FieldHeight, v))
 }
 
 // HeightLT applies the LT predicate on the "height" field.
 func HeightLT(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldLT(FieldHeight, v))
 }
 
 // HeightLTE applies the LTE predicate on the "height" field.
 func HeightLTE(v int) predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldHeight), v))
-	})
+	return predicate.Pet(sql.FieldLTE(FieldHeight, v))
 }
 
 // HeightIsNil applies the IsNil predicate on the "height" field.
 func HeightIsNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.IsNull(s.C(FieldHeight)))
-	})
+	return predicate.Pet(sql.FieldIsNull(FieldHeight))
 }
 
 // HeightNotNil applies the NotNil predicate on the "height" field.
 func HeightNotNil() predicate.Pet {
-	return predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.NotNull(s.C(FieldHeight)))
-	})
+	return predicate.Pet(sql.FieldNotNull(FieldHeight))
 }
 
 // HasCategories applies the HasEdge predicate on the "categories" edge.
@@ -532,7 +350,6 @@ func HasCategories() predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(CategoriesTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, CategoriesTable, CategoriesPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -560,7 +377,6 @@ func HasOwner() predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(OwnerTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
@@ -588,7 +404,6 @@ func HasFriends() predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(FriendsTable, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, FriendsTable, FriendsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)

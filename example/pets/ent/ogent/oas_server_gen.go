@@ -3,71 +3,7 @@
 package ogent
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"io"
-	"math"
-	"math/big"
-	"math/bits"
-	"net"
-	"net/http"
-	"net/url"
-	"regexp"
-	"sort"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
-
-	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
-	"github.com/google/uuid"
-	"github.com/ogen-go/ogen/conv"
-	ht "github.com/ogen-go/ogen/http"
-	"github.com/ogen-go/ogen/json"
-	"github.com/ogen-go/ogen/otelogen"
-	"github.com/ogen-go/ogen/uri"
-	"github.com/ogen-go/ogen/validate"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
-	"go.opentelemetry.io/otel/trace"
-)
-
-// No-op definition for keeping imports.
-var (
-	_ = context.Background()
-	_ = fmt.Stringer(nil)
-	_ = strings.Builder{}
-	_ = errors.Is
-	_ = sort.Ints
-	_ = http.MethodGet
-	_ = io.Copy
-	_ = json.Marshal
-	_ = bytes.NewReader
-	_ = strconv.ParseInt
-	_ = time.Time{}
-	_ = conv.ToInt32
-	_ = uuid.UUID{}
-	_ = uri.PathEncoder{}
-	_ = url.URL{}
-	_ = math.Mod
-	_ = bits.LeadingZeros64
-	_ = big.Rat{}
-	_ = validate.Int{}
-	_ = ht.NewRequest
-	_ = net.IP{}
-	_ = otelogen.Version
-	_ = attribute.KeyValue{}
-	_ = trace.TraceIDFromHex
-	_ = otel.GetTracerProvider
-	_ = metric.NewNoopMeterProvider
-	_ = regexp.MustCompile
-	_ = jx.Null
-	_ = sync.Pool{}
-	_ = codes.Unset
 )
 
 // Handler handles operations described by OpenAPI v3 specification.
@@ -77,20 +13,22 @@ type Handler interface {
 	// Creates a new Category and persists it to storage.
 	//
 	// POST /categories
-	CreateCategory(ctx context.Context, req CreateCategoryReq) (CreateCategoryRes, error)
+	CreateCategory(ctx context.Context, req *CreateCategoryReq) (CreateCategoryRes, error)
 	// CreatePet implements createPet operation.
 	//
 	// Creates a new Pet and persists it to storage.
 	//
 	// POST /pets
-	CreatePet(ctx context.Context, req CreatePetReq) (CreatePetRes, error)
+	CreatePet(ctx context.Context, req *CreatePetReq) (CreatePetRes, error)
 	// CreateUser implements createUser operation.
 	//
 	// Creates a new User and persists it to storage.
 	//
 	// POST /users
-	CreateUser(ctx context.Context, req CreateUserReq) (CreateUserRes, error)
+	CreateUser(ctx context.Context, req *CreateUserReq) (CreateUserRes, error)
 	// DBHealth implements DBHealth operation.
+	//
+	// Ping the database and report.
 	//
 	// GET /db-health
 	DBHealth(ctx context.Context) (DBHealthRes, error)
@@ -183,46 +121,36 @@ type Handler interface {
 	// Updates a Category and persists changes to storage.
 	//
 	// PATCH /categories/{id}
-	UpdateCategory(ctx context.Context, req UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
+	UpdateCategory(ctx context.Context, req *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
 	// UpdatePet implements updatePet operation.
 	//
 	// Updates a Pet and persists changes to storage.
 	//
 	// PATCH /pets/{id}
-	UpdatePet(ctx context.Context, req UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
+	UpdatePet(ctx context.Context, req *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
 	// UpdateUser implements updateUser operation.
 	//
 	// Updates a User and persists changes to storage.
 	//
 	// PATCH /users/{id}
-	UpdateUser(ctx context.Context, req UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)
+	UpdateUser(ctx context.Context, req *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and
 // calls Handler to handle requests.
 type Server struct {
-	h   Handler
-	cfg config
-
-	requests metric.Int64Counter
-	errors   metric.Int64Counter
-	duration metric.Int64Histogram
+	h Handler
+	baseServer
 }
 
-func NewServer(h Handler, opts ...Option) (*Server, error) {
-	s := &Server{
-		h:   h,
-		cfg: newConfig(opts...),
-	}
-	var err error
-	if s.requests, err = s.cfg.Meter.NewInt64Counter(otelogen.ServerRequestCount); err != nil {
+// NewServer creates new Server.
+func NewServer(h Handler, opts ...ServerOption) (*Server, error) {
+	s, err := newServerConfig(opts...).baseServer()
+	if err != nil {
 		return nil, err
 	}
-	if s.errors, err = s.cfg.Meter.NewInt64Counter(otelogen.ServerErrorsCount); err != nil {
-		return nil, err
-	}
-	if s.duration, err = s.cfg.Meter.NewInt64Histogram(otelogen.ServerDuration); err != nil {
-		return nil, err
-	}
-	return s, nil
+	return &Server{
+		h:          h,
+		baseServer: s,
+	}, nil
 }

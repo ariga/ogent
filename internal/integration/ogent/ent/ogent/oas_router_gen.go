@@ -4,21 +4,21 @@ package ogent
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
+
+	"github.com/ogen-go/ogen/uri"
 )
-
-func (s *Server) notFound(w http.ResponseWriter, r *http.Request) {
-	s.cfg.NotFound(w, r)
-}
-
-func (s *Server) notAllowed(w http.ResponseWriter, r *http.Request, allowed string) {
-	s.cfg.MethodNotAllowed(w, r, allowed)
-}
 
 // ServeHTTP serves http request as defined by OpenAPI v3 specification,
 // calling handler that matches the path or returning not found error.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	elem := r.URL.Path
+	if rawPath := r.URL.RawPath; rawPath != "" {
+		if normalized, ok := uri.NormalizeEscapedPath(rawPath); ok {
+			elem = normalized
+		}
+	}
 	if prefix := s.cfg.Prefix; len(prefix) > 0 {
 		if strings.HasPrefix(elem, prefix) {
 			// Cut prefix from the path.
@@ -460,14 +460,29 @@ func (r Route) Args() []string {
 }
 
 // FindRoute finds Route for given method and path.
-func (s *Server) FindRoute(method, path string) (r Route, _ bool) {
+//
+// Note: this method does not unescape path or handle reserved characters in path properly. Use FindPath instead.
+func (s *Server) FindRoute(method, path string) (Route, bool) {
+	return s.FindPath(method, &url.URL{Path: path})
+}
+
+// FindPath finds Route for given method and URL.
+func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 	var (
-		args = [1]string{}
-		elem = path
+		elem = u.Path
+		args = r.args
 	)
-	r.args = args
-	if elem == "" {
-		return r, false
+	if rawPath := u.RawPath; rawPath != "" {
+		if normalized, ok := uri.NormalizeEscapedPath(rawPath); ok {
+			elem = normalized
+		}
+		defer func() {
+			for i, arg := range r.args[:r.count] {
+				if unescaped, err := url.PathUnescape(arg); err == nil {
+					r.args[i] = unescaped
+				}
+			}
+		}()
 	}
 
 	// Static code generated router with unwrapped path search.
