@@ -18,6 +18,8 @@ require (
 
 require (
 	ariga.io/atlas v0.8.4-0.20221212165942-e53dd27a603d // indirect
+	ariga.io/ogent v0.0.0-00010101000000-000000000000 // indirect
+	entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect

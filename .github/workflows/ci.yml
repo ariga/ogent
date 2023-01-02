@@ -8,14 +8,11 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goversion: [ 1.19 ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.goversion }}
+          go-version: '1.19'
       - name: Run linters
         uses: golangci/golangci-lint-action@v3.1.0
         with:
@@ -23,14 +20,11 @@ jobs:
           args: --timeout 3m
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goversion: [ 1.19 ]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.goversion }}
+          go-version: '1.19'
       - uses: actions/cache@v3.0.11
         with:
           path: |
@@ -42,7 +36,10 @@ jobs:
       - name: Run tests
         run: go test -race ./...
   generate:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        working-directory: [ '.', 'example/pets', 'example/todo' ]
+    runs-on: ubuntu-latest#
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
@@ -55,8 +52,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Run go generate
+        working-directory: ${{ matrix.working-directory }}
         run: go generate ./...
       - name: Check generated files
+        working-directory: ${{ matrix.working-directory }}
         run: |
           status=$(git status --porcelain)
           if [ -n "$status" ]; then
