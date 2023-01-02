@@ -227,6 +227,12 @@ func (atu *AllTypesUpdate) SetBytes(b []byte) *AllTypesUpdate {
 	return atu
 }
 
+// SetNilable sets the "nilable" field.
+func (atu *AllTypesUpdate) SetNilable(s string) *AllTypesUpdate {
+	atu.mutation.SetNilable(s)
+	return atu
+}
+
 // Mutation returns the AllTypesMutation object of the builder.
 func (atu *AllTypesUpdate) Mutation() *AllTypesMutation {
 	return atu.mutation
@@ -382,6 +388,9 @@ func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := atu.mutation.Bytes(); ok {
 		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
+	}
+	if value, ok := atu.mutation.Nilable(); ok {
+		_spec.SetField(alltypes.FieldNilable, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, atu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -601,6 +610,12 @@ func (atuo *AllTypesUpdateOne) SetBytes(b []byte) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNilable sets the "nilable" field.
+func (atuo *AllTypesUpdateOne) SetNilable(s string) *AllTypesUpdateOne {
+	atuo.mutation.SetNilable(s)
+	return atuo
+}
+
 // Mutation returns the AllTypesMutation object of the builder.
 func (atuo *AllTypesUpdateOne) Mutation() *AllTypesMutation {
 	return atuo.mutation
@@ -780,6 +795,9 @@ func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, er
 	}
 	if value, ok := atuo.mutation.Bytes(); ok {
 		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
+	}
+	if value, ok := atuo.mutation.Nilable(); ok {
+		_spec.SetField(alltypes.FieldNilable, field.TypeString, value)
 	}
 	_node = &AllTypes{config: atuo.config}
 	_spec.Assign = _node.assignValues

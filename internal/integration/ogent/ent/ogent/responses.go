@@ -29,6 +29,10 @@ func NewAllTypesCreate(e *ent.AllTypes) *AllTypesCreate {
 	ret.Text = e.Text
 	ret.State = AllTypesCreateState(e.State)
 	ret.Bytes = e.Bytes
+	ret.Nilable = OptString{}
+	if e.Nilable != nil {
+		ret.Nilable.SetTo(*e.Nilable)
+	}
 	return &ret
 }
 
@@ -75,6 +79,10 @@ func NewAllTypesList(e *ent.AllTypes) *AllTypesList {
 	ret.Text = e.Text
 	ret.State = AllTypesListState(e.State)
 	ret.Bytes = e.Bytes
+	ret.Nilable = OptString{}
+	if e.Nilable != nil {
+		ret.Nilable.SetTo(*e.Nilable)
+	}
 	return &ret
 }
 
@@ -121,6 +129,10 @@ func NewAllTypesRead(e *ent.AllTypes) *AllTypesRead {
 	ret.Text = e.Text
 	ret.State = AllTypesReadState(e.State)
 	ret.Bytes = e.Bytes
+	ret.Nilable = OptString{}
+	if e.Nilable != nil {
+		ret.Nilable.SetTo(*e.Nilable)
+	}
 	return &ret
 }
 
@@ -167,6 +179,10 @@ func NewAllTypesUpdate(e *ent.AllTypes) *AllTypesUpdate {
 	ret.Text = e.Text
 	ret.State = AllTypesUpdateState(e.State)
 	ret.Bytes = e.Bytes
+	ret.Nilable = OptString{}
+	if e.Nilable != nil {
+		ret.Nilable.SetTo(*e.Nilable)
+	}
 	return &ret
 }
 

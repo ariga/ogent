@@ -53,6 +53,7 @@ func (h *OgentHandler) CreateAllTypes(ctx context.Context, req *CreateAllTypesRe
 	b.SetText(req.Text)
 	b.SetState(alltypes.State(req.State))
 	b.SetBytes(req.Bytes)
+	b.SetNilable(req.Nilable)
 	// Add all edges.
 	// Persist to storage.
 	e, err := b.Save(ctx)
@@ -171,6 +172,9 @@ func (h *OgentHandler) UpdateAllTypes(ctx context.Context, req *UpdateAllTypesRe
 	}
 	if req.Bytes != nil {
 		b.SetBytes(req.Bytes)
+	}
+	if v, ok := req.Nilable.Get(); ok {
+		b.SetNilable(v)
 	}
 	// Add all edges.
 	// Persist to storage.

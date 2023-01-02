@@ -145,6 +145,11 @@ func Bytes(v []byte) predicate.AllTypes {
 	return predicate.AllTypes(sql.FieldEQ(FieldBytes, v))
 }
 
+// Nilable applies equality check predicate on the "nilable" field. It's identical to NilableEQ.
+func Nilable(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldEQ(FieldNilable, v))
+}
+
 // IntEQ applies the EQ predicate on the "int" field.
 func IntEQ(v int) predicate.AllTypes {
 	return predicate.AllTypes(sql.FieldEQ(FieldInt, v))
@@ -903,6 +908,71 @@ func BytesLT(v []byte) predicate.AllTypes {
 // BytesLTE applies the LTE predicate on the "bytes" field.
 func BytesLTE(v []byte) predicate.AllTypes {
 	return predicate.AllTypes(sql.FieldLTE(FieldBytes, v))
+}
+
+// NilableEQ applies the EQ predicate on the "nilable" field.
+func NilableEQ(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldEQ(FieldNilable, v))
+}
+
+// NilableNEQ applies the NEQ predicate on the "nilable" field.
+func NilableNEQ(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldNEQ(FieldNilable, v))
+}
+
+// NilableIn applies the In predicate on the "nilable" field.
+func NilableIn(vs ...string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldIn(FieldNilable, vs...))
+}
+
+// NilableNotIn applies the NotIn predicate on the "nilable" field.
+func NilableNotIn(vs ...string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldNotIn(FieldNilable, vs...))
+}
+
+// NilableGT applies the GT predicate on the "nilable" field.
+func NilableGT(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldGT(FieldNilable, v))
+}
+
+// NilableGTE applies the GTE predicate on the "nilable" field.
+func NilableGTE(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldGTE(FieldNilable, v))
+}
+
+// NilableLT applies the LT predicate on the "nilable" field.
+func NilableLT(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldLT(FieldNilable, v))
+}
+
+// NilableLTE applies the LTE predicate on the "nilable" field.
+func NilableLTE(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldLTE(FieldNilable, v))
+}
+
+// NilableContains applies the Contains predicate on the "nilable" field.
+func NilableContains(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldContains(FieldNilable, v))
+}
+
+// NilableHasPrefix applies the HasPrefix predicate on the "nilable" field.
+func NilableHasPrefix(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldHasPrefix(FieldNilable, v))
+}
+
+// NilableHasSuffix applies the HasSuffix predicate on the "nilable" field.
+func NilableHasSuffix(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldHasSuffix(FieldNilable, v))
+}
+
+// NilableEqualFold applies the EqualFold predicate on the "nilable" field.
+func NilableEqualFold(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldEqualFold(FieldNilable, v))
+}
+
+// NilableContainsFold applies the ContainsFold predicate on the "nilable" field.
+func NilableContainsFold(v string) predicate.AllTypes {
+	return predicate.AllTypes(sql.FieldContainsFold(FieldNilable, v))
 }
 
 // And groups predicates with the AND operator between them.

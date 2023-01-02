@@ -32,6 +32,7 @@ type AllTypesCreate struct {
 	Text       string              `json:"text"`
 	State      AllTypesCreateState `json:"state"`
 	Bytes      []byte              `json:"bytes"`
+	Nilable    OptString           `json:"nilable"`
 }
 
 // GetID returns the value of ID.
@@ -134,6 +135,11 @@ func (s *AllTypesCreate) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *AllTypesCreate) GetNilable() OptString {
+	return s.Nilable
+}
+
 // SetID sets the value of ID.
 func (s *AllTypesCreate) SetID(val int64) {
 	s.ID = val
@@ -234,6 +240,11 @@ func (s *AllTypesCreate) SetBytes(val []byte) {
 	s.Bytes = val
 }
 
+// SetNilable sets the value of Nilable.
+func (s *AllTypesCreate) SetNilable(val OptString) {
+	s.Nilable = val
+}
+
 func (*AllTypesCreate) createAllTypesRes() {}
 
 type AllTypesCreateState string
@@ -291,6 +302,7 @@ type AllTypesList struct {
 	Text       string            `json:"text"`
 	State      AllTypesListState `json:"state"`
 	Bytes      []byte            `json:"bytes"`
+	Nilable    OptString         `json:"nilable"`
 }
 
 // GetID returns the value of ID.
@@ -393,6 +405,11 @@ func (s *AllTypesList) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *AllTypesList) GetNilable() OptString {
+	return s.Nilable
+}
+
 // SetID sets the value of ID.
 func (s *AllTypesList) SetID(val int64) {
 	s.ID = val
@@ -493,6 +510,11 @@ func (s *AllTypesList) SetBytes(val []byte) {
 	s.Bytes = val
 }
 
+// SetNilable sets the value of Nilable.
+func (s *AllTypesList) SetNilable(val OptString) {
+	s.Nilable = val
+}
+
 type AllTypesListState string
 
 const (
@@ -548,6 +570,7 @@ type AllTypesRead struct {
 	Text       string            `json:"text"`
 	State      AllTypesReadState `json:"state"`
 	Bytes      []byte            `json:"bytes"`
+	Nilable    OptString         `json:"nilable"`
 }
 
 // GetID returns the value of ID.
@@ -650,6 +673,11 @@ func (s *AllTypesRead) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *AllTypesRead) GetNilable() OptString {
+	return s.Nilable
+}
+
 // SetID sets the value of ID.
 func (s *AllTypesRead) SetID(val int64) {
 	s.ID = val
@@ -750,6 +778,11 @@ func (s *AllTypesRead) SetBytes(val []byte) {
 	s.Bytes = val
 }
 
+// SetNilable sets the value of Nilable.
+func (s *AllTypesRead) SetNilable(val OptString) {
+	s.Nilable = val
+}
+
 func (*AllTypesRead) readAllTypesRes() {}
 
 type AllTypesReadState string
@@ -807,6 +840,7 @@ type AllTypesUpdate struct {
 	Text       string              `json:"text"`
 	State      AllTypesUpdateState `json:"state"`
 	Bytes      []byte              `json:"bytes"`
+	Nilable    OptString           `json:"nilable"`
 }
 
 // GetID returns the value of ID.
@@ -909,6 +943,11 @@ func (s *AllTypesUpdate) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *AllTypesUpdate) GetNilable() OptString {
+	return s.Nilable
+}
+
 // SetID sets the value of ID.
 func (s *AllTypesUpdate) SetID(val int64) {
 	s.ID = val
@@ -1007,6 +1046,11 @@ func (s *AllTypesUpdate) SetState(val AllTypesUpdateState) {
 // SetBytes sets the value of Bytes.
 func (s *AllTypesUpdate) SetBytes(val []byte) {
 	s.Bytes = val
+}
+
+// SetNilable sets the value of Nilable.
+func (s *AllTypesUpdate) SetNilable(val OptString) {
+	s.Nilable = val
 }
 
 func (*AllTypesUpdate) updateAllTypesRes() {}
@@ -1288,6 +1332,7 @@ type CreateAllTypesReq struct {
 	Text       string                 `json:"text"`
 	State      CreateAllTypesReqState `json:"state"`
 	Bytes      []byte                 `json:"bytes"`
+	Nilable    string                 `json:"nilable"`
 }
 
 // GetInt returns the value of Int.
@@ -1385,6 +1430,11 @@ func (s *CreateAllTypesReq) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *CreateAllTypesReq) GetNilable() string {
+	return s.Nilable
+}
+
 // SetInt sets the value of Int.
 func (s *CreateAllTypesReq) SetInt(val int) {
 	s.Int = val
@@ -1478,6 +1528,11 @@ func (s *CreateAllTypesReq) SetState(val CreateAllTypesReqState) {
 // SetBytes sets the value of Bytes.
 func (s *CreateAllTypesReq) SetBytes(val []byte) {
 	s.Bytes = val
+}
+
+// SetNilable sets the value of Nilable.
+func (s *CreateAllTypesReq) SetNilable(val string) {
+	s.Nilable = val
 }
 
 type CreateAllTypesReqState string
@@ -4359,6 +4414,7 @@ type UpdateAllTypesReq struct {
 	Text       OptString                 `json:"text"`
 	State      OptUpdateAllTypesReqState `json:"state"`
 	Bytes      []byte                    `json:"bytes"`
+	Nilable    OptString                 `json:"nilable"`
 }
 
 // GetInt returns the value of Int.
@@ -4456,6 +4512,11 @@ func (s *UpdateAllTypesReq) GetBytes() []byte {
 	return s.Bytes
 }
 
+// GetNilable returns the value of Nilable.
+func (s *UpdateAllTypesReq) GetNilable() OptString {
+	return s.Nilable
+}
+
 // SetInt sets the value of Int.
 func (s *UpdateAllTypesReq) SetInt(val OptInt) {
 	s.Int = val
@@ -4549,6 +4610,11 @@ func (s *UpdateAllTypesReq) SetState(val OptUpdateAllTypesReqState) {
 // SetBytes sets the value of Bytes.
 func (s *UpdateAllTypesReq) SetBytes(val []byte) {
 	s.Bytes = val
+}
+
+// SetNilable sets the value of Nilable.
+func (s *UpdateAllTypesReq) SetNilable(val OptString) {
+	s.Nilable = val
 }
 
 type UpdateAllTypesReqState string

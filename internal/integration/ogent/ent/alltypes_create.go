@@ -135,6 +135,12 @@ func (atc *AllTypesCreate) SetBytes(b []byte) *AllTypesCreate {
 	return atc
 }
 
+// SetNilable sets the "nilable" field.
+func (atc *AllTypesCreate) SetNilable(s string) *AllTypesCreate {
+	atc.mutation.SetNilable(s)
+	return atc
+}
+
 // SetID sets the "id" field.
 func (atc *AllTypesCreate) SetID(u uint32) *AllTypesCreate {
 	atc.mutation.SetID(u)
@@ -236,6 +242,9 @@ func (atc *AllTypesCreate) check() error {
 	}
 	if _, ok := atc.mutation.Bytes(); !ok {
 		return &ValidationError{Name: "bytes", err: errors.New(`ent: missing required field "AllTypes.bytes"`)}
+	}
+	if _, ok := atc.mutation.Nilable(); !ok {
+		return &ValidationError{Name: "nilable", err: errors.New(`ent: missing required field "AllTypes.nilable"`)}
 	}
 	return nil
 }
@@ -350,6 +359,10 @@ func (atc *AllTypesCreate) createSpec() (*AllTypes, *sqlgraph.CreateSpec) {
 	if value, ok := atc.mutation.Bytes(); ok {
 		_spec.SetField(alltypes.FieldBytes, field.TypeBytes, value)
 		_node.Bytes = value
+	}
+	if value, ok := atc.mutation.Nilable(); ok {
+		_spec.SetField(alltypes.FieldNilable, field.TypeString, value)
+		_node.Nilable = &value
 	}
 	return _node, _spec
 }
