@@ -161,6 +161,9 @@
                   "bytes": {
                     "type": "string",
                     "format": "byte"
+                  },
+                  "nilable": {
+                    "type": "string"
                   }
                 },
                 "required": [
@@ -182,7 +185,8 @@
                   "time",
                   "text",
                   "state",
-                  "bytes"
+                  "bytes",
+                  "nilable"
                 ]
               }
             }
@@ -413,6 +417,9 @@
                   "bytes": {
                     "type": "string",
                     "format": "byte"
+                  },
+                  "nilable": {
+                    "type": "string"
                   }
                 }
               }
@@ -1785,6 +1792,9 @@
           "bytes": {
             "type": "string",
             "format": "byte"
+          },
+          "nilable": {
+            "type": "string"
           }
         },
         "required": [
@@ -1906,6 +1916,9 @@
           "bytes": {
             "type": "string",
             "format": "byte"
+          },
+          "nilable": {
+            "type": "string"
           }
         },
         "required": [
@@ -2027,6 +2040,9 @@
           "bytes": {
             "type": "string",
             "format": "byte"
+          },
+          "nilable": {
+            "type": "string"
           }
         },
         "required": [
@@ -2148,6 +2164,9 @@
           "bytes": {
             "type": "string",
             "format": "byte"
+          },
+          "nilable": {
+            "type": "string"
           }
         },
         "required": [
@@ -2269,6 +2288,9 @@
           "bytes": {
             "type": "string",
             "format": "byte"
+          },
+          "nilable": {
+            "type": "string"
           }
         },
         "required": [

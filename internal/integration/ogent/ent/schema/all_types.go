@@ -51,6 +51,8 @@ func (AllTypes) Fields() []ent.Field {
 		// 	SchemaType(map[string]string{dialect.Postgres: "varchar"}).
 		// 	Default(DefaultLink()).
 		// 	Annotations(entoas.Schema(ogen.String())),
+		field.Text("nilable").
+			Nillable(),
 	}
 }
 

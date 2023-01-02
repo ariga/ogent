@@ -30,6 +30,7 @@ var (
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "state", Type: field.TypeEnum, Enums: []string{"on", "off"}},
 		{Name: "bytes", Type: field.TypeBytes},
+		{Name: "nilable", Type: field.TypeString, Size: 2147483647},
 	}
 	// AllTypesTable holds the schema information for the "all_types" table.
 	AllTypesTable = &schema.Table{

@@ -123,9 +123,15 @@ func (s *AllTypesCreate) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+		if s.Nilable.Set {
+			e.FieldStart("nilable")
+			s.Nilable.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAllTypesCreate = [20]string{
+var jsonFieldsNameOfAllTypesCreate = [21]string{
 	0:  "id",
 	1:  "int",
 	2:  "int8",
@@ -146,6 +152,7 @@ var jsonFieldsNameOfAllTypesCreate = [20]string{
 	17: "text",
 	18: "state",
 	19: "bytes",
+	20: "nilable",
 }
 
 // Decode decodes AllTypesCreate from json.
@@ -395,6 +402,16 @@ func (s *AllTypesCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
 			}
+		case "nilable":
+			if err := func() error {
+				s.Nilable.Reset()
+				if err := s.Nilable.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -602,9 +619,15 @@ func (s *AllTypesList) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+		if s.Nilable.Set {
+			e.FieldStart("nilable")
+			s.Nilable.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAllTypesList = [20]string{
+var jsonFieldsNameOfAllTypesList = [21]string{
 	0:  "id",
 	1:  "int",
 	2:  "int8",
@@ -625,6 +648,7 @@ var jsonFieldsNameOfAllTypesList = [20]string{
 	17: "text",
 	18: "state",
 	19: "bytes",
+	20: "nilable",
 }
 
 // Decode decodes AllTypesList from json.
@@ -874,6 +898,16 @@ func (s *AllTypesList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
 			}
+		case "nilable":
+			if err := func() error {
+				s.Nilable.Reset()
+				if err := s.Nilable.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1081,9 +1115,15 @@ func (s *AllTypesRead) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+		if s.Nilable.Set {
+			e.FieldStart("nilable")
+			s.Nilable.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAllTypesRead = [20]string{
+var jsonFieldsNameOfAllTypesRead = [21]string{
 	0:  "id",
 	1:  "int",
 	2:  "int8",
@@ -1104,6 +1144,7 @@ var jsonFieldsNameOfAllTypesRead = [20]string{
 	17: "text",
 	18: "state",
 	19: "bytes",
+	20: "nilable",
 }
 
 // Decode decodes AllTypesRead from json.
@@ -1353,6 +1394,16 @@ func (s *AllTypesRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
 			}
+		case "nilable":
+			if err := func() error {
+				s.Nilable.Reset()
+				if err := s.Nilable.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1560,9 +1611,15 @@ func (s *AllTypesUpdate) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+		if s.Nilable.Set {
+			e.FieldStart("nilable")
+			s.Nilable.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfAllTypesUpdate = [20]string{
+var jsonFieldsNameOfAllTypesUpdate = [21]string{
 	0:  "id",
 	1:  "int",
 	2:  "int8",
@@ -1583,6 +1640,7 @@ var jsonFieldsNameOfAllTypesUpdate = [20]string{
 	17: "text",
 	18: "state",
 	19: "bytes",
+	20: "nilable",
 }
 
 // Decode decodes AllTypesUpdate from json.
@@ -1831,6 +1889,16 @@ func (s *AllTypesUpdate) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		case "nilable":
+			if err := func() error {
+				s.Nilable.Reset()
+				if err := s.Nilable.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
 			}
 		default:
 			return d.Skip()
@@ -2745,9 +2813,14 @@ func (s *CreateAllTypesReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+
+		e.FieldStart("nilable")
+		e.Str(s.Nilable)
+	}
 }
 
-var jsonFieldsNameOfCreateAllTypesReq = [19]string{
+var jsonFieldsNameOfCreateAllTypesReq = [20]string{
 	0:  "int",
 	1:  "int8",
 	2:  "int16",
@@ -2767,6 +2840,7 @@ var jsonFieldsNameOfCreateAllTypesReq = [19]string{
 	16: "text",
 	17: "state",
 	18: "bytes",
+	19: "nilable",
 }
 
 // Decode decodes CreateAllTypesReq from json.
@@ -3004,6 +3078,18 @@ func (s *CreateAllTypesReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
 			}
+		case "nilable":
+			requiredBitSet[2] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.Nilable = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3016,7 +3102,7 @@ func (s *CreateAllTypesReq) Decode(d *jx.Decoder) error {
 	for i, mask := range [3]uint8{
 		0b11111111,
 		0b11111111,
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -7741,9 +7827,15 @@ func (s *UpdateAllTypesReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
+	{
+		if s.Nilable.Set {
+			e.FieldStart("nilable")
+			s.Nilable.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfUpdateAllTypesReq = [19]string{
+var jsonFieldsNameOfUpdateAllTypesReq = [20]string{
 	0:  "int",
 	1:  "int8",
 	2:  "int16",
@@ -7763,6 +7855,7 @@ var jsonFieldsNameOfUpdateAllTypesReq = [19]string{
 	16: "text",
 	17: "state",
 	18: "bytes",
+	19: "nilable",
 }
 
 // Decode decodes UpdateAllTypesReq from json.
@@ -7963,6 +8056,16 @@ func (s *UpdateAllTypesReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"bytes\"")
+			}
+		case "nilable":
+			if err := func() error {
+				s.Nilable.Reset()
+				if err := s.Nilable.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"nilable\"")
 			}
 		default:
 			return d.Skip()

@@ -55,6 +55,8 @@ type AllTypes struct {
 	State alltypes.State `json:"state,omitempty"`
 	// Bytes holds the value of the "bytes" field.
 	Bytes []byte `json:"bytes,omitempty"`
+	// Nilable holds the value of the "nilable" field.
+	Nilable *string `json:"nilable,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -70,7 +72,7 @@ func (*AllTypes) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case alltypes.FieldID, alltypes.FieldInt, alltypes.FieldInt8, alltypes.FieldInt16, alltypes.FieldInt32, alltypes.FieldInt64, alltypes.FieldUint, alltypes.FieldUint8, alltypes.FieldUint16, alltypes.FieldUint32, alltypes.FieldUint64:
 			values[i] = new(sql.NullInt64)
-		case alltypes.FieldStringType, alltypes.FieldText, alltypes.FieldState:
+		case alltypes.FieldStringType, alltypes.FieldText, alltypes.FieldState, alltypes.FieldNilable:
 			values[i] = new(sql.NullString)
 		case alltypes.FieldTime:
 			values[i] = new(sql.NullTime)
@@ -211,6 +213,13 @@ func (at *AllTypes) assignValues(columns []string, values []any) error {
 			} else if value != nil {
 				at.Bytes = *value
 			}
+		case alltypes.FieldNilable:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nilable", values[i])
+			} else if value.Valid {
+				at.Nilable = new(string)
+				*at.Nilable = value.String
+			}
 		}
 	}
 	return nil
@@ -295,6 +304,11 @@ func (at *AllTypes) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("bytes=")
 	builder.WriteString(fmt.Sprintf("%v", at.Bytes))
+	builder.WriteString(", ")
+	if v := at.Nilable; v != nil {
+		builder.WriteString("nilable=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

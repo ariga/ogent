@@ -181,7 +181,7 @@ const (
 
 // setFieldExpr returns a Go expression to set the field on a response.
 func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
-	if !f.Optional {
+	if !f.Optional && !f.Nillable {
 		expr := fmt.Sprintf("%s.%s", ident, f.StructField())
 		if f.IsEnum() {
 			expr = convertTo(schema+f.StructField(), expr)

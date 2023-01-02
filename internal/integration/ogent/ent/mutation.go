@@ -73,6 +73,7 @@ type AllTypesMutation struct {
 	text          *string
 	state         *alltypes.State
 	bytes         *[]byte
+	nilable       *string
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*AllTypes, error)
@@ -1107,6 +1108,42 @@ func (m *AllTypesMutation) ResetBytes() {
 	m.bytes = nil
 }
 
+// SetNilable sets the "nilable" field.
+func (m *AllTypesMutation) SetNilable(s string) {
+	m.nilable = &s
+}
+
+// Nilable returns the value of the "nilable" field in the mutation.
+func (m *AllTypesMutation) Nilable() (r string, exists bool) {
+	v := m.nilable
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNilable returns the old "nilable" field's value of the AllTypes entity.
+// If the AllTypes object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AllTypesMutation) OldNilable(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNilable is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNilable requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNilable: %w", err)
+	}
+	return oldValue.Nilable, nil
+}
+
+// ResetNilable resets all changes to the "nilable" field.
+func (m *AllTypesMutation) ResetNilable() {
+	m.nilable = nil
+}
+
 // Where appends a list predicates to the AllTypesMutation builder.
 func (m *AllTypesMutation) Where(ps ...predicate.AllTypes) {
 	m.predicates = append(m.predicates, ps...)
@@ -1141,7 +1178,7 @@ func (m *AllTypesMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AllTypesMutation) Fields() []string {
-	fields := make([]string, 0, 19)
+	fields := make([]string, 0, 20)
 	if m.int != nil {
 		fields = append(fields, alltypes.FieldInt)
 	}
@@ -1199,6 +1236,9 @@ func (m *AllTypesMutation) Fields() []string {
 	if m.bytes != nil {
 		fields = append(fields, alltypes.FieldBytes)
 	}
+	if m.nilable != nil {
+		fields = append(fields, alltypes.FieldNilable)
+	}
 	return fields
 }
 
@@ -1245,6 +1285,8 @@ func (m *AllTypesMutation) Field(name string) (ent.Value, bool) {
 		return m.State()
 	case alltypes.FieldBytes:
 		return m.Bytes()
+	case alltypes.FieldNilable:
+		return m.Nilable()
 	}
 	return nil, false
 }
@@ -1292,6 +1334,8 @@ func (m *AllTypesMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldState(ctx)
 	case alltypes.FieldBytes:
 		return m.OldBytes(ctx)
+	case alltypes.FieldNilable:
+		return m.OldNilable(ctx)
 	}
 	return nil, fmt.Errorf("unknown AllTypes field %s", name)
 }
@@ -1433,6 +1477,13 @@ func (m *AllTypesMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBytes(v)
+		return nil
+	case alltypes.FieldNilable:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNilable(v)
 		return nil
 	}
 	return fmt.Errorf("unknown AllTypes field %s", name)
@@ -1686,6 +1737,9 @@ func (m *AllTypesMutation) ResetField(name string) error {
 		return nil
 	case alltypes.FieldBytes:
 		m.ResetBytes()
+		return nil
+	case alltypes.FieldNilable:
+		m.ResetNilable()
 		return nil
 	}
 	return fmt.Errorf("unknown AllTypes field %s", name)

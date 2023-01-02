@@ -49,6 +49,8 @@ const (
 	FieldState = "state"
 	// FieldBytes holds the string denoting the bytes field in the database.
 	FieldBytes = "bytes"
+	// FieldNilable holds the string denoting the nilable field in the database.
+	FieldNilable = "nilable"
 	// Table holds the table name of the alltypes in the database.
 	Table = "all_types"
 )
@@ -75,6 +77,7 @@ var Columns = []string{
 	FieldText,
 	FieldState,
 	FieldBytes,
+	FieldNilable,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
