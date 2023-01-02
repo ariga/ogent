@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         working-directory: [ '.', 'example/pets', 'example/todo' ]
-    runs-on: ubuntu-latest#
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
