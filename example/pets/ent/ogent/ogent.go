@@ -100,7 +100,9 @@ func (h *OgentHandler) UpdateCategory(ctx context.Context, req *UpdateCategoryRe
 		b.SetName(v)
 	}
 	// Add all edges.
-	b.ClearPets().AddPetIDs(req.Pets...)
+	if req.Pets != nil {
+		b.ClearPets().AddPetIDs(req.Pets...)
+	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -382,11 +384,15 @@ func (h *OgentHandler) UpdatePet(ctx context.Context, req *UpdatePetReq, params 
 		b.SetBirthday(v)
 	}
 	// Add all edges.
-	b.ClearCategories().AddCategoryIDs(req.Categories...)
+	if req.Categories != nil {
+		b.ClearCategories().AddCategoryIDs(req.Categories...)
+	}
 	if v, ok := req.Owner.Get(); ok {
 		b.SetOwnerID(v)
 	}
-	b.ClearFriends().AddFriendIDs(req.Friends...)
+	if req.Friends != nil {
+		b.ClearFriends().AddFriendIDs(req.Friends...)
+	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {
@@ -592,7 +598,9 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req *UpdateUserReq, param
 		b.SetAge(v)
 	}
 	// Add all edges.
-	b.ClearPets().AddPetIDs(req.Pets...)
+	if req.Pets != nil {
+		b.ClearPets().AddPetIDs(req.Pets...)
+	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
 	if err != nil {

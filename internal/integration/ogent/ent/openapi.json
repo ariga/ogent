@@ -20,7 +20,8 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
@@ -28,7 +29,9 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 1
             }
           }
         ],
@@ -467,7 +470,8 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
@@ -475,7 +479,9 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 1
             }
           }
         ],
@@ -786,7 +792,8 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
@@ -794,7 +801,9 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 1
             }
           }
         ],
@@ -1261,7 +1270,8 @@
             "in": "query",
             "description": "what page to render",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           {
@@ -1269,7 +1279,9 @@
             "in": "query",
             "description": "item count to render per page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 1
             }
           }
         ],

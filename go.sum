@@ -2,6 +2,8 @@ ariga.io/atlas v0.8.4-0.20221212165942-e53dd27a603d h1:eAmX+el+OOTP5Y3ep9kmdj7Db
 ariga.io/atlas v0.8.4-0.20221212165942-e53dd27a603d/go.mod h1:T230JFcENj4ZZzMkZrXFDSkv+2kXkUgpJ5FQQ5hMcKU=
 entgo.io/contrib v0.3.5-0.20230102085655-9abfc729f8b4 h1:wowWtmHaDu61852MuXsDVPu4wvTpuQeOWjj4j7/bN6E=
 entgo.io/contrib v0.3.5-0.20230102085655-9abfc729f8b4/go.mod h1:wa0D2RjMyFP09ZLhdglpgEfHj6SewfYlK7DPo6F0DxU=
+entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99 h1:K+eh6Xq7/gD3T5VV250TPaIvQaNj8CHg/k/cqw7RqS0=
+entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99/go.mod h1:wa0D2RjMyFP09ZLhdglpgEfHj6SewfYlK7DPo6F0DxU=
 entgo.io/ent v0.11.5-0.20230101065352-c07eff2260ef h1:Dqi/7NRMc4NWhzoyWfCUImBtxX7PVOoVG8ESTrztNCM=
 entgo.io/ent v0.11.5-0.20230101065352-c07eff2260ef/go.mod h1:u7eKwNWAo/VlHIKxgwbmsFy3J7cKDxwi3jyF5TW/okY=
 github.com/DATA-DOG/go-sqlmock v1.5.0 h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20OEh60=

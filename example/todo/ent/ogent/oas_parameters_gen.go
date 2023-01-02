@@ -141,6 +141,30 @@ func decodeListTodoParams(args [0]string, r *http.Request) (params ListTodoParam
 			}); err != nil {
 				return err
 			}
+			if err := func() error {
+				if params.Page.Set {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(params.Page.Value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
@@ -180,6 +204,30 @@ func decodeListTodoParams(args [0]string, r *http.Request) (params ListTodoParam
 				params.ItemsPerPage.SetTo(paramsDotItemsPerPageVal)
 				return nil
 			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if params.ItemsPerPage.Set {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           255,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
 				return err
 			}
 		}

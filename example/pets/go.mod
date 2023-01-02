@@ -5,7 +5,7 @@ go 1.19
 replace ariga.io/ogent => ../../
 
 require (
-	entgo.io/contrib v0.3.5-0.20221230045809-7ed77ac9d076
+	entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99
 	entgo.io/ent v0.11.5-0.20230101065352-c07eff2260ef
 	github.com/go-faster/errors v0.6.1
 	github.com/go-faster/jx v0.40.0
