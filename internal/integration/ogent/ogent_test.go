@@ -82,6 +82,15 @@ func (t *testSuite) TestUpdate() {
 	pet.Name = "The changed name"
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewPetUpdate(pet), got)
+
+	// Patch won't clear edges.
+	cat, err := t.client.Category.Create().SetName("dogs").AddPetIDs(pet.ID).Save(context.Background())
+	t.Require().NoError(err)
+	_, err = t.handler.UpdatePet(context.Background(), &ogent.UpdatePetReq{Name: ogent.NewOptString("The again changed name")}, ogent.UpdatePetParams{ID: pet.ID})
+	t.Require().NoError(err)
+	pets, err := cat.QueryPets().All(context.Background())
+	t.Require().NoError(err)
+	t.Require().Len(pets, 1)
 }
 
 func (t *testSuite) TestDelete() {
