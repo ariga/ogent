@@ -13,7 +13,6 @@ import (
 	"ariga.io/ogent/example/pets/ent/pet"
 	"ariga.io/ogent/example/pets/ent/predicate"
 	"ariga.io/ogent/example/pets/ent/user"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )

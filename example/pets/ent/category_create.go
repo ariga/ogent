@@ -102,13 +102,7 @@ func (cc *CategoryCreate) sqlSave(ctx context.Context) (*Category, error) {
 func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Category{config: cc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: category.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: category.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(category.Table, sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt))
 	)
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(category.FieldName, field.TypeString, value)

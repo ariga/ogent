@@ -9,6 +9,7 @@ import (
 
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/middleware"
@@ -24,6 +25,8 @@ import (
 func (s *Server) handleCreateTodoRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createTodo"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/todos"),
 	}
 
 	// Start a span for this request.
@@ -124,6 +127,8 @@ func (s *Server) handleCreateTodoRequest(args [0]string, w http.ResponseWriter, 
 func (s *Server) handleDeleteTodoRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteTodo"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/todos/{id}"),
 	}
 
 	// Start a span for this request.
@@ -224,6 +229,8 @@ func (s *Server) handleDeleteTodoRequest(args [1]string, w http.ResponseWriter, 
 func (s *Server) handleListTodoRequest(args [0]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listTodo"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/todos"),
 	}
 
 	// Start a span for this request.
@@ -328,6 +335,8 @@ func (s *Server) handleListTodoRequest(args [0]string, w http.ResponseWriter, r 
 func (s *Server) handleMarkDoneRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("markDone"),
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/todos/{id}/done"),
 	}
 
 	// Start a span for this request.
@@ -428,6 +437,8 @@ func (s *Server) handleMarkDoneRequest(args [1]string, w http.ResponseWriter, r 
 func (s *Server) handleReadTodoRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readTodo"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/todos/{id}"),
 	}
 
 	// Start a span for this request.
@@ -528,6 +539,8 @@ func (s *Server) handleReadTodoRequest(args [1]string, w http.ResponseWriter, r 
 func (s *Server) handleUpdateTodoRequest(args [1]string, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateTodo"),
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/todos/{id}"),
 	}
 
 	// Start a span for this request.

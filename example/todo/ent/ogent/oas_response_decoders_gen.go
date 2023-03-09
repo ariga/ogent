@@ -28,8 +28,8 @@ func decodeCreateTodoResponse(resp *http.Response) (res CreateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response TodoCreate
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -63,8 +63,8 @@ func decodeCreateTodoResponse(resp *http.Response) (res CreateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R400
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -98,8 +98,8 @@ func decodeCreateTodoResponse(resp *http.Response) (res CreateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R409
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -133,8 +133,8 @@ func decodeCreateTodoResponse(resp *http.Response) (res CreateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R500
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -177,8 +177,8 @@ func decodeDeleteTodoResponse(resp *http.Response) (res DeleteTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R400
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -212,8 +212,8 @@ func decodeDeleteTodoResponse(resp *http.Response) (res DeleteTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R404
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -247,8 +247,8 @@ func decodeDeleteTodoResponse(resp *http.Response) (res DeleteTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R409
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -282,8 +282,8 @@ func decodeDeleteTodoResponse(resp *http.Response) (res DeleteTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R500
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -323,8 +323,8 @@ func decodeListTodoResponse(resp *http.Response) (res ListTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response ListTodoOKApplicationJSON
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -358,8 +358,8 @@ func decodeListTodoResponse(resp *http.Response) (res ListTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R400
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -393,8 +393,8 @@ func decodeListTodoResponse(resp *http.Response) (res ListTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R404
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -428,8 +428,8 @@ func decodeListTodoResponse(resp *http.Response) (res ListTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R409
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -463,8 +463,8 @@ func decodeListTodoResponse(resp *http.Response) (res ListTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R500
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -513,8 +513,8 @@ func decodeReadTodoResponse(resp *http.Response) (res ReadTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response TodoRead
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -548,8 +548,8 @@ func decodeReadTodoResponse(resp *http.Response) (res ReadTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R400
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -583,8 +583,8 @@ func decodeReadTodoResponse(resp *http.Response) (res ReadTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R404
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -618,8 +618,8 @@ func decodeReadTodoResponse(resp *http.Response) (res ReadTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R409
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -653,8 +653,8 @@ func decodeReadTodoResponse(resp *http.Response) (res ReadTodoRes, err error) {
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R500
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -694,8 +694,8 @@ func decodeUpdateTodoResponse(resp *http.Response) (res UpdateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response TodoUpdate
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -729,8 +729,8 @@ func decodeUpdateTodoResponse(resp *http.Response) (res UpdateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R400
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -764,8 +764,8 @@ func decodeUpdateTodoResponse(resp *http.Response) (res UpdateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R404
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -799,8 +799,8 @@ func decodeUpdateTodoResponse(resp *http.Response) (res UpdateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R409
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
@@ -834,8 +834,8 @@ func decodeUpdateTodoResponse(resp *http.Response) (res UpdateTodoRes, err error
 			if err != nil {
 				return res, err
 			}
-
 			d := jx.DecodeBytes(buf)
+
 			var response R500
 			if err := func() error {
 				if err := response.Decode(d); err != nil {

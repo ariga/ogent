@@ -74,7 +74,7 @@ func (t *Todo) assignValues(columns []string, values []any) error {
 // Note that you need to call Todo.Unwrap() before calling this method if this Todo
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (t *Todo) Update() *TodoUpdateOne {
-	return (&TodoClient{config: t.config}).UpdateOne(t)
+	return NewTodoClient(t.config).UpdateOne(t)
 }
 
 // Unwrap unwraps the Todo entity that was returned from a transaction after it was closed,
@@ -104,9 +104,3 @@ func (t *Todo) String() string {
 
 // Todos is a parsable slice of Todo.
 type Todos []*Todo
-
-func (t Todos) config(cfg config) {
-	for _i := range t {
-		t[_i].config = cfg
-	}
-}

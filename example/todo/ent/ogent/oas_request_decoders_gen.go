@@ -44,8 +44,6 @@ func (s *Server) decodeCreateTodoRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request CreateTodoReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -56,6 +54,8 @@ func (s *Server) decodeCreateTodoRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request CreateTodoReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -107,8 +107,6 @@ func (s *Server) decodeUpdateTodoRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request UpdateTodoReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -119,6 +117,8 @@ func (s *Server) decodeUpdateTodoRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request UpdateTodoReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

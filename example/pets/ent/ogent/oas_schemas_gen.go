@@ -323,31 +323,31 @@ func (*DeleteUserNoContent) deleteUserRes() {}
 
 type ListCategoryOKApplicationJSON []CategoryList
 
-func (ListCategoryOKApplicationJSON) listCategoryRes() {}
+func (*ListCategoryOKApplicationJSON) listCategoryRes() {}
 
 type ListCategoryPetsOKApplicationJSON []CategoryPetsList
 
-func (ListCategoryPetsOKApplicationJSON) listCategoryPetsRes() {}
+func (*ListCategoryPetsOKApplicationJSON) listCategoryPetsRes() {}
 
 type ListPetCategoriesOKApplicationJSON []PetCategoriesList
 
-func (ListPetCategoriesOKApplicationJSON) listPetCategoriesRes() {}
+func (*ListPetCategoriesOKApplicationJSON) listPetCategoriesRes() {}
 
 type ListPetFriendsOKApplicationJSON []PetFriendsList
 
-func (ListPetFriendsOKApplicationJSON) listPetFriendsRes() {}
+func (*ListPetFriendsOKApplicationJSON) listPetFriendsRes() {}
 
 type ListPetOKApplicationJSON []PetList
 
-func (ListPetOKApplicationJSON) listPetRes() {}
+func (*ListPetOKApplicationJSON) listPetRes() {}
 
 type ListUserOKApplicationJSON []UserList
 
-func (ListUserOKApplicationJSON) listUserRes() {}
+func (*ListUserOKApplicationJSON) listUserRes() {}
 
 type ListUserPetsOKApplicationJSON []UserPetsList
 
-func (ListUserPetsOKApplicationJSON) listUserPetsRes() {}
+func (*ListUserPetsOKApplicationJSON) listUserPetsRes() {}
 
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {

@@ -100,13 +100,7 @@ func (tc *TodoCreate) sqlSave(ctx context.Context) (*Todo, error) {
 func (tc *TodoCreate) createSpec() (*Todo, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Todo{config: tc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: todo.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeInt,
-				Column: todo.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(todo.Table, sqlgraph.NewFieldSpec(todo.FieldID, field.TypeInt))
 	)
 	if value, ok := tc.mutation.Title(); ok {
 		_spec.SetField(todo.FieldTitle, field.TypeString, value)
