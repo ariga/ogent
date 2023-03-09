@@ -40,15 +40,7 @@ func (atd *AllTypesDelete) ExecX(ctx context.Context) int {
 }
 
 func (atd *AllTypesDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := &sqlgraph.DeleteSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table: alltypes.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: alltypes.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewDeleteSpec(alltypes.Table, sqlgraph.NewFieldSpec(alltypes.FieldID, field.TypeUint32))
 	if ps := atd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -69,6 +61,12 @@ type AllTypesDeleteOne struct {
 	atd *AllTypesDelete
 }
 
+// Where appends a list predicates to the AllTypesDelete builder.
+func (atdo *AllTypesDeleteOne) Where(ps ...predicate.AllTypes) *AllTypesDeleteOne {
+	atdo.atd.mutation.Where(ps...)
+	return atdo
+}
+
 // Exec executes the deletion query.
 func (atdo *AllTypesDeleteOne) Exec(ctx context.Context) error {
 	n, err := atdo.atd.Exec(ctx)
@@ -84,5 +82,7 @@ func (atdo *AllTypesDeleteOne) Exec(ctx context.Context) error {
 
 // ExecX is like Exec, but panics if an error occurs.
 func (atdo *AllTypesDeleteOne) ExecX(ctx context.Context) {
-	atdo.atd.ExecX(ctx)
+	if err := atdo.Exec(ctx); err != nil {
+		panic(err)
+	}
 }

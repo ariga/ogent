@@ -17,11 +17,8 @@ import (
 // AllTypesQuery is the builder for querying AllTypes entities.
 type AllTypesQuery struct {
 	config
-	limit      *int
-	offset     *int
-	unique     *bool
+	ctx        *QueryContext
 	order      []OrderFunc
-	fields     []string
 	inters     []Interceptor
 	predicates []predicate.AllTypes
 	// intermediate query (i.e. traversal path).
@@ -37,20 +34,20 @@ func (atq *AllTypesQuery) Where(ps ...predicate.AllTypes) *AllTypesQuery {
 
 // Limit the number of records to be returned by this query.
 func (atq *AllTypesQuery) Limit(limit int) *AllTypesQuery {
-	atq.limit = &limit
+	atq.ctx.Limit = &limit
 	return atq
 }
 
 // Offset to start from.
 func (atq *AllTypesQuery) Offset(offset int) *AllTypesQuery {
-	atq.offset = &offset
+	atq.ctx.Offset = &offset
 	return atq
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
 func (atq *AllTypesQuery) Unique(unique bool) *AllTypesQuery {
-	atq.unique = &unique
+	atq.ctx.Unique = &unique
 	return atq
 }
 
@@ -63,7 +60,7 @@ func (atq *AllTypesQuery) Order(o ...OrderFunc) *AllTypesQuery {
 // First returns the first AllTypes entity from the query.
 // Returns a *NotFoundError when no AllTypes was found.
 func (atq *AllTypesQuery) First(ctx context.Context) (*AllTypes, error) {
-	nodes, err := atq.Limit(1).All(newQueryContext(ctx, TypeAllTypes, "First"))
+	nodes, err := atq.Limit(1).All(setContextOp(ctx, atq.ctx, "First"))
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +83,7 @@ func (atq *AllTypesQuery) FirstX(ctx context.Context) *AllTypes {
 // Returns a *NotFoundError when no AllTypes ID was found.
 func (atq *AllTypesQuery) FirstID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = atq.Limit(1).IDs(newQueryContext(ctx, TypeAllTypes, "FirstID")); err != nil {
+	if ids, err = atq.Limit(1).IDs(setContextOp(ctx, atq.ctx, "FirstID")); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -109,7 +106,7 @@ func (atq *AllTypesQuery) FirstIDX(ctx context.Context) uint32 {
 // Returns a *NotSingularError when more than one AllTypes entity is found.
 // Returns a *NotFoundError when no AllTypes entities are found.
 func (atq *AllTypesQuery) Only(ctx context.Context) (*AllTypes, error) {
-	nodes, err := atq.Limit(2).All(newQueryContext(ctx, TypeAllTypes, "Only"))
+	nodes, err := atq.Limit(2).All(setContextOp(ctx, atq.ctx, "Only"))
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +134,7 @@ func (atq *AllTypesQuery) OnlyX(ctx context.Context) *AllTypes {
 // Returns a *NotFoundError when no entities are found.
 func (atq *AllTypesQuery) OnlyID(ctx context.Context) (id uint32, err error) {
 	var ids []uint32
-	if ids, err = atq.Limit(2).IDs(newQueryContext(ctx, TypeAllTypes, "OnlyID")); err != nil {
+	if ids, err = atq.Limit(2).IDs(setContextOp(ctx, atq.ctx, "OnlyID")); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -162,7 +159,7 @@ func (atq *AllTypesQuery) OnlyIDX(ctx context.Context) uint32 {
 
 // All executes the query and returns a list of AllTypesSlice.
 func (atq *AllTypesQuery) All(ctx context.Context) ([]*AllTypes, error) {
-	ctx = newQueryContext(ctx, TypeAllTypes, "All")
+	ctx = setContextOp(ctx, atq.ctx, "All")
 	if err := atq.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
@@ -180,10 +177,12 @@ func (atq *AllTypesQuery) AllX(ctx context.Context) []*AllTypes {
 }
 
 // IDs executes the query and returns a list of AllTypes IDs.
-func (atq *AllTypesQuery) IDs(ctx context.Context) ([]uint32, error) {
-	var ids []uint32
-	ctx = newQueryContext(ctx, TypeAllTypes, "IDs")
-	if err := atq.Select(alltypes.FieldID).Scan(ctx, &ids); err != nil {
+func (atq *AllTypesQuery) IDs(ctx context.Context) (ids []uint32, err error) {
+	if atq.ctx.Unique == nil && atq.path != nil {
+		atq.Unique(true)
+	}
+	ctx = setContextOp(ctx, atq.ctx, "IDs")
+	if err = atq.Select(alltypes.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
@@ -200,7 +199,7 @@ func (atq *AllTypesQuery) IDsX(ctx context.Context) []uint32 {
 
 // Count returns the count of the given query.
 func (atq *AllTypesQuery) Count(ctx context.Context) (int, error) {
-	ctx = newQueryContext(ctx, TypeAllTypes, "Count")
+	ctx = setContextOp(ctx, atq.ctx, "Count")
 	if err := atq.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
@@ -218,7 +217,7 @@ func (atq *AllTypesQuery) CountX(ctx context.Context) int {
 
 // Exist returns true if the query has elements in the graph.
 func (atq *AllTypesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = newQueryContext(ctx, TypeAllTypes, "Exist")
+	ctx = setContextOp(ctx, atq.ctx, "Exist")
 	switch _, err := atq.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
@@ -246,15 +245,13 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 	}
 	return &AllTypesQuery{
 		config:     atq.config,
-		limit:      atq.limit,
-		offset:     atq.offset,
+		ctx:        atq.ctx.Clone(),
 		order:      append([]OrderFunc{}, atq.order...),
 		inters:     append([]Interceptor{}, atq.inters...),
 		predicates: append([]predicate.AllTypes{}, atq.predicates...),
 		// clone intermediate query.
-		sql:    atq.sql.Clone(),
-		path:   atq.path,
-		unique: atq.unique,
+		sql:  atq.sql.Clone(),
+		path: atq.path,
 	}
 }
 
@@ -273,9 +270,9 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroupBy {
-	atq.fields = append([]string{field}, fields...)
+	atq.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &AllTypesGroupBy{build: atq}
-	grbuild.flds = &atq.fields
+	grbuild.flds = &atq.ctx.Fields
 	grbuild.label = alltypes.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -294,10 +291,10 @@ func (atq *AllTypesQuery) GroupBy(field string, fields ...string) *AllTypesGroup
 //		Select(alltypes.FieldInt).
 //		Scan(ctx, &v)
 func (atq *AllTypesQuery) Select(fields ...string) *AllTypesSelect {
-	atq.fields = append(atq.fields, fields...)
+	atq.ctx.Fields = append(atq.ctx.Fields, fields...)
 	sbuild := &AllTypesSelect{AllTypesQuery: atq}
 	sbuild.label = alltypes.Label
-	sbuild.flds, sbuild.scan = &atq.fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &atq.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
@@ -317,7 +314,7 @@ func (atq *AllTypesQuery) prepareQuery(ctx context.Context) error {
 			}
 		}
 	}
-	for _, f := range atq.fields {
+	for _, f := range atq.ctx.Fields {
 		if !alltypes.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
@@ -359,30 +356,22 @@ func (atq *AllTypesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Al
 
 func (atq *AllTypesQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := atq.querySpec()
-	_spec.Node.Columns = atq.fields
-	if len(atq.fields) > 0 {
-		_spec.Unique = atq.unique != nil && *atq.unique
+	_spec.Node.Columns = atq.ctx.Fields
+	if len(atq.ctx.Fields) > 0 {
+		_spec.Unique = atq.ctx.Unique != nil && *atq.ctx.Unique
 	}
 	return sqlgraph.CountNodes(ctx, atq.driver, _spec)
 }
 
 func (atq *AllTypesQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := &sqlgraph.QuerySpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   alltypes.Table,
-			Columns: alltypes.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: alltypes.FieldID,
-			},
-		},
-		From:   atq.sql,
-		Unique: true,
-	}
-	if unique := atq.unique; unique != nil {
+	_spec := sqlgraph.NewQuerySpec(alltypes.Table, alltypes.Columns, sqlgraph.NewFieldSpec(alltypes.FieldID, field.TypeUint32))
+	_spec.From = atq.sql
+	if unique := atq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
+	} else if atq.path != nil {
+		_spec.Unique = true
 	}
-	if fields := atq.fields; len(fields) > 0 {
+	if fields := atq.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, alltypes.FieldID)
 		for i := range fields {
@@ -398,10 +387,10 @@ func (atq *AllTypesQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if limit := atq.limit; limit != nil {
+	if limit := atq.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := atq.offset; offset != nil {
+	if offset := atq.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
 	if ps := atq.order; len(ps) > 0 {
@@ -417,7 +406,7 @@ func (atq *AllTypesQuery) querySpec() *sqlgraph.QuerySpec {
 func (atq *AllTypesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(atq.driver.Dialect())
 	t1 := builder.Table(alltypes.Table)
-	columns := atq.fields
+	columns := atq.ctx.Fields
 	if len(columns) == 0 {
 		columns = alltypes.Columns
 	}
@@ -426,7 +415,7 @@ func (atq *AllTypesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector = atq.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if atq.unique != nil && *atq.unique {
+	if atq.ctx.Unique != nil && *atq.ctx.Unique {
 		selector.Distinct()
 	}
 	for _, p := range atq.predicates {
@@ -435,12 +424,12 @@ func (atq *AllTypesQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	for _, p := range atq.order {
 		p(selector)
 	}
-	if offset := atq.offset; offset != nil {
+	if offset := atq.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := atq.limit; limit != nil {
+	if limit := atq.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -460,7 +449,7 @@ func (atgb *AllTypesGroupBy) Aggregate(fns ...AggregateFunc) *AllTypesGroupBy {
 
 // Scan applies the selector query and scans the result into the given value.
 func (atgb *AllTypesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = newQueryContext(ctx, TypeAllTypes, "GroupBy")
+	ctx = setContextOp(ctx, atgb.build.ctx, "GroupBy")
 	if err := atgb.build.prepareQuery(ctx); err != nil {
 		return err
 	}
@@ -508,7 +497,7 @@ func (ats *AllTypesSelect) Aggregate(fns ...AggregateFunc) *AllTypesSelect {
 
 // Scan applies the selector query and scans the result into the given value.
 func (ats *AllTypesSelect) Scan(ctx context.Context, v any) error {
-	ctx = newQueryContext(ctx, TypeAllTypes, "Select")
+	ctx = setContextOp(ctx, ats.ctx, "Select")
 	if err := ats.prepareQuery(ctx); err != nil {
 		return err
 	}

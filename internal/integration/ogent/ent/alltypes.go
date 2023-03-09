@@ -229,7 +229,7 @@ func (at *AllTypes) assignValues(columns []string, values []any) error {
 // Note that you need to call AllTypes.Unwrap() before calling this method if this AllTypes
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (at *AllTypes) Update() *AllTypesUpdateOne {
-	return (&AllTypesClient{config: at.config}).UpdateOne(at)
+	return NewAllTypesClient(at.config).UpdateOne(at)
 }
 
 // Unwrap unwraps the AllTypes entity that was returned from a transaction after it was closed,
@@ -315,9 +315,3 @@ func (at *AllTypes) String() string {
 
 // AllTypesSlice is a parsable slice of AllTypes.
 type AllTypesSlice []*AllTypes
-
-func (at AllTypesSlice) config(cfg config) {
-	for _i := range at {
-		at[_i].config = cfg
-	}
-}

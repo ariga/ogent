@@ -15,10 +15,9 @@ import (
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
-	"github.com/google/uuid"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (

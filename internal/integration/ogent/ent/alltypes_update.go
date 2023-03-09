@@ -279,16 +279,7 @@ func (atu *AllTypesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if err := atu.check(); err != nil {
 		return n, err
 	}
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   alltypes.Table,
-			Columns: alltypes.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: alltypes.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(alltypes.Table, alltypes.Columns, sqlgraph.NewFieldSpec(alltypes.FieldID, field.TypeUint32))
 	if ps := atu.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -621,6 +612,12 @@ func (atuo *AllTypesUpdateOne) Mutation() *AllTypesMutation {
 	return atuo.mutation
 }
 
+// Where appends a list predicates to the AllTypesUpdate builder.
+func (atuo *AllTypesUpdateOne) Where(ps ...predicate.AllTypes) *AllTypesUpdateOne {
+	atuo.mutation.Where(ps...)
+	return atuo
+}
+
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
 func (atuo *AllTypesUpdateOne) Select(field string, fields ...string) *AllTypesUpdateOne {
@@ -669,16 +666,7 @@ func (atuo *AllTypesUpdateOne) sqlSave(ctx context.Context) (_node *AllTypes, er
 	if err := atuo.check(); err != nil {
 		return _node, err
 	}
-	_spec := &sqlgraph.UpdateSpec{
-		Node: &sqlgraph.NodeSpec{
-			Table:   alltypes.Table,
-			Columns: alltypes.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: alltypes.FieldID,
-			},
-		},
-	}
+	_spec := sqlgraph.NewUpdateSpec(alltypes.Table, alltypes.Columns, sqlgraph.NewFieldSpec(alltypes.FieldID, field.TypeUint32))
 	id, ok := atuo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "AllTypes.id" for update`)}
