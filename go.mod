@@ -10,7 +10,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/ogen-go/ogen v0.59.0
-	github.com/stoewer/go-strcase v1.2.0
+	github.com/stoewer/go-strcase v1.2.1
 	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/otel v1.13.0
 	go.opentelemetry.io/otel/metric v0.36.0
