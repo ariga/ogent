@@ -6,7 +6,7 @@ require (
 	entgo.io/contrib v0.3.5
 	entgo.io/ent v0.11.9
 	github.com/go-faster/errors v0.6.1
-	github.com/go-faster/jx v0.42.0-alpha.1
+	github.com/go-faster/jx v1.0.0
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/ogen-go/ogen v0.59.0
