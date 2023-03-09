@@ -438,6 +438,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type Route struct {
 	name        string
 	operationID string
+	pathPattern string
 	count       int
 	args        [1]string
 }
@@ -452,6 +453,11 @@ func (r Route) Name() string {
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
 	return r.operationID
+}
+
+// PathPattern returns OpenAPI path.
+func (r Route) PathPattern() string {
+	return r.pathPattern
 }
 
 // Args returns parsed arguments.
@@ -515,12 +521,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = "ListAllTypes"
 						r.operationID = "listAllTypes"
+						r.pathPattern = "/all-types"
 						r.args = args
 						r.count = 0
 						return r, true
 					case "POST":
 						r.name = "CreateAllTypes"
 						r.operationID = "createAllTypes"
+						r.pathPattern = "/all-types"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -547,6 +555,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf: DeleteAllTypes
 							r.name = "DeleteAllTypes"
 							r.operationID = "deleteAllTypes"
+							r.pathPattern = "/all-types/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -554,6 +563,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf: ReadAllTypes
 							r.name = "ReadAllTypes"
 							r.operationID = "readAllTypes"
+							r.pathPattern = "/all-types/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -561,6 +571,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf: UpdateAllTypes
 							r.name = "UpdateAllTypes"
 							r.operationID = "updateAllTypes"
+							r.pathPattern = "/all-types/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -581,12 +592,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = "ListCategory"
 						r.operationID = "listCategory"
+						r.pathPattern = "/categories"
 						r.args = args
 						r.count = 0
 						return r, true
 					case "POST":
 						r.name = "CreateCategory"
 						r.operationID = "createCategory"
+						r.pathPattern = "/categories"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -616,18 +629,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "DELETE":
 							r.name = "DeleteCategory"
 							r.operationID = "deleteCategory"
+							r.pathPattern = "/categories/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "GET":
 							r.name = "ReadCategory"
 							r.operationID = "readCategory"
+							r.pathPattern = "/categories/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "PATCH":
 							r.name = "UpdateCategory"
 							r.operationID = "updateCategory"
+							r.pathPattern = "/categories/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -649,6 +665,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf: ListCategoryPets
 								r.name = "ListCategoryPets"
 								r.operationID = "listCategoryPets"
+								r.pathPattern = "/categories/{id}/pets"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -670,12 +687,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = "ListPet"
 						r.operationID = "listPet"
+						r.pathPattern = "/pets"
 						r.args = args
 						r.count = 0
 						return r, true
 					case "POST":
 						r.name = "CreatePet"
 						r.operationID = "createPet"
+						r.pathPattern = "/pets"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -705,18 +724,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "DELETE":
 							r.name = "DeletePet"
 							r.operationID = "deletePet"
+							r.pathPattern = "/pets/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "GET":
 							r.name = "ReadPet"
 							r.operationID = "readPet"
+							r.pathPattern = "/pets/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "PATCH":
 							r.name = "UpdatePet"
 							r.operationID = "updatePet"
+							r.pathPattern = "/pets/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -749,6 +771,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf: ListPetCategories
 									r.name = "ListPetCategories"
 									r.operationID = "listPetCategories"
+									r.pathPattern = "/pets/{id}/categories"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -769,6 +792,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf: ListPetFriends
 									r.name = "ListPetFriends"
 									r.operationID = "listPetFriends"
+									r.pathPattern = "/pets/{id}/friends"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -789,6 +813,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf: ReadPetOwner
 									r.name = "ReadPetOwner"
 									r.operationID = "readPetOwner"
+									r.pathPattern = "/pets/{id}/owner"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -811,12 +836,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					case "GET":
 						r.name = "ListUser"
 						r.operationID = "listUser"
+						r.pathPattern = "/users"
 						r.args = args
 						r.count = 0
 						return r, true
 					case "POST":
 						r.name = "CreateUser"
 						r.operationID = "createUser"
+						r.pathPattern = "/users"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -846,18 +873,21 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "DELETE":
 							r.name = "DeleteUser"
 							r.operationID = "deleteUser"
+							r.pathPattern = "/users/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "GET":
 							r.name = "ReadUser"
 							r.operationID = "readUser"
+							r.pathPattern = "/users/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "PATCH":
 							r.name = "UpdateUser"
 							r.operationID = "updateUser"
+							r.pathPattern = "/users/{id}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -890,6 +920,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf: ReadUserBestFriend
 									r.name = "ReadUserBestFriend"
 									r.operationID = "readUserBestFriend"
+									r.pathPattern = "/users/{id}/best-friend"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -910,6 +941,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf: ListUserPets
 									r.name = "ListUserPets"
 									r.operationID = "listUserPets"
+									r.pathPattern = "/users/{id}/pets"
 									r.args = args
 									r.count = 1
 									return r, true
