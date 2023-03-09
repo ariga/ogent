@@ -38,7 +38,7 @@ func (*DeleteTodoNoContent) deleteTodoRes() {}
 
 type ListTodoOKApplicationJSON []TodoList
 
-func (ListTodoOKApplicationJSON) listTodoRes() {}
+func (*ListTodoOKApplicationJSON) listTodoRes() {}
 
 // MarkDoneNoContent is response for MarkDone operation.
 type MarkDoneNoContent struct{}

@@ -5,25 +5,25 @@ go 1.19
 replace ariga.io/ogent => ../../
 
 require (
-	entgo.io/ent v0.11.5-0.20230101065352-c07eff2260ef
+	entgo.io/ent v0.11.9
 	github.com/go-faster/errors v0.6.1
-	github.com/go-faster/jx v0.40.0
+	github.com/go-faster/jx v0.42.0-alpha.1
 	github.com/mattn/go-sqlite3 v1.14.16
-	github.com/ogen-go/ogen v0.56.1
-	go.opentelemetry.io/otel v1.11.2
-	go.opentelemetry.io/otel/metric v0.34.0
-	go.opentelemetry.io/otel/trace v1.11.2
+	github.com/ogen-go/ogen v0.59.0
+	go.opentelemetry.io/otel v1.13.0
+	go.opentelemetry.io/otel/metric v0.36.0
+	go.opentelemetry.io/otel/trace v1.13.0
 	go.uber.org/multierr v1.9.0
 )
 
 require (
-	ariga.io/atlas v0.8.4-0.20221212165942-e53dd27a603d // indirect
+	ariga.io/atlas v0.9.1 // indirect
 	ariga.io/ogent v0.0.0-00010101000000-000000000000 // indirect
-	entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99 // indirect
+	entgo.io/contrib v0.3.5 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/dlclark/regexp2 v1.7.0 // indirect
-	github.com/fatih/color v1.13.0 // indirect
+	github.com/dlclark/regexp2 v1.8.0 // indirect
+	github.com/fatih/color v1.14.1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/yamlx v0.4.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
@@ -40,10 +40,10 @@ require (
 	github.com/zclconf/go-cty v1.12.1 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/exp v0.0.0-20221230185412-738e83a70c30 // indirect
-	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/exp v0.0.0-20230206171751-46f607a40771 // indirect
+	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

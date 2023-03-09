@@ -10,7 +10,6 @@ import (
 
 	"ariga.io/ogent/example/todo/ent/predicate"
 	"ariga.io/ogent/example/todo/ent/todo"
-
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )

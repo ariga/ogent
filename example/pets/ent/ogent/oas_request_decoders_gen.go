@@ -44,8 +44,6 @@ func (s *Server) decodeCreateCategoryRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request CreateCategoryReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -56,6 +54,8 @@ func (s *Server) decodeCreateCategoryRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request CreateCategoryReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -107,8 +107,6 @@ func (s *Server) decodeCreatePetRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request CreatePetReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -119,6 +117,8 @@ func (s *Server) decodeCreatePetRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request CreatePetReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -170,8 +170,6 @@ func (s *Server) decodeCreateUserRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request CreateUserReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -182,6 +180,8 @@ func (s *Server) decodeCreateUserRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request CreateUserReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -233,8 +233,6 @@ func (s *Server) decodeUpdateCategoryRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request UpdateCategoryReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -245,6 +243,8 @@ func (s *Server) decodeUpdateCategoryRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request UpdateCategoryReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -296,8 +296,6 @@ func (s *Server) decodeUpdatePetRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request UpdatePetReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -308,6 +306,8 @@ func (s *Server) decodeUpdatePetRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request UpdatePetReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -359,8 +359,6 @@ func (s *Server) decodeUpdateUserRequest(r *http.Request) (
 		if r.ContentLength == 0 {
 			return req, close, validate.ErrBodyRequired
 		}
-
-		var request UpdateUserReq
 		buf, err := io.ReadAll(r.Body)
 		if err != nil {
 			return req, close, err
@@ -371,6 +369,8 @@ func (s *Server) decodeUpdateUserRequest(r *http.Request) (
 		}
 
 		d := jx.DecodeBytes(buf)
+
+		var request UpdateUserReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

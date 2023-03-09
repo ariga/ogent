@@ -272,13 +272,7 @@ func (atc *AllTypesCreate) sqlSave(ctx context.Context) (*AllTypes, error) {
 func (atc *AllTypesCreate) createSpec() (*AllTypes, *sqlgraph.CreateSpec) {
 	var (
 		_node = &AllTypes{config: atc.config}
-		_spec = &sqlgraph.CreateSpec{
-			Table: alltypes.Table,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeUint32,
-				Column: alltypes.FieldID,
-			},
-		}
+		_spec = sqlgraph.NewCreateSpec(alltypes.Table, sqlgraph.NewFieldSpec(alltypes.FieldID, field.TypeUint32))
 	)
 	if id, ok := atc.mutation.ID(); ok {
 		_node.ID = id

@@ -158,24 +158,24 @@ func (pe *Pet) assignValues(columns []string, values []any) error {
 
 // QueryCategories queries the "categories" edge of the Pet entity.
 func (pe *Pet) QueryCategories() *CategoryQuery {
-	return (&PetClient{config: pe.config}).QueryCategories(pe)
+	return NewPetClient(pe.config).QueryCategories(pe)
 }
 
 // QueryOwner queries the "owner" edge of the Pet entity.
 func (pe *Pet) QueryOwner() *UserQuery {
-	return (&PetClient{config: pe.config}).QueryOwner(pe)
+	return NewPetClient(pe.config).QueryOwner(pe)
 }
 
 // QueryFriends queries the "friends" edge of the Pet entity.
 func (pe *Pet) QueryFriends() *PetQuery {
-	return (&PetClient{config: pe.config}).QueryFriends(pe)
+	return NewPetClient(pe.config).QueryFriends(pe)
 }
 
 // Update returns a builder for updating this Pet.
 // Note that you need to call Pet.Unwrap() before calling this method if this Pet
 // was returned from a transaction, and the transaction was committed or rolled back.
 func (pe *Pet) Update() *PetUpdateOne {
-	return (&PetClient{config: pe.config}).UpdateOne(pe)
+	return NewPetClient(pe.config).UpdateOne(pe)
 }
 
 // Unwrap unwraps the Pet entity that was returned from a transaction after it was closed,
@@ -216,9 +216,3 @@ func (pe *Pet) String() string {
 
 // Pets is a parsable slice of Pet.
 type Pets []*Pet
-
-func (pe Pets) config(cfg config) {
-	for _i := range pe {
-		pe[_i].config = cfg
-	}
-}
