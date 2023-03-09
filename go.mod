@@ -3,15 +3,15 @@ module ariga.io/ogent
 go 1.19
 
 require (
-	entgo.io/contrib v0.3.5-0.20230102095524-68899f180c99
-	entgo.io/ent v0.11.5-0.20230101065352-c07eff2260ef
+	entgo.io/contrib v0.3.5
+	entgo.io/ent v0.11.9
 	github.com/go-faster/errors v0.6.1
 	github.com/go-faster/jx v0.42.0-alpha.1
 	github.com/google/uuid v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/ogen-go/ogen v0.59.0
 	github.com/stoewer/go-strcase v1.2.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/otel v1.13.0
 	go.opentelemetry.io/otel/metric v0.36.0
 	go.opentelemetry.io/otel/trace v1.13.0
@@ -19,7 +19,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.8.4-0.20221212165942-e53dd27a603d // indirect
+	ariga.io/atlas v0.9.1 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -47,7 +47,7 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/text v0.7.0 // indirect
-	golang.org/x/tools v0.6.0 // indirect
+	golang.org/x/tools v0.6.1-0.20230222164832-25d2519c8696 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
