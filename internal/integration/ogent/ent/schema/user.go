@@ -25,6 +25,10 @@ func (User) Fields() []ent.Field {
 			Optional(),
 		field.Enum("favorite_cat_breed").
 			Values("siamese", "bengal", "lion", "tiger", "leopard", "other"),
+		field.Enum("favorite_color").
+			Values("red", "green", "blue").
+			Default("red").
+			Immutable(),
 		field.Enum("favorite_dog_breed").
 			Values("Kuro").
 			Optional(),
@@ -38,7 +42,11 @@ func (User) Fields() []ent.Field {
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("pets", Pet.Type),
+		edge.To("animals_saved", Pet.Type),
 		edge.To("best_friend", User.Type).
 			Unique(),
+		edge.To("favorite_hat", Hat.Type).
+			Unique().
+			Immutable(),
 	}
 }

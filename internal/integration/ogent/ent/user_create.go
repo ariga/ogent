@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
@@ -53,6 +54,20 @@ func (uc *UserCreate) SetFavoriteCatBreed(ucb user.FavoriteCatBreed) *UserCreate
 	return uc
 }
 
+// SetFavoriteColor sets the "favorite_color" field.
+func (uc *UserCreate) SetFavoriteColor(value user.FavoriteColor) *UserCreate {
+	uc.mutation.SetFavoriteColor(value)
+	return uc
+}
+
+// SetNillableFavoriteColor sets the "favorite_color" field if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteColor(value *user.FavoriteColor) *UserCreate {
+	if value != nil {
+		uc.SetFavoriteColor(*value)
+	}
+	return uc
+}
+
 // SetFavoriteDogBreed sets the "favorite_dog_breed" field.
 func (uc *UserCreate) SetFavoriteDogBreed(udb user.FavoriteDogBreed) *UserCreate {
 	uc.mutation.SetFavoriteDogBreed(udb)
@@ -96,6 +111,21 @@ func (uc *UserCreate) AddPets(p ...*Pet) *UserCreate {
 	return uc.AddPetIDs(ids...)
 }
 
+// AddAnimalsSavedIDs adds the "animals_saved" edge to the Pet entity by IDs.
+func (uc *UserCreate) AddAnimalsSavedIDs(ids ...int) *UserCreate {
+	uc.mutation.AddAnimalsSavedIDs(ids...)
+	return uc
+}
+
+// AddAnimalsSaved adds the "animals_saved" edges to the Pet entity.
+func (uc *UserCreate) AddAnimalsSaved(p ...*Pet) *UserCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uc.AddAnimalsSavedIDs(ids...)
+}
+
 // SetBestFriendID sets the "best_friend" edge to the User entity by ID.
 func (uc *UserCreate) SetBestFriendID(id int) *UserCreate {
 	uc.mutation.SetBestFriendID(id)
@@ -115,6 +145,25 @@ func (uc *UserCreate) SetBestFriend(u *User) *UserCreate {
 	return uc.SetBestFriendID(u.ID)
 }
 
+// SetFavoriteHatID sets the "favorite_hat" edge to the Hat entity by ID.
+func (uc *UserCreate) SetFavoriteHatID(id int) *UserCreate {
+	uc.mutation.SetFavoriteHatID(id)
+	return uc
+}
+
+// SetNillableFavoriteHatID sets the "favorite_hat" edge to the Hat entity by ID if the given value is not nil.
+func (uc *UserCreate) SetNillableFavoriteHatID(id *int) *UserCreate {
+	if id != nil {
+		uc = uc.SetFavoriteHatID(*id)
+	}
+	return uc
+}
+
+// SetFavoriteHat sets the "favorite_hat" edge to the Hat entity.
+func (uc *UserCreate) SetFavoriteHat(h *Hat) *UserCreate {
+	return uc.SetFavoriteHatID(h.ID)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uc *UserCreate) Mutation() *UserMutation {
 	return uc.mutation
@@ -122,6 +171,7 @@ func (uc *UserCreate) Mutation() *UserMutation {
 
 // Save creates the User in the database.
 func (uc *UserCreate) Save(ctx context.Context) (*User, error) {
+	uc.defaults()
 	return withHooks[*User, UserMutation](ctx, uc.sqlSave, uc.mutation, uc.hooks)
 }
 
@@ -147,6 +197,14 @@ func (uc *UserCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (uc *UserCreate) defaults() {
+	if _, ok := uc.mutation.FavoriteColor(); !ok {
+		v := user.DefaultFavoriteColor
+		uc.mutation.SetFavoriteColor(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
@@ -161,6 +219,14 @@ func (uc *UserCreate) check() error {
 	if v, ok := uc.mutation.FavoriteCatBreed(); ok {
 		if err := user.FavoriteCatBreedValidator(v); err != nil {
 			return &ValidationError{Name: "favorite_cat_breed", err: fmt.Errorf(`ent: validator failed for field "User.favorite_cat_breed": %w`, err)}
+		}
+	}
+	if _, ok := uc.mutation.FavoriteColor(); !ok {
+		return &ValidationError{Name: "favorite_color", err: errors.New(`ent: missing required field "User.favorite_color"`)}
+	}
+	if v, ok := uc.mutation.FavoriteColor(); ok {
+		if err := user.FavoriteColorValidator(v); err != nil {
+			return &ValidationError{Name: "favorite_color", err: fmt.Errorf(`ent: validator failed for field "User.favorite_color": %w`, err)}
 		}
 	}
 	if v, ok := uc.mutation.FavoriteDogBreed(); ok {
@@ -215,6 +281,10 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_spec.SetField(user.FieldFavoriteCatBreed, field.TypeEnum, value)
 		_node.FavoriteCatBreed = value
 	}
+	if value, ok := uc.mutation.FavoriteColor(); ok {
+		_spec.SetField(user.FieldFavoriteColor, field.TypeEnum, value)
+		_node.FavoriteColor = value
+	}
 	if value, ok := uc.mutation.FavoriteDogBreed(); ok {
 		_spec.SetField(user.FieldFavoriteDogBreed, field.TypeEnum, value)
 		_node.FavoriteDogBreed = value
@@ -229,6 +299,25 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Inverse: false,
 			Table:   user.PetsTable,
 			Columns: []string{user.PetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := uc.mutation.AnimalsSavedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -262,6 +351,25 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		_node.user_best_friend = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := uc.mutation.FavoriteHatIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   user.FavoriteHatTable,
+			Columns: []string{user.FavoriteHatColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: hat.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -279,6 +387,7 @@ func (ucb *UserCreateBulk) Save(ctx context.Context) ([]*User, error) {
 	for i := range ucb.builders {
 		func(i int, root context.Context) {
 			builder := ucb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*UserMutation)
 				if !ok {

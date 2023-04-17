@@ -778,6 +778,312 @@
         }
       }
     },
+    "/hats": {
+      "get": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "List Hats",
+        "description": "List Hats.",
+        "operationId": "listHat",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "what page to render",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "item count to render per page",
+            "schema": {
+              "type": "integer",
+              "maximum": 255,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result Hat list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HatList"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "Create a new Hat",
+        "description": "Creates a new Hat and persists it to storage.",
+        "operationId": "createHat",
+        "requestBody": {
+          "description": "Hat to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "dad",
+                      "trucker",
+                      "snapback"
+                    ]
+                  },
+                  "wearer": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "name",
+                  "type"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Hat created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HatCreate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/hats/{id}": {
+      "get": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "Find a Hat by ID",
+        "description": "Finds the Hat with the requested ID and returns it.",
+        "operationId": "readHat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Hat",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hat with requested ID was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HatRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "Deletes a Hat by ID",
+        "description": "Deletes the Hat with the requested ID.",
+        "operationId": "deleteHat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Hat",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Hat with requested ID was deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "Updates a Hat",
+        "description": "Updates a Hat and persists changes to storage.",
+        "operationId": "updateHat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Hat",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Hat properties to update",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "wearer": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Hat updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HatUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/hats/{id}/wearer": {
+      "get": {
+        "tags": [
+          "Hat"
+        ],
+        "summary": "Find the attached User",
+        "description": "Find the attached User of the Hat with the given ID",
+        "operationId": "readHatWearer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Hat",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User attached to Hat with requested ID was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hat_WearerRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/pets": {
       "get": {
         "tags": [
@@ -874,6 +1180,12 @@
                   },
                   "owner": {
                     "type": "integer"
+                  },
+                  "rescuer": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   },
                   "friends": {
                     "type": "array",
@@ -1044,6 +1356,12 @@
                   },
                   "owner": {
                     "type": "integer"
+                  },
+                  "rescuer": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
                   },
                   "friends": {
                     "type": "array",
@@ -1256,6 +1574,70 @@
         }
       }
     },
+    "/pets/{id}/rescuer": {
+      "get": {
+        "tags": [
+          "Pet"
+        ],
+        "summary": "List attached Rescuers",
+        "description": "List attached Rescuers.",
+        "operationId": "listPetRescuer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the Pet",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "what page to render",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "item count to render per page",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result Pets list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pet_RescuerList"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "tags": [
@@ -1353,6 +1735,15 @@
                       "other"
                     ]
                   },
+                  "favorite_color": {
+                    "type": "string",
+                    "enum": [
+                      "red",
+                      "green",
+                      "blue"
+                    ],
+                    "default": "red"
+                  },
                   "favorite_dog_breed": {
                     "type": "string",
                     "enum": [
@@ -1373,14 +1764,24 @@
                       "type": "integer"
                     }
                   },
+                  "animals_saved": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
                   "best_friend": {
+                    "type": "integer"
+                  },
+                  "favorite_hat": {
                     "type": "integer"
                   }
                 },
                 "required": [
                   "name",
                   "age",
-                  "favorite_cat_breed"
+                  "favorite_cat_breed",
+                  "favorite_color"
                 ]
               }
             }
@@ -1561,7 +1962,16 @@
                       "type": "integer"
                     }
                   },
+                  "animals_saved": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
                   "best_friend": {
+                    "type": "integer"
+                  },
+                  "favorite_hat": {
                     "type": "integer"
                   }
                 }
@@ -1577,6 +1987,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserUpdate"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/{id}/animals-saved": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List attached AnimalsSaveds",
+        "description": "List attached AnimalsSaveds.",
+        "operationId": "listUserAnimalsSaved",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "what page to render",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "itemsPerPage",
+            "in": "query",
+            "description": "item count to render per page",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result Users list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User_AnimalsSavedList"
+                  }
                 }
               }
             }
@@ -1622,6 +2096,51 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User_BestFriendRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users/{id}/favorite-hat": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Find the attached Hat",
+        "description": "Find the attached Hat of the User with the given ID",
+        "operationId": "readUserFavoriteHat",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the User",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hat attached to User with requested ID was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User_FavoriteHatRead"
                 }
               }
             }
@@ -2453,6 +2972,193 @@
           "name"
         ]
       },
+      "Hat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          },
+          "wearer": {
+            "$ref": "#/components/schemas/User"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "HatCreate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "HatList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "HatRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "HatUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "Hat_WearerRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age",
+          "favorite_cat_breed",
+          "favorite_color"
+        ]
+      },
       "Pet": {
         "type": "object",
         "properties": {
@@ -2484,6 +3190,12 @@
           },
           "owner": {
             "$ref": "#/components/schemas/User"
+          },
+          "rescuer": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
           },
           "friends": {
             "type": "array",
@@ -2587,6 +3299,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -2606,7 +3327,8 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "PetList": {
@@ -2775,6 +3497,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -2794,7 +3525,72 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
+        ]
+      },
+      "Pet_RescuerList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "age": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "height": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 4294967295,
+            "minimum": 0
+          },
+          "favorite_cat_breed": {
+            "type": "string",
+            "enum": [
+              "siamese",
+              "bengal",
+              "lion",
+              "tiger",
+              "leopard",
+              "other"
+            ]
+          },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
+          "favorite_dog_breed": {
+            "type": "string",
+            "enum": [
+              "Kuro"
+            ]
+          },
+          "favorite_fish_breed": {
+            "type": "string",
+            "enum": [
+              "gold",
+              "koi",
+              "shark"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "age",
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "User": {
@@ -2829,6 +3625,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -2849,15 +3654,25 @@
               "$ref": "#/components/schemas/Pet"
             }
           },
+          "animals_saved": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Pet"
+            }
+          },
           "best_friend": {
             "$ref": "#/components/schemas/User"
+          },
+          "favorite_hat": {
+            "$ref": "#/components/schemas/Hat"
           }
         },
         "required": [
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "UserCreate": {
@@ -2892,6 +3707,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -2911,7 +3735,8 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "UserList": {
@@ -2946,6 +3771,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -2965,7 +3799,8 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "UserRead": {
@@ -3000,6 +3835,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -3019,7 +3863,8 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
         ]
       },
       "UserUpdate": {
@@ -3054,6 +3899,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -3073,7 +3927,37 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
+        ]
+      },
+      "User_AnimalsSavedList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tag_id": {
+            "type": "string",
+            "format": "byte"
+          },
+          "height": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name"
         ]
       },
       "User_BestFriendRead": {
@@ -3108,6 +3992,15 @@
               "other"
             ]
           },
+          "favorite_color": {
+            "type": "string",
+            "enum": [
+              "red",
+              "green",
+              "blue"
+            ],
+            "default": "red"
+          },
           "favorite_dog_breed": {
             "type": "string",
             "enum": [
@@ -3127,7 +4020,32 @@
           "id",
           "name",
           "age",
-          "favorite_cat_breed"
+          "favorite_cat_breed",
+          "favorite_color"
+        ]
+      },
+      "User_FavoriteHatRead": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "dad",
+              "trucker",
+              "snapback"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
         ]
       },
       "User_PetsList": {

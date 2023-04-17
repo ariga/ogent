@@ -31,6 +31,15 @@ func (UnimplementedHandler) CreateCategory(ctx context.Context, req *CreateCateg
 	return r, ht.ErrNotImplemented
 }
 
+// CreateHat implements createHat operation.
+//
+// Creates a new Hat and persists it to storage.
+//
+// POST /hats
+func (UnimplementedHandler) CreateHat(ctx context.Context, req *CreateHatReq) (r CreateHatRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // CreatePet implements createPet operation.
 //
 // Creates a new Pet and persists it to storage.
@@ -64,6 +73,15 @@ func (UnimplementedHandler) DeleteAllTypes(ctx context.Context, params DeleteAll
 //
 // DELETE /categories/{id}
 func (UnimplementedHandler) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (r DeleteCategoryRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteHat implements deleteHat operation.
+//
+// Deletes the Hat with the requested ID.
+//
+// DELETE /hats/{id}
+func (UnimplementedHandler) DeleteHat(ctx context.Context, params DeleteHatParams) (r DeleteHatRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -112,6 +130,15 @@ func (UnimplementedHandler) ListCategoryPets(ctx context.Context, params ListCat
 	return r, ht.ErrNotImplemented
 }
 
+// ListHat implements listHat operation.
+//
+// List Hats.
+//
+// GET /hats
+func (UnimplementedHandler) ListHat(ctx context.Context, params ListHatParams) (r ListHatRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ListPet implements listPet operation.
 //
 // List Pets.
@@ -139,12 +166,30 @@ func (UnimplementedHandler) ListPetFriends(ctx context.Context, params ListPetFr
 	return r, ht.ErrNotImplemented
 }
 
+// ListPetRescuer implements listPetRescuer operation.
+//
+// List attached Rescuers.
+//
+// GET /pets/{id}/rescuer
+func (UnimplementedHandler) ListPetRescuer(ctx context.Context, params ListPetRescuerParams) (r ListPetRescuerRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ListUser implements listUser operation.
 //
 // List Users.
 //
 // GET /users
 func (UnimplementedHandler) ListUser(ctx context.Context, params ListUserParams) (r ListUserRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListUserAnimalsSaved implements listUserAnimalsSaved operation.
+//
+// List attached AnimalsSaveds.
+//
+// GET /users/{id}/animals-saved
+func (UnimplementedHandler) ListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (r ListUserAnimalsSavedRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -172,6 +217,24 @@ func (UnimplementedHandler) ReadAllTypes(ctx context.Context, params ReadAllType
 //
 // GET /categories/{id}
 func (UnimplementedHandler) ReadCategory(ctx context.Context, params ReadCategoryParams) (r ReadCategoryRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ReadHat implements readHat operation.
+//
+// Finds the Hat with the requested ID and returns it.
+//
+// GET /hats/{id}
+func (UnimplementedHandler) ReadHat(ctx context.Context, params ReadHatParams) (r ReadHatRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ReadHatWearer implements readHatWearer operation.
+//
+// Find the attached User of the Hat with the given ID.
+//
+// GET /hats/{id}/wearer
+func (UnimplementedHandler) ReadHatWearer(ctx context.Context, params ReadHatWearerParams) (r ReadHatWearerRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -211,6 +274,15 @@ func (UnimplementedHandler) ReadUserBestFriend(ctx context.Context, params ReadU
 	return r, ht.ErrNotImplemented
 }
 
+// ReadUserFavoriteHat implements readUserFavoriteHat operation.
+//
+// Find the attached Hat of the User with the given ID.
+//
+// GET /users/{id}/favorite-hat
+func (UnimplementedHandler) ReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (r ReadUserFavoriteHatRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // UpdateAllTypes implements updateAllTypes operation.
 //
 // Updates a AllTypes and persists changes to storage.
@@ -226,6 +298,15 @@ func (UnimplementedHandler) UpdateAllTypes(ctx context.Context, req *UpdateAllTy
 //
 // PATCH /categories/{id}
 func (UnimplementedHandler) UpdateCategory(ctx context.Context, req *UpdateCategoryReq, params UpdateCategoryParams) (r UpdateCategoryRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateHat implements updateHat operation.
+//
+// Updates a Hat and persists changes to storage.
+//
+// PATCH /hats/{id}
+func (UnimplementedHandler) UpdateHat(ctx context.Context, req *UpdateHatReq, params UpdateHatParams) (r UpdateHatRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

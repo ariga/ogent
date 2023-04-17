@@ -50,6 +50,27 @@ var (
 		Columns:    CategoriesColumns,
 		PrimaryKey: []*schema.Column{CategoriesColumns[0]},
 	}
+	// HatsColumns holds the columns for the "hats" table.
+	HatsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"dad", "trucker", "snapback"}},
+		{Name: "user_favorite_hat", Type: field.TypeInt, Unique: true, Nullable: true},
+	}
+	// HatsTable holds the schema information for the "hats" table.
+	HatsTable = &schema.Table{
+		Name:       "hats",
+		Columns:    HatsColumns,
+		PrimaryKey: []*schema.Column{HatsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "hats_users_favorite_hat",
+				Columns:    []*schema.Column{HatsColumns[3]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// PetsColumns holds the columns for the "pets" table.
 	PetsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -81,6 +102,7 @@ var (
 		{Name: "age", Type: field.TypeUint},
 		{Name: "height", Type: field.TypeUint, Nullable: true},
 		{Name: "favorite_cat_breed", Type: field.TypeEnum, Enums: []string{"siamese", "bengal", "lion", "tiger", "leopard", "other"}},
+		{Name: "favorite_color", Type: field.TypeEnum, Enums: []string{"red", "green", "blue"}, Default: "red"},
 		{Name: "favorite_dog_breed", Type: field.TypeEnum, Nullable: true, Enums: []string{"Kuro"}},
 		{Name: "favorite_fish_breed", Type: field.TypeEnum, Nullable: true, Enums: []string{"gold", "koi", "shark"}},
 		{Name: "user_best_friend", Type: field.TypeInt, Unique: true, Nullable: true},
@@ -93,7 +115,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "users_users_best_friend",
-				Columns:    []*schema.Column{UsersColumns[7]},
+				Columns:    []*schema.Column{UsersColumns[8]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -149,22 +171,52 @@ var (
 			},
 		},
 	}
+	// UserAnimalsSavedColumns holds the columns for the "user_animals_saved" table.
+	UserAnimalsSavedColumns = []*schema.Column{
+		{Name: "user_id", Type: field.TypeInt},
+		{Name: "pet_id", Type: field.TypeInt},
+	}
+	// UserAnimalsSavedTable holds the schema information for the "user_animals_saved" table.
+	UserAnimalsSavedTable = &schema.Table{
+		Name:       "user_animals_saved",
+		Columns:    UserAnimalsSavedColumns,
+		PrimaryKey: []*schema.Column{UserAnimalsSavedColumns[0], UserAnimalsSavedColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_animals_saved_user_id",
+				Columns:    []*schema.Column{UserAnimalsSavedColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "user_animals_saved_pet_id",
+				Columns:    []*schema.Column{UserAnimalsSavedColumns[1]},
+				RefColumns: []*schema.Column{PetsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AllTypesTable,
 		CategoriesTable,
+		HatsTable,
 		PetsTable,
 		UsersTable,
 		CategoryPetsTable,
 		PetFriendsTable,
+		UserAnimalsSavedTable,
 	}
 )
 
 func init() {
+	HatsTable.ForeignKeys[0].RefTable = UsersTable
 	PetsTable.ForeignKeys[0].RefTable = UsersTable
 	UsersTable.ForeignKeys[0].RefTable = UsersTable
 	CategoryPetsTable.ForeignKeys[0].RefTable = CategoriesTable
 	CategoryPetsTable.ForeignKeys[1].RefTable = PetsTable
 	PetFriendsTable.ForeignKeys[0].RefTable = PetsTable
 	PetFriendsTable.ForeignKeys[1].RefTable = PetsTable
+	UserAnimalsSavedTable.ForeignKeys[0].RefTable = UsersTable
+	UserAnimalsSavedTable.ForeignKeys[1].RefTable = PetsTable
 }

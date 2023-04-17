@@ -3316,6 +3316,178 @@ func (s *CreateCategoryReq) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *CreateHatReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateHatReq) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+	{
+		if s.Wearer.Set {
+			e.FieldStart("wearer")
+			s.Wearer.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateHatReq = [3]string{
+	0: "name",
+	1: "type",
+	2: "wearer",
+}
+
+// Decode decodes CreateHatReq from json.
+func (s *CreateHatReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateHatReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "wearer":
+			if err := func() error {
+				s.Wearer.Reset()
+				if err := s.Wearer.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"wearer\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateHatReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCreateHatReq) {
+					name = jsonFieldsNameOfCreateHatReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateHatReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateHatReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes CreateHatReqType as json.
+func (s CreateHatReqType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes CreateHatReqType from json.
+func (s *CreateHatReqType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateHatReqType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CreateHatReqType(v) {
+	case CreateHatReqTypeDad:
+		*s = CreateHatReqTypeDad
+	case CreateHatReqTypeTrucker:
+		*s = CreateHatReqTypeTrucker
+	case CreateHatReqTypeSnapback:
+		*s = CreateHatReqTypeSnapback
+	default:
+		*s = CreateHatReqType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CreateHatReqType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateHatReqType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *CreatePetReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -3368,6 +3540,16 @@ func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
 		e.Int(s.Owner)
 	}
 	{
+		if s.Rescuer != nil {
+			e.FieldStart("rescuer")
+			e.ArrStart()
+			for _, elem := range s.Rescuer {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.Friends != nil {
 			e.FieldStart("friends")
 			e.ArrStart()
@@ -3379,7 +3561,7 @@ func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfCreatePetReq = [8]string{
+var jsonFieldsNameOfCreatePetReq = [9]string{
 	0: "name",
 	1: "weight",
 	2: "birthday",
@@ -3387,7 +3569,8 @@ var jsonFieldsNameOfCreatePetReq = [8]string{
 	4: "height",
 	5: "categories",
 	6: "owner",
-	7: "friends",
+	7: "rescuer",
+	8: "friends",
 }
 
 // Decode decodes CreatePetReq from json.
@@ -3395,7 +3578,7 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode CreatePetReq to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -3483,6 +3666,25 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"owner\"")
 			}
+		case "rescuer":
+			if err := func() error {
+				s.Rescuer = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.Rescuer = append(s.Rescuer, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rescuer\"")
+			}
 		case "friends":
 			if err := func() error {
 				s.Friends = make([]int, 0)
@@ -3511,8 +3713,9 @@ func (s *CreatePetReq) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
+	for i, mask := range [2]uint8{
 		0b01000001,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3589,6 +3792,11 @@ func (s *CreateUserReq) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -3611,22 +3819,41 @@ func (s *CreateUserReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.AnimalsSaved != nil {
+			e.FieldStart("animals_saved")
+			e.ArrStart()
+			for _, elem := range s.AnimalsSaved {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.BestFriend.Set {
 			e.FieldStart("best_friend")
 			s.BestFriend.Encode(e)
 		}
 	}
+	{
+		if s.FavoriteHat.Set {
+			e.FieldStart("favorite_hat")
+			s.FavoriteHat.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfCreateUserReq = [8]string{
-	0: "name",
-	1: "age",
-	2: "height",
-	3: "favorite_cat_breed",
-	4: "favorite_dog_breed",
-	5: "favorite_fish_breed",
-	6: "pets",
-	7: "best_friend",
+var jsonFieldsNameOfCreateUserReq = [11]string{
+	0:  "name",
+	1:  "age",
+	2:  "height",
+	3:  "favorite_cat_breed",
+	4:  "favorite_color",
+	5:  "favorite_dog_breed",
+	6:  "favorite_fish_breed",
+	7:  "pets",
+	8:  "animals_saved",
+	9:  "best_friend",
+	10: "favorite_hat",
 }
 
 // Decode decodes CreateUserReq from json.
@@ -3634,7 +3861,8 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode CreateUserReq to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -3682,6 +3910,16 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -3721,6 +3959,25 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"pets\"")
 			}
+		case "animals_saved":
+			if err := func() error {
+				s.AnimalsSaved = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.AnimalsSaved = append(s.AnimalsSaved, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"animals_saved\"")
+			}
 		case "best_friend":
 			if err := func() error {
 				s.BestFriend.Reset()
@@ -3731,6 +3988,16 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"best_friend\"")
 			}
+		case "favorite_hat":
+			if err := func() error {
+				s.FavoriteHat.Reset()
+				if err := s.FavoriteHat.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_hat\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -3740,8 +4007,9 @@ func (s *CreateUserReq) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00001011,
+	for i, mask := range [2]uint8{
+		0b00011011,
+		0b00000000,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3835,6 +4103,48 @@ func (s *CreateUserReqFavoriteCatBreed) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes CreateUserReqFavoriteColor as json.
+func (s CreateUserReqFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes CreateUserReqFavoriteColor from json.
+func (s *CreateUserReqFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateUserReqFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CreateUserReqFavoriteColor(v) {
+	case CreateUserReqFavoriteColorRed:
+		*s = CreateUserReqFavoriteColorRed
+	case CreateUserReqFavoriteColorGreen:
+		*s = CreateUserReqFavoriteColorGreen
+	case CreateUserReqFavoriteColorBlue:
+		*s = CreateUserReqFavoriteColorBlue
+	default:
+		*s = CreateUserReqFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CreateUserReqFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateUserReqFavoriteColor) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes CreateUserReqFavoriteDogBreed as json.
 func (s CreateUserReqFavoriteDogBreed) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -3911,6 +4221,1085 @@ func (s CreateUserReqFavoriteFishBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CreateUserReqFavoriteFishBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *HatCreate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *HatCreate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfHatCreate = [3]string{
+	0: "id",
+	1: "name",
+	2: "type",
+}
+
+// Decode decodes HatCreate from json.
+func (s *HatCreate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatCreate to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode HatCreate")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfHatCreate) {
+					name = jsonFieldsNameOfHatCreate[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *HatCreate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatCreate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatCreateType as json.
+func (s HatCreateType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatCreateType from json.
+func (s *HatCreateType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatCreateType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatCreateType(v) {
+	case HatCreateTypeDad:
+		*s = HatCreateTypeDad
+	case HatCreateTypeTrucker:
+		*s = HatCreateTypeTrucker
+	case HatCreateTypeSnapback:
+		*s = HatCreateTypeSnapback
+	default:
+		*s = HatCreateType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatCreateType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatCreateType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *HatList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *HatList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfHatList = [3]string{
+	0: "id",
+	1: "name",
+	2: "type",
+}
+
+// Decode decodes HatList from json.
+func (s *HatList) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatList to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode HatList")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfHatList) {
+					name = jsonFieldsNameOfHatList[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *HatList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatListType as json.
+func (s HatListType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatListType from json.
+func (s *HatListType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatListType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatListType(v) {
+	case HatListTypeDad:
+		*s = HatListTypeDad
+	case HatListTypeTrucker:
+		*s = HatListTypeTrucker
+	case HatListTypeSnapback:
+		*s = HatListTypeSnapback
+	default:
+		*s = HatListType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatListType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatListType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *HatRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *HatRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfHatRead = [3]string{
+	0: "id",
+	1: "name",
+	2: "type",
+}
+
+// Decode decodes HatRead from json.
+func (s *HatRead) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatRead to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode HatRead")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfHatRead) {
+					name = jsonFieldsNameOfHatRead[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *HatRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatReadType as json.
+func (s HatReadType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatReadType from json.
+func (s *HatReadType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatReadType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatReadType(v) {
+	case HatReadTypeDad:
+		*s = HatReadTypeDad
+	case HatReadTypeTrucker:
+		*s = HatReadTypeTrucker
+	case HatReadTypeSnapback:
+		*s = HatReadTypeSnapback
+	default:
+		*s = HatReadType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatReadType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatReadType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *HatUpdate) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *HatUpdate) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfHatUpdate = [3]string{
+	0: "id",
+	1: "name",
+	2: "type",
+}
+
+// Decode decodes HatUpdate from json.
+func (s *HatUpdate) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatUpdate to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode HatUpdate")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfHatUpdate) {
+					name = jsonFieldsNameOfHatUpdate[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *HatUpdate) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatUpdate) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatUpdateType as json.
+func (s HatUpdateType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatUpdateType from json.
+func (s *HatUpdateType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatUpdateType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatUpdateType(v) {
+	case HatUpdateTypeDad:
+		*s = HatUpdateTypeDad
+	case HatUpdateTypeTrucker:
+		*s = HatUpdateTypeTrucker
+	case HatUpdateTypeSnapback:
+		*s = HatUpdateTypeSnapback
+	default:
+		*s = HatUpdateType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatUpdateType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatUpdateType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *HatWearerRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *HatWearerRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("age")
+		e.Int64(s.Age)
+	}
+	{
+		if s.Height.Set {
+			e.FieldStart("height")
+			s.Height.Encode(e)
+		}
+	}
+	{
+
+		e.FieldStart("favorite_cat_breed")
+		s.FavoriteCatBreed.Encode(e)
+	}
+	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
+		if s.FavoriteDogBreed.Set {
+			e.FieldStart("favorite_dog_breed")
+			s.FavoriteDogBreed.Encode(e)
+		}
+	}
+	{
+		if s.FavoriteFishBreed.Set {
+			e.FieldStart("favorite_fish_breed")
+			s.FavoriteFishBreed.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfHatWearerRead = [8]string{
+	0: "id",
+	1: "name",
+	2: "age",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
+}
+
+// Decode decodes HatWearerRead from json.
+func (s *HatWearerRead) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatWearerRead to nil")
+	}
+	var requiredBitSet [1]uint8
+	s.setDefaults()
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "age":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Age = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"age\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
+		case "favorite_cat_breed":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
+			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
+		case "favorite_dog_breed":
+			if err := func() error {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
+			}
+		case "favorite_fish_breed":
+			if err := func() error {
+				s.FavoriteFishBreed.Reset()
+				if err := s.FavoriteFishBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_fish_breed\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode HatWearerRead")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00110111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfHatWearerRead) {
+					name = jsonFieldsNameOfHatWearerRead[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *HatWearerRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatWearerRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatWearerReadFavoriteCatBreed as json.
+func (s HatWearerReadFavoriteCatBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatWearerReadFavoriteCatBreed from json.
+func (s *HatWearerReadFavoriteCatBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatWearerReadFavoriteCatBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatWearerReadFavoriteCatBreed(v) {
+	case HatWearerReadFavoriteCatBreedSiamese:
+		*s = HatWearerReadFavoriteCatBreedSiamese
+	case HatWearerReadFavoriteCatBreedBengal:
+		*s = HatWearerReadFavoriteCatBreedBengal
+	case HatWearerReadFavoriteCatBreedLion:
+		*s = HatWearerReadFavoriteCatBreedLion
+	case HatWearerReadFavoriteCatBreedTiger:
+		*s = HatWearerReadFavoriteCatBreedTiger
+	case HatWearerReadFavoriteCatBreedLeopard:
+		*s = HatWearerReadFavoriteCatBreedLeopard
+	case HatWearerReadFavoriteCatBreedOther:
+		*s = HatWearerReadFavoriteCatBreedOther
+	default:
+		*s = HatWearerReadFavoriteCatBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatWearerReadFavoriteCatBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatWearerReadFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatWearerReadFavoriteColor as json.
+func (s HatWearerReadFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatWearerReadFavoriteColor from json.
+func (s *HatWearerReadFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatWearerReadFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatWearerReadFavoriteColor(v) {
+	case HatWearerReadFavoriteColorRed:
+		*s = HatWearerReadFavoriteColorRed
+	case HatWearerReadFavoriteColorGreen:
+		*s = HatWearerReadFavoriteColorGreen
+	case HatWearerReadFavoriteColorBlue:
+		*s = HatWearerReadFavoriteColorBlue
+	default:
+		*s = HatWearerReadFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatWearerReadFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatWearerReadFavoriteColor) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatWearerReadFavoriteDogBreed as json.
+func (s HatWearerReadFavoriteDogBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatWearerReadFavoriteDogBreed from json.
+func (s *HatWearerReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatWearerReadFavoriteDogBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatWearerReadFavoriteDogBreed(v) {
+	case HatWearerReadFavoriteDogBreedKuro:
+		*s = HatWearerReadFavoriteDogBreedKuro
+	default:
+		*s = HatWearerReadFavoriteDogBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatWearerReadFavoriteDogBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatWearerReadFavoriteDogBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatWearerReadFavoriteFishBreed as json.
+func (s HatWearerReadFavoriteFishBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes HatWearerReadFavoriteFishBreed from json.
+func (s *HatWearerReadFavoriteFishBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode HatWearerReadFavoriteFishBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch HatWearerReadFavoriteFishBreed(v) {
+	case HatWearerReadFavoriteFishBreedGold:
+		*s = HatWearerReadFavoriteFishBreedGold
+	case HatWearerReadFavoriteFishBreedKoi:
+		*s = HatWearerReadFavoriteFishBreedKoi
+	case HatWearerReadFavoriteFishBreedShark:
+		*s = HatWearerReadFavoriteFishBreedShark
+	default:
+		*s = HatWearerReadFavoriteFishBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s HatWearerReadFavoriteFishBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *HatWearerReadFavoriteFishBreed) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -4065,6 +5454,56 @@ func (s *ListCategoryPetsOKApplicationJSON) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes ListHatOKApplicationJSON as json.
+func (s ListHatOKApplicationJSON) Encode(e *jx.Encoder) {
+	unwrapped := []HatList(s)
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes ListHatOKApplicationJSON from json.
+func (s *ListHatOKApplicationJSON) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListHatOKApplicationJSON to nil")
+	}
+	var unwrapped []HatList
+	if err := func() error {
+		unwrapped = make([]HatList, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem HatList
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = ListHatOKApplicationJSON(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListHatOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListHatOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ListPetCategoriesOKApplicationJSON as json.
 func (s ListPetCategoriesOKApplicationJSON) Encode(e *jx.Encoder) {
 	unwrapped := []PetCategoriesList(s)
@@ -4211,6 +5650,106 @@ func (s ListPetOKApplicationJSON) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *ListPetOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes ListPetRescuerOKApplicationJSON as json.
+func (s ListPetRescuerOKApplicationJSON) Encode(e *jx.Encoder) {
+	unwrapped := []PetRescuerList(s)
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes ListPetRescuerOKApplicationJSON from json.
+func (s *ListPetRescuerOKApplicationJSON) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListPetRescuerOKApplicationJSON to nil")
+	}
+	var unwrapped []PetRescuerList
+	if err := func() error {
+		unwrapped = make([]PetRescuerList, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem PetRescuerList
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = ListPetRescuerOKApplicationJSON(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListPetRescuerOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListPetRescuerOKApplicationJSON) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes ListUserAnimalsSavedOKApplicationJSON as json.
+func (s ListUserAnimalsSavedOKApplicationJSON) Encode(e *jx.Encoder) {
+	unwrapped := []UserAnimalsSavedList(s)
+
+	e.ArrStart()
+	for _, elem := range unwrapped {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+}
+
+// Decode decodes ListUserAnimalsSavedOKApplicationJSON from json.
+func (s *ListUserAnimalsSavedOKApplicationJSON) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListUserAnimalsSavedOKApplicationJSON to nil")
+	}
+	var unwrapped []UserAnimalsSavedList
+	if err := func() error {
+		unwrapped = make([]UserAnimalsSavedList, 0)
+		if err := d.Arr(func(d *jx.Decoder) error {
+			var elem UserAnimalsSavedList
+			if err := elem.Decode(d); err != nil {
+				return err
+			}
+			unwrapped = append(unwrapped, elem)
+			return nil
+		}); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = ListUserAnimalsSavedOKApplicationJSON(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListUserAnimalsSavedOKApplicationJSON) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListUserAnimalsSavedOKApplicationJSON) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -4521,6 +6060,72 @@ func (s *OptFloat64) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes HatWearerReadFavoriteDogBreed as json.
+func (o OptHatWearerReadFavoriteDogBreed) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes HatWearerReadFavoriteDogBreed from json.
+func (o *OptHatWearerReadFavoriteDogBreed) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptHatWearerReadFavoriteDogBreed to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptHatWearerReadFavoriteDogBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptHatWearerReadFavoriteDogBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes HatWearerReadFavoriteFishBreed as json.
+func (o OptHatWearerReadFavoriteFishBreed) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes HatWearerReadFavoriteFishBreed from json.
+func (o *OptHatWearerReadFavoriteFishBreed) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptHatWearerReadFavoriteFishBreed to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptHatWearerReadFavoriteFishBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptHatWearerReadFavoriteFishBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes int as json.
 func (o OptInt) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -4754,6 +6359,72 @@ func (s OptPetOwnerReadFavoriteFishBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptPetOwnerReadFavoriteFishBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteDogBreed as json.
+func (o OptPetRescuerListFavoriteDogBreed) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes PetRescuerListFavoriteDogBreed from json.
+func (o *OptPetRescuerListFavoriteDogBreed) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPetRescuerListFavoriteDogBreed to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptPetRescuerListFavoriteDogBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptPetRescuerListFavoriteDogBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteFishBreed as json.
+func (o OptPetRescuerListFavoriteFishBreed) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes PetRescuerListFavoriteFishBreed from json.
+func (o *OptPetRescuerListFavoriteFishBreed) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPetRescuerListFavoriteFishBreed to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptPetRescuerListFavoriteFishBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptPetRescuerListFavoriteFishBreed) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -5817,6 +7488,11 @@ func (s *PetCreateOwner) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -5830,14 +7506,15 @@ func (s *PetCreateOwner) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfPetCreateOwner = [7]string{
+var jsonFieldsNameOfPetCreateOwner = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes PetCreateOwner from json.
@@ -5846,6 +7523,7 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode PetCreateOwner to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -5905,6 +7583,16 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -5935,7 +7623,7 @@ func (s *PetCreateOwner) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -6025,6 +7713,48 @@ func (s PetCreateOwnerFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *PetCreateOwnerFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetCreateOwnerFavoriteColor as json.
+func (s PetCreateOwnerFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetCreateOwnerFavoriteColor from json.
+func (s *PetCreateOwnerFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetCreateOwnerFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetCreateOwnerFavoriteColor(v) {
+	case PetCreateOwnerFavoriteColorRed:
+		*s = PetCreateOwnerFavoriteColorRed
+	case PetCreateOwnerFavoriteColorGreen:
+		*s = PetCreateOwnerFavoriteColorGreen
+	case PetCreateOwnerFavoriteColorBlue:
+		*s = PetCreateOwnerFavoriteColorBlue
+	default:
+		*s = PetCreateOwnerFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetCreateOwnerFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetCreateOwnerFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -6511,6 +8241,11 @@ func (s *PetOwnerRead) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -6524,14 +8259,15 @@ func (s *PetOwnerRead) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfPetOwnerRead = [7]string{
+var jsonFieldsNameOfPetOwnerRead = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes PetOwnerRead from json.
@@ -6540,6 +8276,7 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode PetOwnerRead to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -6599,6 +8336,16 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -6629,7 +8376,7 @@ func (s *PetOwnerRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -6719,6 +8466,48 @@ func (s PetOwnerReadFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *PetOwnerReadFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetOwnerReadFavoriteColor as json.
+func (s PetOwnerReadFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetOwnerReadFavoriteColor from json.
+func (s *PetOwnerReadFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetOwnerReadFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetOwnerReadFavoriteColor(v) {
+	case PetOwnerReadFavoriteColorRed:
+		*s = PetOwnerReadFavoriteColorRed
+	case PetOwnerReadFavoriteColorGreen:
+		*s = PetOwnerReadFavoriteColorGreen
+	case PetOwnerReadFavoriteColorBlue:
+		*s = PetOwnerReadFavoriteColorBlue
+	default:
+		*s = PetOwnerReadFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetOwnerReadFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetOwnerReadFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -6982,6 +8771,393 @@ func (s *PetRead) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *PetRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *PetRescuerList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PetRescuerList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("age")
+		e.Int64(s.Age)
+	}
+	{
+		if s.Height.Set {
+			e.FieldStart("height")
+			s.Height.Encode(e)
+		}
+	}
+	{
+
+		e.FieldStart("favorite_cat_breed")
+		s.FavoriteCatBreed.Encode(e)
+	}
+	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
+		if s.FavoriteDogBreed.Set {
+			e.FieldStart("favorite_dog_breed")
+			s.FavoriteDogBreed.Encode(e)
+		}
+	}
+	{
+		if s.FavoriteFishBreed.Set {
+			e.FieldStart("favorite_fish_breed")
+			s.FavoriteFishBreed.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfPetRescuerList = [8]string{
+	0: "id",
+	1: "name",
+	2: "age",
+	3: "height",
+	4: "favorite_cat_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
+}
+
+// Decode decodes PetRescuerList from json.
+func (s *PetRescuerList) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetRescuerList to nil")
+	}
+	var requiredBitSet [1]uint8
+	s.setDefaults()
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "age":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Int64()
+				s.Age = int64(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"age\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
+		case "favorite_cat_breed":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.FavoriteCatBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
+			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
+		case "favorite_dog_breed":
+			if err := func() error {
+				s.FavoriteDogBreed.Reset()
+				if err := s.FavoriteDogBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_dog_breed\"")
+			}
+		case "favorite_fish_breed":
+			if err := func() error {
+				s.FavoriteFishBreed.Reset()
+				if err := s.FavoriteFishBreed.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_fish_breed\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode PetRescuerList")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00110111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfPetRescuerList) {
+					name = jsonFieldsNameOfPetRescuerList[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PetRescuerList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRescuerList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteCatBreed as json.
+func (s PetRescuerListFavoriteCatBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetRescuerListFavoriteCatBreed from json.
+func (s *PetRescuerListFavoriteCatBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetRescuerListFavoriteCatBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetRescuerListFavoriteCatBreed(v) {
+	case PetRescuerListFavoriteCatBreedSiamese:
+		*s = PetRescuerListFavoriteCatBreedSiamese
+	case PetRescuerListFavoriteCatBreedBengal:
+		*s = PetRescuerListFavoriteCatBreedBengal
+	case PetRescuerListFavoriteCatBreedLion:
+		*s = PetRescuerListFavoriteCatBreedLion
+	case PetRescuerListFavoriteCatBreedTiger:
+		*s = PetRescuerListFavoriteCatBreedTiger
+	case PetRescuerListFavoriteCatBreedLeopard:
+		*s = PetRescuerListFavoriteCatBreedLeopard
+	case PetRescuerListFavoriteCatBreedOther:
+		*s = PetRescuerListFavoriteCatBreedOther
+	default:
+		*s = PetRescuerListFavoriteCatBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetRescuerListFavoriteCatBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRescuerListFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteColor as json.
+func (s PetRescuerListFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetRescuerListFavoriteColor from json.
+func (s *PetRescuerListFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetRescuerListFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetRescuerListFavoriteColor(v) {
+	case PetRescuerListFavoriteColorRed:
+		*s = PetRescuerListFavoriteColorRed
+	case PetRescuerListFavoriteColorGreen:
+		*s = PetRescuerListFavoriteColorGreen
+	case PetRescuerListFavoriteColorBlue:
+		*s = PetRescuerListFavoriteColorBlue
+	default:
+		*s = PetRescuerListFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetRescuerListFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRescuerListFavoriteColor) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteDogBreed as json.
+func (s PetRescuerListFavoriteDogBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetRescuerListFavoriteDogBreed from json.
+func (s *PetRescuerListFavoriteDogBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetRescuerListFavoriteDogBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetRescuerListFavoriteDogBreed(v) {
+	case PetRescuerListFavoriteDogBreedKuro:
+		*s = PetRescuerListFavoriteDogBreedKuro
+	default:
+		*s = PetRescuerListFavoriteDogBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetRescuerListFavoriteDogBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRescuerListFavoriteDogBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PetRescuerListFavoriteFishBreed as json.
+func (s PetRescuerListFavoriteFishBreed) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PetRescuerListFavoriteFishBreed from json.
+func (s *PetRescuerListFavoriteFishBreed) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PetRescuerListFavoriteFishBreed to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PetRescuerListFavoriteFishBreed(v) {
+	case PetRescuerListFavoriteFishBreedGold:
+		*s = PetRescuerListFavoriteFishBreedGold
+	case PetRescuerListFavoriteFishBreedKoi:
+		*s = PetRescuerListFavoriteFishBreedKoi
+	case PetRescuerListFavoriteFishBreedShark:
+		*s = PetRescuerListFavoriteFishBreedShark
+	default:
+		*s = PetRescuerListFavoriteFishBreed(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PetRescuerListFavoriteFishBreed) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PetRescuerListFavoriteFishBreed) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -8225,6 +10401,86 @@ func (s *UpdateCategoryReq) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *UpdateHatReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateHatReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
+		}
+	}
+	{
+		if s.Wearer.Set {
+			e.FieldStart("wearer")
+			s.Wearer.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUpdateHatReq = [2]string{
+	0: "name",
+	1: "wearer",
+}
+
+// Decode decodes UpdateHatReq from json.
+func (s *UpdateHatReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateHatReq to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			if err := func() error {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "wearer":
+			if err := func() error {
+				s.Wearer.Reset()
+				if err := s.Wearer.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"wearer\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UpdateHatReq")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateHatReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateHatReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *UpdatePetReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -8279,6 +10535,16 @@ func (s *UpdatePetReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.Rescuer != nil {
+			e.FieldStart("rescuer")
+			e.ArrStart()
+			for _, elem := range s.Rescuer {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.Friends != nil {
 			e.FieldStart("friends")
 			e.ArrStart()
@@ -8290,7 +10556,7 @@ func (s *UpdatePetReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUpdatePetReq = [8]string{
+var jsonFieldsNameOfUpdatePetReq = [9]string{
 	0: "name",
 	1: "weight",
 	2: "birthday",
@@ -8298,7 +10564,8 @@ var jsonFieldsNameOfUpdatePetReq = [8]string{
 	4: "height",
 	5: "categories",
 	6: "owner",
-	7: "friends",
+	7: "rescuer",
+	8: "friends",
 }
 
 // Decode decodes UpdatePetReq from json.
@@ -8388,6 +10655,25 @@ func (s *UpdatePetReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"owner\"")
+			}
+		case "rescuer":
+			if err := func() error {
+				s.Rescuer = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.Rescuer = append(s.Rescuer, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rescuer\"")
 			}
 		case "friends":
 			if err := func() error {
@@ -8488,14 +10774,30 @@ func (s *UpdateUserReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
+		if s.AnimalsSaved != nil {
+			e.FieldStart("animals_saved")
+			e.ArrStart()
+			for _, elem := range s.AnimalsSaved {
+				e.Int(elem)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
 		if s.BestFriend.Set {
 			e.FieldStart("best_friend")
 			s.BestFriend.Encode(e)
 		}
 	}
+	{
+		if s.FavoriteHat.Set {
+			e.FieldStart("favorite_hat")
+			s.FavoriteHat.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfUpdateUserReq = [8]string{
+var jsonFieldsNameOfUpdateUserReq = [10]string{
 	0: "name",
 	1: "age",
 	2: "height",
@@ -8503,7 +10805,9 @@ var jsonFieldsNameOfUpdateUserReq = [8]string{
 	4: "favorite_dog_breed",
 	5: "favorite_fish_breed",
 	6: "pets",
-	7: "best_friend",
+	7: "animals_saved",
+	8: "best_friend",
+	9: "favorite_hat",
 }
 
 // Decode decodes UpdateUserReq from json.
@@ -8593,6 +10897,25 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"pets\"")
 			}
+		case "animals_saved":
+			if err := func() error {
+				s.AnimalsSaved = make([]int, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem int
+					v, err := d.Int()
+					elem = int(v)
+					if err != nil {
+						return err
+					}
+					s.AnimalsSaved = append(s.AnimalsSaved, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"animals_saved\"")
+			}
 		case "best_friend":
 			if err := func() error {
 				s.BestFriend.Reset()
@@ -8602,6 +10925,16 @@ func (s *UpdateUserReq) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"best_friend\"")
+			}
+		case "favorite_hat":
+			if err := func() error {
+				s.FavoriteHat.Reset()
+				if err := s.FavoriteHat.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_hat\"")
 			}
 		default:
 			return d.Skip()
@@ -8756,6 +11089,189 @@ func (s *UpdateUserReqFavoriteFishBreed) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *UserAnimalsSavedList) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserAnimalsSavedList) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+		if s.Weight.Set {
+			e.FieldStart("weight")
+			s.Weight.Encode(e)
+		}
+	}
+	{
+		if s.Birthday.Set {
+			e.FieldStart("birthday")
+			s.Birthday.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+
+		e.FieldStart("tag_id")
+		e.Base64(s.TagID)
+	}
+	{
+		if s.Height.Set {
+			e.FieldStart("height")
+			s.Height.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUserAnimalsSavedList = [6]string{
+	0: "id",
+	1: "name",
+	2: "weight",
+	3: "birthday",
+	4: "tag_id",
+	5: "height",
+}
+
+// Decode decodes UserAnimalsSavedList from json.
+func (s *UserAnimalsSavedList) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserAnimalsSavedList to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "weight":
+			if err := func() error {
+				s.Weight.Reset()
+				if err := s.Weight.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"weight\"")
+			}
+		case "birthday":
+			if err := func() error {
+				s.Birthday.Reset()
+				if err := s.Birthday.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"birthday\"")
+			}
+		case "tag_id":
+			if err := func() error {
+				v, err := d.Base64()
+				s.TagID = []byte(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tag_id\"")
+			}
+		case "height":
+			if err := func() error {
+				s.Height.Reset()
+				if err := s.Height.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"height\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UserAnimalsSavedList")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUserAnimalsSavedList) {
+					name = jsonFieldsNameOfUserAnimalsSavedList[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserAnimalsSavedList) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserAnimalsSavedList) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *UserBestFriendRead) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -8791,6 +11307,11 @@ func (s *UserBestFriendRead) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -8804,14 +11325,15 @@ func (s *UserBestFriendRead) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUserBestFriendRead = [7]string{
+var jsonFieldsNameOfUserBestFriendRead = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes UserBestFriendRead from json.
@@ -8820,6 +11342,7 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode UserBestFriendRead to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -8879,6 +11402,16 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -8909,7 +11442,7 @@ func (s *UserBestFriendRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -8999,6 +11532,48 @@ func (s UserBestFriendReadFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *UserBestFriendReadFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes UserBestFriendReadFavoriteColor as json.
+func (s UserBestFriendReadFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserBestFriendReadFavoriteColor from json.
+func (s *UserBestFriendReadFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserBestFriendReadFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserBestFriendReadFavoriteColor(v) {
+	case UserBestFriendReadFavoriteColorRed:
+		*s = UserBestFriendReadFavoriteColorRed
+	case UserBestFriendReadFavoriteColorGreen:
+		*s = UserBestFriendReadFavoriteColorGreen
+	case UserBestFriendReadFavoriteColorBlue:
+		*s = UserBestFriendReadFavoriteColorBlue
+	default:
+		*s = UserBestFriendReadFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserBestFriendReadFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserBestFriendReadFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -9119,6 +11694,11 @@ func (s *UserCreate) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -9132,14 +11712,15 @@ func (s *UserCreate) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUserCreate = [7]string{
+var jsonFieldsNameOfUserCreate = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes UserCreate from json.
@@ -9148,6 +11729,7 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode UserCreate to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -9207,6 +11789,16 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -9237,7 +11829,7 @@ func (s *UserCreate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -9331,6 +11923,48 @@ func (s *UserCreateFavoriteCatBreed) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes UserCreateFavoriteColor as json.
+func (s UserCreateFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserCreateFavoriteColor from json.
+func (s *UserCreateFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserCreateFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserCreateFavoriteColor(v) {
+	case UserCreateFavoriteColorRed:
+		*s = UserCreateFavoriteColorRed
+	case UserCreateFavoriteColorGreen:
+		*s = UserCreateFavoriteColorGreen
+	case UserCreateFavoriteColorBlue:
+		*s = UserCreateFavoriteColorBlue
+	default:
+		*s = UserCreateFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserCreateFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserCreateFavoriteColor) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes UserCreateFavoriteDogBreed as json.
 func (s UserCreateFavoriteDogBreed) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -9412,6 +12046,179 @@ func (s *UserCreateFavoriteFishBreed) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *UserFavoriteHatRead) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UserFavoriteHatRead) encodeFields(e *jx.Encoder) {
+	{
+
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+
+		e.FieldStart("name")
+		e.Str(s.Name)
+	}
+	{
+
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfUserFavoriteHatRead = [3]string{
+	0: "id",
+	1: "name",
+	2: "type",
+}
+
+// Decode decodes UserFavoriteHatRead from json.
+func (s *UserFavoriteHatRead) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserFavoriteHatRead to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Name = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UserFavoriteHatRead")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfUserFavoriteHatRead) {
+					name = jsonFieldsNameOfUserFavoriteHatRead[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UserFavoriteHatRead) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserFavoriteHatRead) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes UserFavoriteHatReadType as json.
+func (s UserFavoriteHatReadType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserFavoriteHatReadType from json.
+func (s *UserFavoriteHatReadType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserFavoriteHatReadType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserFavoriteHatReadType(v) {
+	case UserFavoriteHatReadTypeDad:
+		*s = UserFavoriteHatReadTypeDad
+	case UserFavoriteHatReadTypeTrucker:
+		*s = UserFavoriteHatReadTypeTrucker
+	case UserFavoriteHatReadTypeSnapback:
+		*s = UserFavoriteHatReadTypeSnapback
+	default:
+		*s = UserFavoriteHatReadType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserFavoriteHatReadType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserFavoriteHatReadType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *UserList) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -9447,6 +12254,11 @@ func (s *UserList) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -9460,14 +12272,15 @@ func (s *UserList) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUserList = [7]string{
+var jsonFieldsNameOfUserList = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes UserList from json.
@@ -9476,6 +12289,7 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode UserList to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -9535,6 +12349,16 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -9565,7 +12389,7 @@ func (s *UserList) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -9655,6 +12479,48 @@ func (s UserListFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *UserListFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes UserListFavoriteColor as json.
+func (s UserListFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserListFavoriteColor from json.
+func (s *UserListFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserListFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserListFavoriteColor(v) {
+	case UserListFavoriteColorRed:
+		*s = UserListFavoriteColorRed
+	case UserListFavoriteColorGreen:
+		*s = UserListFavoriteColorGreen
+	case UserListFavoriteColorBlue:
+		*s = UserListFavoriteColorBlue
+	default:
+		*s = UserListFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserListFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserListFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -9958,6 +12824,11 @@ func (s *UserRead) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -9971,14 +12842,15 @@ func (s *UserRead) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUserRead = [7]string{
+var jsonFieldsNameOfUserRead = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes UserRead from json.
@@ -9987,6 +12859,7 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode UserRead to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -10046,6 +12919,16 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -10076,7 +12959,7 @@ func (s *UserRead) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -10166,6 +13049,48 @@ func (s UserReadFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *UserReadFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes UserReadFavoriteColor as json.
+func (s UserReadFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserReadFavoriteColor from json.
+func (s *UserReadFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserReadFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserReadFavoriteColor(v) {
+	case UserReadFavoriteColorRed:
+		*s = UserReadFavoriteColorRed
+	case UserReadFavoriteColorGreen:
+		*s = UserReadFavoriteColorGreen
+	case UserReadFavoriteColorBlue:
+		*s = UserReadFavoriteColorBlue
+	default:
+		*s = UserReadFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserReadFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserReadFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -10286,6 +13211,11 @@ func (s *UserUpdate) encodeFields(e *jx.Encoder) {
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
+
+		e.FieldStart("favorite_color")
+		s.FavoriteColor.Encode(e)
+	}
+	{
 		if s.FavoriteDogBreed.Set {
 			e.FieldStart("favorite_dog_breed")
 			s.FavoriteDogBreed.Encode(e)
@@ -10299,14 +13229,15 @@ func (s *UserUpdate) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfUserUpdate = [7]string{
+var jsonFieldsNameOfUserUpdate = [8]string{
 	0: "id",
 	1: "name",
 	2: "age",
 	3: "height",
 	4: "favorite_cat_breed",
-	5: "favorite_dog_breed",
-	6: "favorite_fish_breed",
+	5: "favorite_color",
+	6: "favorite_dog_breed",
+	7: "favorite_fish_breed",
 }
 
 // Decode decodes UserUpdate from json.
@@ -10315,6 +13246,7 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 		return errors.New("invalid: unable to decode UserUpdate to nil")
 	}
 	var requiredBitSet [1]uint8
+	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -10374,6 +13306,16 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"favorite_cat_breed\"")
 			}
+		case "favorite_color":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.FavoriteColor.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favorite_color\"")
+			}
 		case "favorite_dog_breed":
 			if err := func() error {
 				s.FavoriteDogBreed.Reset()
@@ -10404,7 +13346,7 @@ func (s *UserUpdate) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -10494,6 +13436,48 @@ func (s UserUpdateFavoriteCatBreed) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *UserUpdateFavoriteCatBreed) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes UserUpdateFavoriteColor as json.
+func (s UserUpdateFavoriteColor) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes UserUpdateFavoriteColor from json.
+func (s *UserUpdateFavoriteColor) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UserUpdateFavoriteColor to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch UserUpdateFavoriteColor(v) {
+	case UserUpdateFavoriteColorRed:
+		*s = UserUpdateFavoriteColorRed
+	case UserUpdateFavoriteColorGreen:
+		*s = UserUpdateFavoriteColorGreen
+	case UserUpdateFavoriteColorBlue:
+		*s = UserUpdateFavoriteColorBlue
+	default:
+		*s = UserUpdateFavoriteColor(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s UserUpdateFavoriteColor) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UserUpdateFavoriteColor) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

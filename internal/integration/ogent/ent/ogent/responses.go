@@ -355,6 +355,156 @@ func (pe *CategoryPetsList) Elem() CategoryPetsList {
 	return *pe
 }
 
+func NewHatCreate(e *ent.Hat) *HatCreate {
+	if e == nil {
+		return nil
+	}
+	var ret HatCreate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Type = HatCreateType(e.Type)
+	return &ret
+}
+
+func NewHatCreates(es []*ent.Hat) []HatCreate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]HatCreate, len(es))
+	for i, e := range es {
+		r[i] = NewHatCreate(e).Elem()
+	}
+	return r
+}
+
+func (h *HatCreate) Elem() HatCreate {
+	if h == nil {
+		return HatCreate{}
+	}
+	return *h
+}
+
+func NewHatList(e *ent.Hat) *HatList {
+	if e == nil {
+		return nil
+	}
+	var ret HatList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Type = HatListType(e.Type)
+	return &ret
+}
+
+func NewHatLists(es []*ent.Hat) []HatList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]HatList, len(es))
+	for i, e := range es {
+		r[i] = NewHatList(e).Elem()
+	}
+	return r
+}
+
+func (h *HatList) Elem() HatList {
+	if h == nil {
+		return HatList{}
+	}
+	return *h
+}
+
+func NewHatRead(e *ent.Hat) *HatRead {
+	if e == nil {
+		return nil
+	}
+	var ret HatRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Type = HatReadType(e.Type)
+	return &ret
+}
+
+func NewHatReads(es []*ent.Hat) []HatRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]HatRead, len(es))
+	for i, e := range es {
+		r[i] = NewHatRead(e).Elem()
+	}
+	return r
+}
+
+func (h *HatRead) Elem() HatRead {
+	if h == nil {
+		return HatRead{}
+	}
+	return *h
+}
+
+func NewHatUpdate(e *ent.Hat) *HatUpdate {
+	if e == nil {
+		return nil
+	}
+	var ret HatUpdate
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Type = HatUpdateType(e.Type)
+	return &ret
+}
+
+func NewHatUpdates(es []*ent.Hat) []HatUpdate {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]HatUpdate, len(es))
+	for i, e := range es {
+		r[i] = NewHatUpdate(e).Elem()
+	}
+	return r
+}
+
+func (h *HatUpdate) Elem() HatUpdate {
+	if h == nil {
+		return HatUpdate{}
+	}
+	return *h
+}
+
+func NewHatWearerRead(e *ent.User) *HatWearerRead {
+	if e == nil {
+		return nil
+	}
+	var ret HatWearerRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
+	ret.FavoriteCatBreed = HatWearerReadFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = HatWearerReadFavoriteColor(e.FavoriteColor)
+	NewOptHatWearerReadFavoriteDogBreed(HatWearerReadFavoriteDogBreed(e.FavoriteDogBreed))
+	NewOptHatWearerReadFavoriteFishBreed(HatWearerReadFavoriteFishBreed(e.FavoriteFishBreed))
+	return &ret
+}
+
+func NewHatWearerReads(es []*ent.User) []HatWearerRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]HatWearerRead, len(es))
+	for i, e := range es {
+		r[i] = NewHatWearerRead(e).Elem()
+	}
+	return r
+}
+
+func (u *HatWearerRead) Elem() HatWearerRead {
+	if u == nil {
+		return HatWearerRead{}
+	}
+	return *u
+}
+
 func NewPetCreate(e *ent.Pet) *PetCreate {
 	if e == nil {
 		return nil
@@ -431,6 +581,7 @@ func NewPetCreateOwner(e *ent.User) *PetCreateOwner {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = PetCreateOwnerFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = PetCreateOwnerFavoriteColor(e.FavoriteColor)
 	NewOptPetCreateOwnerFavoriteDogBreed(PetCreateOwnerFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetCreateOwnerFavoriteFishBreed(PetCreateOwnerFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -633,6 +784,7 @@ func NewPetOwnerRead(e *ent.User) *PetOwnerRead {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = PetOwnerReadFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = PetOwnerReadFavoriteColor(e.FavoriteColor)
 	NewOptPetOwnerReadFavoriteDogBreed(PetOwnerReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptPetOwnerReadFavoriteFishBreed(PetOwnerReadFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -656,6 +808,40 @@ func (u *PetOwnerRead) Elem() PetOwnerRead {
 	return *u
 }
 
+func NewPetRescuerList(e *ent.User) *PetRescuerList {
+	if e == nil {
+		return nil
+	}
+	var ret PetRescuerList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Age = int64(e.Age)
+	ret.Height = NewOptInt64(int64(e.Height))
+	ret.FavoriteCatBreed = PetRescuerListFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = PetRescuerListFavoriteColor(e.FavoriteColor)
+	NewOptPetRescuerListFavoriteDogBreed(PetRescuerListFavoriteDogBreed(e.FavoriteDogBreed))
+	NewOptPetRescuerListFavoriteFishBreed(PetRescuerListFavoriteFishBreed(e.FavoriteFishBreed))
+	return &ret
+}
+
+func NewPetRescuerLists(es []*ent.User) []PetRescuerList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]PetRescuerList, len(es))
+	for i, e := range es {
+		r[i] = NewPetRescuerList(e).Elem()
+	}
+	return r
+}
+
+func (u *PetRescuerList) Elem() PetRescuerList {
+	if u == nil {
+		return PetRescuerList{}
+	}
+	return *u
+}
+
 func NewUserCreate(e *ent.User) *UserCreate {
 	if e == nil {
 		return nil
@@ -666,6 +852,7 @@ func NewUserCreate(e *ent.User) *UserCreate {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserCreateFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = UserCreateFavoriteColor(e.FavoriteColor)
 	NewOptUserCreateFavoriteDogBreed(UserCreateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserCreateFavoriteFishBreed(UserCreateFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -699,6 +886,7 @@ func NewUserList(e *ent.User) *UserList {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserListFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = UserListFavoriteColor(e.FavoriteColor)
 	NewOptUserListFavoriteDogBreed(UserListFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserListFavoriteFishBreed(UserListFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -732,6 +920,7 @@ func NewUserRead(e *ent.User) *UserRead {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserReadFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = UserReadFavoriteColor(e.FavoriteColor)
 	NewOptUserReadFavoriteDogBreed(UserReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserReadFavoriteFishBreed(UserReadFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -765,6 +954,7 @@ func NewUserUpdate(e *ent.User) *UserUpdate {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserUpdateFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = UserUpdateFavoriteColor(e.FavoriteColor)
 	NewOptUserUpdateFavoriteDogBreed(UserUpdateFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserUpdateFavoriteFishBreed(UserUpdateFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -788,6 +978,41 @@ func (u *UserUpdate) Elem() UserUpdate {
 	return *u
 }
 
+func NewUserAnimalsSavedList(e *ent.Pet) *UserAnimalsSavedList {
+	if e == nil {
+		return nil
+	}
+	var ret UserAnimalsSavedList
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Weight = NewOptInt(e.Weight)
+	ret.Birthday = NewOptDateTime(e.Birthday)
+	ret.TagID = e.TagID
+	ret.Height = OptInt{}
+	if e.Height != nil {
+		ret.Height.SetTo(*e.Height)
+	}
+	return &ret
+}
+
+func NewUserAnimalsSavedLists(es []*ent.Pet) []UserAnimalsSavedList {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]UserAnimalsSavedList, len(es))
+	for i, e := range es {
+		r[i] = NewUserAnimalsSavedList(e).Elem()
+	}
+	return r
+}
+
+func (pe *UserAnimalsSavedList) Elem() UserAnimalsSavedList {
+	if pe == nil {
+		return UserAnimalsSavedList{}
+	}
+	return *pe
+}
+
 func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 	if e == nil {
 		return nil
@@ -798,6 +1023,7 @@ func NewUserBestFriendRead(e *ent.User) *UserBestFriendRead {
 	ret.Age = int64(e.Age)
 	ret.Height = NewOptInt64(int64(e.Height))
 	ret.FavoriteCatBreed = UserBestFriendReadFavoriteCatBreed(e.FavoriteCatBreed)
+	ret.FavoriteColor = UserBestFriendReadFavoriteColor(e.FavoriteColor)
 	NewOptUserBestFriendReadFavoriteDogBreed(UserBestFriendReadFavoriteDogBreed(e.FavoriteDogBreed))
 	NewOptUserBestFriendReadFavoriteFishBreed(UserBestFriendReadFavoriteFishBreed(e.FavoriteFishBreed))
 	return &ret
@@ -819,6 +1045,35 @@ func (u *UserBestFriendRead) Elem() UserBestFriendRead {
 		return UserBestFriendRead{}
 	}
 	return *u
+}
+
+func NewUserFavoriteHatRead(e *ent.Hat) *UserFavoriteHatRead {
+	if e == nil {
+		return nil
+	}
+	var ret UserFavoriteHatRead
+	ret.ID = e.ID
+	ret.Name = e.Name
+	ret.Type = UserFavoriteHatReadType(e.Type)
+	return &ret
+}
+
+func NewUserFavoriteHatReads(es []*ent.Hat) []UserFavoriteHatRead {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]UserFavoriteHatRead, len(es))
+	for i, e := range es {
+		r[i] = NewUserFavoriteHatRead(e).Elem()
+	}
+	return r
+}
+
+func (h *UserFavoriteHatRead) Elem() UserFavoriteHatRead {
+	if h == nil {
+		return UserFavoriteHatRead{}
+	}
+	return *h
 }
 
 func NewUserPetsList(e *ent.Pet) *UserPetsList {

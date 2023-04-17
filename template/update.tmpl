@@ -25,7 +25,7 @@
 	{{- end }}
 	// Add all edges.
 	{{- range $e := $.Edges }}
-		{{- if not $e.Unique }}
+		{{- if and (not $e.Unique) (not $e.Immutable) }}
 			if req.{{ $e.StructField }} != nil {
 			    b.{{ $e.MutationClear }}().{{ $e.MutationAdd }}(req.{{ $e.StructField }}...)
 			}

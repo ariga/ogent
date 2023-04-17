@@ -26,6 +26,7 @@ type PetQuery struct {
 	predicates     []predicate.Pet
 	withCategories *CategoryQuery
 	withOwner      *UserQuery
+	withRescuer    *UserQuery
 	withFriends    *PetQuery
 	withFKs        bool
 	// intermediate query (i.e. traversal path).
@@ -101,6 +102,28 @@ func (pq *PetQuery) QueryOwner() *UserQuery {
 			sqlgraph.From(pet.Table, pet.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, pet.OwnerTable, pet.OwnerColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRescuer chains the current query on the "rescuer" edge.
+func (pq *PetQuery) QueryRescuer() *UserQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(pet.Table, pet.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, pet.RescuerTable, pet.RescuerPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
 		return fromU, nil
@@ -324,6 +347,7 @@ func (pq *PetQuery) Clone() *PetQuery {
 		predicates:     append([]predicate.Pet{}, pq.predicates...),
 		withCategories: pq.withCategories.Clone(),
 		withOwner:      pq.withOwner.Clone(),
+		withRescuer:    pq.withRescuer.Clone(),
 		withFriends:    pq.withFriends.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
@@ -350,6 +374,17 @@ func (pq *PetQuery) WithOwner(opts ...func(*UserQuery)) *PetQuery {
 		opt(query)
 	}
 	pq.withOwner = query
+	return pq
+}
+
+// WithRescuer tells the query-builder to eager-load the nodes that are connected to
+// the "rescuer" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PetQuery) WithRescuer(opts ...func(*UserQuery)) *PetQuery {
+	query := (&UserClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withRescuer = query
 	return pq
 }
 
@@ -443,9 +478,10 @@ func (pq *PetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pet, err
 		nodes       = []*Pet{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			pq.withCategories != nil,
 			pq.withOwner != nil,
+			pq.withRescuer != nil,
 			pq.withFriends != nil,
 		}
 	)
@@ -483,6 +519,13 @@ func (pq *PetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pet, err
 	if query := pq.withOwner; query != nil {
 		if err := pq.loadOwner(ctx, query, nodes, nil,
 			func(n *Pet, e *User) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := pq.withRescuer; query != nil {
+		if err := pq.loadRescuer(ctx, query, nodes,
+			func(n *Pet) { n.Edges.Rescuer = []*User{} },
+			func(n *Pet, e *User) { n.Edges.Rescuer = append(n.Edges.Rescuer, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -585,6 +628,67 @@ func (pq *PetQuery) loadOwner(ctx context.Context, query *UserQuery, nodes []*Pe
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (pq *PetQuery) loadRescuer(ctx context.Context, query *UserQuery, nodes []*Pet, init func(*Pet), assign func(*Pet, *User)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*Pet)
+	nids := make(map[int]map[*Pet]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(pet.RescuerTable)
+		s.Join(joinT).On(s.C(user.FieldID), joinT.C(pet.RescuerPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(pet.RescuerPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(pet.RescuerPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Pet]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*User](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "rescuer" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil

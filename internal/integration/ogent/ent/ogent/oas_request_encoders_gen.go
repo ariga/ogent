@@ -39,6 +39,20 @@ func encodeCreateCategoryRequest(
 	return nil
 }
 
+func encodeCreateHatRequest(
+	req *CreateHatReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := jx.GetEncoder()
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeCreatePetRequest(
 	req *CreatePetReq,
 	r *http.Request,
@@ -83,6 +97,20 @@ func encodeUpdateAllTypesRequest(
 
 func encodeUpdateCategoryRequest(
 	req *UpdateCategoryReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := jx.GetEncoder()
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeUpdateHatRequest(
+	req *UpdateHatReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

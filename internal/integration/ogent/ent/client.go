@@ -12,6 +12,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent"
@@ -29,6 +30,8 @@ type Client struct {
 	AllTypes *AllTypesClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
+	// Hat is the client for interacting with the Hat builders.
+	Hat *HatClient
 	// Pet is the client for interacting with the Pet builders.
 	Pet *PetClient
 	// User is the client for interacting with the User builders.
@@ -48,6 +51,7 @@ func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.AllTypes = NewAllTypesClient(c.config)
 	c.Category = NewCategoryClient(c.config)
+	c.Hat = NewHatClient(c.config)
 	c.Pet = NewPetClient(c.config)
 	c.User = NewUserClient(c.config)
 }
@@ -134,6 +138,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		config:   cfg,
 		AllTypes: NewAllTypesClient(cfg),
 		Category: NewCategoryClient(cfg),
+		Hat:      NewHatClient(cfg),
 		Pet:      NewPetClient(cfg),
 		User:     NewUserClient(cfg),
 	}, nil
@@ -157,6 +162,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		config:   cfg,
 		AllTypes: NewAllTypesClient(cfg),
 		Category: NewCategoryClient(cfg),
+		Hat:      NewHatClient(cfg),
 		Pet:      NewPetClient(cfg),
 		User:     NewUserClient(cfg),
 	}, nil
@@ -189,6 +195,7 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	c.AllTypes.Use(hooks...)
 	c.Category.Use(hooks...)
+	c.Hat.Use(hooks...)
 	c.Pet.Use(hooks...)
 	c.User.Use(hooks...)
 }
@@ -198,6 +205,7 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.AllTypes.Intercept(interceptors...)
 	c.Category.Intercept(interceptors...)
+	c.Hat.Intercept(interceptors...)
 	c.Pet.Intercept(interceptors...)
 	c.User.Intercept(interceptors...)
 }
@@ -209,6 +217,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AllTypes.mutate(ctx, m)
 	case *CategoryMutation:
 		return c.Category.mutate(ctx, m)
+	case *HatMutation:
+		return c.Hat.mutate(ctx, m)
 	case *PetMutation:
 		return c.Pet.mutate(ctx, m)
 	case *UserMutation:
@@ -470,6 +480,140 @@ func (c *CategoryClient) mutate(ctx context.Context, m *CategoryMutation) (Value
 	}
 }
 
+// HatClient is a client for the Hat schema.
+type HatClient struct {
+	config
+}
+
+// NewHatClient returns a client for the Hat from the given config.
+func NewHatClient(c config) *HatClient {
+	return &HatClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `hat.Hooks(f(g(h())))`.
+func (c *HatClient) Use(hooks ...Hook) {
+	c.hooks.Hat = append(c.hooks.Hat, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `hat.Intercept(f(g(h())))`.
+func (c *HatClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Hat = append(c.inters.Hat, interceptors...)
+}
+
+// Create returns a builder for creating a Hat entity.
+func (c *HatClient) Create() *HatCreate {
+	mutation := newHatMutation(c.config, OpCreate)
+	return &HatCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Hat entities.
+func (c *HatClient) CreateBulk(builders ...*HatCreate) *HatCreateBulk {
+	return &HatCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Hat.
+func (c *HatClient) Update() *HatUpdate {
+	mutation := newHatMutation(c.config, OpUpdate)
+	return &HatUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *HatClient) UpdateOne(h *Hat) *HatUpdateOne {
+	mutation := newHatMutation(c.config, OpUpdateOne, withHat(h))
+	return &HatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *HatClient) UpdateOneID(id int) *HatUpdateOne {
+	mutation := newHatMutation(c.config, OpUpdateOne, withHatID(id))
+	return &HatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Hat.
+func (c *HatClient) Delete() *HatDelete {
+	mutation := newHatMutation(c.config, OpDelete)
+	return &HatDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *HatClient) DeleteOne(h *Hat) *HatDeleteOne {
+	return c.DeleteOneID(h.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *HatClient) DeleteOneID(id int) *HatDeleteOne {
+	builder := c.Delete().Where(hat.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &HatDeleteOne{builder}
+}
+
+// Query returns a query builder for Hat.
+func (c *HatClient) Query() *HatQuery {
+	return &HatQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeHat},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Hat entity by its id.
+func (c *HatClient) Get(ctx context.Context, id int) (*Hat, error) {
+	return c.Query().Where(hat.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *HatClient) GetX(ctx context.Context, id int) *Hat {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryWearer queries the wearer edge of a Hat.
+func (c *HatClient) QueryWearer(h *Hat) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := h.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hat.Table, hat.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, hat.WearerTable, hat.WearerColumn),
+		)
+		fromV = sqlgraph.Neighbors(h.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *HatClient) Hooks() []Hook {
+	return c.hooks.Hat
+}
+
+// Interceptors returns the client interceptors.
+func (c *HatClient) Interceptors() []Interceptor {
+	return c.inters.Hat
+}
+
+func (c *HatClient) mutate(ctx context.Context, m *HatMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&HatCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&HatUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&HatUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&HatDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Hat mutation op: %q", m.Op())
+	}
+}
+
 // PetClient is a client for the Pet schema.
 type PetClient struct {
 	config
@@ -588,6 +732,22 @@ func (c *PetClient) QueryOwner(pe *Pet) *UserQuery {
 			sqlgraph.From(pet.Table, pet.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, pet.OwnerTable, pet.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRescuer queries the rescuer edge of a Pet.
+func (c *PetClient) QueryRescuer(pe *Pet) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pe.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(pet.Table, pet.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, pet.RescuerTable, pet.RescuerPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(pe.driver.Dialect(), step)
 		return fromV, nil
@@ -745,6 +905,22 @@ func (c *UserClient) QueryPets(u *User) *PetQuery {
 	return query
 }
 
+// QueryAnimalsSaved queries the animals_saved edge of a User.
+func (c *UserClient) QueryAnimalsSaved(u *User) *PetQuery {
+	query := (&PetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(pet.Table, pet.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.AnimalsSavedTable, user.AnimalsSavedPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBestFriend queries the best_friend edge of a User.
 func (c *UserClient) QueryBestFriend(u *User) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -754,6 +930,22 @@ func (c *UserClient) QueryBestFriend(u *User) *UserQuery {
 			sqlgraph.From(user.Table, user.FieldID, id),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, user.BestFriendTable, user.BestFriendColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFavoriteHat queries the favorite_hat edge of a User.
+func (c *UserClient) QueryFavoriteHat(u *User) *HatQuery {
+	query := (&HatClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(hat.Table, hat.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.FavoriteHatTable, user.FavoriteHatColumn),
 		)
 		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
 		return fromV, nil
@@ -789,9 +981,9 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		AllTypes, Category, Pet, User []ent.Hook
+		AllTypes, Category, Hat, Pet, User []ent.Hook
 	}
 	inters struct {
-		AllTypes, Category, Pet, User []ent.Interceptor
+		AllTypes, Category, Hat, Pet, User []ent.Interceptor
 	}
 )

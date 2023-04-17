@@ -33,6 +33,18 @@ func (f CategoryFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, er
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CategoryMutation", m)
 }
 
+// The HatFunc type is an adapter to allow the use of ordinary
+// function as Hat mutator.
+type HatFunc func(context.Context, *ent.HatMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f HatFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.HatMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.HatMutation", m)
+}
+
 // The PetFunc type is an adapter to allow the use of ordinary
 // function as Pet mutator.
 type PetFunc func(context.Context, *ent.PetMutation) (ent.Value, error)

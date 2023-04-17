@@ -244,6 +244,26 @@ func FavoriteCatBreedNotIn(vs ...FavoriteCatBreed) predicate.User {
 	return predicate.User(sql.FieldNotIn(FieldFavoriteCatBreed, vs...))
 }
 
+// FavoriteColorEQ applies the EQ predicate on the "favorite_color" field.
+func FavoriteColorEQ(v FavoriteColor) predicate.User {
+	return predicate.User(sql.FieldEQ(FieldFavoriteColor, v))
+}
+
+// FavoriteColorNEQ applies the NEQ predicate on the "favorite_color" field.
+func FavoriteColorNEQ(v FavoriteColor) predicate.User {
+	return predicate.User(sql.FieldNEQ(FieldFavoriteColor, v))
+}
+
+// FavoriteColorIn applies the In predicate on the "favorite_color" field.
+func FavoriteColorIn(vs ...FavoriteColor) predicate.User {
+	return predicate.User(sql.FieldIn(FieldFavoriteColor, vs...))
+}
+
+// FavoriteColorNotIn applies the NotIn predicate on the "favorite_color" field.
+func FavoriteColorNotIn(vs ...FavoriteColor) predicate.User {
+	return predicate.User(sql.FieldNotIn(FieldFavoriteColor, vs...))
+}
+
 // FavoriteDogBreedEQ applies the EQ predicate on the "favorite_dog_breed" field.
 func FavoriteDogBreedEQ(v FavoriteDogBreed) predicate.User {
 	return predicate.User(sql.FieldEQ(FieldFavoriteDogBreed, v))
@@ -341,6 +361,33 @@ func HasPetsWith(preds ...predicate.Pet) predicate.User {
 	})
 }
 
+// HasAnimalsSaved applies the HasEdge predicate on the "animals_saved" edge.
+func HasAnimalsSaved() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AnimalsSavedTable, AnimalsSavedPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAnimalsSavedWith applies the HasEdge predicate on the "animals_saved" edge with a given conditions (other predicates).
+func HasAnimalsSavedWith(preds ...predicate.Pet) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(AnimalsSavedInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, AnimalsSavedTable, AnimalsSavedPrimaryKey...),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBestFriend applies the HasEdge predicate on the "best_friend" edge.
 func HasBestFriend() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
@@ -359,6 +406,33 @@ func HasBestFriendWith(preds ...predicate.User) predicate.User {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.To(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, BestFriendTable, BestFriendColumn),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFavoriteHat applies the HasEdge predicate on the "favorite_hat" edge.
+func HasFavoriteHat() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, FavoriteHatTable, FavoriteHatColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFavoriteHatWith applies the HasEdge predicate on the "favorite_hat" edge with a given conditions (other predicates).
+func HasFavoriteHatWith(preds ...predicate.Hat) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(FavoriteHatInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, FavoriteHatTable, FavoriteHatColumn),
 		)
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

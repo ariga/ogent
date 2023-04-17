@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
@@ -19,13 +20,15 @@ import (
 // UserQuery is the builder for querying User entities.
 type UserQuery struct {
 	config
-	ctx            *QueryContext
-	order          []OrderFunc
-	inters         []Interceptor
-	predicates     []predicate.User
-	withPets       *PetQuery
-	withBestFriend *UserQuery
-	withFKs        bool
+	ctx              *QueryContext
+	order            []OrderFunc
+	inters           []Interceptor
+	predicates       []predicate.User
+	withPets         *PetQuery
+	withAnimalsSaved *PetQuery
+	withBestFriend   *UserQuery
+	withFavoriteHat  *HatQuery
+	withFKs          bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -84,6 +87,28 @@ func (uq *UserQuery) QueryPets() *PetQuery {
 	return query
 }
 
+// QueryAnimalsSaved chains the current query on the "animals_saved" edge.
+func (uq *UserQuery) QueryAnimalsSaved() *PetQuery {
+	query := (&PetClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(pet.Table, pet.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, user.AnimalsSavedTable, user.AnimalsSavedPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryBestFriend chains the current query on the "best_friend" edge.
 func (uq *UserQuery) QueryBestFriend() *UserQuery {
 	query := (&UserClient{config: uq.config}).Query()
@@ -99,6 +124,28 @@ func (uq *UserQuery) QueryBestFriend() *UserQuery {
 			sqlgraph.From(user.Table, user.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, user.BestFriendTable, user.BestFriendColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFavoriteHat chains the current query on the "favorite_hat" edge.
+func (uq *UserQuery) QueryFavoriteHat() *HatQuery {
+	query := (&HatClient{config: uq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := uq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := uq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(hat.Table, hat.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, user.FavoriteHatTable, user.FavoriteHatColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(uq.driver.Dialect(), step)
 		return fromU, nil
@@ -293,13 +340,15 @@ func (uq *UserQuery) Clone() *UserQuery {
 		return nil
 	}
 	return &UserQuery{
-		config:         uq.config,
-		ctx:            uq.ctx.Clone(),
-		order:          append([]OrderFunc{}, uq.order...),
-		inters:         append([]Interceptor{}, uq.inters...),
-		predicates:     append([]predicate.User{}, uq.predicates...),
-		withPets:       uq.withPets.Clone(),
-		withBestFriend: uq.withBestFriend.Clone(),
+		config:           uq.config,
+		ctx:              uq.ctx.Clone(),
+		order:            append([]OrderFunc{}, uq.order...),
+		inters:           append([]Interceptor{}, uq.inters...),
+		predicates:       append([]predicate.User{}, uq.predicates...),
+		withPets:         uq.withPets.Clone(),
+		withAnimalsSaved: uq.withAnimalsSaved.Clone(),
+		withBestFriend:   uq.withBestFriend.Clone(),
+		withFavoriteHat:  uq.withFavoriteHat.Clone(),
 		// clone intermediate query.
 		sql:  uq.sql.Clone(),
 		path: uq.path,
@@ -317,6 +366,17 @@ func (uq *UserQuery) WithPets(opts ...func(*PetQuery)) *UserQuery {
 	return uq
 }
 
+// WithAnimalsSaved tells the query-builder to eager-load the nodes that are connected to
+// the "animals_saved" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithAnimalsSaved(opts ...func(*PetQuery)) *UserQuery {
+	query := (&PetClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withAnimalsSaved = query
+	return uq
+}
+
 // WithBestFriend tells the query-builder to eager-load the nodes that are connected to
 // the "best_friend" edge. The optional arguments are used to configure the query builder of the edge.
 func (uq *UserQuery) WithBestFriend(opts ...func(*UserQuery)) *UserQuery {
@@ -325,6 +385,17 @@ func (uq *UserQuery) WithBestFriend(opts ...func(*UserQuery)) *UserQuery {
 		opt(query)
 	}
 	uq.withBestFriend = query
+	return uq
+}
+
+// WithFavoriteHat tells the query-builder to eager-load the nodes that are connected to
+// the "favorite_hat" edge. The optional arguments are used to configure the query builder of the edge.
+func (uq *UserQuery) WithFavoriteHat(opts ...func(*HatQuery)) *UserQuery {
+	query := (&HatClient{config: uq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	uq.withFavoriteHat = query
 	return uq
 }
 
@@ -407,9 +478,11 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		nodes       = []*User{}
 		withFKs     = uq.withFKs
 		_spec       = uq.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
 			uq.withPets != nil,
+			uq.withAnimalsSaved != nil,
 			uq.withBestFriend != nil,
+			uq.withFavoriteHat != nil,
 		}
 	)
 	if uq.withBestFriend != nil {
@@ -443,9 +516,22 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := uq.withAnimalsSaved; query != nil {
+		if err := uq.loadAnimalsSaved(ctx, query, nodes,
+			func(n *User) { n.Edges.AnimalsSaved = []*Pet{} },
+			func(n *User, e *Pet) { n.Edges.AnimalsSaved = append(n.Edges.AnimalsSaved, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := uq.withBestFriend; query != nil {
 		if err := uq.loadBestFriend(ctx, query, nodes, nil,
 			func(n *User, e *User) { n.Edges.BestFriend = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := uq.withFavoriteHat; query != nil {
+		if err := uq.loadFavoriteHat(ctx, query, nodes, nil,
+			func(n *User, e *Hat) { n.Edges.FavoriteHat = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -483,6 +569,67 @@ func (uq *UserQuery) loadPets(ctx context.Context, query *PetQuery, nodes []*Use
 	}
 	return nil
 }
+func (uq *UserQuery) loadAnimalsSaved(ctx context.Context, query *PetQuery, nodes []*User, init func(*User), assign func(*User, *Pet)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[int]*User)
+	nids := make(map[int]map[*User]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(user.AnimalsSavedTable)
+		s.Join(joinT).On(s.C(pet.FieldID), joinT.C(user.AnimalsSavedPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(user.AnimalsSavedPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(user.AnimalsSavedPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullInt64)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := int(values[0].(*sql.NullInt64).Int64)
+				inValue := int(values[1].(*sql.NullInt64).Int64)
+				if nids[inValue] == nil {
+					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Pet](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "animals_saved" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (uq *UserQuery) loadBestFriend(ctx context.Context, query *UserQuery, nodes []*User, init func(*User), assign func(*User, *User)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*User)
@@ -512,6 +659,34 @@ func (uq *UserQuery) loadBestFriend(ctx context.Context, query *UserQuery, nodes
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (uq *UserQuery) loadFavoriteHat(ctx context.Context, query *HatQuery, nodes []*User, init func(*User), assign func(*User, *Hat)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.Hat(func(s *sql.Selector) {
+		s.Where(sql.InValues(user.FavoriteHatColumn, fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.user_favorite_hat
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "user_favorite_hat" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "user_favorite_hat" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }

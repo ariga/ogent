@@ -16,6 +16,8 @@ type Tx struct {
 	AllTypes *AllTypesClient
 	// Category is the client for interacting with the Category builders.
 	Category *CategoryClient
+	// Hat is the client for interacting with the Hat builders.
+	Hat *HatClient
 	// Pet is the client for interacting with the Pet builders.
 	Pet *PetClient
 	// User is the client for interacting with the User builders.
@@ -153,6 +155,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.AllTypes = NewAllTypesClient(tx.config)
 	tx.Category = NewCategoryClient(tx.config)
+	tx.Hat = NewHatClient(tx.config)
 	tx.Pet = NewPetClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 }

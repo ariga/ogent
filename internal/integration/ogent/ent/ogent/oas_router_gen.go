@@ -186,6 +186,85 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 					}
 				}
+			case 'h': // Prefix: "hats"
+				if l := len("hats"); len(elem) >= l && elem[0:l] == "hats" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleListHatRequest([0]string{}, w, r)
+					case "POST":
+						s.handleCreateHatRequest([0]string{}, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "DELETE":
+							s.handleDeleteHatRequest([1]string{
+								args[0],
+							}, w, r)
+						case "GET":
+							s.handleReadHatRequest([1]string{
+								args[0],
+							}, w, r)
+						case "PATCH":
+							s.handleUpdateHatRequest([1]string{
+								args[0],
+							}, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PATCH")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/wearer"
+						if l := len("/wearer"); len(elem) >= l && elem[0:l] == "/wearer" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleReadHatWearerRequest([1]string{
+									args[0],
+								}, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+					}
+				}
 			case 'p': // Prefix: "pets"
 				if l := len("pets"); len(elem) >= l && elem[0:l] == "pets" {
 					elem = elem[l:]
@@ -314,6 +393,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 								return
 							}
+						case 'r': // Prefix: "rescuer"
+							if l := len("rescuer"); len(elem) >= l && elem[0:l] == "rescuer" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListPetRescuerRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
 						}
 					}
 				}
@@ -385,6 +484,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
+						case 'a': // Prefix: "animals-saved"
+							if l := len("animals-saved"); len(elem) >= l && elem[0:l] == "animals-saved" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListUserAnimalsSavedRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
 						case 'b': // Prefix: "best-friend"
 							if l := len("best-friend"); len(elem) >= l && elem[0:l] == "best-friend" {
 								elem = elem[l:]
@@ -397,6 +516,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								switch r.Method {
 								case "GET":
 									s.handleReadUserBestFriendRequest([1]string{
+										args[0],
+									}, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+						case 'f': // Prefix: "favorite-hat"
+							if l := len("favorite-hat"); len(elem) >= l && elem[0:l] == "favorite-hat" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleReadUserFavoriteHatRequest([1]string{
 										args[0],
 									}, w, r)
 								default:
@@ -675,6 +814,101 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 				}
+			case 'h': // Prefix: "hats"
+				if l := len("hats"); len(elem) >= l && elem[0:l] == "hats" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = "ListHat"
+						r.operationID = "listHat"
+						r.pathPattern = "/hats"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "CreateHat"
+						r.operationID = "createHat"
+						r.pathPattern = "/hats"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "id"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
+					if len(elem) == 0 {
+						switch method {
+						case "DELETE":
+							r.name = "DeleteHat"
+							r.operationID = "deleteHat"
+							r.pathPattern = "/hats/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = "ReadHat"
+							r.operationID = "readHat"
+							r.pathPattern = "/hats/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PATCH":
+							r.name = "UpdateHat"
+							r.operationID = "updateHat"
+							r.pathPattern = "/hats/{id}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/wearer"
+						if l := len("/wearer"); len(elem) >= l && elem[0:l] == "/wearer" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								// Leaf: ReadHatWearer
+								r.name = "ReadHatWearer"
+								r.operationID = "readHatWearer"
+								r.pathPattern = "/hats/{id}/wearer"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+					}
+				}
 			case 'p': // Prefix: "pets"
 				if l := len("pets"); len(elem) >= l && elem[0:l] == "pets" {
 					elem = elem[l:]
@@ -821,6 +1055,27 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									return
 								}
 							}
+						case 'r': // Prefix: "rescuer"
+							if l := len("rescuer"); len(elem) >= l && elem[0:l] == "rescuer" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "GET":
+									// Leaf: ListPetRescuer
+									r.name = "ListPetRescuer"
+									r.operationID = "listPetRescuer"
+									r.pathPattern = "/pets/{id}/rescuer"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
 						}
 					}
 				}
@@ -907,6 +1162,27 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
+						case 'a': // Prefix: "animals-saved"
+							if l := len("animals-saved"); len(elem) >= l && elem[0:l] == "animals-saved" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "GET":
+									// Leaf: ListUserAnimalsSaved
+									r.name = "ListUserAnimalsSaved"
+									r.operationID = "listUserAnimalsSaved"
+									r.pathPattern = "/users/{id}/animals-saved"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
 						case 'b': // Prefix: "best-friend"
 							if l := len("best-friend"); len(elem) >= l && elem[0:l] == "best-friend" {
 								elem = elem[l:]
@@ -921,6 +1197,27 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = "ReadUserBestFriend"
 									r.operationID = "readUserBestFriend"
 									r.pathPattern = "/users/{id}/best-friend"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+						case 'f': // Prefix: "favorite-hat"
+							if l := len("favorite-hat"); len(elem) >= l && elem[0:l] == "favorite-hat" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								switch method {
+								case "GET":
+									// Leaf: ReadUserFavoriteHat
+									r.name = "ReadUserFavoriteHat"
+									r.operationID = "readUserFavoriteHat"
+									r.pathPattern = "/users/{id}/favorite-hat"
 									r.args = args
 									r.count = 1
 									return r, true

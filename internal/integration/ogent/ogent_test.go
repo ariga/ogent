@@ -40,7 +40,7 @@ func (t *testSuite) TestCreate() {
 	t.reqErr(http.StatusConflict, got)
 
 	// OK
-	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SaveX(context.Background())
+	owner := t.client.User.Create().SetName("Ariel").SetAge(33).SetFavoriteCatBreed(user.FavoriteCatBreedLeopard).SetFavoriteColor(user.FavoriteColorBlue).SaveX(context.Background())
 	got, err = t.handler.CreatePet(context.Background(), &ogent.CreatePetReq{
 		Name:       "Ariels most loved Leopard",
 		Weight:     ogent.NewOptInt(10),
@@ -48,15 +48,6 @@ func (t *testSuite) TestCreate() {
 		Categories: nil,
 		Owner:      owner.ID,
 		Friends:    nil,
-	})
-	pot, err = t.handler.CreatePet(context.Background(), &ogent.CreatePetReq{
-		Name: "Ariels most loved baby leopard",
-		Weight: ogent.NewOptInt(2),
-		Birthday:   ogent.NewOptDateTime(time.Now()),
-		Categories: nil,
-		Owner:      owner.ID,
-		Friends:    nil,
-		Mother: got.ID
 	})
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewPetCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)

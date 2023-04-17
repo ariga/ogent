@@ -12,6 +12,9 @@ type AllTypes func(*sql.Selector)
 // Category is the predicate function for category builders.
 type Category func(*sql.Selector)
 
+// Hat is the predicate function for hat builders.
+type Hat func(*sql.Selector)
+
 // Pet is the predicate function for pet builders.
 type Pet func(*sql.Selector)
 
