@@ -49,6 +49,15 @@ func (t *testSuite) TestCreate() {
 		Owner:      owner.ID,
 		Friends:    nil,
 	})
+	pot, err = t.handler.CreatePet(context.Background(), &ogent.CreatePetReq{
+		Name: "Ariels most loved baby leopard",
+		Weight: ogent.NewOptInt(2),
+		Birthday:   ogent.NewOptDateTime(time.Now()),
+		Categories: nil,
+		Owner:      owner.ID,
+		Friends:    nil,
+		Mother: got.ID
+	})
 	t.Require().NoError(err)
 	t.Require().Equal(ogent.NewPetCreate(t.client.Pet.Query().WithOwner().FirstX(context.Background())), got)
 }
