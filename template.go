@@ -232,8 +232,12 @@ func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 		switch t.Format {
 		case Byte:
 			return fmt.Sprintf("%s.%s = %s.%s", rec, f.StructField(), ident, f.StructField()), nil
-		case DateTime, Date, Time:
+		case DateTime:
 			opt = "DateTime"
+		case Date:
+			opt = "Date"
+		case Time:
+			opt = "Time"			
 		case Duration:
 			opt = "Duration"
 		case UUID:
