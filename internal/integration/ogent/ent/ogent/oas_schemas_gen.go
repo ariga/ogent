@@ -1593,6 +1593,81 @@ func (s *CreateCategoryReq) SetPets(val []int) {
 	s.Pets = val
 }
 
+type CreateHatReq struct {
+	Name   string           `json:"name"`
+	Type   CreateHatReqType `json:"type"`
+	Wearer OptInt           `json:"wearer"`
+}
+
+// GetName returns the value of Name.
+func (s *CreateHatReq) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *CreateHatReq) GetType() CreateHatReqType {
+	return s.Type
+}
+
+// GetWearer returns the value of Wearer.
+func (s *CreateHatReq) GetWearer() OptInt {
+	return s.Wearer
+}
+
+// SetName sets the value of Name.
+func (s *CreateHatReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *CreateHatReq) SetType(val CreateHatReqType) {
+	s.Type = val
+}
+
+// SetWearer sets the value of Wearer.
+func (s *CreateHatReq) SetWearer(val OptInt) {
+	s.Wearer = val
+}
+
+type CreateHatReqType string
+
+const (
+	CreateHatReqTypeDad      CreateHatReqType = "dad"
+	CreateHatReqTypeTrucker  CreateHatReqType = "trucker"
+	CreateHatReqTypeSnapback CreateHatReqType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateHatReqType) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateHatReqTypeDad:
+		return []byte(s), nil
+	case CreateHatReqTypeTrucker:
+		return []byte(s), nil
+	case CreateHatReqTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateHatReqType) UnmarshalText(data []byte) error {
+	switch CreateHatReqType(data) {
+	case CreateHatReqTypeDad:
+		*s = CreateHatReqTypeDad
+		return nil
+	case CreateHatReqTypeTrucker:
+		*s = CreateHatReqTypeTrucker
+		return nil
+	case CreateHatReqTypeSnapback:
+		*s = CreateHatReqTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type CreatePetReq struct {
 	Name       string      `json:"name"`
 	Weight     OptInt      `json:"weight"`
@@ -1601,6 +1676,7 @@ type CreatePetReq struct {
 	Height     OptInt      `json:"height"`
 	Categories []int       `json:"categories"`
 	Owner      int         `json:"owner"`
+	Rescuer    []int       `json:"rescuer"`
 	Friends    []int       `json:"friends"`
 }
 
@@ -1637,6 +1713,11 @@ func (s *CreatePetReq) GetCategories() []int {
 // GetOwner returns the value of Owner.
 func (s *CreatePetReq) GetOwner() int {
 	return s.Owner
+}
+
+// GetRescuer returns the value of Rescuer.
+func (s *CreatePetReq) GetRescuer() []int {
+	return s.Rescuer
 }
 
 // GetFriends returns the value of Friends.
@@ -1679,6 +1760,11 @@ func (s *CreatePetReq) SetOwner(val int) {
 	s.Owner = val
 }
 
+// SetRescuer sets the value of Rescuer.
+func (s *CreatePetReq) SetRescuer(val []int) {
+	s.Rescuer = val
+}
+
 // SetFriends sets the value of Friends.
 func (s *CreatePetReq) SetFriends(val []int) {
 	s.Friends = val
@@ -1689,10 +1775,13 @@ type CreateUserReq struct {
 	Age               int64                             `json:"age"`
 	Height            OptInt64                          `json:"height"`
 	FavoriteCatBreed  CreateUserReqFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     CreateUserReqFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptCreateUserReqFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptCreateUserReqFavoriteFishBreed `json:"favorite_fish_breed"`
 	Pets              []int                             `json:"pets"`
+	AnimalsSaved      []int                             `json:"animals_saved"`
 	BestFriend        OptInt                            `json:"best_friend"`
+	FavoriteHat       OptInt                            `json:"favorite_hat"`
 }
 
 // GetName returns the value of Name.
@@ -1715,6 +1804,11 @@ func (s *CreateUserReq) GetFavoriteCatBreed() CreateUserReqFavoriteCatBreed {
 	return s.FavoriteCatBreed
 }
 
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *CreateUserReq) GetFavoriteColor() CreateUserReqFavoriteColor {
+	return s.FavoriteColor
+}
+
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
 func (s *CreateUserReq) GetFavoriteDogBreed() OptCreateUserReqFavoriteDogBreed {
 	return s.FavoriteDogBreed
@@ -1730,9 +1824,19 @@ func (s *CreateUserReq) GetPets() []int {
 	return s.Pets
 }
 
+// GetAnimalsSaved returns the value of AnimalsSaved.
+func (s *CreateUserReq) GetAnimalsSaved() []int {
+	return s.AnimalsSaved
+}
+
 // GetBestFriend returns the value of BestFriend.
 func (s *CreateUserReq) GetBestFriend() OptInt {
 	return s.BestFriend
+}
+
+// GetFavoriteHat returns the value of FavoriteHat.
+func (s *CreateUserReq) GetFavoriteHat() OptInt {
+	return s.FavoriteHat
 }
 
 // SetName sets the value of Name.
@@ -1755,6 +1859,11 @@ func (s *CreateUserReq) SetFavoriteCatBreed(val CreateUserReqFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
 }
 
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *CreateUserReq) SetFavoriteColor(val CreateUserReqFavoriteColor) {
+	s.FavoriteColor = val
+}
+
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
 func (s *CreateUserReq) SetFavoriteDogBreed(val OptCreateUserReqFavoriteDogBreed) {
 	s.FavoriteDogBreed = val
@@ -1770,9 +1879,19 @@ func (s *CreateUserReq) SetPets(val []int) {
 	s.Pets = val
 }
 
+// SetAnimalsSaved sets the value of AnimalsSaved.
+func (s *CreateUserReq) SetAnimalsSaved(val []int) {
+	s.AnimalsSaved = val
+}
+
 // SetBestFriend sets the value of BestFriend.
 func (s *CreateUserReq) SetBestFriend(val OptInt) {
 	s.BestFriend = val
+}
+
+// SetFavoriteHat sets the value of FavoriteHat.
+func (s *CreateUserReq) SetFavoriteHat(val OptInt) {
+	s.FavoriteHat = val
 }
 
 type CreateUserReqFavoriteCatBreed string
@@ -1826,6 +1945,45 @@ func (s *CreateUserReqFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case CreateUserReqFavoriteCatBreedOther:
 		*s = CreateUserReqFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CreateUserReqFavoriteColor string
+
+const (
+	CreateUserReqFavoriteColorRed   CreateUserReqFavoriteColor = "red"
+	CreateUserReqFavoriteColorGreen CreateUserReqFavoriteColor = "green"
+	CreateUserReqFavoriteColorBlue  CreateUserReqFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateUserReqFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateUserReqFavoriteColorRed:
+		return []byte(s), nil
+	case CreateUserReqFavoriteColorGreen:
+		return []byte(s), nil
+	case CreateUserReqFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateUserReqFavoriteColor) UnmarshalText(data []byte) error {
+	switch CreateUserReqFavoriteColor(data) {
+	case CreateUserReqFavoriteColorRed:
+		*s = CreateUserReqFavoriteColorRed
+		return nil
+	case CreateUserReqFavoriteColorGreen:
+		*s = CreateUserReqFavoriteColorGreen
+		return nil
+	case CreateUserReqFavoriteColorBlue:
+		*s = CreateUserReqFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -1908,6 +2066,11 @@ type DeleteCategoryNoContent struct{}
 
 func (*DeleteCategoryNoContent) deleteCategoryRes() {}
 
+// DeleteHatNoContent is response for DeleteHat operation.
+type DeleteHatNoContent struct{}
+
+func (*DeleteHatNoContent) deleteHatRes() {}
+
 // DeletePetNoContent is response for DeletePet operation.
 type DeletePetNoContent struct{}
 
@@ -1917,6 +2080,572 @@ func (*DeletePetNoContent) deletePetRes() {}
 type DeleteUserNoContent struct{}
 
 func (*DeleteUserNoContent) deleteUserRes() {}
+
+// Ref: #/components/schemas/HatCreate
+type HatCreate struct {
+	ID   int           `json:"id"`
+	Name string        `json:"name"`
+	Type HatCreateType `json:"type"`
+}
+
+// GetID returns the value of ID.
+func (s *HatCreate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *HatCreate) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *HatCreate) GetType() HatCreateType {
+	return s.Type
+}
+
+// SetID sets the value of ID.
+func (s *HatCreate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *HatCreate) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *HatCreate) SetType(val HatCreateType) {
+	s.Type = val
+}
+
+func (*HatCreate) createHatRes() {}
+
+type HatCreateType string
+
+const (
+	HatCreateTypeDad      HatCreateType = "dad"
+	HatCreateTypeTrucker  HatCreateType = "trucker"
+	HatCreateTypeSnapback HatCreateType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatCreateType) MarshalText() ([]byte, error) {
+	switch s {
+	case HatCreateTypeDad:
+		return []byte(s), nil
+	case HatCreateTypeTrucker:
+		return []byte(s), nil
+	case HatCreateTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatCreateType) UnmarshalText(data []byte) error {
+	switch HatCreateType(data) {
+	case HatCreateTypeDad:
+		*s = HatCreateTypeDad
+		return nil
+	case HatCreateTypeTrucker:
+		*s = HatCreateTypeTrucker
+		return nil
+	case HatCreateTypeSnapback:
+		*s = HatCreateTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/HatList
+type HatList struct {
+	ID   int         `json:"id"`
+	Name string      `json:"name"`
+	Type HatListType `json:"type"`
+}
+
+// GetID returns the value of ID.
+func (s *HatList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *HatList) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *HatList) GetType() HatListType {
+	return s.Type
+}
+
+// SetID sets the value of ID.
+func (s *HatList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *HatList) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *HatList) SetType(val HatListType) {
+	s.Type = val
+}
+
+type HatListType string
+
+const (
+	HatListTypeDad      HatListType = "dad"
+	HatListTypeTrucker  HatListType = "trucker"
+	HatListTypeSnapback HatListType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatListType) MarshalText() ([]byte, error) {
+	switch s {
+	case HatListTypeDad:
+		return []byte(s), nil
+	case HatListTypeTrucker:
+		return []byte(s), nil
+	case HatListTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatListType) UnmarshalText(data []byte) error {
+	switch HatListType(data) {
+	case HatListTypeDad:
+		*s = HatListTypeDad
+		return nil
+	case HatListTypeTrucker:
+		*s = HatListTypeTrucker
+		return nil
+	case HatListTypeSnapback:
+		*s = HatListTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/HatRead
+type HatRead struct {
+	ID   int         `json:"id"`
+	Name string      `json:"name"`
+	Type HatReadType `json:"type"`
+}
+
+// GetID returns the value of ID.
+func (s *HatRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *HatRead) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *HatRead) GetType() HatReadType {
+	return s.Type
+}
+
+// SetID sets the value of ID.
+func (s *HatRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *HatRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *HatRead) SetType(val HatReadType) {
+	s.Type = val
+}
+
+func (*HatRead) readHatRes() {}
+
+type HatReadType string
+
+const (
+	HatReadTypeDad      HatReadType = "dad"
+	HatReadTypeTrucker  HatReadType = "trucker"
+	HatReadTypeSnapback HatReadType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatReadType) MarshalText() ([]byte, error) {
+	switch s {
+	case HatReadTypeDad:
+		return []byte(s), nil
+	case HatReadTypeTrucker:
+		return []byte(s), nil
+	case HatReadTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatReadType) UnmarshalText(data []byte) error {
+	switch HatReadType(data) {
+	case HatReadTypeDad:
+		*s = HatReadTypeDad
+		return nil
+	case HatReadTypeTrucker:
+		*s = HatReadTypeTrucker
+		return nil
+	case HatReadTypeSnapback:
+		*s = HatReadTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/HatUpdate
+type HatUpdate struct {
+	ID   int           `json:"id"`
+	Name string        `json:"name"`
+	Type HatUpdateType `json:"type"`
+}
+
+// GetID returns the value of ID.
+func (s *HatUpdate) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *HatUpdate) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *HatUpdate) GetType() HatUpdateType {
+	return s.Type
+}
+
+// SetID sets the value of ID.
+func (s *HatUpdate) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *HatUpdate) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *HatUpdate) SetType(val HatUpdateType) {
+	s.Type = val
+}
+
+func (*HatUpdate) updateHatRes() {}
+
+type HatUpdateType string
+
+const (
+	HatUpdateTypeDad      HatUpdateType = "dad"
+	HatUpdateTypeTrucker  HatUpdateType = "trucker"
+	HatUpdateTypeSnapback HatUpdateType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatUpdateType) MarshalText() ([]byte, error) {
+	switch s {
+	case HatUpdateTypeDad:
+		return []byte(s), nil
+	case HatUpdateTypeTrucker:
+		return []byte(s), nil
+	case HatUpdateTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatUpdateType) UnmarshalText(data []byte) error {
+	switch HatUpdateType(data) {
+	case HatUpdateTypeDad:
+		*s = HatUpdateTypeDad
+		return nil
+	case HatUpdateTypeTrucker:
+		*s = HatUpdateTypeTrucker
+		return nil
+	case HatUpdateTypeSnapback:
+		*s = HatUpdateTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/Hat_WearerRead
+type HatWearerRead struct {
+	ID                int                               `json:"id"`
+	Name              string                            `json:"name"`
+	Age               int64                             `json:"age"`
+	Height            OptInt64                          `json:"height"`
+	FavoriteCatBreed  HatWearerReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     HatWearerReadFavoriteColor        `json:"favorite_color"`
+	FavoriteDogBreed  OptHatWearerReadFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptHatWearerReadFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s *HatWearerRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *HatWearerRead) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s *HatWearerRead) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s *HatWearerRead) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s *HatWearerRead) GetFavoriteCatBreed() HatWearerReadFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *HatWearerRead) GetFavoriteColor() HatWearerReadFavoriteColor {
+	return s.FavoriteColor
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s *HatWearerRead) GetFavoriteDogBreed() OptHatWearerReadFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s *HatWearerRead) GetFavoriteFishBreed() OptHatWearerReadFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *HatWearerRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *HatWearerRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *HatWearerRead) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *HatWearerRead) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *HatWearerRead) SetFavoriteCatBreed(val HatWearerReadFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *HatWearerRead) SetFavoriteColor(val HatWearerReadFavoriteColor) {
+	s.FavoriteColor = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *HatWearerRead) SetFavoriteDogBreed(val OptHatWearerReadFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *HatWearerRead) SetFavoriteFishBreed(val OptHatWearerReadFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
+}
+
+func (*HatWearerRead) readHatWearerRes() {}
+
+type HatWearerReadFavoriteCatBreed string
+
+const (
+	HatWearerReadFavoriteCatBreedSiamese HatWearerReadFavoriteCatBreed = "siamese"
+	HatWearerReadFavoriteCatBreedBengal  HatWearerReadFavoriteCatBreed = "bengal"
+	HatWearerReadFavoriteCatBreedLion    HatWearerReadFavoriteCatBreed = "lion"
+	HatWearerReadFavoriteCatBreedTiger   HatWearerReadFavoriteCatBreed = "tiger"
+	HatWearerReadFavoriteCatBreedLeopard HatWearerReadFavoriteCatBreed = "leopard"
+	HatWearerReadFavoriteCatBreedOther   HatWearerReadFavoriteCatBreed = "other"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatWearerReadFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case HatWearerReadFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case HatWearerReadFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case HatWearerReadFavoriteCatBreedLion:
+		return []byte(s), nil
+	case HatWearerReadFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case HatWearerReadFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case HatWearerReadFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatWearerReadFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch HatWearerReadFavoriteCatBreed(data) {
+	case HatWearerReadFavoriteCatBreedSiamese:
+		*s = HatWearerReadFavoriteCatBreedSiamese
+		return nil
+	case HatWearerReadFavoriteCatBreedBengal:
+		*s = HatWearerReadFavoriteCatBreedBengal
+		return nil
+	case HatWearerReadFavoriteCatBreedLion:
+		*s = HatWearerReadFavoriteCatBreedLion
+		return nil
+	case HatWearerReadFavoriteCatBreedTiger:
+		*s = HatWearerReadFavoriteCatBreedTiger
+		return nil
+	case HatWearerReadFavoriteCatBreedLeopard:
+		*s = HatWearerReadFavoriteCatBreedLeopard
+		return nil
+	case HatWearerReadFavoriteCatBreedOther:
+		*s = HatWearerReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type HatWearerReadFavoriteColor string
+
+const (
+	HatWearerReadFavoriteColorRed   HatWearerReadFavoriteColor = "red"
+	HatWearerReadFavoriteColorGreen HatWearerReadFavoriteColor = "green"
+	HatWearerReadFavoriteColorBlue  HatWearerReadFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatWearerReadFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case HatWearerReadFavoriteColorRed:
+		return []byte(s), nil
+	case HatWearerReadFavoriteColorGreen:
+		return []byte(s), nil
+	case HatWearerReadFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatWearerReadFavoriteColor) UnmarshalText(data []byte) error {
+	switch HatWearerReadFavoriteColor(data) {
+	case HatWearerReadFavoriteColorRed:
+		*s = HatWearerReadFavoriteColorRed
+		return nil
+	case HatWearerReadFavoriteColorGreen:
+		*s = HatWearerReadFavoriteColorGreen
+		return nil
+	case HatWearerReadFavoriteColorBlue:
+		*s = HatWearerReadFavoriteColorBlue
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type HatWearerReadFavoriteDogBreed string
+
+const (
+	HatWearerReadFavoriteDogBreedKuro HatWearerReadFavoriteDogBreed = "Kuro"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatWearerReadFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case HatWearerReadFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatWearerReadFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch HatWearerReadFavoriteDogBreed(data) {
+	case HatWearerReadFavoriteDogBreedKuro:
+		*s = HatWearerReadFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type HatWearerReadFavoriteFishBreed string
+
+const (
+	HatWearerReadFavoriteFishBreedGold  HatWearerReadFavoriteFishBreed = "gold"
+	HatWearerReadFavoriteFishBreedKoi   HatWearerReadFavoriteFishBreed = "koi"
+	HatWearerReadFavoriteFishBreedShark HatWearerReadFavoriteFishBreed = "shark"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s HatWearerReadFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case HatWearerReadFavoriteFishBreedGold:
+		return []byte(s), nil
+	case HatWearerReadFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case HatWearerReadFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *HatWearerReadFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch HatWearerReadFavoriteFishBreed(data) {
+	case HatWearerReadFavoriteFishBreedGold:
+		*s = HatWearerReadFavoriteFishBreedGold
+		return nil
+	case HatWearerReadFavoriteFishBreedKoi:
+		*s = HatWearerReadFavoriteFishBreedKoi
+		return nil
+	case HatWearerReadFavoriteFishBreedShark:
+		*s = HatWearerReadFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type ListAllTypesOKApplicationJSON []AllTypesList
 
@@ -1930,6 +2659,10 @@ type ListCategoryPetsOKApplicationJSON []CategoryPetsList
 
 func (*ListCategoryPetsOKApplicationJSON) listCategoryPetsRes() {}
 
+type ListHatOKApplicationJSON []HatList
+
+func (*ListHatOKApplicationJSON) listHatRes() {}
+
 type ListPetCategoriesOKApplicationJSON []PetCategoriesList
 
 func (*ListPetCategoriesOKApplicationJSON) listPetCategoriesRes() {}
@@ -1941,6 +2674,14 @@ func (*ListPetFriendsOKApplicationJSON) listPetFriendsRes() {}
 type ListPetOKApplicationJSON []PetList
 
 func (*ListPetOKApplicationJSON) listPetRes() {}
+
+type ListPetRescuerOKApplicationJSON []PetRescuerList
+
+func (*ListPetRescuerOKApplicationJSON) listPetRescuerRes() {}
+
+type ListUserAnimalsSavedOKApplicationJSON []UserAnimalsSavedList
+
+func (*ListUserAnimalsSavedOKApplicationJSON) listUserAnimalsSavedRes() {}
 
 type ListUserOKApplicationJSON []UserList
 
@@ -2220,6 +2961,98 @@ func (o OptFloat64) Get() (v float64, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptHatWearerReadFavoriteDogBreed returns new OptHatWearerReadFavoriteDogBreed with value set to v.
+func NewOptHatWearerReadFavoriteDogBreed(v HatWearerReadFavoriteDogBreed) OptHatWearerReadFavoriteDogBreed {
+	return OptHatWearerReadFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptHatWearerReadFavoriteDogBreed is optional HatWearerReadFavoriteDogBreed.
+type OptHatWearerReadFavoriteDogBreed struct {
+	Value HatWearerReadFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptHatWearerReadFavoriteDogBreed was set.
+func (o OptHatWearerReadFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptHatWearerReadFavoriteDogBreed) Reset() {
+	var v HatWearerReadFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptHatWearerReadFavoriteDogBreed) SetTo(v HatWearerReadFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptHatWearerReadFavoriteDogBreed) Get() (v HatWearerReadFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptHatWearerReadFavoriteDogBreed) Or(d HatWearerReadFavoriteDogBreed) HatWearerReadFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptHatWearerReadFavoriteFishBreed returns new OptHatWearerReadFavoriteFishBreed with value set to v.
+func NewOptHatWearerReadFavoriteFishBreed(v HatWearerReadFavoriteFishBreed) OptHatWearerReadFavoriteFishBreed {
+	return OptHatWearerReadFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptHatWearerReadFavoriteFishBreed is optional HatWearerReadFavoriteFishBreed.
+type OptHatWearerReadFavoriteFishBreed struct {
+	Value HatWearerReadFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptHatWearerReadFavoriteFishBreed was set.
+func (o OptHatWearerReadFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptHatWearerReadFavoriteFishBreed) Reset() {
+	var v HatWearerReadFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptHatWearerReadFavoriteFishBreed) SetTo(v HatWearerReadFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptHatWearerReadFavoriteFishBreed) Get() (v HatWearerReadFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptHatWearerReadFavoriteFishBreed) Or(d HatWearerReadFavoriteFishBreed) HatWearerReadFavoriteFishBreed {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2542,6 +3375,98 @@ func (o OptPetOwnerReadFavoriteFishBreed) Get() (v PetOwnerReadFavoriteFishBreed
 
 // Or returns value if set, or given parameter if does not.
 func (o OptPetOwnerReadFavoriteFishBreed) Or(d PetOwnerReadFavoriteFishBreed) PetOwnerReadFavoriteFishBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetRescuerListFavoriteDogBreed returns new OptPetRescuerListFavoriteDogBreed with value set to v.
+func NewOptPetRescuerListFavoriteDogBreed(v PetRescuerListFavoriteDogBreed) OptPetRescuerListFavoriteDogBreed {
+	return OptPetRescuerListFavoriteDogBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetRescuerListFavoriteDogBreed is optional PetRescuerListFavoriteDogBreed.
+type OptPetRescuerListFavoriteDogBreed struct {
+	Value PetRescuerListFavoriteDogBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetRescuerListFavoriteDogBreed was set.
+func (o OptPetRescuerListFavoriteDogBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetRescuerListFavoriteDogBreed) Reset() {
+	var v PetRescuerListFavoriteDogBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetRescuerListFavoriteDogBreed) SetTo(v PetRescuerListFavoriteDogBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetRescuerListFavoriteDogBreed) Get() (v PetRescuerListFavoriteDogBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetRescuerListFavoriteDogBreed) Or(d PetRescuerListFavoriteDogBreed) PetRescuerListFavoriteDogBreed {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPetRescuerListFavoriteFishBreed returns new OptPetRescuerListFavoriteFishBreed with value set to v.
+func NewOptPetRescuerListFavoriteFishBreed(v PetRescuerListFavoriteFishBreed) OptPetRescuerListFavoriteFishBreed {
+	return OptPetRescuerListFavoriteFishBreed{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPetRescuerListFavoriteFishBreed is optional PetRescuerListFavoriteFishBreed.
+type OptPetRescuerListFavoriteFishBreed struct {
+	Value PetRescuerListFavoriteFishBreed
+	Set   bool
+}
+
+// IsSet returns true if OptPetRescuerListFavoriteFishBreed was set.
+func (o OptPetRescuerListFavoriteFishBreed) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPetRescuerListFavoriteFishBreed) Reset() {
+	var v PetRescuerListFavoriteFishBreed
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPetRescuerListFavoriteFishBreed) SetTo(v PetRescuerListFavoriteFishBreed) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPetRescuerListFavoriteFishBreed) Get() (v PetRescuerListFavoriteFishBreed, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPetRescuerListFavoriteFishBreed) Or(d PetRescuerListFavoriteFishBreed) PetRescuerListFavoriteFishBreed {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -3459,6 +4384,7 @@ type PetCreateOwner struct {
 	Age               int64                              `json:"age"`
 	Height            OptInt64                           `json:"height"`
 	FavoriteCatBreed  PetCreateOwnerFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     PetCreateOwnerFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptPetCreateOwnerFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptPetCreateOwnerFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -3486,6 +4412,11 @@ func (s *PetCreateOwner) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *PetCreateOwner) GetFavoriteCatBreed() PetCreateOwnerFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *PetCreateOwner) GetFavoriteColor() PetCreateOwnerFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -3521,6 +4452,11 @@ func (s *PetCreateOwner) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *PetCreateOwner) SetFavoriteCatBreed(val PetCreateOwnerFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *PetCreateOwner) SetFavoriteColor(val PetCreateOwnerFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -3584,6 +4520,45 @@ func (s *PetCreateOwnerFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case PetCreateOwnerFavoriteCatBreedOther:
 		*s = PetCreateOwnerFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type PetCreateOwnerFavoriteColor string
+
+const (
+	PetCreateOwnerFavoriteColorRed   PetCreateOwnerFavoriteColor = "red"
+	PetCreateOwnerFavoriteColorGreen PetCreateOwnerFavoriteColor = "green"
+	PetCreateOwnerFavoriteColorBlue  PetCreateOwnerFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetCreateOwnerFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case PetCreateOwnerFavoriteColorRed:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteColorGreen:
+		return []byte(s), nil
+	case PetCreateOwnerFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetCreateOwnerFavoriteColor) UnmarshalText(data []byte) error {
+	switch PetCreateOwnerFavoriteColor(data) {
+	case PetCreateOwnerFavoriteColorRed:
+		*s = PetCreateOwnerFavoriteColorRed
+		return nil
+	case PetCreateOwnerFavoriteColorGreen:
+		*s = PetCreateOwnerFavoriteColorGreen
+		return nil
+	case PetCreateOwnerFavoriteColorBlue:
+		*s = PetCreateOwnerFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -3803,6 +4778,7 @@ type PetOwnerRead struct {
 	Age               int64                            `json:"age"`
 	Height            OptInt64                         `json:"height"`
 	FavoriteCatBreed  PetOwnerReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     PetOwnerReadFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptPetOwnerReadFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptPetOwnerReadFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -3830,6 +4806,11 @@ func (s *PetOwnerRead) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *PetOwnerRead) GetFavoriteCatBreed() PetOwnerReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *PetOwnerRead) GetFavoriteColor() PetOwnerReadFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -3865,6 +4846,11 @@ func (s *PetOwnerRead) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *PetOwnerRead) SetFavoriteCatBreed(val PetOwnerReadFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *PetOwnerRead) SetFavoriteColor(val PetOwnerReadFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -3930,6 +4916,45 @@ func (s *PetOwnerReadFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case PetOwnerReadFavoriteCatBreedOther:
 		*s = PetOwnerReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type PetOwnerReadFavoriteColor string
+
+const (
+	PetOwnerReadFavoriteColorRed   PetOwnerReadFavoriteColor = "red"
+	PetOwnerReadFavoriteColorGreen PetOwnerReadFavoriteColor = "green"
+	PetOwnerReadFavoriteColorBlue  PetOwnerReadFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetOwnerReadFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case PetOwnerReadFavoriteColorRed:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteColorGreen:
+		return []byte(s), nil
+	case PetOwnerReadFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetOwnerReadFavoriteColor) UnmarshalText(data []byte) error {
+	switch PetOwnerReadFavoriteColor(data) {
+	case PetOwnerReadFavoriteColorRed:
+		*s = PetOwnerReadFavoriteColorRed
+		return nil
+	case PetOwnerReadFavoriteColorGreen:
+		*s = PetOwnerReadFavoriteColorGreen
+		return nil
+	case PetOwnerReadFavoriteColorBlue:
+		*s = PetOwnerReadFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -4074,6 +5099,260 @@ func (s *PetRead) SetHeight(val OptInt) {
 
 func (*PetRead) readPetRes() {}
 
+// Ref: #/components/schemas/Pet_RescuerList
+type PetRescuerList struct {
+	ID                int                                `json:"id"`
+	Name              string                             `json:"name"`
+	Age               int64                              `json:"age"`
+	Height            OptInt64                           `json:"height"`
+	FavoriteCatBreed  PetRescuerListFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     PetRescuerListFavoriteColor        `json:"favorite_color"`
+	FavoriteDogBreed  OptPetRescuerListFavoriteDogBreed  `json:"favorite_dog_breed"`
+	FavoriteFishBreed OptPetRescuerListFavoriteFishBreed `json:"favorite_fish_breed"`
+}
+
+// GetID returns the value of ID.
+func (s *PetRescuerList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *PetRescuerList) GetName() string {
+	return s.Name
+}
+
+// GetAge returns the value of Age.
+func (s *PetRescuerList) GetAge() int64 {
+	return s.Age
+}
+
+// GetHeight returns the value of Height.
+func (s *PetRescuerList) GetHeight() OptInt64 {
+	return s.Height
+}
+
+// GetFavoriteCatBreed returns the value of FavoriteCatBreed.
+func (s *PetRescuerList) GetFavoriteCatBreed() PetRescuerListFavoriteCatBreed {
+	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *PetRescuerList) GetFavoriteColor() PetRescuerListFavoriteColor {
+	return s.FavoriteColor
+}
+
+// GetFavoriteDogBreed returns the value of FavoriteDogBreed.
+func (s *PetRescuerList) GetFavoriteDogBreed() OptPetRescuerListFavoriteDogBreed {
+	return s.FavoriteDogBreed
+}
+
+// GetFavoriteFishBreed returns the value of FavoriteFishBreed.
+func (s *PetRescuerList) GetFavoriteFishBreed() OptPetRescuerListFavoriteFishBreed {
+	return s.FavoriteFishBreed
+}
+
+// SetID sets the value of ID.
+func (s *PetRescuerList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *PetRescuerList) SetName(val string) {
+	s.Name = val
+}
+
+// SetAge sets the value of Age.
+func (s *PetRescuerList) SetAge(val int64) {
+	s.Age = val
+}
+
+// SetHeight sets the value of Height.
+func (s *PetRescuerList) SetHeight(val OptInt64) {
+	s.Height = val
+}
+
+// SetFavoriteCatBreed sets the value of FavoriteCatBreed.
+func (s *PetRescuerList) SetFavoriteCatBreed(val PetRescuerListFavoriteCatBreed) {
+	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *PetRescuerList) SetFavoriteColor(val PetRescuerListFavoriteColor) {
+	s.FavoriteColor = val
+}
+
+// SetFavoriteDogBreed sets the value of FavoriteDogBreed.
+func (s *PetRescuerList) SetFavoriteDogBreed(val OptPetRescuerListFavoriteDogBreed) {
+	s.FavoriteDogBreed = val
+}
+
+// SetFavoriteFishBreed sets the value of FavoriteFishBreed.
+func (s *PetRescuerList) SetFavoriteFishBreed(val OptPetRescuerListFavoriteFishBreed) {
+	s.FavoriteFishBreed = val
+}
+
+type PetRescuerListFavoriteCatBreed string
+
+const (
+	PetRescuerListFavoriteCatBreedSiamese PetRescuerListFavoriteCatBreed = "siamese"
+	PetRescuerListFavoriteCatBreedBengal  PetRescuerListFavoriteCatBreed = "bengal"
+	PetRescuerListFavoriteCatBreedLion    PetRescuerListFavoriteCatBreed = "lion"
+	PetRescuerListFavoriteCatBreedTiger   PetRescuerListFavoriteCatBreed = "tiger"
+	PetRescuerListFavoriteCatBreedLeopard PetRescuerListFavoriteCatBreed = "leopard"
+	PetRescuerListFavoriteCatBreedOther   PetRescuerListFavoriteCatBreed = "other"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetRescuerListFavoriteCatBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetRescuerListFavoriteCatBreedSiamese:
+		return []byte(s), nil
+	case PetRescuerListFavoriteCatBreedBengal:
+		return []byte(s), nil
+	case PetRescuerListFavoriteCatBreedLion:
+		return []byte(s), nil
+	case PetRescuerListFavoriteCatBreedTiger:
+		return []byte(s), nil
+	case PetRescuerListFavoriteCatBreedLeopard:
+		return []byte(s), nil
+	case PetRescuerListFavoriteCatBreedOther:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetRescuerListFavoriteCatBreed) UnmarshalText(data []byte) error {
+	switch PetRescuerListFavoriteCatBreed(data) {
+	case PetRescuerListFavoriteCatBreedSiamese:
+		*s = PetRescuerListFavoriteCatBreedSiamese
+		return nil
+	case PetRescuerListFavoriteCatBreedBengal:
+		*s = PetRescuerListFavoriteCatBreedBengal
+		return nil
+	case PetRescuerListFavoriteCatBreedLion:
+		*s = PetRescuerListFavoriteCatBreedLion
+		return nil
+	case PetRescuerListFavoriteCatBreedTiger:
+		*s = PetRescuerListFavoriteCatBreedTiger
+		return nil
+	case PetRescuerListFavoriteCatBreedLeopard:
+		*s = PetRescuerListFavoriteCatBreedLeopard
+		return nil
+	case PetRescuerListFavoriteCatBreedOther:
+		*s = PetRescuerListFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type PetRescuerListFavoriteColor string
+
+const (
+	PetRescuerListFavoriteColorRed   PetRescuerListFavoriteColor = "red"
+	PetRescuerListFavoriteColorGreen PetRescuerListFavoriteColor = "green"
+	PetRescuerListFavoriteColorBlue  PetRescuerListFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetRescuerListFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case PetRescuerListFavoriteColorRed:
+		return []byte(s), nil
+	case PetRescuerListFavoriteColorGreen:
+		return []byte(s), nil
+	case PetRescuerListFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetRescuerListFavoriteColor) UnmarshalText(data []byte) error {
+	switch PetRescuerListFavoriteColor(data) {
+	case PetRescuerListFavoriteColorRed:
+		*s = PetRescuerListFavoriteColorRed
+		return nil
+	case PetRescuerListFavoriteColorGreen:
+		*s = PetRescuerListFavoriteColorGreen
+		return nil
+	case PetRescuerListFavoriteColorBlue:
+		*s = PetRescuerListFavoriteColorBlue
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type PetRescuerListFavoriteDogBreed string
+
+const (
+	PetRescuerListFavoriteDogBreedKuro PetRescuerListFavoriteDogBreed = "Kuro"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetRescuerListFavoriteDogBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetRescuerListFavoriteDogBreedKuro:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetRescuerListFavoriteDogBreed) UnmarshalText(data []byte) error {
+	switch PetRescuerListFavoriteDogBreed(data) {
+	case PetRescuerListFavoriteDogBreedKuro:
+		*s = PetRescuerListFavoriteDogBreedKuro
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type PetRescuerListFavoriteFishBreed string
+
+const (
+	PetRescuerListFavoriteFishBreedGold  PetRescuerListFavoriteFishBreed = "gold"
+	PetRescuerListFavoriteFishBreedKoi   PetRescuerListFavoriteFishBreed = "koi"
+	PetRescuerListFavoriteFishBreedShark PetRescuerListFavoriteFishBreed = "shark"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PetRescuerListFavoriteFishBreed) MarshalText() ([]byte, error) {
+	switch s {
+	case PetRescuerListFavoriteFishBreedGold:
+		return []byte(s), nil
+	case PetRescuerListFavoriteFishBreedKoi:
+		return []byte(s), nil
+	case PetRescuerListFavoriteFishBreedShark:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PetRescuerListFavoriteFishBreed) UnmarshalText(data []byte) error {
+	switch PetRescuerListFavoriteFishBreed(data) {
+	case PetRescuerListFavoriteFishBreedGold:
+		*s = PetRescuerListFavoriteFishBreedGold
+		return nil
+	case PetRescuerListFavoriteFishBreedKoi:
+		*s = PetRescuerListFavoriteFishBreedKoi
+		return nil
+	case PetRescuerListFavoriteFishBreedShark:
+		*s = PetRescuerListFavoriteFishBreedShark
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/PetUpdate
 type PetUpdate struct {
 	ID       int         `json:"id"`
@@ -4182,32 +5461,41 @@ func (s *R400) SetErrors(val jx.Raw) {
 	s.Errors = val
 }
 
-func (*R400) createAllTypesRes()     {}
-func (*R400) createCategoryRes()     {}
-func (*R400) createPetRes()          {}
-func (*R400) createUserRes()         {}
-func (*R400) deleteAllTypesRes()     {}
-func (*R400) deleteCategoryRes()     {}
-func (*R400) deletePetRes()          {}
-func (*R400) deleteUserRes()         {}
-func (*R400) listAllTypesRes()       {}
-func (*R400) listCategoryPetsRes()   {}
-func (*R400) listCategoryRes()       {}
-func (*R400) listPetCategoriesRes()  {}
-func (*R400) listPetFriendsRes()     {}
-func (*R400) listPetRes()            {}
-func (*R400) listUserPetsRes()       {}
-func (*R400) listUserRes()           {}
-func (*R400) readAllTypesRes()       {}
-func (*R400) readCategoryRes()       {}
-func (*R400) readPetOwnerRes()       {}
-func (*R400) readPetRes()            {}
-func (*R400) readUserBestFriendRes() {}
-func (*R400) readUserRes()           {}
-func (*R400) updateAllTypesRes()     {}
-func (*R400) updateCategoryRes()     {}
-func (*R400) updatePetRes()          {}
-func (*R400) updateUserRes()         {}
+func (*R400) createAllTypesRes()       {}
+func (*R400) createCategoryRes()       {}
+func (*R400) createHatRes()            {}
+func (*R400) createPetRes()            {}
+func (*R400) createUserRes()           {}
+func (*R400) deleteAllTypesRes()       {}
+func (*R400) deleteCategoryRes()       {}
+func (*R400) deleteHatRes()            {}
+func (*R400) deletePetRes()            {}
+func (*R400) deleteUserRes()           {}
+func (*R400) listAllTypesRes()         {}
+func (*R400) listCategoryPetsRes()     {}
+func (*R400) listCategoryRes()         {}
+func (*R400) listHatRes()              {}
+func (*R400) listPetCategoriesRes()    {}
+func (*R400) listPetFriendsRes()       {}
+func (*R400) listPetRes()              {}
+func (*R400) listPetRescuerRes()       {}
+func (*R400) listUserAnimalsSavedRes() {}
+func (*R400) listUserPetsRes()         {}
+func (*R400) listUserRes()             {}
+func (*R400) readAllTypesRes()         {}
+func (*R400) readCategoryRes()         {}
+func (*R400) readHatRes()              {}
+func (*R400) readHatWearerRes()        {}
+func (*R400) readPetOwnerRes()         {}
+func (*R400) readPetRes()              {}
+func (*R400) readUserBestFriendRes()   {}
+func (*R400) readUserFavoriteHatRes()  {}
+func (*R400) readUserRes()             {}
+func (*R400) updateAllTypesRes()       {}
+func (*R400) updateCategoryRes()       {}
+func (*R400) updateHatRes()            {}
+func (*R400) updatePetRes()            {}
+func (*R400) updateUserRes()           {}
 
 type R404 struct {
 	Code   int    `json:"code"`
@@ -4245,28 +5533,36 @@ func (s *R404) SetErrors(val jx.Raw) {
 	s.Errors = val
 }
 
-func (*R404) deleteAllTypesRes()     {}
-func (*R404) deleteCategoryRes()     {}
-func (*R404) deletePetRes()          {}
-func (*R404) deleteUserRes()         {}
-func (*R404) listAllTypesRes()       {}
-func (*R404) listCategoryPetsRes()   {}
-func (*R404) listCategoryRes()       {}
-func (*R404) listPetCategoriesRes()  {}
-func (*R404) listPetFriendsRes()     {}
-func (*R404) listPetRes()            {}
-func (*R404) listUserPetsRes()       {}
-func (*R404) listUserRes()           {}
-func (*R404) readAllTypesRes()       {}
-func (*R404) readCategoryRes()       {}
-func (*R404) readPetOwnerRes()       {}
-func (*R404) readPetRes()            {}
-func (*R404) readUserBestFriendRes() {}
-func (*R404) readUserRes()           {}
-func (*R404) updateAllTypesRes()     {}
-func (*R404) updateCategoryRes()     {}
-func (*R404) updatePetRes()          {}
-func (*R404) updateUserRes()         {}
+func (*R404) deleteAllTypesRes()       {}
+func (*R404) deleteCategoryRes()       {}
+func (*R404) deleteHatRes()            {}
+func (*R404) deletePetRes()            {}
+func (*R404) deleteUserRes()           {}
+func (*R404) listAllTypesRes()         {}
+func (*R404) listCategoryPetsRes()     {}
+func (*R404) listCategoryRes()         {}
+func (*R404) listHatRes()              {}
+func (*R404) listPetCategoriesRes()    {}
+func (*R404) listPetFriendsRes()       {}
+func (*R404) listPetRes()              {}
+func (*R404) listPetRescuerRes()       {}
+func (*R404) listUserAnimalsSavedRes() {}
+func (*R404) listUserPetsRes()         {}
+func (*R404) listUserRes()             {}
+func (*R404) readAllTypesRes()         {}
+func (*R404) readCategoryRes()         {}
+func (*R404) readHatRes()              {}
+func (*R404) readHatWearerRes()        {}
+func (*R404) readPetOwnerRes()         {}
+func (*R404) readPetRes()              {}
+func (*R404) readUserBestFriendRes()   {}
+func (*R404) readUserFavoriteHatRes()  {}
+func (*R404) readUserRes()             {}
+func (*R404) updateAllTypesRes()       {}
+func (*R404) updateCategoryRes()       {}
+func (*R404) updateHatRes()            {}
+func (*R404) updatePetRes()            {}
+func (*R404) updateUserRes()           {}
 
 type R409 struct {
 	Code   int    `json:"code"`
@@ -4304,32 +5600,41 @@ func (s *R409) SetErrors(val jx.Raw) {
 	s.Errors = val
 }
 
-func (*R409) createAllTypesRes()     {}
-func (*R409) createCategoryRes()     {}
-func (*R409) createPetRes()          {}
-func (*R409) createUserRes()         {}
-func (*R409) deleteAllTypesRes()     {}
-func (*R409) deleteCategoryRes()     {}
-func (*R409) deletePetRes()          {}
-func (*R409) deleteUserRes()         {}
-func (*R409) listAllTypesRes()       {}
-func (*R409) listCategoryPetsRes()   {}
-func (*R409) listCategoryRes()       {}
-func (*R409) listPetCategoriesRes()  {}
-func (*R409) listPetFriendsRes()     {}
-func (*R409) listPetRes()            {}
-func (*R409) listUserPetsRes()       {}
-func (*R409) listUserRes()           {}
-func (*R409) readAllTypesRes()       {}
-func (*R409) readCategoryRes()       {}
-func (*R409) readPetOwnerRes()       {}
-func (*R409) readPetRes()            {}
-func (*R409) readUserBestFriendRes() {}
-func (*R409) readUserRes()           {}
-func (*R409) updateAllTypesRes()     {}
-func (*R409) updateCategoryRes()     {}
-func (*R409) updatePetRes()          {}
-func (*R409) updateUserRes()         {}
+func (*R409) createAllTypesRes()       {}
+func (*R409) createCategoryRes()       {}
+func (*R409) createHatRes()            {}
+func (*R409) createPetRes()            {}
+func (*R409) createUserRes()           {}
+func (*R409) deleteAllTypesRes()       {}
+func (*R409) deleteCategoryRes()       {}
+func (*R409) deleteHatRes()            {}
+func (*R409) deletePetRes()            {}
+func (*R409) deleteUserRes()           {}
+func (*R409) listAllTypesRes()         {}
+func (*R409) listCategoryPetsRes()     {}
+func (*R409) listCategoryRes()         {}
+func (*R409) listHatRes()              {}
+func (*R409) listPetCategoriesRes()    {}
+func (*R409) listPetFriendsRes()       {}
+func (*R409) listPetRes()              {}
+func (*R409) listPetRescuerRes()       {}
+func (*R409) listUserAnimalsSavedRes() {}
+func (*R409) listUserPetsRes()         {}
+func (*R409) listUserRes()             {}
+func (*R409) readAllTypesRes()         {}
+func (*R409) readCategoryRes()         {}
+func (*R409) readHatRes()              {}
+func (*R409) readHatWearerRes()        {}
+func (*R409) readPetOwnerRes()         {}
+func (*R409) readPetRes()              {}
+func (*R409) readUserBestFriendRes()   {}
+func (*R409) readUserFavoriteHatRes()  {}
+func (*R409) readUserRes()             {}
+func (*R409) updateAllTypesRes()       {}
+func (*R409) updateCategoryRes()       {}
+func (*R409) updateHatRes()            {}
+func (*R409) updatePetRes()            {}
+func (*R409) updateUserRes()           {}
 
 type R500 struct {
 	Code   int    `json:"code"`
@@ -4367,32 +5672,41 @@ func (s *R500) SetErrors(val jx.Raw) {
 	s.Errors = val
 }
 
-func (*R500) createAllTypesRes()     {}
-func (*R500) createCategoryRes()     {}
-func (*R500) createPetRes()          {}
-func (*R500) createUserRes()         {}
-func (*R500) deleteAllTypesRes()     {}
-func (*R500) deleteCategoryRes()     {}
-func (*R500) deletePetRes()          {}
-func (*R500) deleteUserRes()         {}
-func (*R500) listAllTypesRes()       {}
-func (*R500) listCategoryPetsRes()   {}
-func (*R500) listCategoryRes()       {}
-func (*R500) listPetCategoriesRes()  {}
-func (*R500) listPetFriendsRes()     {}
-func (*R500) listPetRes()            {}
-func (*R500) listUserPetsRes()       {}
-func (*R500) listUserRes()           {}
-func (*R500) readAllTypesRes()       {}
-func (*R500) readCategoryRes()       {}
-func (*R500) readPetOwnerRes()       {}
-func (*R500) readPetRes()            {}
-func (*R500) readUserBestFriendRes() {}
-func (*R500) readUserRes()           {}
-func (*R500) updateAllTypesRes()     {}
-func (*R500) updateCategoryRes()     {}
-func (*R500) updatePetRes()          {}
-func (*R500) updateUserRes()         {}
+func (*R500) createAllTypesRes()       {}
+func (*R500) createCategoryRes()       {}
+func (*R500) createHatRes()            {}
+func (*R500) createPetRes()            {}
+func (*R500) createUserRes()           {}
+func (*R500) deleteAllTypesRes()       {}
+func (*R500) deleteCategoryRes()       {}
+func (*R500) deleteHatRes()            {}
+func (*R500) deletePetRes()            {}
+func (*R500) deleteUserRes()           {}
+func (*R500) listAllTypesRes()         {}
+func (*R500) listCategoryPetsRes()     {}
+func (*R500) listCategoryRes()         {}
+func (*R500) listHatRes()              {}
+func (*R500) listPetCategoriesRes()    {}
+func (*R500) listPetFriendsRes()       {}
+func (*R500) listPetRes()              {}
+func (*R500) listPetRescuerRes()       {}
+func (*R500) listUserAnimalsSavedRes() {}
+func (*R500) listUserPetsRes()         {}
+func (*R500) listUserRes()             {}
+func (*R500) readAllTypesRes()         {}
+func (*R500) readCategoryRes()         {}
+func (*R500) readHatRes()              {}
+func (*R500) readHatWearerRes()        {}
+func (*R500) readPetOwnerRes()         {}
+func (*R500) readPetRes()              {}
+func (*R500) readUserBestFriendRes()   {}
+func (*R500) readUserFavoriteHatRes()  {}
+func (*R500) readUserRes()             {}
+func (*R500) updateAllTypesRes()       {}
+func (*R500) updateCategoryRes()       {}
+func (*R500) updateHatRes()            {}
+func (*R500) updatePetRes()            {}
+func (*R500) updateUserRes()           {}
 
 type UpdateAllTypesReq struct {
 	Int        OptInt                    `json:"int"`
@@ -4675,6 +5989,31 @@ func (s *UpdateCategoryReq) SetPets(val []int) {
 	s.Pets = val
 }
 
+type UpdateHatReq struct {
+	Name   OptString `json:"name"`
+	Wearer OptInt    `json:"wearer"`
+}
+
+// GetName returns the value of Name.
+func (s *UpdateHatReq) GetName() OptString {
+	return s.Name
+}
+
+// GetWearer returns the value of Wearer.
+func (s *UpdateHatReq) GetWearer() OptInt {
+	return s.Wearer
+}
+
+// SetName sets the value of Name.
+func (s *UpdateHatReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetWearer sets the value of Wearer.
+func (s *UpdateHatReq) SetWearer(val OptInt) {
+	s.Wearer = val
+}
+
 type UpdatePetReq struct {
 	Name       OptString   `json:"name"`
 	Weight     OptInt      `json:"weight"`
@@ -4683,6 +6022,7 @@ type UpdatePetReq struct {
 	Height     OptInt      `json:"height"`
 	Categories []int       `json:"categories"`
 	Owner      OptInt      `json:"owner"`
+	Rescuer    []int       `json:"rescuer"`
 	Friends    []int       `json:"friends"`
 }
 
@@ -4719,6 +6059,11 @@ func (s *UpdatePetReq) GetCategories() []int {
 // GetOwner returns the value of Owner.
 func (s *UpdatePetReq) GetOwner() OptInt {
 	return s.Owner
+}
+
+// GetRescuer returns the value of Rescuer.
+func (s *UpdatePetReq) GetRescuer() []int {
+	return s.Rescuer
 }
 
 // GetFriends returns the value of Friends.
@@ -4761,6 +6106,11 @@ func (s *UpdatePetReq) SetOwner(val OptInt) {
 	s.Owner = val
 }
 
+// SetRescuer sets the value of Rescuer.
+func (s *UpdatePetReq) SetRescuer(val []int) {
+	s.Rescuer = val
+}
+
 // SetFriends sets the value of Friends.
 func (s *UpdatePetReq) SetFriends(val []int) {
 	s.Friends = val
@@ -4774,7 +6124,9 @@ type UpdateUserReq struct {
 	FavoriteDogBreed  OptUpdateUserReqFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUpdateUserReqFavoriteFishBreed `json:"favorite_fish_breed"`
 	Pets              []int                             `json:"pets"`
+	AnimalsSaved      []int                             `json:"animals_saved"`
 	BestFriend        OptInt                            `json:"best_friend"`
+	FavoriteHat       OptInt                            `json:"favorite_hat"`
 }
 
 // GetName returns the value of Name.
@@ -4812,9 +6164,19 @@ func (s *UpdateUserReq) GetPets() []int {
 	return s.Pets
 }
 
+// GetAnimalsSaved returns the value of AnimalsSaved.
+func (s *UpdateUserReq) GetAnimalsSaved() []int {
+	return s.AnimalsSaved
+}
+
 // GetBestFriend returns the value of BestFriend.
 func (s *UpdateUserReq) GetBestFriend() OptInt {
 	return s.BestFriend
+}
+
+// GetFavoriteHat returns the value of FavoriteHat.
+func (s *UpdateUserReq) GetFavoriteHat() OptInt {
+	return s.FavoriteHat
 }
 
 // SetName sets the value of Name.
@@ -4852,9 +6214,19 @@ func (s *UpdateUserReq) SetPets(val []int) {
 	s.Pets = val
 }
 
+// SetAnimalsSaved sets the value of AnimalsSaved.
+func (s *UpdateUserReq) SetAnimalsSaved(val []int) {
+	s.AnimalsSaved = val
+}
+
 // SetBestFriend sets the value of BestFriend.
 func (s *UpdateUserReq) SetBestFriend(val OptInt) {
 	s.BestFriend = val
+}
+
+// SetFavoriteHat sets the value of FavoriteHat.
+func (s *UpdateUserReq) SetFavoriteHat(val OptInt) {
+	s.FavoriteHat = val
 }
 
 type UpdateUserReqFavoriteCatBreed string
@@ -4980,6 +6352,76 @@ func (s *UpdateUserReqFavoriteFishBreed) UnmarshalText(data []byte) error {
 	}
 }
 
+// Ref: #/components/schemas/User_AnimalsSavedList
+type UserAnimalsSavedList struct {
+	ID       int         `json:"id"`
+	Name     string      `json:"name"`
+	Weight   OptInt      `json:"weight"`
+	Birthday OptDateTime `json:"birthday"`
+	TagID    []byte      `json:"tag_id"`
+	Height   OptInt      `json:"height"`
+}
+
+// GetID returns the value of ID.
+func (s *UserAnimalsSavedList) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *UserAnimalsSavedList) GetName() string {
+	return s.Name
+}
+
+// GetWeight returns the value of Weight.
+func (s *UserAnimalsSavedList) GetWeight() OptInt {
+	return s.Weight
+}
+
+// GetBirthday returns the value of Birthday.
+func (s *UserAnimalsSavedList) GetBirthday() OptDateTime {
+	return s.Birthday
+}
+
+// GetTagID returns the value of TagID.
+func (s *UserAnimalsSavedList) GetTagID() []byte {
+	return s.TagID
+}
+
+// GetHeight returns the value of Height.
+func (s *UserAnimalsSavedList) GetHeight() OptInt {
+	return s.Height
+}
+
+// SetID sets the value of ID.
+func (s *UserAnimalsSavedList) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserAnimalsSavedList) SetName(val string) {
+	s.Name = val
+}
+
+// SetWeight sets the value of Weight.
+func (s *UserAnimalsSavedList) SetWeight(val OptInt) {
+	s.Weight = val
+}
+
+// SetBirthday sets the value of Birthday.
+func (s *UserAnimalsSavedList) SetBirthday(val OptDateTime) {
+	s.Birthday = val
+}
+
+// SetTagID sets the value of TagID.
+func (s *UserAnimalsSavedList) SetTagID(val []byte) {
+	s.TagID = val
+}
+
+// SetHeight sets the value of Height.
+func (s *UserAnimalsSavedList) SetHeight(val OptInt) {
+	s.Height = val
+}
+
 // Ref: #/components/schemas/User_BestFriendRead
 type UserBestFriendRead struct {
 	ID                int                                    `json:"id"`
@@ -4987,6 +6429,7 @@ type UserBestFriendRead struct {
 	Age               int64                                  `json:"age"`
 	Height            OptInt64                               `json:"height"`
 	FavoriteCatBreed  UserBestFriendReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     UserBestFriendReadFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptUserBestFriendReadFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUserBestFriendReadFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -5014,6 +6457,11 @@ func (s *UserBestFriendRead) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *UserBestFriendRead) GetFavoriteCatBreed() UserBestFriendReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *UserBestFriendRead) GetFavoriteColor() UserBestFriendReadFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -5049,6 +6497,11 @@ func (s *UserBestFriendRead) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *UserBestFriendRead) SetFavoriteCatBreed(val UserBestFriendReadFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *UserBestFriendRead) SetFavoriteColor(val UserBestFriendReadFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -5114,6 +6567,45 @@ func (s *UserBestFriendReadFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case UserBestFriendReadFavoriteCatBreedOther:
 		*s = UserBestFriendReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type UserBestFriendReadFavoriteColor string
+
+const (
+	UserBestFriendReadFavoriteColorRed   UserBestFriendReadFavoriteColor = "red"
+	UserBestFriendReadFavoriteColorGreen UserBestFriendReadFavoriteColor = "green"
+	UserBestFriendReadFavoriteColorBlue  UserBestFriendReadFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserBestFriendReadFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case UserBestFriendReadFavoriteColorRed:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteColorGreen:
+		return []byte(s), nil
+	case UserBestFriendReadFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserBestFriendReadFavoriteColor) UnmarshalText(data []byte) error {
+	switch UserBestFriendReadFavoriteColor(data) {
+	case UserBestFriendReadFavoriteColorRed:
+		*s = UserBestFriendReadFavoriteColorRed
+		return nil
+	case UserBestFriendReadFavoriteColorGreen:
+		*s = UserBestFriendReadFavoriteColorGreen
+		return nil
+	case UserBestFriendReadFavoriteColorBlue:
+		*s = UserBestFriendReadFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -5193,6 +6685,7 @@ type UserCreate struct {
 	Age               int64                          `json:"age"`
 	Height            OptInt64                       `json:"height"`
 	FavoriteCatBreed  UserCreateFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     UserCreateFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptUserCreateFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUserCreateFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -5220,6 +6713,11 @@ func (s *UserCreate) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *UserCreate) GetFavoriteCatBreed() UserCreateFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *UserCreate) GetFavoriteColor() UserCreateFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -5255,6 +6753,11 @@ func (s *UserCreate) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *UserCreate) SetFavoriteCatBreed(val UserCreateFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *UserCreate) SetFavoriteColor(val UserCreateFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -5320,6 +6823,45 @@ func (s *UserCreateFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case UserCreateFavoriteCatBreedOther:
 		*s = UserCreateFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type UserCreateFavoriteColor string
+
+const (
+	UserCreateFavoriteColorRed   UserCreateFavoriteColor = "red"
+	UserCreateFavoriteColorGreen UserCreateFavoriteColor = "green"
+	UserCreateFavoriteColorBlue  UserCreateFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserCreateFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case UserCreateFavoriteColorRed:
+		return []byte(s), nil
+	case UserCreateFavoriteColorGreen:
+		return []byte(s), nil
+	case UserCreateFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserCreateFavoriteColor) UnmarshalText(data []byte) error {
+	switch UserCreateFavoriteColor(data) {
+	case UserCreateFavoriteColorRed:
+		*s = UserCreateFavoriteColorRed
+		return nil
+	case UserCreateFavoriteColorGreen:
+		*s = UserCreateFavoriteColorGreen
+		return nil
+	case UserCreateFavoriteColorBlue:
+		*s = UserCreateFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -5392,6 +6934,84 @@ func (s *UserCreateFavoriteFishBreed) UnmarshalText(data []byte) error {
 	}
 }
 
+// Ref: #/components/schemas/User_FavoriteHatRead
+type UserFavoriteHatRead struct {
+	ID   int                     `json:"id"`
+	Name string                  `json:"name"`
+	Type UserFavoriteHatReadType `json:"type"`
+}
+
+// GetID returns the value of ID.
+func (s *UserFavoriteHatRead) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *UserFavoriteHatRead) GetName() string {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *UserFavoriteHatRead) GetType() UserFavoriteHatReadType {
+	return s.Type
+}
+
+// SetID sets the value of ID.
+func (s *UserFavoriteHatRead) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *UserFavoriteHatRead) SetName(val string) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *UserFavoriteHatRead) SetType(val UserFavoriteHatReadType) {
+	s.Type = val
+}
+
+func (*UserFavoriteHatRead) readUserFavoriteHatRes() {}
+
+type UserFavoriteHatReadType string
+
+const (
+	UserFavoriteHatReadTypeDad      UserFavoriteHatReadType = "dad"
+	UserFavoriteHatReadTypeTrucker  UserFavoriteHatReadType = "trucker"
+	UserFavoriteHatReadTypeSnapback UserFavoriteHatReadType = "snapback"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserFavoriteHatReadType) MarshalText() ([]byte, error) {
+	switch s {
+	case UserFavoriteHatReadTypeDad:
+		return []byte(s), nil
+	case UserFavoriteHatReadTypeTrucker:
+		return []byte(s), nil
+	case UserFavoriteHatReadTypeSnapback:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserFavoriteHatReadType) UnmarshalText(data []byte) error {
+	switch UserFavoriteHatReadType(data) {
+	case UserFavoriteHatReadTypeDad:
+		*s = UserFavoriteHatReadTypeDad
+		return nil
+	case UserFavoriteHatReadTypeTrucker:
+		*s = UserFavoriteHatReadTypeTrucker
+		return nil
+	case UserFavoriteHatReadTypeSnapback:
+		*s = UserFavoriteHatReadTypeSnapback
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/UserList
 type UserList struct {
 	ID                int                          `json:"id"`
@@ -5399,6 +7019,7 @@ type UserList struct {
 	Age               int64                        `json:"age"`
 	Height            OptInt64                     `json:"height"`
 	FavoriteCatBreed  UserListFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     UserListFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptUserListFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUserListFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -5426,6 +7047,11 @@ func (s *UserList) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *UserList) GetFavoriteCatBreed() UserListFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *UserList) GetFavoriteColor() UserListFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -5461,6 +7087,11 @@ func (s *UserList) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *UserList) SetFavoriteCatBreed(val UserListFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *UserList) SetFavoriteColor(val UserListFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -5524,6 +7155,45 @@ func (s *UserListFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case UserListFavoriteCatBreedOther:
 		*s = UserListFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type UserListFavoriteColor string
+
+const (
+	UserListFavoriteColorRed   UserListFavoriteColor = "red"
+	UserListFavoriteColorGreen UserListFavoriteColor = "green"
+	UserListFavoriteColorBlue  UserListFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserListFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case UserListFavoriteColorRed:
+		return []byte(s), nil
+	case UserListFavoriteColorGreen:
+		return []byte(s), nil
+	case UserListFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserListFavoriteColor) UnmarshalText(data []byte) error {
+	switch UserListFavoriteColor(data) {
+	case UserListFavoriteColorRed:
+		*s = UserListFavoriteColorRed
+		return nil
+	case UserListFavoriteColorGreen:
+		*s = UserListFavoriteColorGreen
+		return nil
+	case UserListFavoriteColorBlue:
+		*s = UserListFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -5673,6 +7343,7 @@ type UserRead struct {
 	Age               int64                        `json:"age"`
 	Height            OptInt64                     `json:"height"`
 	FavoriteCatBreed  UserReadFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     UserReadFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptUserReadFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUserReadFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -5700,6 +7371,11 @@ func (s *UserRead) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *UserRead) GetFavoriteCatBreed() UserReadFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *UserRead) GetFavoriteColor() UserReadFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -5735,6 +7411,11 @@ func (s *UserRead) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *UserRead) SetFavoriteCatBreed(val UserReadFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *UserRead) SetFavoriteColor(val UserReadFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -5800,6 +7481,45 @@ func (s *UserReadFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case UserReadFavoriteCatBreedOther:
 		*s = UserReadFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type UserReadFavoriteColor string
+
+const (
+	UserReadFavoriteColorRed   UserReadFavoriteColor = "red"
+	UserReadFavoriteColorGreen UserReadFavoriteColor = "green"
+	UserReadFavoriteColorBlue  UserReadFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserReadFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case UserReadFavoriteColorRed:
+		return []byte(s), nil
+	case UserReadFavoriteColorGreen:
+		return []byte(s), nil
+	case UserReadFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserReadFavoriteColor) UnmarshalText(data []byte) error {
+	switch UserReadFavoriteColor(data) {
+	case UserReadFavoriteColorRed:
+		*s = UserReadFavoriteColorRed
+		return nil
+	case UserReadFavoriteColorGreen:
+		*s = UserReadFavoriteColorGreen
+		return nil
+	case UserReadFavoriteColorBlue:
+		*s = UserReadFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -5879,6 +7599,7 @@ type UserUpdate struct {
 	Age               int64                          `json:"age"`
 	Height            OptInt64                       `json:"height"`
 	FavoriteCatBreed  UserUpdateFavoriteCatBreed     `json:"favorite_cat_breed"`
+	FavoriteColor     UserUpdateFavoriteColor        `json:"favorite_color"`
 	FavoriteDogBreed  OptUserUpdateFavoriteDogBreed  `json:"favorite_dog_breed"`
 	FavoriteFishBreed OptUserUpdateFavoriteFishBreed `json:"favorite_fish_breed"`
 }
@@ -5906,6 +7627,11 @@ func (s *UserUpdate) GetHeight() OptInt64 {
 // GetFavoriteCatBreed returns the value of FavoriteCatBreed.
 func (s *UserUpdate) GetFavoriteCatBreed() UserUpdateFavoriteCatBreed {
 	return s.FavoriteCatBreed
+}
+
+// GetFavoriteColor returns the value of FavoriteColor.
+func (s *UserUpdate) GetFavoriteColor() UserUpdateFavoriteColor {
+	return s.FavoriteColor
 }
 
 // GetFavoriteDogBreed returns the value of FavoriteDogBreed.
@@ -5941,6 +7667,11 @@ func (s *UserUpdate) SetHeight(val OptInt64) {
 // SetFavoriteCatBreed sets the value of FavoriteCatBreed.
 func (s *UserUpdate) SetFavoriteCatBreed(val UserUpdateFavoriteCatBreed) {
 	s.FavoriteCatBreed = val
+}
+
+// SetFavoriteColor sets the value of FavoriteColor.
+func (s *UserUpdate) SetFavoriteColor(val UserUpdateFavoriteColor) {
+	s.FavoriteColor = val
 }
 
 // SetFavoriteDogBreed sets the value of FavoriteDogBreed.
@@ -6006,6 +7737,45 @@ func (s *UserUpdateFavoriteCatBreed) UnmarshalText(data []byte) error {
 		return nil
 	case UserUpdateFavoriteCatBreedOther:
 		*s = UserUpdateFavoriteCatBreedOther
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type UserUpdateFavoriteColor string
+
+const (
+	UserUpdateFavoriteColorRed   UserUpdateFavoriteColor = "red"
+	UserUpdateFavoriteColorGreen UserUpdateFavoriteColor = "green"
+	UserUpdateFavoriteColorBlue  UserUpdateFavoriteColor = "blue"
+)
+
+// MarshalText implements encoding.TextMarshaler.
+func (s UserUpdateFavoriteColor) MarshalText() ([]byte, error) {
+	switch s {
+	case UserUpdateFavoriteColorRed:
+		return []byte(s), nil
+	case UserUpdateFavoriteColorGreen:
+		return []byte(s), nil
+	case UserUpdateFavoriteColorBlue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *UserUpdateFavoriteColor) UnmarshalText(data []byte) error {
+	switch UserUpdateFavoriteColor(data) {
+	case UserUpdateFavoriteColorRed:
+		*s = UserUpdateFavoriteColorRed
+		return nil
+	case UserUpdateFavoriteColorGreen:
+		*s = UserUpdateFavoriteColorGreen
+		return nil
+	case UserUpdateFavoriteColorBlue:
+		*s = UserUpdateFavoriteColorBlue
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)

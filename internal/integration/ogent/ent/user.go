@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent/dialect/sql"
@@ -24,6 +25,8 @@ type User struct {
 	Height uint `json:"height,omitempty"`
 	// FavoriteCatBreed holds the value of the "favorite_cat_breed" field.
 	FavoriteCatBreed user.FavoriteCatBreed `json:"favorite_cat_breed,omitempty"`
+	// FavoriteColor holds the value of the "favorite_color" field.
+	FavoriteColor user.FavoriteColor `json:"favorite_color,omitempty"`
 	// FavoriteDogBreed holds the value of the "favorite_dog_breed" field.
 	FavoriteDogBreed user.FavoriteDogBreed `json:"favorite_dog_breed,omitempty"`
 	// FavoriteFishBreed holds the value of the "favorite_fish_breed" field.
@@ -38,11 +41,15 @@ type User struct {
 type UserEdges struct {
 	// Pets holds the value of the pets edge.
 	Pets []*Pet `json:"pets,omitempty"`
+	// AnimalsSaved holds the value of the animals_saved edge.
+	AnimalsSaved []*Pet `json:"animals_saved,omitempty"`
 	// BestFriend holds the value of the best_friend edge.
 	BestFriend *User `json:"best_friend,omitempty"`
+	// FavoriteHat holds the value of the favorite_hat edge.
+	FavoriteHat *Hat `json:"favorite_hat,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 }
 
 // PetsOrErr returns the Pets value or an error if the edge
@@ -54,10 +61,19 @@ func (e UserEdges) PetsOrErr() ([]*Pet, error) {
 	return nil, &NotLoadedError{edge: "pets"}
 }
 
+// AnimalsSavedOrErr returns the AnimalsSaved value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) AnimalsSavedOrErr() ([]*Pet, error) {
+	if e.loadedTypes[1] {
+		return e.AnimalsSaved, nil
+	}
+	return nil, &NotLoadedError{edge: "animals_saved"}
+}
+
 // BestFriendOrErr returns the BestFriend value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e UserEdges) BestFriendOrErr() (*User, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		if e.BestFriend == nil {
 			// Edge was loaded but was not found.
 			return nil, &NotFoundError{label: user.Label}
@@ -67,6 +83,19 @@ func (e UserEdges) BestFriendOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "best_friend"}
 }
 
+// FavoriteHatOrErr returns the FavoriteHat value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e UserEdges) FavoriteHatOrErr() (*Hat, error) {
+	if e.loadedTypes[3] {
+		if e.FavoriteHat == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: hat.Label}
+		}
+		return e.FavoriteHat, nil
+	}
+	return nil, &NotLoadedError{edge: "favorite_hat"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -74,7 +103,7 @@ func (*User) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case user.FieldID, user.FieldAge, user.FieldHeight:
 			values[i] = new(sql.NullInt64)
-		case user.FieldName, user.FieldFavoriteCatBreed, user.FieldFavoriteDogBreed, user.FieldFavoriteFishBreed:
+		case user.FieldName, user.FieldFavoriteCatBreed, user.FieldFavoriteColor, user.FieldFavoriteDogBreed, user.FieldFavoriteFishBreed:
 			values[i] = new(sql.NullString)
 		case user.ForeignKeys[0]: // user_best_friend
 			values[i] = new(sql.NullInt64)
@@ -123,6 +152,12 @@ func (u *User) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				u.FavoriteCatBreed = user.FavoriteCatBreed(value.String)
 			}
+		case user.FieldFavoriteColor:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field favorite_color", values[i])
+			} else if value.Valid {
+				u.FavoriteColor = user.FavoriteColor(value.String)
+			}
 		case user.FieldFavoriteDogBreed:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field favorite_dog_breed", values[i])
@@ -152,9 +187,19 @@ func (u *User) QueryPets() *PetQuery {
 	return NewUserClient(u.config).QueryPets(u)
 }
 
+// QueryAnimalsSaved queries the "animals_saved" edge of the User entity.
+func (u *User) QueryAnimalsSaved() *PetQuery {
+	return NewUserClient(u.config).QueryAnimalsSaved(u)
+}
+
 // QueryBestFriend queries the "best_friend" edge of the User entity.
 func (u *User) QueryBestFriend() *UserQuery {
 	return NewUserClient(u.config).QueryBestFriend(u)
+}
+
+// QueryFavoriteHat queries the "favorite_hat" edge of the User entity.
+func (u *User) QueryFavoriteHat() *HatQuery {
+	return NewUserClient(u.config).QueryFavoriteHat(u)
 }
 
 // Update returns a builder for updating this User.
@@ -191,6 +236,9 @@ func (u *User) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("favorite_cat_breed=")
 	builder.WriteString(fmt.Sprintf("%v", u.FavoriteCatBreed))
+	builder.WriteString(", ")
+	builder.WriteString("favorite_color=")
+	builder.WriteString(fmt.Sprintf("%v", u.FavoriteColor))
 	builder.WriteString(", ")
 	builder.WriteString("favorite_dog_breed=")
 	builder.WriteString(fmt.Sprintf("%v", u.FavoriteDogBreed))

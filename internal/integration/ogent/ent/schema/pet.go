@@ -40,6 +40,9 @@ func (Pet) Edges() []ent.Edge {
 			Unique().
 			Required().
 			Annotations(entoas.Groups("pet:create")),
+		edge.From("rescuer", User.Type).
+			Ref("animals_saved").
+			Immutable(),
 		edge.To("friends", Pet.Type),
 	}
 }

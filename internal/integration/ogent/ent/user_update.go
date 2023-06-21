@@ -136,6 +136,21 @@ func (uu *UserUpdate) AddPets(p ...*Pet) *UserUpdate {
 	return uu.AddPetIDs(ids...)
 }
 
+// AddAnimalsSavedIDs adds the "animals_saved" edge to the Pet entity by IDs.
+func (uu *UserUpdate) AddAnimalsSavedIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddAnimalsSavedIDs(ids...)
+	return uu
+}
+
+// AddAnimalsSaved adds the "animals_saved" edges to the Pet entity.
+func (uu *UserUpdate) AddAnimalsSaved(p ...*Pet) *UserUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.AddAnimalsSavedIDs(ids...)
+}
+
 // SetBestFriendID sets the "best_friend" edge to the User entity by ID.
 func (uu *UserUpdate) SetBestFriendID(id int) *UserUpdate {
 	uu.mutation.SetBestFriendID(id)
@@ -179,6 +194,27 @@ func (uu *UserUpdate) RemovePets(p ...*Pet) *UserUpdate {
 		ids[i] = p[i].ID
 	}
 	return uu.RemovePetIDs(ids...)
+}
+
+// ClearAnimalsSaved clears all "animals_saved" edges to the Pet entity.
+func (uu *UserUpdate) ClearAnimalsSaved() *UserUpdate {
+	uu.mutation.ClearAnimalsSaved()
+	return uu
+}
+
+// RemoveAnimalsSavedIDs removes the "animals_saved" edge to Pet entities by IDs.
+func (uu *UserUpdate) RemoveAnimalsSavedIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveAnimalsSavedIDs(ids...)
+	return uu
+}
+
+// RemoveAnimalsSaved removes "animals_saved" edges to Pet entities.
+func (uu *UserUpdate) RemoveAnimalsSaved(p ...*Pet) *UserUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uu.RemoveAnimalsSavedIDs(ids...)
 }
 
 // ClearBestFriend clears the "best_friend" edge to the User entity.
@@ -320,6 +356,60 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Inverse: false,
 			Table:   user.PetsTable,
 			Columns: []string{user.PetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.AnimalsSavedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedAnimalsSavedIDs(); len(nodes) > 0 && !uu.mutation.AnimalsSavedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.AnimalsSavedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{
@@ -495,6 +585,21 @@ func (uuo *UserUpdateOne) AddPets(p ...*Pet) *UserUpdateOne {
 	return uuo.AddPetIDs(ids...)
 }
 
+// AddAnimalsSavedIDs adds the "animals_saved" edge to the Pet entity by IDs.
+func (uuo *UserUpdateOne) AddAnimalsSavedIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddAnimalsSavedIDs(ids...)
+	return uuo
+}
+
+// AddAnimalsSaved adds the "animals_saved" edges to the Pet entity.
+func (uuo *UserUpdateOne) AddAnimalsSaved(p ...*Pet) *UserUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.AddAnimalsSavedIDs(ids...)
+}
+
 // SetBestFriendID sets the "best_friend" edge to the User entity by ID.
 func (uuo *UserUpdateOne) SetBestFriendID(id int) *UserUpdateOne {
 	uuo.mutation.SetBestFriendID(id)
@@ -538,6 +643,27 @@ func (uuo *UserUpdateOne) RemovePets(p ...*Pet) *UserUpdateOne {
 		ids[i] = p[i].ID
 	}
 	return uuo.RemovePetIDs(ids...)
+}
+
+// ClearAnimalsSaved clears all "animals_saved" edges to the Pet entity.
+func (uuo *UserUpdateOne) ClearAnimalsSaved() *UserUpdateOne {
+	uuo.mutation.ClearAnimalsSaved()
+	return uuo
+}
+
+// RemoveAnimalsSavedIDs removes the "animals_saved" edge to Pet entities by IDs.
+func (uuo *UserUpdateOne) RemoveAnimalsSavedIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveAnimalsSavedIDs(ids...)
+	return uuo
+}
+
+// RemoveAnimalsSaved removes "animals_saved" edges to Pet entities.
+func (uuo *UserUpdateOne) RemoveAnimalsSaved(p ...*Pet) *UserUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
+	}
+	return uuo.RemoveAnimalsSavedIDs(ids...)
 }
 
 // ClearBestFriend clears the "best_friend" edge to the User entity.
@@ -709,6 +835,60 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Inverse: false,
 			Table:   user.PetsTable,
 			Columns: []string{user.PetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.AnimalsSavedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedAnimalsSavedIDs(); len(nodes) > 0 && !uuo.mutation.AnimalsSavedCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: pet.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.AnimalsSavedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   user.AnimalsSavedTable,
+			Columns: user.AnimalsSavedPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: &sqlgraph.FieldSpec{

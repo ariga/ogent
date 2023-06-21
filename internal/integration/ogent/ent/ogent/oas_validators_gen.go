@@ -1040,6 +1040,36 @@ func (s CreateAllTypesReqState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+func (s *CreateHatReq) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s CreateHatReqType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
 func (s *CreateUserReq) Validate() error {
 	var failures []validate.FieldError
 	if err := func() error {
@@ -1097,6 +1127,17 @@ func (s *CreateUserReq) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "favorite_cat_breed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
 			Error: err,
 		})
 	}
@@ -1159,6 +1200,18 @@ func (s CreateUserReqFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+func (s CreateUserReqFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
 func (s CreateUserReqFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1168,6 +1221,288 @@ func (s CreateUserReqFavoriteDogBreed) Validate() error {
 	}
 }
 func (s CreateUserReqFavoriteFishBreed) Validate() error {
+	switch s {
+	case "gold":
+		return nil
+	case "koi":
+		return nil
+	case "shark":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *HatCreate) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s HatCreateType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *HatList) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s HatListType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *HatRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s HatReadType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *HatUpdate) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s HatUpdateType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *HatWearerRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        true,
+					Max:           4294967295,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_cat_breed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.FavoriteDogBreed.Set {
+			if err := func() error {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_dog_breed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.FavoriteFishBreed.Set {
+			if err := func() error {
+				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_fish_breed",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s HatWearerReadFavoriteCatBreed) Validate() error {
+	switch s {
+	case "siamese":
+		return nil
+	case "bengal":
+		return nil
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s HatWearerReadFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s HatWearerReadFavoriteDogBreed) Validate() error {
+	switch s {
+	case "Kuro":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s HatWearerReadFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
 		return nil
@@ -1214,6 +1549,29 @@ func (s ListCategoryPetsOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+func (s ListHatOKApplicationJSON) Validate() error {
+	if s == nil {
+		return errors.New("nil is invalid value")
+	}
+	var failures []validate.FieldError
+	for i, elem := range s {
+		if err := func() error {
+			if err := elem.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			failures = append(failures, validate.FieldError{
+				Name:  fmt.Sprintf("[%d]", i),
+				Error: err,
+			})
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
 func (s ListPetCategoriesOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
@@ -1227,6 +1585,35 @@ func (s ListPetFriendsOKApplicationJSON) Validate() error {
 	return nil
 }
 func (s ListPetOKApplicationJSON) Validate() error {
+	if s == nil {
+		return errors.New("nil is invalid value")
+	}
+	return nil
+}
+func (s ListPetRescuerOKApplicationJSON) Validate() error {
+	if s == nil {
+		return errors.New("nil is invalid value")
+	}
+	var failures []validate.FieldError
+	for i, elem := range s {
+		if err := func() error {
+			if err := elem.Validate(); err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			failures = append(failures, validate.FieldError{
+				Name:  fmt.Sprintf("[%d]", i),
+				Error: err,
+			})
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s ListUserAnimalsSavedOKApplicationJSON) Validate() error {
 	if s == nil {
 		return errors.New("nil is invalid value")
 	}
@@ -1341,6 +1728,17 @@ func (s *PetCreateOwner) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -1394,6 +1792,18 @@ func (s PetCreateOwnerFavoriteCatBreed) Validate() error {
 	case "leopard":
 		return nil
 	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetCreateOwnerFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -1480,6 +1890,17 @@ func (s *PetOwnerRead) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -1538,6 +1959,18 @@ func (s PetOwnerReadFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+func (s PetOwnerReadFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
 func (s PetOwnerReadFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1547,6 +1980,168 @@ func (s PetOwnerReadFavoriteDogBreed) Validate() error {
 	}
 }
 func (s PetOwnerReadFavoriteFishBreed) Validate() error {
+	switch s {
+	case "gold":
+		return nil
+	case "koi":
+		return nil
+	case "shark":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *PetRescuerList) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.Int{
+			MinSet:        true,
+			Min:           0,
+			MaxSet:        true,
+			Max:           4294967295,
+			MinExclusive:  false,
+			MaxExclusive:  false,
+			MultipleOfSet: false,
+			MultipleOf:    0,
+		}).Validate(int64(s.Age)); err != nil {
+			return errors.Wrap(err, "int")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "age",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Height.Set {
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           0,
+					MaxSet:        true,
+					Max:           4294967295,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(s.Height.Value)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "height",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FavoriteCatBreed.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_cat_breed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.FavoriteDogBreed.Set {
+			if err := func() error {
+				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_dog_breed",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.FavoriteFishBreed.Set {
+			if err := func() error {
+				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_fish_breed",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s PetRescuerListFavoriteCatBreed) Validate() error {
+	switch s {
+	case "siamese":
+		return nil
+	case "bengal":
+		return nil
+	case "lion":
+		return nil
+	case "tiger":
+		return nil
+	case "leopard":
+		return nil
+	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetRescuerListFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetRescuerListFavoriteDogBreed) Validate() error {
+	switch s {
+	case "Kuro":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s PetRescuerListFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
 		return nil
@@ -2032,6 +2627,17 @@ func (s *UserBestFriendRead) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -2085,6 +2691,18 @@ func (s UserBestFriendReadFavoriteCatBreed) Validate() error {
 	case "leopard":
 		return nil
 	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserBestFriendReadFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -2171,6 +2789,17 @@ func (s *UserCreate) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -2229,6 +2858,18 @@ func (s UserCreateFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+func (s UserCreateFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
 func (s UserCreateFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -2244,6 +2885,36 @@ func (s UserCreateFavoriteFishBreed) Validate() error {
 	case "koi":
 		return nil
 	case "shark":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s *UserFavoriteHatRead) Validate() error {
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Type.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "type",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+func (s UserFavoriteHatReadType) Validate() error {
+	switch s {
+	case "dad":
+		return nil
+	case "trucker":
+		return nil
+	case "snapback":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -2310,6 +2981,17 @@ func (s *UserList) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -2363,6 +3045,18 @@ func (s UserListFavoriteCatBreed) Validate() error {
 	case "leopard":
 		return nil
 	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserListFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -2449,6 +3143,17 @@ func (s *UserRead) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -2502,6 +3207,18 @@ func (s UserReadFavoriteCatBreed) Validate() error {
 	case "leopard":
 		return nil
 	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserReadFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -2588,6 +3305,17 @@ func (s *UserUpdate) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.FavoriteColor.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "favorite_color",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if s.FavoriteDogBreed.Set {
 			if err := func() error {
 				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
@@ -2641,6 +3369,18 @@ func (s UserUpdateFavoriteCatBreed) Validate() error {
 	case "leopard":
 		return nil
 	case "other":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+func (s UserUpdateFavoriteColor) Validate() error {
+	switch s {
+	case "red":
+		return nil
+	case "green":
+		return nil
+	case "blue":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

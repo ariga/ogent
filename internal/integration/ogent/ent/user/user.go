@@ -21,14 +21,20 @@ const (
 	FieldHeight = "height"
 	// FieldFavoriteCatBreed holds the string denoting the favorite_cat_breed field in the database.
 	FieldFavoriteCatBreed = "favorite_cat_breed"
+	// FieldFavoriteColor holds the string denoting the favorite_color field in the database.
+	FieldFavoriteColor = "favorite_color"
 	// FieldFavoriteDogBreed holds the string denoting the favorite_dog_breed field in the database.
 	FieldFavoriteDogBreed = "favorite_dog_breed"
 	// FieldFavoriteFishBreed holds the string denoting the favorite_fish_breed field in the database.
 	FieldFavoriteFishBreed = "favorite_fish_breed"
 	// EdgePets holds the string denoting the pets edge name in mutations.
 	EdgePets = "pets"
+	// EdgeAnimalsSaved holds the string denoting the animals_saved edge name in mutations.
+	EdgeAnimalsSaved = "animals_saved"
 	// EdgeBestFriend holds the string denoting the best_friend edge name in mutations.
 	EdgeBestFriend = "best_friend"
+	// EdgeFavoriteHat holds the string denoting the favorite_hat edge name in mutations.
+	EdgeFavoriteHat = "favorite_hat"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// PetsTable is the table that holds the pets relation/edge.
@@ -38,10 +44,22 @@ const (
 	PetsInverseTable = "pets"
 	// PetsColumn is the table column denoting the pets relation/edge.
 	PetsColumn = "user_pets"
+	// AnimalsSavedTable is the table that holds the animals_saved relation/edge. The primary key declared below.
+	AnimalsSavedTable = "user_animals_saved"
+	// AnimalsSavedInverseTable is the table name for the Pet entity.
+	// It exists in this package in order to avoid circular dependency with the "pet" package.
+	AnimalsSavedInverseTable = "pets"
 	// BestFriendTable is the table that holds the best_friend relation/edge.
 	BestFriendTable = "users"
 	// BestFriendColumn is the table column denoting the best_friend relation/edge.
 	BestFriendColumn = "user_best_friend"
+	// FavoriteHatTable is the table that holds the favorite_hat relation/edge.
+	FavoriteHatTable = "hats"
+	// FavoriteHatInverseTable is the table name for the Hat entity.
+	// It exists in this package in order to avoid circular dependency with the "hat" package.
+	FavoriteHatInverseTable = "hats"
+	// FavoriteHatColumn is the table column denoting the favorite_hat relation/edge.
+	FavoriteHatColumn = "user_favorite_hat"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -51,6 +69,7 @@ var Columns = []string{
 	FieldAge,
 	FieldHeight,
 	FieldFavoriteCatBreed,
+	FieldFavoriteColor,
 	FieldFavoriteDogBreed,
 	FieldFavoriteFishBreed,
 }
@@ -60,6 +79,12 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"user_best_friend",
 }
+
+var (
+	// AnimalsSavedPrimaryKey and AnimalsSavedColumn2 are the table columns denoting the
+	// primary key for the animals_saved relation (M2M).
+	AnimalsSavedPrimaryKey = []string{"user_id", "pet_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -100,6 +125,33 @@ func FavoriteCatBreedValidator(fcb FavoriteCatBreed) error {
 		return nil
 	default:
 		return fmt.Errorf("user: invalid enum value for favorite_cat_breed field: %q", fcb)
+	}
+}
+
+// FavoriteColor defines the type for the "favorite_color" enum field.
+type FavoriteColor string
+
+// FavoriteColorRed is the default value of the FavoriteColor enum.
+const DefaultFavoriteColor = FavoriteColorRed
+
+// FavoriteColor values.
+const (
+	FavoriteColorRed   FavoriteColor = "red"
+	FavoriteColorGreen FavoriteColor = "green"
+	FavoriteColorBlue  FavoriteColor = "blue"
+)
+
+func (fc FavoriteColor) String() string {
+	return string(fc)
+}
+
+// FavoriteColorValidator is a validator for the "favorite_color" field enum values. It is called by the builders before save.
+func FavoriteColorValidator(fc FavoriteColor) error {
+	switch fc {
+	case FavoriteColorRed, FavoriteColorGreen, FavoriteColorBlue:
+		return nil
+	default:
+		return fmt.Errorf("user: invalid enum value for favorite_color field: %q", fc)
 	}
 }
 

@@ -20,6 +20,12 @@ type Handler interface {
 	//
 	// POST /categories
 	CreateCategory(ctx context.Context, req *CreateCategoryReq) (CreateCategoryRes, error)
+	// CreateHat implements createHat operation.
+	//
+	// Creates a new Hat and persists it to storage.
+	//
+	// POST /hats
+	CreateHat(ctx context.Context, req *CreateHatReq) (CreateHatRes, error)
 	// CreatePet implements createPet operation.
 	//
 	// Creates a new Pet and persists it to storage.
@@ -44,6 +50,12 @@ type Handler interface {
 	//
 	// DELETE /categories/{id}
 	DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error)
+	// DeleteHat implements deleteHat operation.
+	//
+	// Deletes the Hat with the requested ID.
+	//
+	// DELETE /hats/{id}
+	DeleteHat(ctx context.Context, params DeleteHatParams) (DeleteHatRes, error)
 	// DeletePet implements deletePet operation.
 	//
 	// Deletes the Pet with the requested ID.
@@ -74,6 +86,12 @@ type Handler interface {
 	//
 	// GET /categories/{id}/pets
 	ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error)
+	// ListHat implements listHat operation.
+	//
+	// List Hats.
+	//
+	// GET /hats
+	ListHat(ctx context.Context, params ListHatParams) (ListHatRes, error)
 	// ListPet implements listPet operation.
 	//
 	// List Pets.
@@ -92,12 +110,24 @@ type Handler interface {
 	//
 	// GET /pets/{id}/friends
 	ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error)
+	// ListPetRescuer implements listPetRescuer operation.
+	//
+	// List attached Rescuers.
+	//
+	// GET /pets/{id}/rescuer
+	ListPetRescuer(ctx context.Context, params ListPetRescuerParams) (ListPetRescuerRes, error)
 	// ListUser implements listUser operation.
 	//
 	// List Users.
 	//
 	// GET /users
 	ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error)
+	// ListUserAnimalsSaved implements listUserAnimalsSaved operation.
+	//
+	// List attached AnimalsSaveds.
+	//
+	// GET /users/{id}/animals-saved
+	ListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (ListUserAnimalsSavedRes, error)
 	// ListUserPets implements listUserPets operation.
 	//
 	// List attached Pets.
@@ -116,6 +146,18 @@ type Handler interface {
 	//
 	// GET /categories/{id}
 	ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error)
+	// ReadHat implements readHat operation.
+	//
+	// Finds the Hat with the requested ID and returns it.
+	//
+	// GET /hats/{id}
+	ReadHat(ctx context.Context, params ReadHatParams) (ReadHatRes, error)
+	// ReadHatWearer implements readHatWearer operation.
+	//
+	// Find the attached User of the Hat with the given ID.
+	//
+	// GET /hats/{id}/wearer
+	ReadHatWearer(ctx context.Context, params ReadHatWearerParams) (ReadHatWearerRes, error)
 	// ReadPet implements readPet operation.
 	//
 	// Finds the Pet with the requested ID and returns it.
@@ -140,6 +182,12 @@ type Handler interface {
 	//
 	// GET /users/{id}/best-friend
 	ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error)
+	// ReadUserFavoriteHat implements readUserFavoriteHat operation.
+	//
+	// Find the attached Hat of the User with the given ID.
+	//
+	// GET /users/{id}/favorite-hat
+	ReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (ReadUserFavoriteHatRes, error)
 	// UpdateAllTypes implements updateAllTypes operation.
 	//
 	// Updates a AllTypes and persists changes to storage.
@@ -152,6 +200,12 @@ type Handler interface {
 	//
 	// PATCH /categories/{id}
 	UpdateCategory(ctx context.Context, req *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
+	// UpdateHat implements updateHat operation.
+	//
+	// Updates a Hat and persists changes to storage.
+	//
+	// PATCH /hats/{id}
+	UpdateHat(ctx context.Context, req *UpdateHatReq, params UpdateHatParams) (UpdateHatRes, error)
 	// UpdatePet implements updatePet operation.
 	//
 	// Updates a Pet and persists changes to storage.

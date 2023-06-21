@@ -102,6 +102,21 @@ func (pc *PetCreate) SetOwner(u *User) *PetCreate {
 	return pc.SetOwnerID(u.ID)
 }
 
+// AddRescuerIDs adds the "rescuer" edge to the User entity by IDs.
+func (pc *PetCreate) AddRescuerIDs(ids ...int) *PetCreate {
+	pc.mutation.AddRescuerIDs(ids...)
+	return pc
+}
+
+// AddRescuer adds the "rescuer" edges to the User entity.
+func (pc *PetCreate) AddRescuer(u ...*User) *PetCreate {
+	ids := make([]int, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return pc.AddRescuerIDs(ids...)
+}
+
 // AddFriendIDs adds the "friends" edge to the Pet entity by IDs.
 func (pc *PetCreate) AddFriendIDs(ids ...int) *PetCreate {
 	pc.mutation.AddFriendIDs(ids...)
@@ -240,6 +255,25 @@ func (pc *PetCreate) createSpec() (*Pet, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.user_pets = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := pc.mutation.RescuerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   pet.RescuerTable,
+			Columns: pet.RescuerPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: &sqlgraph.FieldSpec{
+					Type:   field.TypeInt,
+					Column: user.FieldID,
+				},
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.FriendsIDs(); len(nodes) > 0 {

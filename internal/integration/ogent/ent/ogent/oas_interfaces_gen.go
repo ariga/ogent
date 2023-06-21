@@ -9,6 +9,10 @@ type CreateCategoryRes interface {
 	createCategoryRes()
 }
 
+type CreateHatRes interface {
+	createHatRes()
+}
+
 type CreatePetRes interface {
 	createPetRes()
 }
@@ -23,6 +27,10 @@ type DeleteAllTypesRes interface {
 
 type DeleteCategoryRes interface {
 	deleteCategoryRes()
+}
+
+type DeleteHatRes interface {
+	deleteHatRes()
 }
 
 type DeletePetRes interface {
@@ -45,6 +53,10 @@ type ListCategoryRes interface {
 	listCategoryRes()
 }
 
+type ListHatRes interface {
+	listHatRes()
+}
+
 type ListPetCategoriesRes interface {
 	listPetCategoriesRes()
 }
@@ -55,6 +67,14 @@ type ListPetFriendsRes interface {
 
 type ListPetRes interface {
 	listPetRes()
+}
+
+type ListPetRescuerRes interface {
+	listPetRescuerRes()
+}
+
+type ListUserAnimalsSavedRes interface {
+	listUserAnimalsSavedRes()
 }
 
 type ListUserPetsRes interface {
@@ -73,6 +93,14 @@ type ReadCategoryRes interface {
 	readCategoryRes()
 }
 
+type ReadHatRes interface {
+	readHatRes()
+}
+
+type ReadHatWearerRes interface {
+	readHatWearerRes()
+}
+
 type ReadPetOwnerRes interface {
 	readPetOwnerRes()
 }
@@ -85,6 +113,10 @@ type ReadUserBestFriendRes interface {
 	readUserBestFriendRes()
 }
 
+type ReadUserFavoriteHatRes interface {
+	readUserFavoriteHatRes()
+}
+
 type ReadUserRes interface {
 	readUserRes()
 }
@@ -95,6 +127,10 @@ type UpdateAllTypesRes interface {
 
 type UpdateCategoryRes interface {
 	updateCategoryRes()
+}
+
+type UpdateHatRes interface {
+	updateHatRes()
 }
 
 type UpdatePetRes interface {

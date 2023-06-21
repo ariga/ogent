@@ -21,6 +21,8 @@ const (
 	EdgeCategories = "categories"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeRescuer holds the string denoting the rescuer edge name in mutations.
+	EdgeRescuer = "rescuer"
 	// EdgeFriends holds the string denoting the friends edge name in mutations.
 	EdgeFriends = "friends"
 	// Table holds the table name of the pet in the database.
@@ -37,6 +39,11 @@ const (
 	OwnerInverseTable = "users"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "user_pets"
+	// RescuerTable is the table that holds the rescuer relation/edge. The primary key declared below.
+	RescuerTable = "user_animals_saved"
+	// RescuerInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	RescuerInverseTable = "users"
 	// FriendsTable is the table that holds the friends relation/edge. The primary key declared below.
 	FriendsTable = "pet_friends"
 )
@@ -61,6 +68,9 @@ var (
 	// CategoriesPrimaryKey and CategoriesColumn2 are the table columns denoting the
 	// primary key for the categories relation (M2M).
 	CategoriesPrimaryKey = []string{"category_id", "pet_id"}
+	// RescuerPrimaryKey and RescuerColumn2 are the table columns denoting the
+	// primary key for the rescuer relation (M2M).
+	RescuerPrimaryKey = []string{"user_id", "pet_id"}
 	// FriendsPrimaryKey and FriendsColumn2 are the table columns denoting the
 	// primary key for the friends relation (M2M).
 	FriendsPrimaryKey = []string{"pet_id", "friend_id"}

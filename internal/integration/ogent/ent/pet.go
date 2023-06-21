@@ -39,11 +39,13 @@ type PetEdges struct {
 	Categories []*Category `json:"categories,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *User `json:"owner,omitempty"`
+	// Rescuer holds the value of the rescuer edge.
+	Rescuer []*User `json:"rescuer,omitempty"`
 	// Friends holds the value of the friends edge.
 	Friends []*Pet `json:"friends,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 }
 
 // CategoriesOrErr returns the Categories value or an error if the edge
@@ -68,10 +70,19 @@ func (e PetEdges) OwnerOrErr() (*User, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// RescuerOrErr returns the Rescuer value or an error if the edge
+// was not loaded in eager-loading.
+func (e PetEdges) RescuerOrErr() ([]*User, error) {
+	if e.loadedTypes[2] {
+		return e.Rescuer, nil
+	}
+	return nil, &NotLoadedError{edge: "rescuer"}
+}
+
 // FriendsOrErr returns the Friends value or an error if the edge
 // was not loaded in eager-loading.
 func (e PetEdges) FriendsOrErr() ([]*Pet, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Friends, nil
 	}
 	return nil, &NotLoadedError{edge: "friends"}
@@ -164,6 +175,11 @@ func (pe *Pet) QueryCategories() *CategoryQuery {
 // QueryOwner queries the "owner" edge of the Pet entity.
 func (pe *Pet) QueryOwner() *UserQuery {
 	return NewPetClient(pe.config).QueryOwner(pe)
+}
+
+// QueryRescuer queries the "rescuer" edge of the Pet entity.
+func (pe *Pet) QueryRescuer() *UserQuery {
+	return NewPetClient(pe.config).QueryRescuer(pe)
 }
 
 // QueryFriends queries the "friends" edge of the Pet entity.

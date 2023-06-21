@@ -399,6 +399,33 @@ func HasOwnerWith(preds ...predicate.User) predicate.Pet {
 	})
 }
 
+// HasRescuer applies the HasEdge predicate on the "rescuer" edge.
+func HasRescuer() predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RescuerTable, RescuerPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRescuerWith applies the HasEdge predicate on the "rescuer" edge with a given conditions (other predicates).
+func HasRescuerWith(preds ...predicate.User) predicate.Pet {
+	return predicate.Pet(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.To(RescuerInverseTable, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RescuerTable, RescuerPrimaryKey...),
+		)
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFriends applies the HasEdge predicate on the "friends" edge.
 func HasFriends() predicate.Pet {
 	return predicate.Pet(func(s *sql.Selector) {

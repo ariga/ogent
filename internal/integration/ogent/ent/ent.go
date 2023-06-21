@@ -10,6 +10,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
 	"entgo.io/ent"
@@ -70,6 +71,7 @@ func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		alltypes.Table: alltypes.ValidColumn,
 		category.Table: category.ValidColumn,
+		hat.Table:      hat.ValidColumn,
 		pet.Table:      pet.ValidColumn,
 		user.Table:     user.ValidColumn,
 	}

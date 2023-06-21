@@ -9,6 +9,7 @@ import (
 	"ariga.io/ogent/internal/integration/ogent/ent"
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
@@ -476,6 +477,201 @@ func (h *OgentHandler) ListCategoryPets(ctx context.Context, params ListCategory
 	return (*ListCategoryPetsOKApplicationJSON)(&r), nil
 }
 
+// CreateHat handles POST /hats requests.
+func (h *OgentHandler) CreateHat(ctx context.Context, req *CreateHatReq) (CreateHatRes, error) {
+	b := h.client.Hat.Create()
+	// Add all fields.
+	b.SetName(req.Name)
+	b.SetType(hat.Type(req.Type))
+	// Add all edges.
+	if v, ok := req.Wearer.Get(); ok {
+		b.SetWearerID(v)
+	}
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Hat.Query().Where(hat.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewHatCreate(e), nil
+}
+
+// ReadHat handles GET /hats/{id} requests.
+func (h *OgentHandler) ReadHat(ctx context.Context, params ReadHatParams) (ReadHatRes, error) {
+	q := h.client.Hat.Query().Where(hat.IDEQ(params.ID))
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewHatRead(e), nil
+}
+
+// UpdateHat handles PATCH /hats/{id} requests.
+func (h *OgentHandler) UpdateHat(ctx context.Context, req *UpdateHatReq, params UpdateHatParams) (UpdateHatRes, error) {
+	b := h.client.Hat.UpdateOneID(params.ID)
+	// Add all fields.
+	if v, ok := req.Name.Get(); ok {
+		b.SetName(v)
+	}
+	// Add all edges.
+	// Persist to storage.
+	e, err := b.Save(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	// Reload the entity to attach all eager-loaded edges.
+	q := h.client.Hat.Query().Where(hat.ID(e.ID))
+	e, err = q.Only(ctx)
+	if err != nil {
+		// This should never happen.
+		return nil, err
+	}
+	return NewHatUpdate(e), nil
+}
+
+// DeleteHat handles DELETE /hats/{id} requests.
+func (h *OgentHandler) DeleteHat(ctx context.Context, params DeleteHatParams) (DeleteHatRes, error) {
+	err := h.client.Hat.DeleteOneID(params.ID).Exec(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsConstraintError(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return new(DeleteHatNoContent), nil
+
+}
+
+// ListHat handles GET /hats requests.
+func (h *OgentHandler) ListHat(ctx context.Context, params ListHatParams) (ListHatRes, error) {
+	q := h.client.Hat.Query()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewHatLists(es)
+	return (*ListHatOKApplicationJSON)(&r), nil
+}
+
+// ReadHatWearer handles GET /hats/{id}/wearer requests.
+func (h *OgentHandler) ReadHatWearer(ctx context.Context, params ReadHatWearerParams) (ReadHatWearerRes, error) {
+	q := h.client.Hat.Query().Where(hat.IDEQ(params.ID)).QueryWearer()
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewHatWearerRead(e), nil
+}
+
 // CreatePet handles POST /pets requests.
 func (h *OgentHandler) CreatePet(ctx context.Context, req *CreatePetReq) (CreatePetRes, error) {
 	b := h.client.Pet.Create()
@@ -496,6 +692,7 @@ func (h *OgentHandler) CreatePet(ctx context.Context, req *CreatePetReq) (Create
 	// Add all edges.
 	b.AddCategoryIDs(req.Categories...)
 	b.SetOwnerID(req.Owner)
+	b.AddRescuerIDs(req.Rescuer...)
 	b.AddFriendIDs(req.Friends...)
 	// Persist to storage.
 	e, err := b.Save(ctx)
@@ -741,6 +938,42 @@ func (h *OgentHandler) ReadPetOwner(ctx context.Context, params ReadPetOwnerPara
 	return NewPetOwnerRead(e), nil
 }
 
+// ListPetRescuer handles GET /pets/{id}/rescuer requests.
+func (h *OgentHandler) ListPetRescuer(ctx context.Context, params ListPetRescuerParams) (ListPetRescuerRes, error) {
+	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryRescuer()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewPetRescuerLists(es)
+	return (*ListPetRescuerOKApplicationJSON)(&r), nil
+}
+
 // ListPetFriends handles GET /pets/{id}/friends requests.
 func (h *OgentHandler) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error) {
 	q := h.client.Pet.Query().Where(pet.IDEQ(params.ID)).QueryFriends()
@@ -787,6 +1020,7 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req *CreateUserReq) (Crea
 		b.SetHeight(uint(v))
 	}
 	b.SetFavoriteCatBreed(user.FavoriteCatBreed(req.FavoriteCatBreed))
+	b.SetFavoriteColor(user.FavoriteColor(req.FavoriteColor))
 	if v, ok := req.FavoriteDogBreed.Get(); ok {
 		b.SetFavoriteDogBreed(user.FavoriteDogBreed(v))
 	}
@@ -795,8 +1029,12 @@ func (h *OgentHandler) CreateUser(ctx context.Context, req *CreateUserReq) (Crea
 	}
 	// Add all edges.
 	b.AddPetIDs(req.Pets...)
+	b.AddAnimalsSavedIDs(req.AnimalsSaved...)
 	if v, ok := req.BestFriend.Get(); ok {
 		b.SetBestFriendID(v)
+	}
+	if v, ok := req.FavoriteHat.Get(); ok {
+		b.SetFavoriteHatID(v)
 	}
 	// Persist to storage.
 	e, err := b.Save(ctx)
@@ -880,6 +1118,9 @@ func (h *OgentHandler) UpdateUser(ctx context.Context, req *UpdateUserReq, param
 	// Add all edges.
 	if req.Pets != nil {
 		b.ClearPets().AddPetIDs(req.Pets...)
+	}
+	if req.AnimalsSaved != nil {
+		b.ClearAnimalsSaved().AddAnimalsSavedIDs(req.AnimalsSaved...)
 	}
 	if v, ok := req.BestFriend.Get(); ok {
 		b.SetBestFriendID(v)
@@ -1014,6 +1255,42 @@ func (h *OgentHandler) ListUserPets(ctx context.Context, params ListUserPetsPara
 	return (*ListUserPetsOKApplicationJSON)(&r), nil
 }
 
+// ListUserAnimalsSaved handles GET /users/{id}/animals-saved requests.
+func (h *OgentHandler) ListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (ListUserAnimalsSavedRes, error) {
+	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryAnimalsSaved()
+	page := 1
+	if v, ok := params.Page.Get(); ok {
+		page = v
+	}
+	itemsPerPage := 30
+	if v, ok := params.ItemsPerPage.Get(); ok {
+		itemsPerPage = v
+	}
+	q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage)
+	es, err := q.All(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	r := NewUserAnimalsSavedLists(es)
+	return (*ListUserAnimalsSavedOKApplicationJSON)(&r), nil
+}
+
 // ReadUserBestFriend handles GET /users/{id}/best-friend requests.
 func (h *OgentHandler) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error) {
 	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryBestFriend()
@@ -1038,4 +1315,30 @@ func (h *OgentHandler) ReadUserBestFriend(ctx context.Context, params ReadUserBe
 		}
 	}
 	return NewUserBestFriendRead(e), nil
+}
+
+// ReadUserFavoriteHat handles GET /users/{id}/favorite-hat requests.
+func (h *OgentHandler) ReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (ReadUserFavoriteHatRes, error) {
+	q := h.client.User.Query().Where(user.IDEQ(params.ID)).QueryFavoriteHat()
+	e, err := q.Only(ctx)
+	if err != nil {
+		switch {
+		case ent.IsNotFound(err):
+			return &R404{
+				Code:   http.StatusNotFound,
+				Status: http.StatusText(http.StatusNotFound),
+				Errors: rawError(err),
+			}, nil
+		case ent.IsNotSingular(err):
+			return &R409{
+				Code:   http.StatusConflict,
+				Status: http.StatusText(http.StatusConflict),
+				Errors: rawError(err),
+			}, nil
+		default:
+			// Let the server handle the error.
+			return nil, err
+		}
+	}
+	return NewUserFavoriteHatRead(e), nil
 }

@@ -11,6 +11,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
 	"ariga.io/ogent/internal/integration/ogent/ent/category"
+	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/pet"
 	"ariga.io/ogent/internal/integration/ogent/ent/predicate"
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
@@ -31,6 +32,7 @@ const (
 	// Node types.
 	TypeAllTypes = "AllTypes"
 	TypeCategory = "Category"
+	TypeHat      = "Hat"
 	TypePet      = "Pet"
 	TypeUser     = "User"
 )
@@ -2287,6 +2289,453 @@ func (m *CategoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Category edge %s", name)
 }
 
+// HatMutation represents an operation that mutates the Hat nodes in the graph.
+type HatMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *int
+	name          *string
+	_type         *hat.Type
+	clearedFields map[string]struct{}
+	wearer        *int
+	clearedwearer bool
+	done          bool
+	oldValue      func(context.Context) (*Hat, error)
+	predicates    []predicate.Hat
+}
+
+var _ ent.Mutation = (*HatMutation)(nil)
+
+// hatOption allows management of the mutation configuration using functional options.
+type hatOption func(*HatMutation)
+
+// newHatMutation creates new mutation for the Hat entity.
+func newHatMutation(c config, op Op, opts ...hatOption) *HatMutation {
+	m := &HatMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeHat,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withHatID sets the ID field of the mutation.
+func withHatID(id int) hatOption {
+	return func(m *HatMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Hat
+		)
+		m.oldValue = func(ctx context.Context) (*Hat, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Hat.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withHat sets the old Hat of the mutation.
+func withHat(node *Hat) hatOption {
+	return func(m *HatMutation) {
+		m.oldValue = func(context.Context) (*Hat, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m HatMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m HatMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *HatMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *HatMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Hat.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetName sets the "name" field.
+func (m *HatMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *HatMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Hat entity.
+// If the Hat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HatMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *HatMutation) ResetName() {
+	m.name = nil
+}
+
+// SetType sets the "type" field.
+func (m *HatMutation) SetType(h hat.Type) {
+	m._type = &h
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *HatMutation) GetType() (r hat.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the Hat entity.
+// If the Hat object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HatMutation) OldType(ctx context.Context) (v hat.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *HatMutation) ResetType() {
+	m._type = nil
+}
+
+// SetWearerID sets the "wearer" edge to the User entity by id.
+func (m *HatMutation) SetWearerID(id int) {
+	m.wearer = &id
+}
+
+// ClearWearer clears the "wearer" edge to the User entity.
+func (m *HatMutation) ClearWearer() {
+	m.clearedwearer = true
+}
+
+// WearerCleared reports if the "wearer" edge to the User entity was cleared.
+func (m *HatMutation) WearerCleared() bool {
+	return m.clearedwearer
+}
+
+// WearerID returns the "wearer" edge ID in the mutation.
+func (m *HatMutation) WearerID() (id int, exists bool) {
+	if m.wearer != nil {
+		return *m.wearer, true
+	}
+	return
+}
+
+// WearerIDs returns the "wearer" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// WearerID instead. It exists only for internal usage by the builders.
+func (m *HatMutation) WearerIDs() (ids []int) {
+	if id := m.wearer; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetWearer resets all changes to the "wearer" edge.
+func (m *HatMutation) ResetWearer() {
+	m.wearer = nil
+	m.clearedwearer = false
+}
+
+// Where appends a list predicates to the HatMutation builder.
+func (m *HatMutation) Where(ps ...predicate.Hat) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the HatMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *HatMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Hat, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *HatMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *HatMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Hat).
+func (m *HatMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *HatMutation) Fields() []string {
+	fields := make([]string, 0, 2)
+	if m.name != nil {
+		fields = append(fields, hat.FieldName)
+	}
+	if m._type != nil {
+		fields = append(fields, hat.FieldType)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *HatMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case hat.FieldName:
+		return m.Name()
+	case hat.FieldType:
+		return m.GetType()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *HatMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case hat.FieldName:
+		return m.OldName(ctx)
+	case hat.FieldType:
+		return m.OldType(ctx)
+	}
+	return nil, fmt.Errorf("unknown Hat field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *HatMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case hat.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case hat.FieldType:
+		v, ok := value.(hat.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Hat field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *HatMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *HatMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *HatMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Hat numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *HatMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *HatMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *HatMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Hat nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *HatMutation) ResetField(name string) error {
+	switch name {
+	case hat.FieldName:
+		m.ResetName()
+		return nil
+	case hat.FieldType:
+		m.ResetType()
+		return nil
+	}
+	return fmt.Errorf("unknown Hat field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *HatMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.wearer != nil {
+		edges = append(edges, hat.EdgeWearer)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *HatMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case hat.EdgeWearer:
+		if id := m.wearer; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *HatMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *HatMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *HatMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedwearer {
+		edges = append(edges, hat.EdgeWearer)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *HatMutation) EdgeCleared(name string) bool {
+	switch name {
+	case hat.EdgeWearer:
+		return m.clearedwearer
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *HatMutation) ClearEdge(name string) error {
+	switch name {
+	case hat.EdgeWearer:
+		m.ClearWearer()
+		return nil
+	}
+	return fmt.Errorf("unknown Hat unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *HatMutation) ResetEdge(name string) error {
+	switch name {
+	case hat.EdgeWearer:
+		m.ResetWearer()
+		return nil
+	}
+	return fmt.Errorf("unknown Hat edge %s", name)
+}
+
 // PetMutation represents an operation that mutates the Pet nodes in the graph.
 type PetMutation struct {
 	config
@@ -2306,6 +2755,9 @@ type PetMutation struct {
 	clearedcategories bool
 	owner             *int
 	clearedowner      bool
+	rescuer           map[int]struct{}
+	removedrescuer    map[int]struct{}
+	clearedrescuer    bool
 	friends           map[int]struct{}
 	removedfriends    map[int]struct{}
 	clearedfriends    bool
@@ -2779,6 +3231,60 @@ func (m *PetMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
+// AddRescuerIDs adds the "rescuer" edge to the User entity by ids.
+func (m *PetMutation) AddRescuerIDs(ids ...int) {
+	if m.rescuer == nil {
+		m.rescuer = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.rescuer[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRescuer clears the "rescuer" edge to the User entity.
+func (m *PetMutation) ClearRescuer() {
+	m.clearedrescuer = true
+}
+
+// RescuerCleared reports if the "rescuer" edge to the User entity was cleared.
+func (m *PetMutation) RescuerCleared() bool {
+	return m.clearedrescuer
+}
+
+// RemoveRescuerIDs removes the "rescuer" edge to the User entity by IDs.
+func (m *PetMutation) RemoveRescuerIDs(ids ...int) {
+	if m.removedrescuer == nil {
+		m.removedrescuer = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.rescuer, ids[i])
+		m.removedrescuer[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRescuer returns the removed IDs of the "rescuer" edge to the User entity.
+func (m *PetMutation) RemovedRescuerIDs() (ids []int) {
+	for id := range m.removedrescuer {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RescuerIDs returns the "rescuer" edge IDs in the mutation.
+func (m *PetMutation) RescuerIDs() (ids []int) {
+	for id := range m.rescuer {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRescuer resets all changes to the "rescuer" edge.
+func (m *PetMutation) ResetRescuer() {
+	m.rescuer = nil
+	m.clearedrescuer = false
+	m.removedrescuer = nil
+}
+
 // AddFriendIDs adds the "friends" edge to the Pet entity by ids.
 func (m *PetMutation) AddFriendIDs(ids ...int) {
 	if m.friends == nil {
@@ -3088,12 +3594,15 @@ func (m *PetMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PetMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.categories != nil {
 		edges = append(edges, pet.EdgeCategories)
 	}
 	if m.owner != nil {
 		edges = append(edges, pet.EdgeOwner)
+	}
+	if m.rescuer != nil {
+		edges = append(edges, pet.EdgeRescuer)
 	}
 	if m.friends != nil {
 		edges = append(edges, pet.EdgeFriends)
@@ -3115,6 +3624,12 @@ func (m *PetMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
+	case pet.EdgeRescuer:
+		ids := make([]ent.Value, 0, len(m.rescuer))
+		for id := range m.rescuer {
+			ids = append(ids, id)
+		}
+		return ids
 	case pet.EdgeFriends:
 		ids := make([]ent.Value, 0, len(m.friends))
 		for id := range m.friends {
@@ -3127,9 +3642,12 @@ func (m *PetMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PetMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.removedcategories != nil {
 		edges = append(edges, pet.EdgeCategories)
+	}
+	if m.removedrescuer != nil {
+		edges = append(edges, pet.EdgeRescuer)
 	}
 	if m.removedfriends != nil {
 		edges = append(edges, pet.EdgeFriends)
@@ -3147,6 +3665,12 @@ func (m *PetMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case pet.EdgeRescuer:
+		ids := make([]ent.Value, 0, len(m.removedrescuer))
+		for id := range m.removedrescuer {
+			ids = append(ids, id)
+		}
+		return ids
 	case pet.EdgeFriends:
 		ids := make([]ent.Value, 0, len(m.removedfriends))
 		for id := range m.removedfriends {
@@ -3159,12 +3683,15 @@ func (m *PetMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PetMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	if m.clearedcategories {
 		edges = append(edges, pet.EdgeCategories)
 	}
 	if m.clearedowner {
 		edges = append(edges, pet.EdgeOwner)
+	}
+	if m.clearedrescuer {
+		edges = append(edges, pet.EdgeRescuer)
 	}
 	if m.clearedfriends {
 		edges = append(edges, pet.EdgeFriends)
@@ -3180,6 +3707,8 @@ func (m *PetMutation) EdgeCleared(name string) bool {
 		return m.clearedcategories
 	case pet.EdgeOwner:
 		return m.clearedowner
+	case pet.EdgeRescuer:
+		return m.clearedrescuer
 	case pet.EdgeFriends:
 		return m.clearedfriends
 	}
@@ -3207,6 +3736,9 @@ func (m *PetMutation) ResetEdge(name string) error {
 	case pet.EdgeOwner:
 		m.ResetOwner()
 		return nil
+	case pet.EdgeRescuer:
+		m.ResetRescuer()
+		return nil
 	case pet.EdgeFriends:
 		m.ResetFriends()
 		return nil
@@ -3217,26 +3749,32 @@ func (m *PetMutation) ResetEdge(name string) error {
 // UserMutation represents an operation that mutates the User nodes in the graph.
 type UserMutation struct {
 	config
-	op                  Op
-	typ                 string
-	id                  *int
-	name                *string
-	age                 *uint
-	addage              *int
-	height              *uint
-	addheight           *int
-	favorite_cat_breed  *user.FavoriteCatBreed
-	favorite_dog_breed  *user.FavoriteDogBreed
-	favorite_fish_breed *schema.FishBreed
-	clearedFields       map[string]struct{}
-	pets                map[int]struct{}
-	removedpets         map[int]struct{}
-	clearedpets         bool
-	best_friend         *int
-	clearedbest_friend  bool
-	done                bool
-	oldValue            func(context.Context) (*User, error)
-	predicates          []predicate.User
+	op                   Op
+	typ                  string
+	id                   *int
+	name                 *string
+	age                  *uint
+	addage               *int
+	height               *uint
+	addheight            *int
+	favorite_cat_breed   *user.FavoriteCatBreed
+	favorite_color       *user.FavoriteColor
+	favorite_dog_breed   *user.FavoriteDogBreed
+	favorite_fish_breed  *schema.FishBreed
+	clearedFields        map[string]struct{}
+	pets                 map[int]struct{}
+	removedpets          map[int]struct{}
+	clearedpets          bool
+	animals_saved        map[int]struct{}
+	removedanimals_saved map[int]struct{}
+	clearedanimals_saved bool
+	best_friend          *int
+	clearedbest_friend   bool
+	favorite_hat         *int
+	clearedfavorite_hat  bool
+	done                 bool
+	oldValue             func(context.Context) (*User, error)
+	predicates           []predicate.User
 }
 
 var _ ent.Mutation = (*UserMutation)(nil)
@@ -3535,6 +4073,42 @@ func (m *UserMutation) ResetFavoriteCatBreed() {
 	m.favorite_cat_breed = nil
 }
 
+// SetFavoriteColor sets the "favorite_color" field.
+func (m *UserMutation) SetFavoriteColor(uc user.FavoriteColor) {
+	m.favorite_color = &uc
+}
+
+// FavoriteColor returns the value of the "favorite_color" field in the mutation.
+func (m *UserMutation) FavoriteColor() (r user.FavoriteColor, exists bool) {
+	v := m.favorite_color
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFavoriteColor returns the old "favorite_color" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldFavoriteColor(ctx context.Context) (v user.FavoriteColor, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFavoriteColor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFavoriteColor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFavoriteColor: %w", err)
+	}
+	return oldValue.FavoriteColor, nil
+}
+
+// ResetFavoriteColor resets all changes to the "favorite_color" field.
+func (m *UserMutation) ResetFavoriteColor() {
+	m.favorite_color = nil
+}
+
 // SetFavoriteDogBreed sets the "favorite_dog_breed" field.
 func (m *UserMutation) SetFavoriteDogBreed(udb user.FavoriteDogBreed) {
 	m.favorite_dog_breed = &udb
@@ -3687,6 +4261,60 @@ func (m *UserMutation) ResetPets() {
 	m.removedpets = nil
 }
 
+// AddAnimalsSavedIDs adds the "animals_saved" edge to the Pet entity by ids.
+func (m *UserMutation) AddAnimalsSavedIDs(ids ...int) {
+	if m.animals_saved == nil {
+		m.animals_saved = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.animals_saved[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAnimalsSaved clears the "animals_saved" edge to the Pet entity.
+func (m *UserMutation) ClearAnimalsSaved() {
+	m.clearedanimals_saved = true
+}
+
+// AnimalsSavedCleared reports if the "animals_saved" edge to the Pet entity was cleared.
+func (m *UserMutation) AnimalsSavedCleared() bool {
+	return m.clearedanimals_saved
+}
+
+// RemoveAnimalsSavedIDs removes the "animals_saved" edge to the Pet entity by IDs.
+func (m *UserMutation) RemoveAnimalsSavedIDs(ids ...int) {
+	if m.removedanimals_saved == nil {
+		m.removedanimals_saved = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.animals_saved, ids[i])
+		m.removedanimals_saved[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAnimalsSaved returns the removed IDs of the "animals_saved" edge to the Pet entity.
+func (m *UserMutation) RemovedAnimalsSavedIDs() (ids []int) {
+	for id := range m.removedanimals_saved {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AnimalsSavedIDs returns the "animals_saved" edge IDs in the mutation.
+func (m *UserMutation) AnimalsSavedIDs() (ids []int) {
+	for id := range m.animals_saved {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAnimalsSaved resets all changes to the "animals_saved" edge.
+func (m *UserMutation) ResetAnimalsSaved() {
+	m.animals_saved = nil
+	m.clearedanimals_saved = false
+	m.removedanimals_saved = nil
+}
+
 // SetBestFriendID sets the "best_friend" edge to the User entity by id.
 func (m *UserMutation) SetBestFriendID(id int) {
 	m.best_friend = &id
@@ -3726,6 +4354,45 @@ func (m *UserMutation) ResetBestFriend() {
 	m.clearedbest_friend = false
 }
 
+// SetFavoriteHatID sets the "favorite_hat" edge to the Hat entity by id.
+func (m *UserMutation) SetFavoriteHatID(id int) {
+	m.favorite_hat = &id
+}
+
+// ClearFavoriteHat clears the "favorite_hat" edge to the Hat entity.
+func (m *UserMutation) ClearFavoriteHat() {
+	m.clearedfavorite_hat = true
+}
+
+// FavoriteHatCleared reports if the "favorite_hat" edge to the Hat entity was cleared.
+func (m *UserMutation) FavoriteHatCleared() bool {
+	return m.clearedfavorite_hat
+}
+
+// FavoriteHatID returns the "favorite_hat" edge ID in the mutation.
+func (m *UserMutation) FavoriteHatID() (id int, exists bool) {
+	if m.favorite_hat != nil {
+		return *m.favorite_hat, true
+	}
+	return
+}
+
+// FavoriteHatIDs returns the "favorite_hat" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// FavoriteHatID instead. It exists only for internal usage by the builders.
+func (m *UserMutation) FavoriteHatIDs() (ids []int) {
+	if id := m.favorite_hat; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetFavoriteHat resets all changes to the "favorite_hat" edge.
+func (m *UserMutation) ResetFavoriteHat() {
+	m.favorite_hat = nil
+	m.clearedfavorite_hat = false
+}
+
 // Where appends a list predicates to the UserMutation builder.
 func (m *UserMutation) Where(ps ...predicate.User) {
 	m.predicates = append(m.predicates, ps...)
@@ -3760,7 +4427,7 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.name != nil {
 		fields = append(fields, user.FieldName)
 	}
@@ -3772,6 +4439,9 @@ func (m *UserMutation) Fields() []string {
 	}
 	if m.favorite_cat_breed != nil {
 		fields = append(fields, user.FieldFavoriteCatBreed)
+	}
+	if m.favorite_color != nil {
+		fields = append(fields, user.FieldFavoriteColor)
 	}
 	if m.favorite_dog_breed != nil {
 		fields = append(fields, user.FieldFavoriteDogBreed)
@@ -3795,6 +4465,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 		return m.Height()
 	case user.FieldFavoriteCatBreed:
 		return m.FavoriteCatBreed()
+	case user.FieldFavoriteColor:
+		return m.FavoriteColor()
 	case user.FieldFavoriteDogBreed:
 		return m.FavoriteDogBreed()
 	case user.FieldFavoriteFishBreed:
@@ -3816,6 +4488,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldHeight(ctx)
 	case user.FieldFavoriteCatBreed:
 		return m.OldFavoriteCatBreed(ctx)
+	case user.FieldFavoriteColor:
+		return m.OldFavoriteColor(ctx)
 	case user.FieldFavoriteDogBreed:
 		return m.OldFavoriteDogBreed(ctx)
 	case user.FieldFavoriteFishBreed:
@@ -3856,6 +4530,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFavoriteCatBreed(v)
+		return nil
+	case user.FieldFavoriteColor:
+		v, ok := value.(user.FavoriteColor)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFavoriteColor(v)
 		return nil
 	case user.FieldFavoriteDogBreed:
 		v, ok := value.(user.FavoriteDogBreed)
@@ -3980,6 +4661,9 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldFavoriteCatBreed:
 		m.ResetFavoriteCatBreed()
 		return nil
+	case user.FieldFavoriteColor:
+		m.ResetFavoriteColor()
+		return nil
 	case user.FieldFavoriteDogBreed:
 		m.ResetFavoriteDogBreed()
 		return nil
@@ -3992,12 +4676,18 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.pets != nil {
 		edges = append(edges, user.EdgePets)
 	}
+	if m.animals_saved != nil {
+		edges = append(edges, user.EdgeAnimalsSaved)
+	}
 	if m.best_friend != nil {
 		edges = append(edges, user.EdgeBestFriend)
+	}
+	if m.favorite_hat != nil {
+		edges = append(edges, user.EdgeFavoriteHat)
 	}
 	return edges
 }
@@ -4012,8 +4702,18 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeAnimalsSaved:
+		ids := make([]ent.Value, 0, len(m.animals_saved))
+		for id := range m.animals_saved {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeBestFriend:
 		if id := m.best_friend; id != nil {
+			return []ent.Value{*id}
+		}
+	case user.EdgeFavoriteHat:
+		if id := m.favorite_hat; id != nil {
 			return []ent.Value{*id}
 		}
 	}
@@ -4022,9 +4722,12 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.removedpets != nil {
 		edges = append(edges, user.EdgePets)
+	}
+	if m.removedanimals_saved != nil {
+		edges = append(edges, user.EdgeAnimalsSaved)
 	}
 	return edges
 }
@@ -4039,18 +4742,30 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeAnimalsSaved:
+		ids := make([]ent.Value, 0, len(m.removedanimals_saved))
+		for id := range m.removedanimals_saved {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 2)
+	edges := make([]string, 0, 4)
 	if m.clearedpets {
 		edges = append(edges, user.EdgePets)
 	}
+	if m.clearedanimals_saved {
+		edges = append(edges, user.EdgeAnimalsSaved)
+	}
 	if m.clearedbest_friend {
 		edges = append(edges, user.EdgeBestFriend)
+	}
+	if m.clearedfavorite_hat {
+		edges = append(edges, user.EdgeFavoriteHat)
 	}
 	return edges
 }
@@ -4061,8 +4776,12 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 	switch name {
 	case user.EdgePets:
 		return m.clearedpets
+	case user.EdgeAnimalsSaved:
+		return m.clearedanimals_saved
 	case user.EdgeBestFriend:
 		return m.clearedbest_friend
+	case user.EdgeFavoriteHat:
+		return m.clearedfavorite_hat
 	}
 	return false
 }
@@ -4073,6 +4792,9 @@ func (m *UserMutation) ClearEdge(name string) error {
 	switch name {
 	case user.EdgeBestFriend:
 		m.ClearBestFriend()
+		return nil
+	case user.EdgeFavoriteHat:
+		m.ClearFavoriteHat()
 		return nil
 	}
 	return fmt.Errorf("unknown User unique edge %s", name)
@@ -4085,8 +4807,14 @@ func (m *UserMutation) ResetEdge(name string) error {
 	case user.EdgePets:
 		m.ResetPets()
 		return nil
+	case user.EdgeAnimalsSaved:
+		m.ResetAnimalsSaved()
+		return nil
 	case user.EdgeBestFriend:
 		m.ResetBestFriend()
+		return nil
+	case user.EdgeFavoriteHat:
+		m.ResetFavoriteHat()
 		return nil
 	}
 	return fmt.Errorf("unknown User edge %s", name)
