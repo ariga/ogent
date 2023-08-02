@@ -18,8 +18,14 @@ import (
 var (
 	//go:embed template
 	templateDir embed.FS
+)
+
+func genTemplates(cfg *Config) *gen.Template {
 	// funcMap contains extra template functions used by ogent.
-	funcMap = template.FuncMap{
+	funcMap := template.FuncMap{
+		"allowClientUUIDs": func() bool {
+			return cfg.AllowClientUUIDs
+		},
 		"convertTo":       convertTo,
 		"eagerLoad":       eagerLoad,
 		"edgeOperations":  entoas.EdgeOperations,
@@ -43,8 +49,9 @@ var (
 		"viewNameEdge":    entoas.ViewNameEdge,
 	}
 	// templates holds all templates used by ogent.
-	templates = gen.MustParse(gen.NewTemplate("ogent").Funcs(funcMap).ParseFS(templateDir, "template/*tmpl"))
-)
+	templates := gen.MustParse(gen.NewTemplate("ogent").Funcs(funcMap).ParseFS(templateDir, "template/*tmpl"))
+	return templates
+}
 
 // eagerLoad returns the Go expression to eager load the required edges on the node operation.
 func eagerLoad(n *gen.Type, op entoas.Operation) (string, error) {
@@ -237,7 +244,7 @@ func setFieldExpr(f *gen.Field, schema, rec, ident string) (string, error) {
 		case Date:
 			opt = "Date"
 		case Time:
-			opt = "Time"			
+			opt = "Time"
 		case Duration:
 			opt = "Duration"
 		case UUID:
