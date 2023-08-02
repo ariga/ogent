@@ -1,5 +1,12 @@
 {{ define "ogent/ogent/helper/create" }}{{/* gotype: entgo.io/ent/entc/gen.Type */}}
 	b := h.client.{{ $.Name }}.Create()
+	{{ if allowClientUUIDs }}
+	{{ if eq $.ID.Type.Ident "uuid.UUID" }}
+	if v, ok := req.{{ $.ID.StructField }}.Get(); ok && v != uuid.Nil {
+		b.Set{{ $.ID.StructField }}(v)
+	}
+	{{ end }}
+	{{ end }}
 	// Add all fields.
 	{{- range $f := $.Fields }}
 		{{- $a := fieldAnnotation $f }}

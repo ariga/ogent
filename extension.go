@@ -21,6 +21,9 @@ type (
 		Target string
 		// The Views created by entoas.
 		Views map[string]*entoas.View
+		// Whether to allow the client to supply IDs in case uuids are used.
+		// AllowClientUUIDs, when enabled, allows the built-in "id" field as part of the payload for create, allowing the client to supply UUIDs as primary keys and for idempotency.
+		AllowClientUUIDs bool
 	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
@@ -41,12 +44,14 @@ func NewExtension(spec *ogen.Spec, opts ...ExtensionOption) (*Extension, error) 
 	if spec == nil {
 		return nil, errors.New("ogent: spec cannot be nil")
 	}
-	ex := &Extension{spec: spec, cfg: new(Config), templates: []*gen.Template{templates}}
+	ex := &Extension{spec: spec, cfg: new(Config)}
 	for _, opt := range opts {
 		if err := opt(ex); err != nil {
 			return nil, err
 		}
 	}
+	ex.templates = []*gen.Template{genTemplates(ex.cfg)}
+
 	return ex, nil
 }
 
@@ -54,6 +59,14 @@ func NewExtension(spec *ogen.Spec, opts ...ExtensionOption) (*Extension, error) 
 func Target(t string) ExtensionOption {
 	return func(ex *Extension) error {
 		ex.cfg.Target = t
+		return nil
+	}
+}
+
+// AllowClientUUIDs allows the client to supply IDs in case uuids are used.
+func AllowClientUUIDs() ExtensionOption {
+	return func(ex *Extension) error {
+		ex.cfg.AllowClientUUIDs = true
 		return nil
 	}
 }
