@@ -21,7 +21,7 @@ type (
 		Target string
 		// The Views created by entoas.
 		Views map[string]*entoas.View
-		OgenGenOptions ogengen.Options
+		OgenGenOptions *ogengen.Options
 	}
 	// Extension implements entc.Extension interface providing integration with ogen.
 	Extension struct {
@@ -69,7 +69,7 @@ func Templates(ts ...*gen.Template) ExtensionOption {
 
 func OgenGenOptions(opts ogengen.Options) ExtensionOption {
 	return func(ex *Extension) error {
-		ex.Config.OgenGenOptions = opts
+		ex.cfg.OgenGenOptions = &opts
 		return nil
 	}
 }
@@ -118,8 +118,8 @@ func (ex Extension) ogen(next gen.Generator) gen.Generator {
 		}
 		// Run the ogen code generator.
 		opts := ogengen.Options{}
-		if ex.Config.OgenGenOptions != opts {
-			opts = ex.Config.OgenGenOptions
+		if ex.cfg.OgenGenOptions != nil {
+			opts = *ex.cfg.OgenGenOptions
 		}
 		generator, err := ogengen.NewGenerator(ex.spec, opts)
 		if err != nil {
