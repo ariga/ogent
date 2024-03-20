@@ -14,7 +14,7 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeCreateAllTypesResponse(resp *http.Response) (res CreateAllTypesRes, err error) {
+func decodeCreateAllTypesResponse(resp *http.Response) (res CreateAllTypesRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -46,6 +46,15 @@ func decodeCreateAllTypesResponse(resp *http.Response) (res CreateAllTypesRes, e
 					Err:         err,
 				}
 				return res, err
+			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:
@@ -160,7 +169,7 @@ func decodeCreateAllTypesResponse(resp *http.Response) (res CreateAllTypesRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeCreateCategoryResponse(resp *http.Response) (res CreateCategoryRes, err error) {
+func decodeCreateCategoryResponse(resp *http.Response) (res CreateCategoryRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -306,7 +315,7 @@ func decodeCreateCategoryResponse(resp *http.Response) (res CreateCategoryRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeCreateHatResponse(resp *http.Response) (res CreateHatRes, err error) {
+func decodeCreateHatResponse(resp *http.Response) (res CreateHatRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -339,6 +348,15 @@ func decodeCreateHatResponse(resp *http.Response) (res CreateHatRes, err error) 
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -452,7 +470,7 @@ func decodeCreateHatResponse(resp *http.Response) (res CreateHatRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeCreatePetResponse(resp *http.Response) (res CreatePetRes, err error) {
+func decodeCreatePetResponse(resp *http.Response) (res CreatePetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -485,6 +503,15 @@ func decodeCreatePetResponse(resp *http.Response) (res CreatePetRes, err error) 
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -598,7 +625,7 @@ func decodeCreatePetResponse(resp *http.Response) (res CreatePetRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeCreateUserResponse(resp *http.Response) (res CreateUserRes, err error) {
+func decodeCreateUserResponse(resp *http.Response) (res CreateUserRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -631,6 +658,15 @@ func decodeCreateUserResponse(resp *http.Response) (res CreateUserRes, err error
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -744,7 +780,7 @@ func decodeCreateUserResponse(resp *http.Response) (res CreateUserRes, err error
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeDeleteAllTypesResponse(resp *http.Response) (res DeleteAllTypesRes, err error) {
+func decodeDeleteAllTypesResponse(resp *http.Response) (res DeleteAllTypesRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
@@ -893,7 +929,7 @@ func decodeDeleteAllTypesResponse(resp *http.Response) (res DeleteAllTypesRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeDeleteCategoryResponse(resp *http.Response) (res DeleteCategoryRes, err error) {
+func decodeDeleteCategoryResponse(resp *http.Response) (res DeleteCategoryRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
@@ -1042,7 +1078,7 @@ func decodeDeleteCategoryResponse(resp *http.Response) (res DeleteCategoryRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeDeleteHatResponse(resp *http.Response) (res DeleteHatRes, err error) {
+func decodeDeleteHatResponse(resp *http.Response) (res DeleteHatRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
@@ -1191,7 +1227,7 @@ func decodeDeleteHatResponse(resp *http.Response) (res DeleteHatRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeDeletePetResponse(resp *http.Response) (res DeletePetRes, err error) {
+func decodeDeletePetResponse(resp *http.Response) (res DeletePetRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
@@ -1340,7 +1376,7 @@ func decodeDeletePetResponse(resp *http.Response) (res DeletePetRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeDeleteUserResponse(resp *http.Response) (res DeleteUserRes, err error) {
+func decodeDeleteUserResponse(resp *http.Response) (res DeleteUserRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
@@ -1489,7 +1525,7 @@ func decodeDeleteUserResponse(resp *http.Response) (res DeleteUserRes, err error
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListAllTypesResponse(resp *http.Response) (res ListAllTypesRes, err error) {
+func decodeListAllTypesResponse(resp *http.Response) (res ListAllTypesRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -1522,6 +1558,15 @@ func decodeListAllTypesResponse(resp *http.Response) (res ListAllTypesRes, err e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -1670,7 +1715,7 @@ func decodeListAllTypesResponse(resp *http.Response) (res ListAllTypesRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListCategoryResponse(resp *http.Response) (res ListCategoryRes, err error) {
+func decodeListCategoryResponse(resp *http.Response) (res ListCategoryRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -1703,6 +1748,15 @@ func decodeListCategoryResponse(resp *http.Response) (res ListCategoryRes, err e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -1851,7 +1905,7 @@ func decodeListCategoryResponse(resp *http.Response) (res ListCategoryRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListCategoryPetsResponse(resp *http.Response) (res ListCategoryPetsRes, err error) {
+func decodeListCategoryPetsResponse(resp *http.Response) (res ListCategoryPetsRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -1884,6 +1938,15 @@ func decodeListCategoryPetsResponse(resp *http.Response) (res ListCategoryPetsRe
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2032,7 +2095,7 @@ func decodeListCategoryPetsResponse(resp *http.Response) (res ListCategoryPetsRe
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListHatResponse(resp *http.Response) (res ListHatRes, err error) {
+func decodeListHatResponse(resp *http.Response) (res ListHatRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2065,6 +2128,15 @@ func decodeListHatResponse(resp *http.Response) (res ListHatRes, err error) {
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2213,7 +2285,7 @@ func decodeListHatResponse(resp *http.Response) (res ListHatRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListPetResponse(resp *http.Response) (res ListPetRes, err error) {
+func decodeListPetResponse(resp *http.Response) (res ListPetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2246,6 +2318,15 @@ func decodeListPetResponse(resp *http.Response) (res ListPetRes, err error) {
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2394,7 +2475,7 @@ func decodeListPetResponse(resp *http.Response) (res ListPetRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListPetCategoriesResponse(resp *http.Response) (res ListPetCategoriesRes, err error) {
+func decodeListPetCategoriesResponse(resp *http.Response) (res ListPetCategoriesRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2427,6 +2508,15 @@ func decodeListPetCategoriesResponse(resp *http.Response) (res ListPetCategories
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2575,7 +2665,7 @@ func decodeListPetCategoriesResponse(resp *http.Response) (res ListPetCategories
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListPetFriendsResponse(resp *http.Response) (res ListPetFriendsRes, err error) {
+func decodeListPetFriendsResponse(resp *http.Response) (res ListPetFriendsRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2608,6 +2698,15 @@ func decodeListPetFriendsResponse(resp *http.Response) (res ListPetFriendsRes, e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2756,7 +2855,7 @@ func decodeListPetFriendsResponse(resp *http.Response) (res ListPetFriendsRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListPetRescuerResponse(resp *http.Response) (res ListPetRescuerRes, err error) {
+func decodeListPetRescuerResponse(resp *http.Response) (res ListPetRescuerRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2789,6 +2888,15 @@ func decodeListPetRescuerResponse(resp *http.Response) (res ListPetRescuerRes, e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -2937,7 +3045,7 @@ func decodeListPetRescuerResponse(resp *http.Response) (res ListPetRescuerRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListUserResponse(resp *http.Response) (res ListUserRes, err error) {
+func decodeListUserResponse(resp *http.Response) (res ListUserRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2970,6 +3078,15 @@ func decodeListUserResponse(resp *http.Response) (res ListUserRes, err error) {
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -3118,7 +3235,7 @@ func decodeListUserResponse(resp *http.Response) (res ListUserRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListUserAnimalsSavedResponse(resp *http.Response) (res ListUserAnimalsSavedRes, err error) {
+func decodeListUserAnimalsSavedResponse(resp *http.Response) (res ListUserAnimalsSavedRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -3151,6 +3268,15 @@ func decodeListUserAnimalsSavedResponse(resp *http.Response) (res ListUserAnimal
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -3299,7 +3425,7 @@ func decodeListUserAnimalsSavedResponse(resp *http.Response) (res ListUserAnimal
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeListUserPetsResponse(resp *http.Response) (res ListUserPetsRes, err error) {
+func decodeListUserPetsResponse(resp *http.Response) (res ListUserPetsRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -3332,6 +3458,15 @@ func decodeListUserPetsResponse(resp *http.Response) (res ListUserPetsRes, err e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -3480,7 +3615,7 @@ func decodeListUserPetsResponse(resp *http.Response) (res ListUserPetsRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadAllTypesResponse(resp *http.Response) (res ReadAllTypesRes, err error) {
+func decodeReadAllTypesResponse(resp *http.Response) (res ReadAllTypesRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -3513,6 +3648,15 @@ func decodeReadAllTypesResponse(resp *http.Response) (res ReadAllTypesRes, err e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -3661,7 +3805,7 @@ func decodeReadAllTypesResponse(resp *http.Response) (res ReadAllTypesRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadCategoryResponse(resp *http.Response) (res ReadCategoryRes, err error) {
+func decodeReadCategoryResponse(resp *http.Response) (res ReadCategoryRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -3842,7 +3986,7 @@ func decodeReadCategoryResponse(resp *http.Response) (res ReadCategoryRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadHatResponse(resp *http.Response) (res ReadHatRes, err error) {
+func decodeReadHatResponse(resp *http.Response) (res ReadHatRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -3875,6 +4019,15 @@ func decodeReadHatResponse(resp *http.Response) (res ReadHatRes, err error) {
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -4023,7 +4176,7 @@ func decodeReadHatResponse(resp *http.Response) (res ReadHatRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadHatWearerResponse(resp *http.Response) (res ReadHatWearerRes, err error) {
+func decodeReadHatWearerResponse(resp *http.Response) (res ReadHatWearerRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4056,6 +4209,15 @@ func decodeReadHatWearerResponse(resp *http.Response) (res ReadHatWearerRes, err
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -4204,7 +4366,7 @@ func decodeReadHatWearerResponse(resp *http.Response) (res ReadHatWearerRes, err
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadPetResponse(resp *http.Response) (res ReadPetRes, err error) {
+func decodeReadPetResponse(resp *http.Response) (res ReadPetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4385,7 +4547,7 @@ func decodeReadPetResponse(resp *http.Response) (res ReadPetRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadPetOwnerResponse(resp *http.Response) (res ReadPetOwnerRes, err error) {
+func decodeReadPetOwnerResponse(resp *http.Response) (res ReadPetOwnerRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4418,6 +4580,15 @@ func decodeReadPetOwnerResponse(resp *http.Response) (res ReadPetOwnerRes, err e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -4566,7 +4737,7 @@ func decodeReadPetOwnerResponse(resp *http.Response) (res ReadPetOwnerRes, err e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadUserResponse(resp *http.Response) (res ReadUserRes, err error) {
+func decodeReadUserResponse(resp *http.Response) (res ReadUserRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4599,6 +4770,15 @@ func decodeReadUserResponse(resp *http.Response) (res ReadUserRes, err error) {
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -4747,7 +4927,7 @@ func decodeReadUserResponse(resp *http.Response) (res ReadUserRes, err error) {
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadUserBestFriendResponse(resp *http.Response) (res ReadUserBestFriendRes, err error) {
+func decodeReadUserBestFriendResponse(resp *http.Response) (res ReadUserBestFriendRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4780,6 +4960,15 @@ func decodeReadUserBestFriendResponse(resp *http.Response) (res ReadUserBestFrie
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -4928,7 +5117,7 @@ func decodeReadUserBestFriendResponse(resp *http.Response) (res ReadUserBestFrie
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeReadUserFavoriteHatResponse(resp *http.Response) (res ReadUserFavoriteHatRes, err error) {
+func decodeReadUserFavoriteHatResponse(resp *http.Response) (res ReadUserFavoriteHatRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -4961,6 +5150,15 @@ func decodeReadUserFavoriteHatResponse(resp *http.Response) (res ReadUserFavorit
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -5109,7 +5307,7 @@ func decodeReadUserFavoriteHatResponse(resp *http.Response) (res ReadUserFavorit
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeUpdateAllTypesResponse(resp *http.Response) (res UpdateAllTypesRes, err error) {
+func decodeUpdateAllTypesResponse(resp *http.Response) (res UpdateAllTypesRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -5142,6 +5340,15 @@ func decodeUpdateAllTypesResponse(resp *http.Response) (res UpdateAllTypesRes, e
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
@@ -5290,7 +5497,7 @@ func decodeUpdateAllTypesResponse(resp *http.Response) (res UpdateAllTypesRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeUpdateCategoryResponse(resp *http.Response) (res UpdateCategoryRes, err error) {
+func decodeUpdateCategoryResponse(resp *http.Response) (res UpdateCategoryRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -5471,7 +5678,7 @@ func decodeUpdateCategoryResponse(resp *http.Response) (res UpdateCategoryRes, e
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeUpdateHatResponse(resp *http.Response) (res UpdateHatRes, err error) {
+func decodeUpdateHatResponse(resp *http.Response) (res UpdateHatRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -5503,6 +5710,15 @@ func decodeUpdateHatResponse(resp *http.Response) (res UpdateHatRes, err error) 
 					Err:         err,
 				}
 				return res, err
+			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:
@@ -5652,7 +5868,7 @@ func decodeUpdateHatResponse(resp *http.Response) (res UpdateHatRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeUpdatePetResponse(resp *http.Response) (res UpdatePetRes, err error) {
+func decodeUpdatePetResponse(resp *http.Response) (res UpdatePetRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -5833,7 +6049,7 @@ func decodeUpdatePetResponse(resp *http.Response) (res UpdatePetRes, err error) 
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeUpdateUserResponse(resp *http.Response) (res UpdateUserRes, err error) {
+func decodeUpdateUserResponse(resp *http.Response) (res UpdateUserRes, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -5865,6 +6081,15 @@ func decodeUpdateUserResponse(resp *http.Response) (res UpdateUserRes, err error
 					Err:         err,
 				}
 				return res, err
+			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
 			}
 			return &response, nil
 		default:

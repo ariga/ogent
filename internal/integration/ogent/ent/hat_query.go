@@ -19,7 +19,7 @@ import (
 type HatQuery struct {
 	config
 	ctx        *QueryContext
-	order      []OrderFunc
+	order      []hat.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Hat
 	withWearer *UserQuery
@@ -55,7 +55,7 @@ func (hq *HatQuery) Unique(unique bool) *HatQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (hq *HatQuery) Order(o ...OrderFunc) *HatQuery {
+func (hq *HatQuery) Order(o ...hat.OrderOption) *HatQuery {
 	hq.order = append(hq.order, o...)
 	return hq
 }
@@ -271,7 +271,7 @@ func (hq *HatQuery) Clone() *HatQuery {
 	return &HatQuery{
 		config:     hq.config,
 		ctx:        hq.ctx.Clone(),
-		order:      append([]OrderFunc{}, hq.order...),
+		order:      append([]hat.OrderOption{}, hq.order...),
 		inters:     append([]Interceptor{}, hq.inters...),
 		predicates: append([]predicate.Hat{}, hq.predicates...),
 		withWearer: hq.withWearer.Clone(),

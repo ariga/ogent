@@ -21,7 +21,7 @@ import (
 type UserQuery struct {
 	config
 	ctx              *QueryContext
-	order            []OrderFunc
+	order            []user.OrderOption
 	inters           []Interceptor
 	predicates       []predicate.User
 	withPets         *PetQuery
@@ -60,7 +60,7 @@ func (uq *UserQuery) Unique(unique bool) *UserQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (uq *UserQuery) Order(o ...OrderFunc) *UserQuery {
+func (uq *UserQuery) Order(o ...user.OrderOption) *UserQuery {
 	uq.order = append(uq.order, o...)
 	return uq
 }
@@ -342,7 +342,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 	return &UserQuery{
 		config:           uq.config,
 		ctx:              uq.ctx.Clone(),
-		order:            append([]OrderFunc{}, uq.order...),
+		order:            append([]user.OrderOption{}, uq.order...),
 		inters:           append([]Interceptor{}, uq.inters...),
 		predicates:       append([]predicate.User{}, uq.predicates...),
 		withPets:         uq.withPets.Clone(),
@@ -550,7 +550,7 @@ func (uq *UserQuery) loadPets(ctx context.Context, query *PetQuery, nodes []*Use
 	}
 	query.withFKs = true
 	query.Where(predicate.Pet(func(s *sql.Selector) {
-		s.Where(sql.InValues(user.PetsColumn, fks...))
+		s.Where(sql.InValues(s.C(user.PetsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -563,7 +563,7 @@ func (uq *UserQuery) loadPets(ctx context.Context, query *PetQuery, nodes []*Use
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_pets" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "user_pets" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -671,7 +671,7 @@ func (uq *UserQuery) loadFavoriteHat(ctx context.Context, query *HatQuery, nodes
 	}
 	query.withFKs = true
 	query.Where(predicate.Hat(func(s *sql.Selector) {
-		s.Where(sql.InValues(user.FavoriteHatColumn, fks...))
+		s.Where(sql.InValues(s.C(user.FavoriteHatColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -684,7 +684,7 @@ func (uq *UserQuery) loadFavoriteHat(ctx context.Context, query *HatQuery, nodes
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_favorite_hat" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "user_favorite_hat" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

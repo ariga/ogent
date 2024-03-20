@@ -254,6 +254,14 @@ const (
 	AllTypesCreateStateOff AllTypesCreateState = "off"
 )
 
+// AllValues returns all AllTypesCreateState values.
+func (AllTypesCreateState) AllValues() []AllTypesCreateState {
+	return []AllTypesCreateState{
+		AllTypesCreateStateOn,
+		AllTypesCreateStateOff,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s AllTypesCreateState) MarshalText() ([]byte, error) {
 	switch s {
@@ -521,6 +529,14 @@ const (
 	AllTypesListStateOn  AllTypesListState = "on"
 	AllTypesListStateOff AllTypesListState = "off"
 )
+
+// AllValues returns all AllTypesListState values.
+func (AllTypesListState) AllValues() []AllTypesListState {
+	return []AllTypesListState{
+		AllTypesListStateOn,
+		AllTypesListStateOff,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s AllTypesListState) MarshalText() ([]byte, error) {
@@ -792,6 +808,14 @@ const (
 	AllTypesReadStateOff AllTypesReadState = "off"
 )
 
+// AllValues returns all AllTypesReadState values.
+func (AllTypesReadState) AllValues() []AllTypesReadState {
+	return []AllTypesReadState{
+		AllTypesReadStateOn,
+		AllTypesReadStateOff,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s AllTypesReadState) MarshalText() ([]byte, error) {
 	switch s {
@@ -1061,6 +1085,14 @@ const (
 	AllTypesUpdateStateOn  AllTypesUpdateState = "on"
 	AllTypesUpdateStateOff AllTypesUpdateState = "off"
 )
+
+// AllValues returns all AllTypesUpdateState values.
+func (AllTypesUpdateState) AllValues() []AllTypesUpdateState {
+	return []AllTypesUpdateState{
+		AllTypesUpdateStateOn,
+		AllTypesUpdateStateOff,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s AllTypesUpdateState) MarshalText() ([]byte, error) {
@@ -1542,6 +1574,14 @@ const (
 	CreateAllTypesReqStateOff CreateAllTypesReqState = "off"
 )
 
+// AllValues returns all CreateAllTypesReqState values.
+func (CreateAllTypesReqState) AllValues() []CreateAllTypesReqState {
+	return []CreateAllTypesReqState{
+		CreateAllTypesReqStateOn,
+		CreateAllTypesReqStateOff,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateAllTypesReqState) MarshalText() ([]byte, error) {
 	switch s {
@@ -1636,6 +1676,15 @@ const (
 	CreateHatReqTypeTrucker  CreateHatReqType = "trucker"
 	CreateHatReqTypeSnapback CreateHatReqType = "snapback"
 )
+
+// AllValues returns all CreateHatReqType values.
+func (CreateHatReqType) AllValues() []CreateHatReqType {
+	return []CreateHatReqType{
+		CreateHatReqTypeDad,
+		CreateHatReqTypeTrucker,
+		CreateHatReqTypeSnapback,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateHatReqType) MarshalText() ([]byte, error) {
@@ -1905,6 +1954,18 @@ const (
 	CreateUserReqFavoriteCatBreedOther   CreateUserReqFavoriteCatBreed = "other"
 )
 
+// AllValues returns all CreateUserReqFavoriteCatBreed values.
+func (CreateUserReqFavoriteCatBreed) AllValues() []CreateUserReqFavoriteCatBreed {
+	return []CreateUserReqFavoriteCatBreed{
+		CreateUserReqFavoriteCatBreedSiamese,
+		CreateUserReqFavoriteCatBreedBengal,
+		CreateUserReqFavoriteCatBreedLion,
+		CreateUserReqFavoriteCatBreedTiger,
+		CreateUserReqFavoriteCatBreedLeopard,
+		CreateUserReqFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateUserReqFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -1959,6 +2020,15 @@ const (
 	CreateUserReqFavoriteColorBlue  CreateUserReqFavoriteColor = "blue"
 )
 
+// AllValues returns all CreateUserReqFavoriteColor values.
+func (CreateUserReqFavoriteColor) AllValues() []CreateUserReqFavoriteColor {
+	return []CreateUserReqFavoriteColor{
+		CreateUserReqFavoriteColorRed,
+		CreateUserReqFavoriteColorGreen,
+		CreateUserReqFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateUserReqFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -1996,6 +2066,13 @@ const (
 	CreateUserReqFavoriteDogBreedKuro CreateUserReqFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all CreateUserReqFavoriteDogBreed values.
+func (CreateUserReqFavoriteDogBreed) AllValues() []CreateUserReqFavoriteDogBreed {
+	return []CreateUserReqFavoriteDogBreed{
+		CreateUserReqFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateUserReqFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -2024,6 +2101,15 @@ const (
 	CreateUserReqFavoriteFishBreedKoi   CreateUserReqFavoriteFishBreed = "koi"
 	CreateUserReqFavoriteFishBreedShark CreateUserReqFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all CreateUserReqFavoriteFishBreed values.
+func (CreateUserReqFavoriteFishBreed) AllValues() []CreateUserReqFavoriteFishBreed {
+	return []CreateUserReqFavoriteFishBreed{
+		CreateUserReqFavoriteFishBreedGold,
+		CreateUserReqFavoriteFishBreedKoi,
+		CreateUserReqFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s CreateUserReqFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -2128,6 +2214,15 @@ const (
 	HatCreateTypeSnapback HatCreateType = "snapback"
 )
 
+// AllValues returns all HatCreateType values.
+func (HatCreateType) AllValues() []HatCreateType {
+	return []HatCreateType{
+		HatCreateTypeDad,
+		HatCreateTypeTrucker,
+		HatCreateTypeSnapback,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s HatCreateType) MarshalText() ([]byte, error) {
 	switch s {
@@ -2203,6 +2298,15 @@ const (
 	HatListTypeTrucker  HatListType = "trucker"
 	HatListTypeSnapback HatListType = "snapback"
 )
+
+// AllValues returns all HatListType values.
+func (HatListType) AllValues() []HatListType {
+	return []HatListType{
+		HatListTypeDad,
+		HatListTypeTrucker,
+		HatListTypeSnapback,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s HatListType) MarshalText() ([]byte, error) {
@@ -2282,6 +2386,15 @@ const (
 	HatReadTypeSnapback HatReadType = "snapback"
 )
 
+// AllValues returns all HatReadType values.
+func (HatReadType) AllValues() []HatReadType {
+	return []HatReadType{
+		HatReadTypeDad,
+		HatReadTypeTrucker,
+		HatReadTypeSnapback,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s HatReadType) MarshalText() ([]byte, error) {
 	switch s {
@@ -2359,6 +2472,15 @@ const (
 	HatUpdateTypeTrucker  HatUpdateType = "trucker"
 	HatUpdateTypeSnapback HatUpdateType = "snapback"
 )
+
+// AllValues returns all HatUpdateType values.
+func (HatUpdateType) AllValues() []HatUpdateType {
+	return []HatUpdateType{
+		HatUpdateTypeDad,
+		HatUpdateTypeTrucker,
+		HatUpdateTypeSnapback,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s HatUpdateType) MarshalText() ([]byte, error) {
@@ -2496,6 +2618,18 @@ const (
 	HatWearerReadFavoriteCatBreedOther   HatWearerReadFavoriteCatBreed = "other"
 )
 
+// AllValues returns all HatWearerReadFavoriteCatBreed values.
+func (HatWearerReadFavoriteCatBreed) AllValues() []HatWearerReadFavoriteCatBreed {
+	return []HatWearerReadFavoriteCatBreed{
+		HatWearerReadFavoriteCatBreedSiamese,
+		HatWearerReadFavoriteCatBreedBengal,
+		HatWearerReadFavoriteCatBreedLion,
+		HatWearerReadFavoriteCatBreedTiger,
+		HatWearerReadFavoriteCatBreedLeopard,
+		HatWearerReadFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s HatWearerReadFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -2550,6 +2684,15 @@ const (
 	HatWearerReadFavoriteColorBlue  HatWearerReadFavoriteColor = "blue"
 )
 
+// AllValues returns all HatWearerReadFavoriteColor values.
+func (HatWearerReadFavoriteColor) AllValues() []HatWearerReadFavoriteColor {
+	return []HatWearerReadFavoriteColor{
+		HatWearerReadFavoriteColorRed,
+		HatWearerReadFavoriteColorGreen,
+		HatWearerReadFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s HatWearerReadFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -2587,6 +2730,13 @@ const (
 	HatWearerReadFavoriteDogBreedKuro HatWearerReadFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all HatWearerReadFavoriteDogBreed values.
+func (HatWearerReadFavoriteDogBreed) AllValues() []HatWearerReadFavoriteDogBreed {
+	return []HatWearerReadFavoriteDogBreed{
+		HatWearerReadFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s HatWearerReadFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -2615,6 +2765,15 @@ const (
 	HatWearerReadFavoriteFishBreedKoi   HatWearerReadFavoriteFishBreed = "koi"
 	HatWearerReadFavoriteFishBreedShark HatWearerReadFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all HatWearerReadFavoriteFishBreed values.
+func (HatWearerReadFavoriteFishBreed) AllValues() []HatWearerReadFavoriteFishBreed {
+	return []HatWearerReadFavoriteFishBreed{
+		HatWearerReadFavoriteFishBreedGold,
+		HatWearerReadFavoriteFishBreedKoi,
+		HatWearerReadFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s HatWearerReadFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -4480,6 +4639,18 @@ const (
 	PetCreateOwnerFavoriteCatBreedOther   PetCreateOwnerFavoriteCatBreed = "other"
 )
 
+// AllValues returns all PetCreateOwnerFavoriteCatBreed values.
+func (PetCreateOwnerFavoriteCatBreed) AllValues() []PetCreateOwnerFavoriteCatBreed {
+	return []PetCreateOwnerFavoriteCatBreed{
+		PetCreateOwnerFavoriteCatBreedSiamese,
+		PetCreateOwnerFavoriteCatBreedBengal,
+		PetCreateOwnerFavoriteCatBreedLion,
+		PetCreateOwnerFavoriteCatBreedTiger,
+		PetCreateOwnerFavoriteCatBreedLeopard,
+		PetCreateOwnerFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetCreateOwnerFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -4534,6 +4705,15 @@ const (
 	PetCreateOwnerFavoriteColorBlue  PetCreateOwnerFavoriteColor = "blue"
 )
 
+// AllValues returns all PetCreateOwnerFavoriteColor values.
+func (PetCreateOwnerFavoriteColor) AllValues() []PetCreateOwnerFavoriteColor {
+	return []PetCreateOwnerFavoriteColor{
+		PetCreateOwnerFavoriteColorRed,
+		PetCreateOwnerFavoriteColorGreen,
+		PetCreateOwnerFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetCreateOwnerFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -4571,6 +4751,13 @@ const (
 	PetCreateOwnerFavoriteDogBreedKuro PetCreateOwnerFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all PetCreateOwnerFavoriteDogBreed values.
+func (PetCreateOwnerFavoriteDogBreed) AllValues() []PetCreateOwnerFavoriteDogBreed {
+	return []PetCreateOwnerFavoriteDogBreed{
+		PetCreateOwnerFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetCreateOwnerFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -4599,6 +4786,15 @@ const (
 	PetCreateOwnerFavoriteFishBreedKoi   PetCreateOwnerFavoriteFishBreed = "koi"
 	PetCreateOwnerFavoriteFishBreedShark PetCreateOwnerFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all PetCreateOwnerFavoriteFishBreed values.
+func (PetCreateOwnerFavoriteFishBreed) AllValues() []PetCreateOwnerFavoriteFishBreed {
+	return []PetCreateOwnerFavoriteFishBreed{
+		PetCreateOwnerFavoriteFishBreedGold,
+		PetCreateOwnerFavoriteFishBreedKoi,
+		PetCreateOwnerFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s PetCreateOwnerFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -4876,6 +5072,18 @@ const (
 	PetOwnerReadFavoriteCatBreedOther   PetOwnerReadFavoriteCatBreed = "other"
 )
 
+// AllValues returns all PetOwnerReadFavoriteCatBreed values.
+func (PetOwnerReadFavoriteCatBreed) AllValues() []PetOwnerReadFavoriteCatBreed {
+	return []PetOwnerReadFavoriteCatBreed{
+		PetOwnerReadFavoriteCatBreedSiamese,
+		PetOwnerReadFavoriteCatBreedBengal,
+		PetOwnerReadFavoriteCatBreedLion,
+		PetOwnerReadFavoriteCatBreedTiger,
+		PetOwnerReadFavoriteCatBreedLeopard,
+		PetOwnerReadFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetOwnerReadFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -4930,6 +5138,15 @@ const (
 	PetOwnerReadFavoriteColorBlue  PetOwnerReadFavoriteColor = "blue"
 )
 
+// AllValues returns all PetOwnerReadFavoriteColor values.
+func (PetOwnerReadFavoriteColor) AllValues() []PetOwnerReadFavoriteColor {
+	return []PetOwnerReadFavoriteColor{
+		PetOwnerReadFavoriteColorRed,
+		PetOwnerReadFavoriteColorGreen,
+		PetOwnerReadFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetOwnerReadFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -4967,6 +5184,13 @@ const (
 	PetOwnerReadFavoriteDogBreedKuro PetOwnerReadFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all PetOwnerReadFavoriteDogBreed values.
+func (PetOwnerReadFavoriteDogBreed) AllValues() []PetOwnerReadFavoriteDogBreed {
+	return []PetOwnerReadFavoriteDogBreed{
+		PetOwnerReadFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetOwnerReadFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -4995,6 +5219,15 @@ const (
 	PetOwnerReadFavoriteFishBreedKoi   PetOwnerReadFavoriteFishBreed = "koi"
 	PetOwnerReadFavoriteFishBreedShark PetOwnerReadFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all PetOwnerReadFavoriteFishBreed values.
+func (PetOwnerReadFavoriteFishBreed) AllValues() []PetOwnerReadFavoriteFishBreed {
+	return []PetOwnerReadFavoriteFishBreed{
+		PetOwnerReadFavoriteFishBreedGold,
+		PetOwnerReadFavoriteFishBreedKoi,
+		PetOwnerReadFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s PetOwnerReadFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -5202,6 +5435,18 @@ const (
 	PetRescuerListFavoriteCatBreedOther   PetRescuerListFavoriteCatBreed = "other"
 )
 
+// AllValues returns all PetRescuerListFavoriteCatBreed values.
+func (PetRescuerListFavoriteCatBreed) AllValues() []PetRescuerListFavoriteCatBreed {
+	return []PetRescuerListFavoriteCatBreed{
+		PetRescuerListFavoriteCatBreedSiamese,
+		PetRescuerListFavoriteCatBreedBengal,
+		PetRescuerListFavoriteCatBreedLion,
+		PetRescuerListFavoriteCatBreedTiger,
+		PetRescuerListFavoriteCatBreedLeopard,
+		PetRescuerListFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetRescuerListFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -5256,6 +5501,15 @@ const (
 	PetRescuerListFavoriteColorBlue  PetRescuerListFavoriteColor = "blue"
 )
 
+// AllValues returns all PetRescuerListFavoriteColor values.
+func (PetRescuerListFavoriteColor) AllValues() []PetRescuerListFavoriteColor {
+	return []PetRescuerListFavoriteColor{
+		PetRescuerListFavoriteColorRed,
+		PetRescuerListFavoriteColorGreen,
+		PetRescuerListFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetRescuerListFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -5293,6 +5547,13 @@ const (
 	PetRescuerListFavoriteDogBreedKuro PetRescuerListFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all PetRescuerListFavoriteDogBreed values.
+func (PetRescuerListFavoriteDogBreed) AllValues() []PetRescuerListFavoriteDogBreed {
+	return []PetRescuerListFavoriteDogBreed{
+		PetRescuerListFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s PetRescuerListFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -5321,6 +5582,15 @@ const (
 	PetRescuerListFavoriteFishBreedKoi   PetRescuerListFavoriteFishBreed = "koi"
 	PetRescuerListFavoriteFishBreedShark PetRescuerListFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all PetRescuerListFavoriteFishBreed values.
+func (PetRescuerListFavoriteFishBreed) AllValues() []PetRescuerListFavoriteFishBreed {
+	return []PetRescuerListFavoriteFishBreed{
+		PetRescuerListFavoriteFishBreedGold,
+		PetRescuerListFavoriteFishBreedKoi,
+		PetRescuerListFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s PetRescuerListFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -5938,6 +6208,14 @@ const (
 	UpdateAllTypesReqStateOff UpdateAllTypesReqState = "off"
 )
 
+// AllValues returns all UpdateAllTypesReqState values.
+func (UpdateAllTypesReqState) AllValues() []UpdateAllTypesReqState {
+	return []UpdateAllTypesReqState{
+		UpdateAllTypesReqStateOn,
+		UpdateAllTypesReqStateOff,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UpdateAllTypesReqState) MarshalText() ([]byte, error) {
 	switch s {
@@ -6240,6 +6518,18 @@ const (
 	UpdateUserReqFavoriteCatBreedOther   UpdateUserReqFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UpdateUserReqFavoriteCatBreed values.
+func (UpdateUserReqFavoriteCatBreed) AllValues() []UpdateUserReqFavoriteCatBreed {
+	return []UpdateUserReqFavoriteCatBreed{
+		UpdateUserReqFavoriteCatBreedSiamese,
+		UpdateUserReqFavoriteCatBreedBengal,
+		UpdateUserReqFavoriteCatBreedLion,
+		UpdateUserReqFavoriteCatBreedTiger,
+		UpdateUserReqFavoriteCatBreedLeopard,
+		UpdateUserReqFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UpdateUserReqFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6292,6 +6582,13 @@ const (
 	UpdateUserReqFavoriteDogBreedKuro UpdateUserReqFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UpdateUserReqFavoriteDogBreed values.
+func (UpdateUserReqFavoriteDogBreed) AllValues() []UpdateUserReqFavoriteDogBreed {
+	return []UpdateUserReqFavoriteDogBreed{
+		UpdateUserReqFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UpdateUserReqFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6320,6 +6617,15 @@ const (
 	UpdateUserReqFavoriteFishBreedKoi   UpdateUserReqFavoriteFishBreed = "koi"
 	UpdateUserReqFavoriteFishBreedShark UpdateUserReqFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UpdateUserReqFavoriteFishBreed values.
+func (UpdateUserReqFavoriteFishBreed) AllValues() []UpdateUserReqFavoriteFishBreed {
+	return []UpdateUserReqFavoriteFishBreed{
+		UpdateUserReqFavoriteFishBreedGold,
+		UpdateUserReqFavoriteFishBreedKoi,
+		UpdateUserReqFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UpdateUserReqFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -6527,6 +6833,18 @@ const (
 	UserBestFriendReadFavoriteCatBreedOther   UserBestFriendReadFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UserBestFriendReadFavoriteCatBreed values.
+func (UserBestFriendReadFavoriteCatBreed) AllValues() []UserBestFriendReadFavoriteCatBreed {
+	return []UserBestFriendReadFavoriteCatBreed{
+		UserBestFriendReadFavoriteCatBreedSiamese,
+		UserBestFriendReadFavoriteCatBreedBengal,
+		UserBestFriendReadFavoriteCatBreedLion,
+		UserBestFriendReadFavoriteCatBreedTiger,
+		UserBestFriendReadFavoriteCatBreedLeopard,
+		UserBestFriendReadFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserBestFriendReadFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6581,6 +6899,15 @@ const (
 	UserBestFriendReadFavoriteColorBlue  UserBestFriendReadFavoriteColor = "blue"
 )
 
+// AllValues returns all UserBestFriendReadFavoriteColor values.
+func (UserBestFriendReadFavoriteColor) AllValues() []UserBestFriendReadFavoriteColor {
+	return []UserBestFriendReadFavoriteColor{
+		UserBestFriendReadFavoriteColorRed,
+		UserBestFriendReadFavoriteColorGreen,
+		UserBestFriendReadFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserBestFriendReadFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -6618,6 +6945,13 @@ const (
 	UserBestFriendReadFavoriteDogBreedKuro UserBestFriendReadFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UserBestFriendReadFavoriteDogBreed values.
+func (UserBestFriendReadFavoriteDogBreed) AllValues() []UserBestFriendReadFavoriteDogBreed {
+	return []UserBestFriendReadFavoriteDogBreed{
+		UserBestFriendReadFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserBestFriendReadFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6646,6 +6980,15 @@ const (
 	UserBestFriendReadFavoriteFishBreedKoi   UserBestFriendReadFavoriteFishBreed = "koi"
 	UserBestFriendReadFavoriteFishBreedShark UserBestFriendReadFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UserBestFriendReadFavoriteFishBreed values.
+func (UserBestFriendReadFavoriteFishBreed) AllValues() []UserBestFriendReadFavoriteFishBreed {
+	return []UserBestFriendReadFavoriteFishBreed{
+		UserBestFriendReadFavoriteFishBreedGold,
+		UserBestFriendReadFavoriteFishBreedKoi,
+		UserBestFriendReadFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserBestFriendReadFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -6783,6 +7126,18 @@ const (
 	UserCreateFavoriteCatBreedOther   UserCreateFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UserCreateFavoriteCatBreed values.
+func (UserCreateFavoriteCatBreed) AllValues() []UserCreateFavoriteCatBreed {
+	return []UserCreateFavoriteCatBreed{
+		UserCreateFavoriteCatBreedSiamese,
+		UserCreateFavoriteCatBreedBengal,
+		UserCreateFavoriteCatBreedLion,
+		UserCreateFavoriteCatBreedTiger,
+		UserCreateFavoriteCatBreedLeopard,
+		UserCreateFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserCreateFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6837,6 +7192,15 @@ const (
 	UserCreateFavoriteColorBlue  UserCreateFavoriteColor = "blue"
 )
 
+// AllValues returns all UserCreateFavoriteColor values.
+func (UserCreateFavoriteColor) AllValues() []UserCreateFavoriteColor {
+	return []UserCreateFavoriteColor{
+		UserCreateFavoriteColorRed,
+		UserCreateFavoriteColorGreen,
+		UserCreateFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserCreateFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -6874,6 +7238,13 @@ const (
 	UserCreateFavoriteDogBreedKuro UserCreateFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UserCreateFavoriteDogBreed values.
+func (UserCreateFavoriteDogBreed) AllValues() []UserCreateFavoriteDogBreed {
+	return []UserCreateFavoriteDogBreed{
+		UserCreateFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserCreateFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -6902,6 +7273,15 @@ const (
 	UserCreateFavoriteFishBreedKoi   UserCreateFavoriteFishBreed = "koi"
 	UserCreateFavoriteFishBreedShark UserCreateFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UserCreateFavoriteFishBreed values.
+func (UserCreateFavoriteFishBreed) AllValues() []UserCreateFavoriteFishBreed {
+	return []UserCreateFavoriteFishBreed{
+		UserCreateFavoriteFishBreedGold,
+		UserCreateFavoriteFishBreedKoi,
+		UserCreateFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserCreateFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -6980,6 +7360,15 @@ const (
 	UserFavoriteHatReadTypeTrucker  UserFavoriteHatReadType = "trucker"
 	UserFavoriteHatReadTypeSnapback UserFavoriteHatReadType = "snapback"
 )
+
+// AllValues returns all UserFavoriteHatReadType values.
+func (UserFavoriteHatReadType) AllValues() []UserFavoriteHatReadType {
+	return []UserFavoriteHatReadType{
+		UserFavoriteHatReadTypeDad,
+		UserFavoriteHatReadTypeTrucker,
+		UserFavoriteHatReadTypeSnapback,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserFavoriteHatReadType) MarshalText() ([]byte, error) {
@@ -7115,6 +7504,18 @@ const (
 	UserListFavoriteCatBreedOther   UserListFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UserListFavoriteCatBreed values.
+func (UserListFavoriteCatBreed) AllValues() []UserListFavoriteCatBreed {
+	return []UserListFavoriteCatBreed{
+		UserListFavoriteCatBreedSiamese,
+		UserListFavoriteCatBreedBengal,
+		UserListFavoriteCatBreedLion,
+		UserListFavoriteCatBreedTiger,
+		UserListFavoriteCatBreedLeopard,
+		UserListFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserListFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7169,6 +7570,15 @@ const (
 	UserListFavoriteColorBlue  UserListFavoriteColor = "blue"
 )
 
+// AllValues returns all UserListFavoriteColor values.
+func (UserListFavoriteColor) AllValues() []UserListFavoriteColor {
+	return []UserListFavoriteColor{
+		UserListFavoriteColorRed,
+		UserListFavoriteColorGreen,
+		UserListFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserListFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -7206,6 +7616,13 @@ const (
 	UserListFavoriteDogBreedKuro UserListFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UserListFavoriteDogBreed values.
+func (UserListFavoriteDogBreed) AllValues() []UserListFavoriteDogBreed {
+	return []UserListFavoriteDogBreed{
+		UserListFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserListFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7234,6 +7651,15 @@ const (
 	UserListFavoriteFishBreedKoi   UserListFavoriteFishBreed = "koi"
 	UserListFavoriteFishBreedShark UserListFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UserListFavoriteFishBreed values.
+func (UserListFavoriteFishBreed) AllValues() []UserListFavoriteFishBreed {
+	return []UserListFavoriteFishBreed{
+		UserListFavoriteFishBreedGold,
+		UserListFavoriteFishBreedKoi,
+		UserListFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserListFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -7441,6 +7867,18 @@ const (
 	UserReadFavoriteCatBreedOther   UserReadFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UserReadFavoriteCatBreed values.
+func (UserReadFavoriteCatBreed) AllValues() []UserReadFavoriteCatBreed {
+	return []UserReadFavoriteCatBreed{
+		UserReadFavoriteCatBreedSiamese,
+		UserReadFavoriteCatBreedBengal,
+		UserReadFavoriteCatBreedLion,
+		UserReadFavoriteCatBreedTiger,
+		UserReadFavoriteCatBreedLeopard,
+		UserReadFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserReadFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7495,6 +7933,15 @@ const (
 	UserReadFavoriteColorBlue  UserReadFavoriteColor = "blue"
 )
 
+// AllValues returns all UserReadFavoriteColor values.
+func (UserReadFavoriteColor) AllValues() []UserReadFavoriteColor {
+	return []UserReadFavoriteColor{
+		UserReadFavoriteColorRed,
+		UserReadFavoriteColorGreen,
+		UserReadFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserReadFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -7532,6 +7979,13 @@ const (
 	UserReadFavoriteDogBreedKuro UserReadFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UserReadFavoriteDogBreed values.
+func (UserReadFavoriteDogBreed) AllValues() []UserReadFavoriteDogBreed {
+	return []UserReadFavoriteDogBreed{
+		UserReadFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserReadFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7560,6 +8014,15 @@ const (
 	UserReadFavoriteFishBreedKoi   UserReadFavoriteFishBreed = "koi"
 	UserReadFavoriteFishBreedShark UserReadFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UserReadFavoriteFishBreed values.
+func (UserReadFavoriteFishBreed) AllValues() []UserReadFavoriteFishBreed {
+	return []UserReadFavoriteFishBreed{
+		UserReadFavoriteFishBreedGold,
+		UserReadFavoriteFishBreedKoi,
+		UserReadFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserReadFavoriteFishBreed) MarshalText() ([]byte, error) {
@@ -7697,6 +8160,18 @@ const (
 	UserUpdateFavoriteCatBreedOther   UserUpdateFavoriteCatBreed = "other"
 )
 
+// AllValues returns all UserUpdateFavoriteCatBreed values.
+func (UserUpdateFavoriteCatBreed) AllValues() []UserUpdateFavoriteCatBreed {
+	return []UserUpdateFavoriteCatBreed{
+		UserUpdateFavoriteCatBreedSiamese,
+		UserUpdateFavoriteCatBreedBengal,
+		UserUpdateFavoriteCatBreedLion,
+		UserUpdateFavoriteCatBreedTiger,
+		UserUpdateFavoriteCatBreedLeopard,
+		UserUpdateFavoriteCatBreedOther,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserUpdateFavoriteCatBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7751,6 +8226,15 @@ const (
 	UserUpdateFavoriteColorBlue  UserUpdateFavoriteColor = "blue"
 )
 
+// AllValues returns all UserUpdateFavoriteColor values.
+func (UserUpdateFavoriteColor) AllValues() []UserUpdateFavoriteColor {
+	return []UserUpdateFavoriteColor{
+		UserUpdateFavoriteColorRed,
+		UserUpdateFavoriteColorGreen,
+		UserUpdateFavoriteColorBlue,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserUpdateFavoriteColor) MarshalText() ([]byte, error) {
 	switch s {
@@ -7788,6 +8272,13 @@ const (
 	UserUpdateFavoriteDogBreedKuro UserUpdateFavoriteDogBreed = "Kuro"
 )
 
+// AllValues returns all UserUpdateFavoriteDogBreed values.
+func (UserUpdateFavoriteDogBreed) AllValues() []UserUpdateFavoriteDogBreed {
+	return []UserUpdateFavoriteDogBreed{
+		UserUpdateFavoriteDogBreedKuro,
+	}
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (s UserUpdateFavoriteDogBreed) MarshalText() ([]byte, error) {
 	switch s {
@@ -7816,6 +8307,15 @@ const (
 	UserUpdateFavoriteFishBreedKoi   UserUpdateFavoriteFishBreed = "koi"
 	UserUpdateFavoriteFishBreedShark UserUpdateFavoriteFishBreed = "shark"
 )
+
+// AllValues returns all UserUpdateFavoriteFishBreed values.
+func (UserUpdateFavoriteFishBreed) AllValues() []UserUpdateFavoriteFishBreed {
+	return []UserUpdateFavoriteFishBreed{
+		UserUpdateFavoriteFishBreedGold,
+		UserUpdateFavoriteFishBreedKoi,
+		UserUpdateFavoriteFishBreedShark,
+	}
+}
 
 // MarshalText implements encoding.TextMarshaler.
 func (s UserUpdateFavoriteFishBreed) MarshalText() ([]byte, error) {

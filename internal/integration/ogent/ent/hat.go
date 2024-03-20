@@ -8,6 +8,7 @@ import (
 
 	"ariga.io/ogent/internal/integration/ogent/ent/hat"
 	"ariga.io/ogent/internal/integration/ogent/ent/user"
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )
 
@@ -24,6 +25,7 @@ type Hat struct {
 	// The values are being populated by the HatQuery when eager-loading is set.
 	Edges             HatEdges `json:"edges"`
 	user_favorite_hat *int
+	selectValues      sql.SelectValues
 }
 
 // HatEdges holds the relations/edges for other nodes in the graph.
@@ -38,12 +40,10 @@ type HatEdges struct {
 // WearerOrErr returns the Wearer value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e HatEdges) WearerOrErr() (*User, error) {
-	if e.loadedTypes[0] {
-		if e.Wearer == nil {
-			// Edge was loaded but was not found.
-			return nil, &NotFoundError{label: user.Label}
-		}
+	if e.Wearer != nil {
 		return e.Wearer, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "wearer"}
 }
@@ -60,7 +60,7 @@ func (*Hat) scanValues(columns []string) ([]any, error) {
 		case hat.ForeignKeys[0]: // user_favorite_hat
 			values[i] = new(sql.NullInt64)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type Hat", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -99,9 +99,17 @@ func (h *Hat) assignValues(columns []string, values []any) error {
 				h.user_favorite_hat = new(int)
 				*h.user_favorite_hat = int(value.Int64)
 			}
+		default:
+			h.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the Hat.
+// This includes values selected through modifiers, order, etc.
+func (h *Hat) Value(name string) (ent.Value, error) {
+	return h.selectValues.Get(name)
 }
 
 // QueryWearer queries the "wearer" edge of the Hat entity.

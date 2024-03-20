@@ -34,6 +34,14 @@ func (cu *CategoryUpdate) SetName(s string) *CategoryUpdate {
 	return cu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (cu *CategoryUpdate) SetNillableName(s *string) *CategoryUpdate {
+	if s != nil {
+		cu.SetName(*s)
+	}
+	return cu
+}
+
 // SetReadonly sets the "readonly" field.
 func (cu *CategoryUpdate) SetReadonly(s string) *CategoryUpdate {
 	cu.mutation.SetReadonly(s)
@@ -97,7 +105,7 @@ func (cu *CategoryUpdate) RemovePets(p ...*Pet) *CategoryUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (cu *CategoryUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, CategoryMutation](ctx, cu.sqlSave, cu.mutation, cu.hooks)
+	return withHooks(ctx, cu.sqlSave, cu.mutation, cu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -148,10 +156,7 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -164,10 +169,7 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -183,10 +185,7 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -217,6 +216,14 @@ type CategoryUpdateOne struct {
 // SetName sets the "name" field.
 func (cuo *CategoryUpdateOne) SetName(s string) *CategoryUpdateOne {
 	cuo.mutation.SetName(s)
+	return cuo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (cuo *CategoryUpdateOne) SetNillableName(s *string) *CategoryUpdateOne {
+	if s != nil {
+		cuo.SetName(*s)
+	}
 	return cuo
 }
 
@@ -296,7 +303,7 @@ func (cuo *CategoryUpdateOne) Select(field string, fields ...string) *CategoryUp
 
 // Save executes the query and returns the updated Category entity.
 func (cuo *CategoryUpdateOne) Save(ctx context.Context) (*Category, error) {
-	return withHooks[*Category, CategoryMutation](ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
+	return withHooks(ctx, cuo.sqlSave, cuo.mutation, cuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -364,10 +371,7 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -380,10 +384,7 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -399,10 +400,7 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 			Columns: category.PetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

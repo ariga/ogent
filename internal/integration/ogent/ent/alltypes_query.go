@@ -18,7 +18,7 @@ import (
 type AllTypesQuery struct {
 	config
 	ctx        *QueryContext
-	order      []OrderFunc
+	order      []alltypes.OrderOption
 	inters     []Interceptor
 	predicates []predicate.AllTypes
 	// intermediate query (i.e. traversal path).
@@ -52,7 +52,7 @@ func (atq *AllTypesQuery) Unique(unique bool) *AllTypesQuery {
 }
 
 // Order specifies how the records should be ordered.
-func (atq *AllTypesQuery) Order(o ...OrderFunc) *AllTypesQuery {
+func (atq *AllTypesQuery) Order(o ...alltypes.OrderOption) *AllTypesQuery {
 	atq.order = append(atq.order, o...)
 	return atq
 }
@@ -246,7 +246,7 @@ func (atq *AllTypesQuery) Clone() *AllTypesQuery {
 	return &AllTypesQuery{
 		config:     atq.config,
 		ctx:        atq.ctx.Clone(),
-		order:      append([]OrderFunc{}, atq.order...),
+		order:      append([]alltypes.OrderOption{}, atq.order...),
 		inters:     append([]Interceptor{}, atq.inters...),
 		predicates: append([]predicate.AllTypes{}, atq.predicates...),
 		// clone intermediate query.

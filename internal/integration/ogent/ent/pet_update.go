@@ -36,6 +36,14 @@ func (pu *PetUpdate) SetName(s string) *PetUpdate {
 	return pu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (pu *PetUpdate) SetNillableName(s *string) *PetUpdate {
+	if s != nil {
+		pu.SetName(*s)
+	}
+	return pu
+}
+
 // SetWeight sets the "weight" field.
 func (pu *PetUpdate) SetWeight(i int) *PetUpdate {
 	pu.mutation.ResetWeight()
@@ -218,7 +226,7 @@ func (pu *PetUpdate) RemoveFriends(p ...*Pet) *PetUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (pu *PetUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, PetMutation](ctx, pu.sqlSave, pu.mutation, pu.hooks)
+	return withHooks(ctx, pu.sqlSave, pu.mutation, pu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -304,10 +312,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -320,10 +325,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -339,10 +341,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -358,10 +357,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{pet.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: user.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -374,10 +370,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{pet.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: user.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -393,10 +386,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -409,10 +399,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -428,10 +415,7 @@ func (pu *PetUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -462,6 +446,14 @@ type PetUpdateOne struct {
 // SetName sets the "name" field.
 func (puo *PetUpdateOne) SetName(s string) *PetUpdateOne {
 	puo.mutation.SetName(s)
+	return puo
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (puo *PetUpdateOne) SetNillableName(s *string) *PetUpdateOne {
+	if s != nil {
+		puo.SetName(*s)
+	}
 	return puo
 }
 
@@ -660,7 +652,7 @@ func (puo *PetUpdateOne) Select(field string, fields ...string) *PetUpdateOne {
 
 // Save executes the query and returns the updated Pet entity.
 func (puo *PetUpdateOne) Save(ctx context.Context) (*Pet, error) {
-	return withHooks[*Pet, PetMutation](ctx, puo.sqlSave, puo.mutation, puo.hooks)
+	return withHooks(ctx, puo.sqlSave, puo.mutation, puo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -763,10 +755,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -779,10 +768,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -798,10 +784,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.CategoriesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: category.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(category.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -817,10 +800,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: []string{pet.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: user.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -833,10 +813,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: []string{pet.OwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: user.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -852,10 +829,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -868,10 +842,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -887,10 +858,7 @@ func (puo *PetUpdateOne) sqlSave(ctx context.Context) (_node *Pet, err error) {
 			Columns: pet.FriendsPrimaryKey,
 			Bidi:    true,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: pet.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(pet.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

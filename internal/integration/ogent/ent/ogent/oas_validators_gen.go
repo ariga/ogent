@@ -11,6 +11,10 @@ import (
 )
 
 func (s *AllTypesCreate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -210,6 +214,7 @@ func (s *AllTypesCreate) Validate() error {
 	}
 	return nil
 }
+
 func (s AllTypesCreateState) Validate() error {
 	switch s {
 	case "on":
@@ -220,7 +225,12 @@ func (s AllTypesCreateState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *AllTypesList) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -420,6 +430,7 @@ func (s *AllTypesList) Validate() error {
 	}
 	return nil
 }
+
 func (s AllTypesListState) Validate() error {
 	switch s {
 	case "on":
@@ -430,7 +441,12 @@ func (s AllTypesListState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *AllTypesRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -630,6 +646,7 @@ func (s *AllTypesRead) Validate() error {
 	}
 	return nil
 }
+
 func (s AllTypesReadState) Validate() error {
 	switch s {
 	case "on":
@@ -640,7 +657,12 @@ func (s AllTypesReadState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *AllTypesUpdate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -840,6 +862,7 @@ func (s *AllTypesUpdate) Validate() error {
 	}
 	return nil
 }
+
 func (s AllTypesUpdateState) Validate() error {
 	switch s {
 	case "on":
@@ -850,7 +873,12 @@ func (s AllTypesUpdateState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *CreateAllTypesReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1030,6 +1058,7 @@ func (s *CreateAllTypesReq) Validate() error {
 	}
 	return nil
 }
+
 func (s CreateAllTypesReqState) Validate() error {
 	switch s {
 	case "on":
@@ -1040,7 +1069,12 @@ func (s CreateAllTypesReqState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *CreateHatReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -1058,6 +1092,7 @@ func (s *CreateHatReq) Validate() error {
 	}
 	return nil
 }
+
 func (s CreateHatReqType) Validate() error {
 	switch s {
 	case "dad":
@@ -1070,7 +1105,12 @@ func (s CreateHatReqType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *CreateUserReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1093,7 +1133,7 @@ func (s *CreateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -1104,7 +1144,7 @@ func (s *CreateUserReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -1142,9 +1182,9 @@ func (s *CreateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1160,9 +1200,9 @@ func (s *CreateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1182,6 +1222,7 @@ func (s *CreateUserReq) Validate() error {
 	}
 	return nil
 }
+
 func (s CreateUserReqFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -1200,6 +1241,7 @@ func (s CreateUserReqFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s CreateUserReqFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -1212,6 +1254,7 @@ func (s CreateUserReqFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s CreateUserReqFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1220,6 +1263,7 @@ func (s CreateUserReqFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s CreateUserReqFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -1232,7 +1276,12 @@ func (s CreateUserReqFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *HatCreate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -1250,6 +1299,7 @@ func (s *HatCreate) Validate() error {
 	}
 	return nil
 }
+
 func (s HatCreateType) Validate() error {
 	switch s {
 	case "dad":
@@ -1262,7 +1312,12 @@ func (s HatCreateType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *HatList) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -1280,6 +1335,7 @@ func (s *HatList) Validate() error {
 	}
 	return nil
 }
+
 func (s HatListType) Validate() error {
 	switch s {
 	case "dad":
@@ -1292,7 +1348,12 @@ func (s HatListType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *HatRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -1310,6 +1371,7 @@ func (s *HatRead) Validate() error {
 	}
 	return nil
 }
+
 func (s HatReadType) Validate() error {
 	switch s {
 	case "dad":
@@ -1322,7 +1384,12 @@ func (s HatReadType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *HatUpdate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -1340,6 +1407,7 @@ func (s *HatUpdate) Validate() error {
 	}
 	return nil
 }
+
 func (s HatUpdateType) Validate() error {
 	switch s {
 	case "dad":
@@ -1352,7 +1420,12 @@ func (s HatUpdateType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *HatWearerRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1375,7 +1448,7 @@ func (s *HatWearerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -1386,7 +1459,7 @@ func (s *HatWearerRead) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -1424,9 +1497,9 @@ func (s *HatWearerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1442,9 +1515,9 @@ func (s *HatWearerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1464,6 +1537,7 @@ func (s *HatWearerRead) Validate() error {
 	}
 	return nil
 }
+
 func (s HatWearerReadFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -1482,6 +1556,7 @@ func (s HatWearerReadFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s HatWearerReadFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -1494,6 +1569,7 @@ func (s HatWearerReadFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s HatWearerReadFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1502,6 +1578,7 @@ func (s HatWearerReadFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s HatWearerReadFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -1514,12 +1591,14 @@ func (s HatWearerReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s ListAllTypesOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]AllTypesList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	var failures []validate.FieldError
-	for i, elem := range s {
+	for i, elem := range alias {
 		if err := func() error {
 			if err := elem.Validate(); err != nil {
 				return err
@@ -1537,24 +1616,30 @@ func (s ListAllTypesOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+
 func (s ListCategoryOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]CategoryList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListCategoryPetsOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]CategoryPetsList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListHatOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]HatList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	var failures []validate.FieldError
-	for i, elem := range s {
+	for i, elem := range alias {
 		if err := func() error {
 			if err := elem.Validate(); err != nil {
 				return err
@@ -1572,30 +1657,38 @@ func (s ListHatOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+
 func (s ListPetCategoriesOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]PetCategoriesList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListPetFriendsOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]PetFriendsList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListPetOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]PetList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListPetRescuerOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]PetRescuerList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	var failures []validate.FieldError
-	for i, elem := range s {
+	for i, elem := range alias {
 		if err := func() error {
 			if err := elem.Validate(); err != nil {
 				return err
@@ -1613,18 +1706,22 @@ func (s ListPetRescuerOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+
 func (s ListUserAnimalsSavedOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]UserAnimalsSavedList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
+
 func (s ListUserOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]UserList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	var failures []validate.FieldError
-	for i, elem := range s {
+	for i, elem := range alias {
 		if err := func() error {
 			if err := elem.Validate(); err != nil {
 				return err
@@ -1642,14 +1739,20 @@ func (s ListUserOKApplicationJSON) Validate() error {
 	}
 	return nil
 }
+
 func (s ListUserPetsOKApplicationJSON) Validate() error {
-	if s == nil {
+	alias := ([]UserPetsList)(s)
+	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
 	return nil
 }
 
 func (s *PetCreate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Owner.Validate(); err != nil {
@@ -1667,7 +1770,12 @@ func (s *PetCreate) Validate() error {
 	}
 	return nil
 }
+
 func (s *PetCreateOwner) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1690,7 +1798,7 @@ func (s *PetCreateOwner) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -1701,7 +1809,7 @@ func (s *PetCreateOwner) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -1739,9 +1847,9 @@ func (s *PetCreateOwner) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1757,9 +1865,9 @@ func (s *PetCreateOwner) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1779,6 +1887,7 @@ func (s *PetCreateOwner) Validate() error {
 	}
 	return nil
 }
+
 func (s PetCreateOwnerFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -1797,6 +1906,7 @@ func (s PetCreateOwnerFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetCreateOwnerFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -1809,6 +1919,7 @@ func (s PetCreateOwnerFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetCreateOwnerFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1817,6 +1928,7 @@ func (s PetCreateOwnerFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetCreateOwnerFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -1829,7 +1941,12 @@ func (s PetCreateOwnerFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *PetOwnerRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -1852,7 +1969,7 @@ func (s *PetOwnerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -1863,7 +1980,7 @@ func (s *PetOwnerRead) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -1901,9 +2018,9 @@ func (s *PetOwnerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1919,9 +2036,9 @@ func (s *PetOwnerRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -1941,6 +2058,7 @@ func (s *PetOwnerRead) Validate() error {
 	}
 	return nil
 }
+
 func (s PetOwnerReadFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -1959,6 +2077,7 @@ func (s PetOwnerReadFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetOwnerReadFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -1971,6 +2090,7 @@ func (s PetOwnerReadFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetOwnerReadFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -1979,6 +2099,7 @@ func (s PetOwnerReadFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetOwnerReadFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -1991,7 +2112,12 @@ func (s PetOwnerReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *PetRescuerList) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2014,7 +2140,7 @@ func (s *PetRescuerList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2025,7 +2151,7 @@ func (s *PetRescuerList) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2063,9 +2189,9 @@ func (s *PetRescuerList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2081,9 +2207,9 @@ func (s *PetRescuerList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2103,6 +2229,7 @@ func (s *PetRescuerList) Validate() error {
 	}
 	return nil
 }
+
 func (s PetRescuerListFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -2121,6 +2248,7 @@ func (s PetRescuerListFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetRescuerListFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -2133,6 +2261,7 @@ func (s PetRescuerListFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetRescuerListFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -2141,6 +2270,7 @@ func (s PetRescuerListFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s PetRescuerListFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -2153,10 +2283,15 @@ func (s PetRescuerListFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UpdateAllTypesReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
-		if s.Int8.Set {
+		if value, ok := s.Int8.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2167,7 +2302,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Int8.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2183,7 +2318,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Int16.Set {
+		if value, ok := s.Int16.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2194,7 +2329,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Int16.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2210,7 +2345,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Uint.Set {
+		if value, ok := s.Uint.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2221,7 +2356,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Uint.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2237,7 +2372,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Uint8.Set {
+		if value, ok := s.Uint8.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2248,7 +2383,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Uint8.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2264,7 +2399,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Uint16.Set {
+		if value, ok := s.Uint16.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2275,7 +2410,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Uint16.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2291,7 +2426,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Uint32.Set {
+		if value, ok := s.Uint32.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2302,7 +2437,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Uint32.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2318,7 +2453,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Uint64.Set {
+		if value, ok := s.Uint64.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2329,7 +2464,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Uint64.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2345,9 +2480,9 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Float32.Set {
+		if value, ok := s.Float32.Get(); ok {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.Float32.Value)); err != nil {
+				if err := (validate.Float{}).Validate(float64(value)); err != nil {
 					return errors.Wrap(err, "float")
 				}
 				return nil
@@ -2363,9 +2498,9 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Float64.Set {
+		if value, ok := s.Float64.Get(); ok {
 			if err := func() error {
-				if err := (validate.Float{}).Validate(float64(s.Float64.Value)); err != nil {
+				if err := (validate.Float{}).Validate(float64(value)); err != nil {
 					return errors.Wrap(err, "float")
 				}
 				return nil
@@ -2381,9 +2516,9 @@ func (s *UpdateAllTypesReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.State.Set {
+		if value, ok := s.State.Get(); ok {
 			if err := func() error {
-				if err := s.State.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2403,6 +2538,7 @@ func (s *UpdateAllTypesReq) Validate() error {
 	}
 	return nil
 }
+
 func (s UpdateAllTypesReqState) Validate() error {
 	switch s {
 	case "on":
@@ -2413,10 +2549,15 @@ func (s UpdateAllTypesReqState) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UpdateUserReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
-		if s.Age.Set {
+		if value, ok := s.Age.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2427,7 +2568,7 @@ func (s *UpdateUserReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Age.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2443,7 +2584,7 @@ func (s *UpdateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2454,7 +2595,7 @@ func (s *UpdateUserReq) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2470,9 +2611,9 @@ func (s *UpdateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteCatBreed.Set {
+		if value, ok := s.FavoriteCatBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteCatBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2488,9 +2629,9 @@ func (s *UpdateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2506,9 +2647,9 @@ func (s *UpdateUserReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2528,6 +2669,7 @@ func (s *UpdateUserReq) Validate() error {
 	}
 	return nil
 }
+
 func (s UpdateUserReqFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -2546,6 +2688,7 @@ func (s UpdateUserReqFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UpdateUserReqFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -2554,6 +2697,7 @@ func (s UpdateUserReqFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UpdateUserReqFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -2566,7 +2710,12 @@ func (s UpdateUserReqFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserBestFriendRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2589,7 +2738,7 @@ func (s *UserBestFriendRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2600,7 +2749,7 @@ func (s *UserBestFriendRead) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2638,9 +2787,9 @@ func (s *UserBestFriendRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2656,9 +2805,9 @@ func (s *UserBestFriendRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2678,6 +2827,7 @@ func (s *UserBestFriendRead) Validate() error {
 	}
 	return nil
 }
+
 func (s UserBestFriendReadFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -2696,6 +2846,7 @@ func (s UserBestFriendReadFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserBestFriendReadFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -2708,6 +2859,7 @@ func (s UserBestFriendReadFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserBestFriendReadFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -2716,6 +2868,7 @@ func (s UserBestFriendReadFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserBestFriendReadFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -2728,7 +2881,12 @@ func (s UserBestFriendReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserCreate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2751,7 +2909,7 @@ func (s *UserCreate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2762,7 +2920,7 @@ func (s *UserCreate) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2800,9 +2958,9 @@ func (s *UserCreate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2818,9 +2976,9 @@ func (s *UserCreate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -2840,6 +2998,7 @@ func (s *UserCreate) Validate() error {
 	}
 	return nil
 }
+
 func (s UserCreateFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -2858,6 +3017,7 @@ func (s UserCreateFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserCreateFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -2870,6 +3030,7 @@ func (s UserCreateFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserCreateFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -2878,6 +3039,7 @@ func (s UserCreateFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserCreateFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -2890,7 +3052,12 @@ func (s UserCreateFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserFavoriteHatRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := s.Type.Validate(); err != nil {
@@ -2908,6 +3075,7 @@ func (s *UserFavoriteHatRead) Validate() error {
 	}
 	return nil
 }
+
 func (s UserFavoriteHatReadType) Validate() error {
 	switch s {
 	case "dad":
@@ -2920,7 +3088,12 @@ func (s UserFavoriteHatReadType) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserList) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -2943,7 +3116,7 @@ func (s *UserList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -2954,7 +3127,7 @@ func (s *UserList) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -2992,9 +3165,9 @@ func (s *UserList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3010,9 +3183,9 @@ func (s *UserList) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3032,6 +3205,7 @@ func (s *UserList) Validate() error {
 	}
 	return nil
 }
+
 func (s UserListFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -3050,6 +3224,7 @@ func (s UserListFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserListFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -3062,6 +3237,7 @@ func (s UserListFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserListFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -3070,6 +3246,7 @@ func (s UserListFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserListFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -3082,7 +3259,12 @@ func (s UserListFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserRead) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -3105,7 +3287,7 @@ func (s *UserRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -3116,7 +3298,7 @@ func (s *UserRead) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -3154,9 +3336,9 @@ func (s *UserRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3172,9 +3354,9 @@ func (s *UserRead) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3194,6 +3376,7 @@ func (s *UserRead) Validate() error {
 	}
 	return nil
 }
+
 func (s UserReadFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -3212,6 +3395,7 @@ func (s UserReadFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserReadFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -3224,6 +3408,7 @@ func (s UserReadFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserReadFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -3232,6 +3417,7 @@ func (s UserReadFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserReadFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":
@@ -3244,7 +3430,12 @@ func (s UserReadFavoriteFishBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s *UserUpdate) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
 	var failures []validate.FieldError
 	if err := func() error {
 		if err := (validate.Int{
@@ -3267,7 +3458,7 @@ func (s *UserUpdate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.Height.Set {
+		if value, ok := s.Height.Get(); ok {
 			if err := func() error {
 				if err := (validate.Int{
 					MinSet:        true,
@@ -3278,7 +3469,7 @@ func (s *UserUpdate) Validate() error {
 					MaxExclusive:  false,
 					MultipleOfSet: false,
 					MultipleOf:    0,
-				}).Validate(int64(s.Height.Value)); err != nil {
+				}).Validate(int64(value)); err != nil {
 					return errors.Wrap(err, "int")
 				}
 				return nil
@@ -3316,9 +3507,9 @@ func (s *UserUpdate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteDogBreed.Set {
+		if value, ok := s.FavoriteDogBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteDogBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3334,9 +3525,9 @@ func (s *UserUpdate) Validate() error {
 		})
 	}
 	if err := func() error {
-		if s.FavoriteFishBreed.Set {
+		if value, ok := s.FavoriteFishBreed.Get(); ok {
 			if err := func() error {
-				if err := s.FavoriteFishBreed.Value.Validate(); err != nil {
+				if err := value.Validate(); err != nil {
 					return err
 				}
 				return nil
@@ -3356,6 +3547,7 @@ func (s *UserUpdate) Validate() error {
 	}
 	return nil
 }
+
 func (s UserUpdateFavoriteCatBreed) Validate() error {
 	switch s {
 	case "siamese":
@@ -3374,6 +3566,7 @@ func (s UserUpdateFavoriteCatBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserUpdateFavoriteColor) Validate() error {
 	switch s {
 	case "red":
@@ -3386,6 +3579,7 @@ func (s UserUpdateFavoriteColor) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserUpdateFavoriteDogBreed) Validate() error {
 	switch s {
 	case "Kuro":
@@ -3394,6 +3588,7 @@ func (s UserUpdateFavoriteDogBreed) Validate() error {
 		return errors.Errorf("invalid value: %v", s)
 	}
 }
+
 func (s UserUpdateFavoriteFishBreed) Validate() error {
 	switch s {
 	case "gold":

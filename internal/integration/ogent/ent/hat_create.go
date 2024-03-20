@@ -58,7 +58,7 @@ func (hc *HatCreate) Mutation() *HatMutation {
 
 // Save creates the Hat in the database.
 func (hc *HatCreate) Save(ctx context.Context) (*Hat, error) {
-	return withHooks[*Hat, HatMutation](ctx, hc.sqlSave, hc.mutation, hc.hooks)
+	return withHooks(ctx, hc.sqlSave, hc.mutation, hc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -138,10 +138,7 @@ func (hc *HatCreate) createSpec() (*Hat, *sqlgraph.CreateSpec) {
 			Columns: []string{hat.WearerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: user.FieldID,
-				},
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -156,11 +153,15 @@ func (hc *HatCreate) createSpec() (*Hat, *sqlgraph.CreateSpec) {
 // HatCreateBulk is the builder for creating many Hat entities in bulk.
 type HatCreateBulk struct {
 	config
+	err      error
 	builders []*HatCreate
 }
 
 // Save creates the Hat entities in the database.
 func (hcb *HatCreateBulk) Save(ctx context.Context) ([]*Hat, error) {
+	if hcb.err != nil {
+		return nil, hcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(hcb.builders))
 	nodes := make([]*Hat, len(hcb.builders))
 	mutators := make([]Mutator, len(hcb.builders))
@@ -176,8 +177,8 @@ func (hcb *HatCreateBulk) Save(ctx context.Context) ([]*Hat, error) {
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, hcb.builders[i+1].mutation)
 				} else {

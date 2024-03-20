@@ -154,7 +154,7 @@ func (atc *AllTypesCreate) Mutation() *AllTypesMutation {
 
 // Save creates the AllTypes in the database.
 func (atc *AllTypesCreate) Save(ctx context.Context) (*AllTypes, error) {
-	return withHooks[*AllTypes, AllTypesMutation](ctx, atc.sqlSave, atc.mutation, atc.hooks)
+	return withHooks(ctx, atc.sqlSave, atc.mutation, atc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -364,11 +364,15 @@ func (atc *AllTypesCreate) createSpec() (*AllTypes, *sqlgraph.CreateSpec) {
 // AllTypesCreateBulk is the builder for creating many AllTypes entities in bulk.
 type AllTypesCreateBulk struct {
 	config
+	err      error
 	builders []*AllTypesCreate
 }
 
 // Save creates the AllTypes entities in the database.
 func (atcb *AllTypesCreateBulk) Save(ctx context.Context) ([]*AllTypes, error) {
+	if atcb.err != nil {
+		return nil, atcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(atcb.builders))
 	nodes := make([]*AllTypes, len(atcb.builders))
 	mutators := make([]Mutator, len(atcb.builders))
@@ -384,8 +388,8 @@ func (atcb *AllTypesCreateBulk) Save(ctx context.Context) ([]*AllTypes, error) {
 					return nil, err
 				}
 				builder.mutation = mutation
-				nodes[i], specs[i] = builder.createSpec()
 				var err error
+				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, atcb.builders[i+1].mutation)
 				} else {

@@ -36,6 +36,14 @@ func (atu *AllTypesUpdate) SetInt(i int) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableInt sets the "int" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableInt(i *int) *AllTypesUpdate {
+	if i != nil {
+		atu.SetInt(*i)
+	}
+	return atu
+}
+
 // AddInt adds i to the "int" field.
 func (atu *AllTypesUpdate) AddInt(i int) *AllTypesUpdate {
 	atu.mutation.AddInt(i)
@@ -46,6 +54,14 @@ func (atu *AllTypesUpdate) AddInt(i int) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetInt8(i int8) *AllTypesUpdate {
 	atu.mutation.ResetInt8()
 	atu.mutation.SetInt8(i)
+	return atu
+}
+
+// SetNillableInt8 sets the "int8" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableInt8(i *int8) *AllTypesUpdate {
+	if i != nil {
+		atu.SetInt8(*i)
+	}
 	return atu
 }
 
@@ -62,6 +78,14 @@ func (atu *AllTypesUpdate) SetInt16(i int16) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableInt16 sets the "int16" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableInt16(i *int16) *AllTypesUpdate {
+	if i != nil {
+		atu.SetInt16(*i)
+	}
+	return atu
+}
+
 // AddInt16 adds i to the "int16" field.
 func (atu *AllTypesUpdate) AddInt16(i int16) *AllTypesUpdate {
 	atu.mutation.AddInt16(i)
@@ -72,6 +96,14 @@ func (atu *AllTypesUpdate) AddInt16(i int16) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetInt32(i int32) *AllTypesUpdate {
 	atu.mutation.ResetInt32()
 	atu.mutation.SetInt32(i)
+	return atu
+}
+
+// SetNillableInt32 sets the "int32" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableInt32(i *int32) *AllTypesUpdate {
+	if i != nil {
+		atu.SetInt32(*i)
+	}
 	return atu
 }
 
@@ -88,6 +120,14 @@ func (atu *AllTypesUpdate) SetInt64(i int64) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableInt64 sets the "int64" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableInt64(i *int64) *AllTypesUpdate {
+	if i != nil {
+		atu.SetInt64(*i)
+	}
+	return atu
+}
+
 // AddInt64 adds i to the "int64" field.
 func (atu *AllTypesUpdate) AddInt64(i int64) *AllTypesUpdate {
 	atu.mutation.AddInt64(i)
@@ -98,6 +138,14 @@ func (atu *AllTypesUpdate) AddInt64(i int64) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetUint(u uint) *AllTypesUpdate {
 	atu.mutation.ResetUint()
 	atu.mutation.SetUint(u)
+	return atu
+}
+
+// SetNillableUint sets the "uint" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUint(u *uint) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUint(*u)
+	}
 	return atu
 }
 
@@ -114,6 +162,14 @@ func (atu *AllTypesUpdate) SetUint8(u uint8) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableUint8 sets the "uint8" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUint8(u *uint8) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUint8(*u)
+	}
+	return atu
+}
+
 // AddUint8 adds u to the "uint8" field.
 func (atu *AllTypesUpdate) AddUint8(u int8) *AllTypesUpdate {
 	atu.mutation.AddUint8(u)
@@ -124,6 +180,14 @@ func (atu *AllTypesUpdate) AddUint8(u int8) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetUint16(u uint16) *AllTypesUpdate {
 	atu.mutation.ResetUint16()
 	atu.mutation.SetUint16(u)
+	return atu
+}
+
+// SetNillableUint16 sets the "uint16" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUint16(u *uint16) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUint16(*u)
+	}
 	return atu
 }
 
@@ -140,6 +204,14 @@ func (atu *AllTypesUpdate) SetUint32(u uint32) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableUint32 sets the "uint32" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUint32(u *uint32) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUint32(*u)
+	}
+	return atu
+}
+
 // AddUint32 adds u to the "uint32" field.
 func (atu *AllTypesUpdate) AddUint32(u int32) *AllTypesUpdate {
 	atu.mutation.AddUint32(u)
@@ -150,6 +222,14 @@ func (atu *AllTypesUpdate) AddUint32(u int32) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetUint64(u uint64) *AllTypesUpdate {
 	atu.mutation.ResetUint64()
 	atu.mutation.SetUint64(u)
+	return atu
+}
+
+// SetNillableUint64 sets the "uint64" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUint64(u *uint64) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUint64(*u)
+	}
 	return atu
 }
 
@@ -166,6 +246,14 @@ func (atu *AllTypesUpdate) SetFloat32(f float32) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableFloat32 sets the "float32" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableFloat32(f *float32) *AllTypesUpdate {
+	if f != nil {
+		atu.SetFloat32(*f)
+	}
+	return atu
+}
+
 // AddFloat32 adds f to the "float32" field.
 func (atu *AllTypesUpdate) AddFloat32(f float32) *AllTypesUpdate {
 	atu.mutation.AddFloat32(f)
@@ -176,6 +264,14 @@ func (atu *AllTypesUpdate) AddFloat32(f float32) *AllTypesUpdate {
 func (atu *AllTypesUpdate) SetFloat64(f float64) *AllTypesUpdate {
 	atu.mutation.ResetFloat64()
 	atu.mutation.SetFloat64(f)
+	return atu
+}
+
+// SetNillableFloat64 sets the "float64" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableFloat64(f *float64) *AllTypesUpdate {
+	if f != nil {
+		atu.SetFloat64(*f)
+	}
 	return atu
 }
 
@@ -191,9 +287,25 @@ func (atu *AllTypesUpdate) SetStringType(s string) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableStringType sets the "string_type" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableStringType(s *string) *AllTypesUpdate {
+	if s != nil {
+		atu.SetStringType(*s)
+	}
+	return atu
+}
+
 // SetBool sets the "bool" field.
 func (atu *AllTypesUpdate) SetBool(b bool) *AllTypesUpdate {
 	atu.mutation.SetBool(b)
+	return atu
+}
+
+// SetNillableBool sets the "bool" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableBool(b *bool) *AllTypesUpdate {
+	if b != nil {
+		atu.SetBool(*b)
+	}
 	return atu
 }
 
@@ -203,9 +315,25 @@ func (atu *AllTypesUpdate) SetUUID(u uuid.UUID) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableUUID(u *uuid.UUID) *AllTypesUpdate {
+	if u != nil {
+		atu.SetUUID(*u)
+	}
+	return atu
+}
+
 // SetTime sets the "time" field.
 func (atu *AllTypesUpdate) SetTime(t time.Time) *AllTypesUpdate {
 	atu.mutation.SetTime(t)
+	return atu
+}
+
+// SetNillableTime sets the "time" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableTime(t *time.Time) *AllTypesUpdate {
+	if t != nil {
+		atu.SetTime(*t)
+	}
 	return atu
 }
 
@@ -215,9 +343,25 @@ func (atu *AllTypesUpdate) SetText(s string) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableText sets the "text" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableText(s *string) *AllTypesUpdate {
+	if s != nil {
+		atu.SetText(*s)
+	}
+	return atu
+}
+
 // SetState sets the "state" field.
 func (atu *AllTypesUpdate) SetState(a alltypes.State) *AllTypesUpdate {
 	atu.mutation.SetState(a)
+	return atu
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableState(a *alltypes.State) *AllTypesUpdate {
+	if a != nil {
+		atu.SetState(*a)
+	}
 	return atu
 }
 
@@ -233,6 +377,14 @@ func (atu *AllTypesUpdate) SetNilable(s string) *AllTypesUpdate {
 	return atu
 }
 
+// SetNillableNilable sets the "nilable" field if the given value is not nil.
+func (atu *AllTypesUpdate) SetNillableNilable(s *string) *AllTypesUpdate {
+	if s != nil {
+		atu.SetNilable(*s)
+	}
+	return atu
+}
+
 // Mutation returns the AllTypesMutation object of the builder.
 func (atu *AllTypesUpdate) Mutation() *AllTypesMutation {
 	return atu.mutation
@@ -240,7 +392,7 @@ func (atu *AllTypesUpdate) Mutation() *AllTypesMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (atu *AllTypesUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, AllTypesMutation](ctx, atu.sqlSave, atu.mutation, atu.hooks)
+	return withHooks(ctx, atu.sqlSave, atu.mutation, atu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -410,6 +562,14 @@ func (atuo *AllTypesUpdateOne) SetInt(i int) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableInt sets the "int" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableInt(i *int) *AllTypesUpdateOne {
+	if i != nil {
+		atuo.SetInt(*i)
+	}
+	return atuo
+}
+
 // AddInt adds i to the "int" field.
 func (atuo *AllTypesUpdateOne) AddInt(i int) *AllTypesUpdateOne {
 	atuo.mutation.AddInt(i)
@@ -420,6 +580,14 @@ func (atuo *AllTypesUpdateOne) AddInt(i int) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetInt8(i int8) *AllTypesUpdateOne {
 	atuo.mutation.ResetInt8()
 	atuo.mutation.SetInt8(i)
+	return atuo
+}
+
+// SetNillableInt8 sets the "int8" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableInt8(i *int8) *AllTypesUpdateOne {
+	if i != nil {
+		atuo.SetInt8(*i)
+	}
 	return atuo
 }
 
@@ -436,6 +604,14 @@ func (atuo *AllTypesUpdateOne) SetInt16(i int16) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableInt16 sets the "int16" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableInt16(i *int16) *AllTypesUpdateOne {
+	if i != nil {
+		atuo.SetInt16(*i)
+	}
+	return atuo
+}
+
 // AddInt16 adds i to the "int16" field.
 func (atuo *AllTypesUpdateOne) AddInt16(i int16) *AllTypesUpdateOne {
 	atuo.mutation.AddInt16(i)
@@ -446,6 +622,14 @@ func (atuo *AllTypesUpdateOne) AddInt16(i int16) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetInt32(i int32) *AllTypesUpdateOne {
 	atuo.mutation.ResetInt32()
 	atuo.mutation.SetInt32(i)
+	return atuo
+}
+
+// SetNillableInt32 sets the "int32" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableInt32(i *int32) *AllTypesUpdateOne {
+	if i != nil {
+		atuo.SetInt32(*i)
+	}
 	return atuo
 }
 
@@ -462,6 +646,14 @@ func (atuo *AllTypesUpdateOne) SetInt64(i int64) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableInt64 sets the "int64" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableInt64(i *int64) *AllTypesUpdateOne {
+	if i != nil {
+		atuo.SetInt64(*i)
+	}
+	return atuo
+}
+
 // AddInt64 adds i to the "int64" field.
 func (atuo *AllTypesUpdateOne) AddInt64(i int64) *AllTypesUpdateOne {
 	atuo.mutation.AddInt64(i)
@@ -472,6 +664,14 @@ func (atuo *AllTypesUpdateOne) AddInt64(i int64) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetUint(u uint) *AllTypesUpdateOne {
 	atuo.mutation.ResetUint()
 	atuo.mutation.SetUint(u)
+	return atuo
+}
+
+// SetNillableUint sets the "uint" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUint(u *uint) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUint(*u)
+	}
 	return atuo
 }
 
@@ -488,6 +688,14 @@ func (atuo *AllTypesUpdateOne) SetUint8(u uint8) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableUint8 sets the "uint8" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUint8(u *uint8) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUint8(*u)
+	}
+	return atuo
+}
+
 // AddUint8 adds u to the "uint8" field.
 func (atuo *AllTypesUpdateOne) AddUint8(u int8) *AllTypesUpdateOne {
 	atuo.mutation.AddUint8(u)
@@ -498,6 +706,14 @@ func (atuo *AllTypesUpdateOne) AddUint8(u int8) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetUint16(u uint16) *AllTypesUpdateOne {
 	atuo.mutation.ResetUint16()
 	atuo.mutation.SetUint16(u)
+	return atuo
+}
+
+// SetNillableUint16 sets the "uint16" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUint16(u *uint16) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUint16(*u)
+	}
 	return atuo
 }
 
@@ -514,6 +730,14 @@ func (atuo *AllTypesUpdateOne) SetUint32(u uint32) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableUint32 sets the "uint32" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUint32(u *uint32) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUint32(*u)
+	}
+	return atuo
+}
+
 // AddUint32 adds u to the "uint32" field.
 func (atuo *AllTypesUpdateOne) AddUint32(u int32) *AllTypesUpdateOne {
 	atuo.mutation.AddUint32(u)
@@ -524,6 +748,14 @@ func (atuo *AllTypesUpdateOne) AddUint32(u int32) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetUint64(u uint64) *AllTypesUpdateOne {
 	atuo.mutation.ResetUint64()
 	atuo.mutation.SetUint64(u)
+	return atuo
+}
+
+// SetNillableUint64 sets the "uint64" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUint64(u *uint64) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUint64(*u)
+	}
 	return atuo
 }
 
@@ -540,6 +772,14 @@ func (atuo *AllTypesUpdateOne) SetFloat32(f float32) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableFloat32 sets the "float32" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableFloat32(f *float32) *AllTypesUpdateOne {
+	if f != nil {
+		atuo.SetFloat32(*f)
+	}
+	return atuo
+}
+
 // AddFloat32 adds f to the "float32" field.
 func (atuo *AllTypesUpdateOne) AddFloat32(f float32) *AllTypesUpdateOne {
 	atuo.mutation.AddFloat32(f)
@@ -550,6 +790,14 @@ func (atuo *AllTypesUpdateOne) AddFloat32(f float32) *AllTypesUpdateOne {
 func (atuo *AllTypesUpdateOne) SetFloat64(f float64) *AllTypesUpdateOne {
 	atuo.mutation.ResetFloat64()
 	atuo.mutation.SetFloat64(f)
+	return atuo
+}
+
+// SetNillableFloat64 sets the "float64" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableFloat64(f *float64) *AllTypesUpdateOne {
+	if f != nil {
+		atuo.SetFloat64(*f)
+	}
 	return atuo
 }
 
@@ -565,9 +813,25 @@ func (atuo *AllTypesUpdateOne) SetStringType(s string) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableStringType sets the "string_type" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableStringType(s *string) *AllTypesUpdateOne {
+	if s != nil {
+		atuo.SetStringType(*s)
+	}
+	return atuo
+}
+
 // SetBool sets the "bool" field.
 func (atuo *AllTypesUpdateOne) SetBool(b bool) *AllTypesUpdateOne {
 	atuo.mutation.SetBool(b)
+	return atuo
+}
+
+// SetNillableBool sets the "bool" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableBool(b *bool) *AllTypesUpdateOne {
+	if b != nil {
+		atuo.SetBool(*b)
+	}
 	return atuo
 }
 
@@ -577,9 +841,25 @@ func (atuo *AllTypesUpdateOne) SetUUID(u uuid.UUID) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableUUID sets the "uuid" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableUUID(u *uuid.UUID) *AllTypesUpdateOne {
+	if u != nil {
+		atuo.SetUUID(*u)
+	}
+	return atuo
+}
+
 // SetTime sets the "time" field.
 func (atuo *AllTypesUpdateOne) SetTime(t time.Time) *AllTypesUpdateOne {
 	atuo.mutation.SetTime(t)
+	return atuo
+}
+
+// SetNillableTime sets the "time" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableTime(t *time.Time) *AllTypesUpdateOne {
+	if t != nil {
+		atuo.SetTime(*t)
+	}
 	return atuo
 }
 
@@ -589,9 +869,25 @@ func (atuo *AllTypesUpdateOne) SetText(s string) *AllTypesUpdateOne {
 	return atuo
 }
 
+// SetNillableText sets the "text" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableText(s *string) *AllTypesUpdateOne {
+	if s != nil {
+		atuo.SetText(*s)
+	}
+	return atuo
+}
+
 // SetState sets the "state" field.
 func (atuo *AllTypesUpdateOne) SetState(a alltypes.State) *AllTypesUpdateOne {
 	atuo.mutation.SetState(a)
+	return atuo
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableState(a *alltypes.State) *AllTypesUpdateOne {
+	if a != nil {
+		atuo.SetState(*a)
+	}
 	return atuo
 }
 
@@ -604,6 +900,14 @@ func (atuo *AllTypesUpdateOne) SetBytes(b []byte) *AllTypesUpdateOne {
 // SetNilable sets the "nilable" field.
 func (atuo *AllTypesUpdateOne) SetNilable(s string) *AllTypesUpdateOne {
 	atuo.mutation.SetNilable(s)
+	return atuo
+}
+
+// SetNillableNilable sets the "nilable" field if the given value is not nil.
+func (atuo *AllTypesUpdateOne) SetNillableNilable(s *string) *AllTypesUpdateOne {
+	if s != nil {
+		atuo.SetNilable(*s)
+	}
 	return atuo
 }
 
@@ -627,7 +931,7 @@ func (atuo *AllTypesUpdateOne) Select(field string, fields ...string) *AllTypesU
 
 // Save executes the query and returns the updated AllTypes entity.
 func (atuo *AllTypesUpdateOne) Save(ctx context.Context) (*AllTypes, error) {
-	return withHooks[*AllTypes, AllTypesMutation](ctx, atuo.sqlSave, atuo.mutation, atuo.hooks)
+	return withHooks(ctx, atuo.sqlSave, atuo.mutation, atuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

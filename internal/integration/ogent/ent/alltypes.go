@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"ariga.io/ogent/internal/integration/ogent/ent/alltypes"
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 )
@@ -56,7 +57,8 @@ type AllTypes struct {
 	// Bytes holds the value of the "bytes" field.
 	Bytes []byte `json:"bytes,omitempty"`
 	// Nilable holds the value of the "nilable" field.
-	Nilable *string `json:"nilable,omitempty"`
+	Nilable      *string `json:"nilable,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -79,7 +81,7 @@ func (*AllTypes) scanValues(columns []string) ([]any, error) {
 		case alltypes.FieldUUID:
 			values[i] = new(uuid.UUID)
 		default:
-			return nil, fmt.Errorf("unexpected column %q for type AllTypes", columns[i])
+			values[i] = new(sql.UnknownType)
 		}
 	}
 	return values, nil
@@ -220,9 +222,17 @@ func (at *AllTypes) assignValues(columns []string, values []any) error {
 				at.Nilable = new(string)
 				*at.Nilable = value.String
 			}
+		default:
+			at.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
+}
+
+// Value returns the ent.Value that was dynamically selected and assigned to the AllTypes.
+// This includes values selected through modifiers, order, etc.
+func (at *AllTypes) Value(name string) (ent.Value, error) {
+	return at.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this AllTypes.

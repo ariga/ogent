@@ -6,6 +6,8 @@ import (
 	"fmt"
 
 	"ariga.io/ogent/internal/integration/ogent/ent/schema"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -185,4 +187,117 @@ func FavoriteFishBreedValidator(ffb schema.FishBreed) error {
 	default:
 		return fmt.Errorf("user: invalid enum value for favorite_fish_breed field: %q", ffb)
 	}
+}
+
+// OrderOption defines the ordering options for the User queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByAge orders the results by the age field.
+func ByAge(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAge, opts...).ToFunc()
+}
+
+// ByHeight orders the results by the height field.
+func ByHeight(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHeight, opts...).ToFunc()
+}
+
+// ByFavoriteCatBreed orders the results by the favorite_cat_breed field.
+func ByFavoriteCatBreed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFavoriteCatBreed, opts...).ToFunc()
+}
+
+// ByFavoriteColor orders the results by the favorite_color field.
+func ByFavoriteColor(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFavoriteColor, opts...).ToFunc()
+}
+
+// ByFavoriteDogBreed orders the results by the favorite_dog_breed field.
+func ByFavoriteDogBreed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFavoriteDogBreed, opts...).ToFunc()
+}
+
+// ByFavoriteFishBreed orders the results by the favorite_fish_breed field.
+func ByFavoriteFishBreed(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFavoriteFishBreed, opts...).ToFunc()
+}
+
+// ByPetsCount orders the results by pets count.
+func ByPetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPetsStep(), opts...)
+	}
+}
+
+// ByPets orders the results by pets terms.
+func ByPets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAnimalsSavedCount orders the results by animals_saved count.
+func ByAnimalsSavedCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAnimalsSavedStep(), opts...)
+	}
+}
+
+// ByAnimalsSaved orders the results by animals_saved terms.
+func ByAnimalsSaved(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAnimalsSavedStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByBestFriendField orders the results by best_friend field.
+func ByBestFriendField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBestFriendStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByFavoriteHatField orders the results by favorite_hat field.
+func ByFavoriteHatField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFavoriteHatStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newPetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PetsTable, PetsColumn),
+	)
+}
+func newAnimalsSavedStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AnimalsSavedInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AnimalsSavedTable, AnimalsSavedPrimaryKey...),
+	)
+}
+func newBestFriendStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, BestFriendTable, BestFriendColumn),
+	)
+}
+func newFavoriteHatStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FavoriteHatInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, FavoriteHatTable, FavoriteHatColumn),
+	)
 }

@@ -24,102 +24,82 @@ func (s *AllTypesCreate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *AllTypesCreate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int64(s.ID)
 	}
 	{
-
 		e.FieldStart("int")
 		e.Int(s.Int)
 	}
 	{
-
 		e.FieldStart("int8")
 		e.Int32(s.Int8)
 	}
 	{
-
 		e.FieldStart("int16")
 		e.Int32(s.Int16)
 	}
 	{
-
 		e.FieldStart("int32")
 		e.Int32(s.Int32)
 	}
 	{
-
 		e.FieldStart("int64")
 		e.Int64(s.Int64)
 	}
 	{
-
 		e.FieldStart("uint")
 		e.Int64(s.Uint)
 	}
 	{
-
 		e.FieldStart("uint8")
 		e.Int32(s.Uint8)
 	}
 	{
-
 		e.FieldStart("uint16")
 		e.Int32(s.Uint16)
 	}
 	{
-
 		e.FieldStart("uint32")
 		e.Int64(s.Uint32)
 	}
 	{
-
 		e.FieldStart("uint64")
 		e.Int64(s.Uint64)
 	}
 	{
-
 		e.FieldStart("float32")
 		e.Float32(s.Float32)
 	}
 	{
-
 		e.FieldStart("float64")
 		e.Float64(s.Float64)
 	}
 	{
-
 		e.FieldStart("string_type")
 		e.Str(s.StringType)
 	}
 	{
-
 		e.FieldStart("bool")
 		e.Bool(s.Bool)
 	}
 	{
-
 		e.FieldStart("uuid")
 		json.EncodeUUID(e, s.UUID)
 	}
 	{
-
 		e.FieldStart("time")
 		json.EncodeDateTime(e, s.Time)
 	}
 	{
-
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
 	{
-
 		e.FieldStart("state")
 		s.State.Encode(e)
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
@@ -520,102 +500,82 @@ func (s *AllTypesList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *AllTypesList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int64(s.ID)
 	}
 	{
-
 		e.FieldStart("int")
 		e.Int(s.Int)
 	}
 	{
-
 		e.FieldStart("int8")
 		e.Int32(s.Int8)
 	}
 	{
-
 		e.FieldStart("int16")
 		e.Int32(s.Int16)
 	}
 	{
-
 		e.FieldStart("int32")
 		e.Int32(s.Int32)
 	}
 	{
-
 		e.FieldStart("int64")
 		e.Int64(s.Int64)
 	}
 	{
-
 		e.FieldStart("uint")
 		e.Int64(s.Uint)
 	}
 	{
-
 		e.FieldStart("uint8")
 		e.Int32(s.Uint8)
 	}
 	{
-
 		e.FieldStart("uint16")
 		e.Int32(s.Uint16)
 	}
 	{
-
 		e.FieldStart("uint32")
 		e.Int64(s.Uint32)
 	}
 	{
-
 		e.FieldStart("uint64")
 		e.Int64(s.Uint64)
 	}
 	{
-
 		e.FieldStart("float32")
 		e.Float32(s.Float32)
 	}
 	{
-
 		e.FieldStart("float64")
 		e.Float64(s.Float64)
 	}
 	{
-
 		e.FieldStart("string_type")
 		e.Str(s.StringType)
 	}
 	{
-
 		e.FieldStart("bool")
 		e.Bool(s.Bool)
 	}
 	{
-
 		e.FieldStart("uuid")
 		json.EncodeUUID(e, s.UUID)
 	}
 	{
-
 		e.FieldStart("time")
 		json.EncodeDateTime(e, s.Time)
 	}
 	{
-
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
 	{
-
 		e.FieldStart("state")
 		s.State.Encode(e)
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
@@ -1016,102 +976,82 @@ func (s *AllTypesRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *AllTypesRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int64(s.ID)
 	}
 	{
-
 		e.FieldStart("int")
 		e.Int(s.Int)
 	}
 	{
-
 		e.FieldStart("int8")
 		e.Int32(s.Int8)
 	}
 	{
-
 		e.FieldStart("int16")
 		e.Int32(s.Int16)
 	}
 	{
-
 		e.FieldStart("int32")
 		e.Int32(s.Int32)
 	}
 	{
-
 		e.FieldStart("int64")
 		e.Int64(s.Int64)
 	}
 	{
-
 		e.FieldStart("uint")
 		e.Int64(s.Uint)
 	}
 	{
-
 		e.FieldStart("uint8")
 		e.Int32(s.Uint8)
 	}
 	{
-
 		e.FieldStart("uint16")
 		e.Int32(s.Uint16)
 	}
 	{
-
 		e.FieldStart("uint32")
 		e.Int64(s.Uint32)
 	}
 	{
-
 		e.FieldStart("uint64")
 		e.Int64(s.Uint64)
 	}
 	{
-
 		e.FieldStart("float32")
 		e.Float32(s.Float32)
 	}
 	{
-
 		e.FieldStart("float64")
 		e.Float64(s.Float64)
 	}
 	{
-
 		e.FieldStart("string_type")
 		e.Str(s.StringType)
 	}
 	{
-
 		e.FieldStart("bool")
 		e.Bool(s.Bool)
 	}
 	{
-
 		e.FieldStart("uuid")
 		json.EncodeUUID(e, s.UUID)
 	}
 	{
-
 		e.FieldStart("time")
 		json.EncodeDateTime(e, s.Time)
 	}
 	{
-
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
 	{
-
 		e.FieldStart("state")
 		s.State.Encode(e)
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
@@ -1512,102 +1452,82 @@ func (s *AllTypesUpdate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *AllTypesUpdate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int64(s.ID)
 	}
 	{
-
 		e.FieldStart("int")
 		e.Int(s.Int)
 	}
 	{
-
 		e.FieldStart("int8")
 		e.Int32(s.Int8)
 	}
 	{
-
 		e.FieldStart("int16")
 		e.Int32(s.Int16)
 	}
 	{
-
 		e.FieldStart("int32")
 		e.Int32(s.Int32)
 	}
 	{
-
 		e.FieldStart("int64")
 		e.Int64(s.Int64)
 	}
 	{
-
 		e.FieldStart("uint")
 		e.Int64(s.Uint)
 	}
 	{
-
 		e.FieldStart("uint8")
 		e.Int32(s.Uint8)
 	}
 	{
-
 		e.FieldStart("uint16")
 		e.Int32(s.Uint16)
 	}
 	{
-
 		e.FieldStart("uint32")
 		e.Int64(s.Uint32)
 	}
 	{
-
 		e.FieldStart("uint64")
 		e.Int64(s.Uint64)
 	}
 	{
-
 		e.FieldStart("float32")
 		e.Float32(s.Float32)
 	}
 	{
-
 		e.FieldStart("float64")
 		e.Float64(s.Float64)
 	}
 	{
-
 		e.FieldStart("string_type")
 		e.Str(s.StringType)
 	}
 	{
-
 		e.FieldStart("bool")
 		e.Bool(s.Bool)
 	}
 	{
-
 		e.FieldStart("uuid")
 		json.EncodeUUID(e, s.UUID)
 	}
 	{
-
 		e.FieldStart("time")
 		json.EncodeDateTime(e, s.Time)
 	}
 	{
-
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
 	{
-
 		e.FieldStart("state")
 		s.State.Encode(e)
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
@@ -2008,12 +1928,10 @@ func (s *CategoryCreate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CategoryCreate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -2140,12 +2058,10 @@ func (s *CategoryList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CategoryList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -2272,12 +2188,10 @@ func (s *CategoryPetsList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CategoryPetsList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -2294,7 +2208,6 @@ func (s *CategoryPetsList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -2455,12 +2368,10 @@ func (s *CategoryRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CategoryRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -2587,12 +2498,10 @@ func (s *CategoryUpdate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CategoryUpdate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -2719,102 +2628,82 @@ func (s *CreateAllTypesReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreateAllTypesReq) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("int")
 		e.Int(s.Int)
 	}
 	{
-
 		e.FieldStart("int8")
 		e.Int32(s.Int8)
 	}
 	{
-
 		e.FieldStart("int16")
 		e.Int32(s.Int16)
 	}
 	{
-
 		e.FieldStart("int32")
 		e.Int32(s.Int32)
 	}
 	{
-
 		e.FieldStart("int64")
 		e.Int64(s.Int64)
 	}
 	{
-
 		e.FieldStart("uint")
 		e.Int64(s.Uint)
 	}
 	{
-
 		e.FieldStart("uint8")
 		e.Int32(s.Uint8)
 	}
 	{
-
 		e.FieldStart("uint16")
 		e.Int32(s.Uint16)
 	}
 	{
-
 		e.FieldStart("uint32")
 		e.Int64(s.Uint32)
 	}
 	{
-
 		e.FieldStart("uint64")
 		e.Int64(s.Uint64)
 	}
 	{
-
 		e.FieldStart("float32")
 		e.Float32(s.Float32)
 	}
 	{
-
 		e.FieldStart("float64")
 		e.Float64(s.Float64)
 	}
 	{
-
 		e.FieldStart("string_type")
 		e.Str(s.StringType)
 	}
 	{
-
 		e.FieldStart("bool")
 		e.Bool(s.Bool)
 	}
 	{
-
 		e.FieldStart("uuid")
 		json.EncodeUUID(e, s.UUID)
 	}
 	{
-
 		e.FieldStart("time")
 		json.EncodeDateTime(e, s.Time)
 	}
 	{
-
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
 	{
-
 		e.FieldStart("state")
 		s.State.Encode(e)
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
 	{
-
 		e.FieldStart("nilable")
 		e.Str(s.Nilable)
 	}
@@ -3198,7 +3087,6 @@ func (s *CreateCategoryReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreateCategoryReq) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -3325,12 +3213,10 @@ func (s *CreateHatReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreateHatReq) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -3497,7 +3383,6 @@ func (s *CreatePetReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -3514,7 +3399,6 @@ func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -3535,7 +3419,6 @@ func (s *CreatePetReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("owner")
 		e.Int(s.Owner)
 	}
@@ -3771,12 +3654,10 @@ func (s *CreateUserReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CreateUserReq) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -3787,12 +3668,10 @@ func (s *CreateUserReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -4235,17 +4114,14 @@ func (s *HatCreate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *HatCreate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -4408,17 +4284,14 @@ func (s *HatList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *HatList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -4581,17 +4454,14 @@ func (s *HatRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *HatRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -4754,17 +4624,14 @@ func (s *HatUpdate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *HatUpdate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -4927,17 +4794,14 @@ func (s *HatWearerRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *HatWearerRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -4948,12 +4812,10 @@ func (s *HatWearerRead) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -6971,12 +6833,10 @@ func (s *PetCategoriesList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetCategoriesList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -7103,12 +6963,10 @@ func (s *PetCreate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetCreate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -7125,7 +6983,6 @@ func (s *PetCreate) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -7146,7 +7003,6 @@ func (s *PetCreate) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("owner")
 		s.Owner.Encode(e)
 	}
@@ -7330,12 +7186,10 @@ func (s *PetCreateCategories) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetCreateCategories) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -7462,17 +7316,14 @@ func (s *PetCreateOwner) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetCreateOwner) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -7483,12 +7334,10 @@ func (s *PetCreateOwner) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -7849,12 +7698,10 @@ func (s *PetFriendsList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetFriendsList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -7871,7 +7718,6 @@ func (s *PetFriendsList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -8032,12 +7878,10 @@ func (s *PetList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -8054,7 +7898,6 @@ func (s *PetList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -8215,17 +8058,14 @@ func (s *PetOwnerRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetOwnerRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -8236,12 +8076,10 @@ func (s *PetOwnerRead) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -8602,12 +8440,10 @@ func (s *PetRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -8624,7 +8460,6 @@ func (s *PetRead) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -8785,17 +8620,14 @@ func (s *PetRescuerList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetRescuerList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -8806,12 +8638,10 @@ func (s *PetRescuerList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -9172,12 +9002,10 @@ func (s *PetUpdate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PetUpdate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -9194,7 +9022,6 @@ func (s *PetUpdate) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -9355,17 +9182,14 @@ func (s *R400) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *R400) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-
 		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-
 		if len(s.Errors) != 0 {
 			e.FieldStart("errors")
 			e.Raw(s.Errors)
@@ -9489,17 +9313,14 @@ func (s *R404) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *R404) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-
 		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-
 		if len(s.Errors) != 0 {
 			e.FieldStart("errors")
 			e.Raw(s.Errors)
@@ -9623,17 +9444,14 @@ func (s *R409) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *R409) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-
 		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-
 		if len(s.Errors) != 0 {
 			e.FieldStart("errors")
 			e.Raw(s.Errors)
@@ -9757,17 +9575,14 @@ func (s *R500) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *R500) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("code")
 		e.Int(s.Code)
 	}
 	{
-
 		e.FieldStart("status")
 		e.Str(s.Status)
 	}
 	{
-
 		if len(s.Errors) != 0 {
 			e.FieldStart("errors")
 			e.Raw(s.Errors)
@@ -9999,7 +9814,6 @@ func (s *UpdateAllTypesReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("bytes")
 		e.Base64(s.Bytes)
 	}
@@ -10508,7 +10322,6 @@ func (s *UpdatePetReq) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -11098,12 +10911,10 @@ func (s *UserAnimalsSavedList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserAnimalsSavedList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -11120,7 +10931,6 @@ func (s *UserAnimalsSavedList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -11281,17 +11091,14 @@ func (s *UserBestFriendRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserBestFriendRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -11302,12 +11109,10 @@ func (s *UserBestFriendRead) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -11668,17 +11473,14 @@ func (s *UserCreate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserCreate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -11689,12 +11491,10 @@ func (s *UserCreate) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -12055,17 +11855,14 @@ func (s *UserFavoriteHatRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserFavoriteHatRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("type")
 		s.Type.Encode(e)
 	}
@@ -12228,17 +12025,14 @@ func (s *UserList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -12249,12 +12043,10 @@ func (s *UserList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -12615,12 +12407,10 @@ func (s *UserPetsList) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserPetsList) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -12637,7 +12427,6 @@ func (s *UserPetsList) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("tag_id")
 		e.Base64(s.TagID)
 	}
@@ -12798,17 +12587,14 @@ func (s *UserRead) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserRead) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -12819,12 +12605,10 @@ func (s *UserRead) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
@@ -13185,17 +12969,14 @@ func (s *UserUpdate) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *UserUpdate) encodeFields(e *jx.Encoder) {
 	{
-
 		e.FieldStart("id")
 		e.Int(s.ID)
 	}
 	{
-
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
 	{
-
 		e.FieldStart("age")
 		e.Int64(s.Age)
 	}
@@ -13206,12 +12987,10 @@ func (s *UserUpdate) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-
 		e.FieldStart("favorite_cat_breed")
 		s.FavoriteCatBreed.Encode(e)
 	}
 	{
-
 		e.FieldStart("favorite_color")
 		s.FavoriteColor.Encode(e)
 	}
