@@ -27,7 +27,7 @@ func (hd *HatDelete) Where(ps ...predicate.Hat) *HatDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (hd *HatDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, HatMutation](ctx, hd.sqlExec, hd.mutation, hd.hooks)
+	return withHooks(ctx, hd.sqlExec, hd.mutation, hd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

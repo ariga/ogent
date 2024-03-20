@@ -4,6 +4,9 @@ package hat
 
 import (
 	"fmt"
+
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -78,4 +81,36 @@ func TypeValidator(_type Type) error {
 	default:
 		return fmt.Errorf("hat: invalid enum value for type field: %q", _type)
 	}
+}
+
+// OrderOption defines the ordering options for the Hat queries.
+type OrderOption func(*sql.Selector)
+
+// ByID orders the results by the id field.
+func ByID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByWearerField orders the results by wearer field.
+func ByWearerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWearerStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newWearerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WearerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, true, WearerTable, WearerColumn),
+	)
 }

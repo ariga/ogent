@@ -32,12 +32,16 @@ func unpackDeleteAllTypesParams(packed middleware.Parameters) (params DeleteAllT
 	return params
 }
 
-func decodeDeleteAllTypesParams(args [1]string, r *http.Request) (params DeleteAllTypesParams, _ error) {
+func decodeDeleteAllTypesParams(args [1]string, argsEscaped bool, r *http.Request) (params DeleteAllTypesParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -111,12 +115,16 @@ func unpackDeleteCategoryParams(packed middleware.Parameters) (params DeleteCate
 	return params
 }
 
-func decodeDeleteCategoryParams(args [1]string, r *http.Request) (params DeleteCategoryParams, _ error) {
+func decodeDeleteCategoryParams(args [1]string, argsEscaped bool, r *http.Request) (params DeleteCategoryParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -173,12 +181,16 @@ func unpackDeleteHatParams(packed middleware.Parameters) (params DeleteHatParams
 	return params
 }
 
-func decodeDeleteHatParams(args [1]string, r *http.Request) (params DeleteHatParams, _ error) {
+func decodeDeleteHatParams(args [1]string, argsEscaped bool, r *http.Request) (params DeleteHatParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -235,12 +247,16 @@ func unpackDeletePetParams(packed middleware.Parameters) (params DeletePetParams
 	return params
 }
 
-func decodeDeletePetParams(args [1]string, r *http.Request) (params DeletePetParams, _ error) {
+func decodeDeletePetParams(args [1]string, argsEscaped bool, r *http.Request) (params DeletePetParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -297,12 +313,16 @@ func unpackDeleteUserParams(packed middleware.Parameters) (params DeleteUserPara
 	return params
 }
 
-func decodeDeleteUserParams(args [1]string, r *http.Request) (params DeleteUserParams, _ error) {
+func decodeDeleteUserParams(args [1]string, argsEscaped bool, r *http.Request) (params DeleteUserParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -372,7 +392,7 @@ func unpackListAllTypesParams(packed middleware.Parameters) (params ListAllTypes
 	return params
 }
 
-func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTypesParams, _ error) {
+func decodeListAllTypesParams(args [0]string, argsEscaped bool, r *http.Request) (params ListAllTypesParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -407,7 +427,7 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 				return err
 			}
 			if err := func() error {
-				if params.Page.Set {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -418,7 +438,7 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.Page.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -472,7 +492,7 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 				return err
 			}
 			if err := func() error {
-				if params.ItemsPerPage.Set {
+				if value, ok := params.ItemsPerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -483,7 +503,7 @@ func decodeListAllTypesParams(args [0]string, r *http.Request) (params ListAllTy
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -537,7 +557,7 @@ func unpackListCategoryParams(packed middleware.Parameters) (params ListCategory
 	return params
 }
 
-func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCategoryParams, _ error) {
+func decodeListCategoryParams(args [0]string, argsEscaped bool, r *http.Request) (params ListCategoryParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -572,7 +592,7 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 				return err
 			}
 			if err := func() error {
-				if params.Page.Set {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -583,7 +603,7 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.Page.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -637,7 +657,7 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 				return err
 			}
 			if err := func() error {
-				if params.ItemsPerPage.Set {
+				if value, ok := params.ItemsPerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -648,7 +668,7 @@ func decodeListCategoryParams(args [0]string, r *http.Request) (params ListCateg
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -711,13 +731,17 @@ func unpackListCategoryPetsParams(packed middleware.Parameters) (params ListCate
 	return params
 }
 
-func decodeListCategoryPetsParams(args [1]string, r *http.Request) (params ListCategoryPetsParams, _ error) {
+func decodeListCategoryPetsParams(args [1]string, argsEscaped bool, r *http.Request) (params ListCategoryPetsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -869,7 +893,7 @@ func unpackListHatParams(packed middleware.Parameters) (params ListHatParams) {
 	return params
 }
 
-func decodeListHatParams(args [0]string, r *http.Request) (params ListHatParams, _ error) {
+func decodeListHatParams(args [0]string, argsEscaped bool, r *http.Request) (params ListHatParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -904,7 +928,7 @@ func decodeListHatParams(args [0]string, r *http.Request) (params ListHatParams,
 				return err
 			}
 			if err := func() error {
-				if params.Page.Set {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -915,7 +939,7 @@ func decodeListHatParams(args [0]string, r *http.Request) (params ListHatParams,
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.Page.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -969,7 +993,7 @@ func decodeListHatParams(args [0]string, r *http.Request) (params ListHatParams,
 				return err
 			}
 			if err := func() error {
-				if params.ItemsPerPage.Set {
+				if value, ok := params.ItemsPerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -980,7 +1004,7 @@ func decodeListHatParams(args [0]string, r *http.Request) (params ListHatParams,
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -1034,7 +1058,7 @@ func unpackListPetParams(packed middleware.Parameters) (params ListPetParams) {
 	return params
 }
 
-func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams, _ error) {
+func decodeListPetParams(args [0]string, argsEscaped bool, r *http.Request) (params ListPetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -1069,7 +1093,7 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 				return err
 			}
 			if err := func() error {
-				if params.Page.Set {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1080,7 +1104,7 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.Page.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -1134,7 +1158,7 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 				return err
 			}
 			if err := func() error {
-				if params.ItemsPerPage.Set {
+				if value, ok := params.ItemsPerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1145,7 +1169,7 @@ func decodeListPetParams(args [0]string, r *http.Request) (params ListPetParams,
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -1208,13 +1232,17 @@ func unpackListPetCategoriesParams(packed middleware.Parameters) (params ListPet
 	return params
 }
 
-func decodeListPetCategoriesParams(args [1]string, r *http.Request) (params ListPetCategoriesParams, _ error) {
+func decodeListPetCategoriesParams(args [1]string, argsEscaped bool, r *http.Request) (params ListPetCategoriesParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -1375,13 +1403,17 @@ func unpackListPetFriendsParams(packed middleware.Parameters) (params ListPetFri
 	return params
 }
 
-func decodeListPetFriendsParams(args [1]string, r *http.Request) (params ListPetFriendsParams, _ error) {
+func decodeListPetFriendsParams(args [1]string, argsEscaped bool, r *http.Request) (params ListPetFriendsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -1542,13 +1574,17 @@ func unpackListPetRescuerParams(packed middleware.Parameters) (params ListPetRes
 	return params
 }
 
-func decodeListPetRescuerParams(args [1]string, r *http.Request) (params ListPetRescuerParams, _ error) {
+func decodeListPetRescuerParams(args [1]string, argsEscaped bool, r *http.Request) (params ListPetRescuerParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -1700,7 +1736,7 @@ func unpackListUserParams(packed middleware.Parameters) (params ListUserParams) 
 	return params
 }
 
-func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParams, _ error) {
+func decodeListUserParams(args [0]string, argsEscaped bool, r *http.Request) (params ListUserParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode query: page.
 	if err := func() error {
@@ -1735,7 +1771,7 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 				return err
 			}
 			if err := func() error {
-				if params.Page.Set {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1746,7 +1782,7 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.Page.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -1800,7 +1836,7 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 				return err
 			}
 			if err := func() error {
-				if params.ItemsPerPage.Set {
+				if value, ok := params.ItemsPerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1811,7 +1847,7 @@ func decodeListUserParams(args [0]string, r *http.Request) (params ListUserParam
 							MaxExclusive:  false,
 							MultipleOfSet: false,
 							MultipleOf:    0,
-						}).Validate(int64(params.ItemsPerPage.Value)); err != nil {
+						}).Validate(int64(value)); err != nil {
 							return errors.Wrap(err, "int")
 						}
 						return nil
@@ -1874,13 +1910,17 @@ func unpackListUserAnimalsSavedParams(packed middleware.Parameters) (params List
 	return params
 }
 
-func decodeListUserAnimalsSavedParams(args [1]string, r *http.Request) (params ListUserAnimalsSavedParams, _ error) {
+func decodeListUserAnimalsSavedParams(args [1]string, argsEscaped bool, r *http.Request) (params ListUserAnimalsSavedParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2041,13 +2081,17 @@ func unpackListUserPetsParams(packed middleware.Parameters) (params ListUserPets
 	return params
 }
 
-func decodeListUserPetsParams(args [1]string, r *http.Request) (params ListUserPetsParams, _ error) {
+func decodeListUserPetsParams(args [1]string, argsEscaped bool, r *http.Request) (params ListUserPetsParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2186,12 +2230,16 @@ func unpackReadAllTypesParams(packed middleware.Parameters) (params ReadAllTypes
 	return params
 }
 
-func decodeReadAllTypesParams(args [1]string, r *http.Request) (params ReadAllTypesParams, _ error) {
+func decodeReadAllTypesParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadAllTypesParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2265,12 +2313,16 @@ func unpackReadCategoryParams(packed middleware.Parameters) (params ReadCategory
 	return params
 }
 
-func decodeReadCategoryParams(args [1]string, r *http.Request) (params ReadCategoryParams, _ error) {
+func decodeReadCategoryParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadCategoryParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2327,12 +2379,16 @@ func unpackReadHatParams(packed middleware.Parameters) (params ReadHatParams) {
 	return params
 }
 
-func decodeReadHatParams(args [1]string, r *http.Request) (params ReadHatParams, _ error) {
+func decodeReadHatParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadHatParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2389,12 +2445,16 @@ func unpackReadHatWearerParams(packed middleware.Parameters) (params ReadHatWear
 	return params
 }
 
-func decodeReadHatWearerParams(args [1]string, r *http.Request) (params ReadHatWearerParams, _ error) {
+func decodeReadHatWearerParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadHatWearerParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2451,12 +2511,16 @@ func unpackReadPetParams(packed middleware.Parameters) (params ReadPetParams) {
 	return params
 }
 
-func decodeReadPetParams(args [1]string, r *http.Request) (params ReadPetParams, _ error) {
+func decodeReadPetParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadPetParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2513,12 +2577,16 @@ func unpackReadPetOwnerParams(packed middleware.Parameters) (params ReadPetOwner
 	return params
 }
 
-func decodeReadPetOwnerParams(args [1]string, r *http.Request) (params ReadPetOwnerParams, _ error) {
+func decodeReadPetOwnerParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadPetOwnerParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2575,12 +2643,16 @@ func unpackReadUserParams(packed middleware.Parameters) (params ReadUserParams) 
 	return params
 }
 
-func decodeReadUserParams(args [1]string, r *http.Request) (params ReadUserParams, _ error) {
+func decodeReadUserParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadUserParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2637,12 +2709,16 @@ func unpackReadUserBestFriendParams(packed middleware.Parameters) (params ReadUs
 	return params
 }
 
-func decodeReadUserBestFriendParams(args [1]string, r *http.Request) (params ReadUserBestFriendParams, _ error) {
+func decodeReadUserBestFriendParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadUserBestFriendParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2699,12 +2775,16 @@ func unpackReadUserFavoriteHatParams(packed middleware.Parameters) (params ReadU
 	return params
 }
 
-func decodeReadUserFavoriteHatParams(args [1]string, r *http.Request) (params ReadUserFavoriteHatParams, _ error) {
+func decodeReadUserFavoriteHatParams(args [1]string, argsEscaped bool, r *http.Request) (params ReadUserFavoriteHatParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2761,12 +2841,16 @@ func unpackUpdateAllTypesParams(packed middleware.Parameters) (params UpdateAllT
 	return params
 }
 
-func decodeUpdateAllTypesParams(args [1]string, r *http.Request) (params UpdateAllTypesParams, _ error) {
+func decodeUpdateAllTypesParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateAllTypesParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2840,12 +2924,16 @@ func unpackUpdateCategoryParams(packed middleware.Parameters) (params UpdateCate
 	return params
 }
 
-func decodeUpdateCategoryParams(args [1]string, r *http.Request) (params UpdateCategoryParams, _ error) {
+func decodeUpdateCategoryParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateCategoryParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2902,12 +2990,16 @@ func unpackUpdateHatParams(packed middleware.Parameters) (params UpdateHatParams
 	return params
 }
 
-func decodeUpdateHatParams(args [1]string, r *http.Request) (params UpdateHatParams, _ error) {
+func decodeUpdateHatParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateHatParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -2964,12 +3056,16 @@ func unpackUpdatePetParams(packed middleware.Parameters) (params UpdatePetParams
 	return params
 }
 
-func decodeUpdatePetParams(args [1]string, r *http.Request) (params UpdatePetParams, _ error) {
+func decodeUpdatePetParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdatePetParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{
@@ -3026,12 +3122,16 @@ func unpackUpdateUserParams(packed middleware.Parameters) (params UpdateUserPara
 	return params
 }
 
-func decodeUpdateUserParams(args [1]string, r *http.Request) (params UpdateUserParams, _ error) {
+func decodeUpdateUserParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateUserParams, _ error) {
 	// Decode path: id.
 	if err := func() error {
-		param, err := url.PathUnescape(args[0])
-		if err != nil {
-			return errors.Wrap(err, "unescape path")
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
 		}
 		if len(param) > 0 {
 			d := uri.NewPathDecoder(uri.PathDecoderConfig{

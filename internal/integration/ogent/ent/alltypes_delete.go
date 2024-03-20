@@ -27,7 +27,7 @@ func (atd *AllTypesDelete) Where(ps ...predicate.AllTypes) *AllTypesDelete {
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (atd *AllTypesDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, AllTypesMutation](ctx, atd.sqlExec, atd.mutation, atd.hooks)
+	return withHooks(ctx, atd.sqlExec, atd.mutation, atd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

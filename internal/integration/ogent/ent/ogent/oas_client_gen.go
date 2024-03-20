@@ -5,11 +5,14 @@ package ogent
 import (
 	"context"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/go-faster/errors"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
@@ -17,6 +20,220 @@ import (
 	"github.com/ogen-go/ogen/otelogen"
 	"github.com/ogen-go/ogen/uri"
 )
+
+// Invoker invokes operations described by OpenAPI v3 specification.
+type Invoker interface {
+	// CreateAllTypes invokes createAllTypes operation.
+	//
+	// Creates a new AllTypes and persists it to storage.
+	//
+	// POST /all-types
+	CreateAllTypes(ctx context.Context, request *CreateAllTypesReq) (CreateAllTypesRes, error)
+	// CreateCategory invokes createCategory operation.
+	//
+	// Creates a new Category and persists it to storage.
+	//
+	// POST /categories
+	CreateCategory(ctx context.Context, request *CreateCategoryReq) (CreateCategoryRes, error)
+	// CreateHat invokes createHat operation.
+	//
+	// Creates a new Hat and persists it to storage.
+	//
+	// POST /hats
+	CreateHat(ctx context.Context, request *CreateHatReq) (CreateHatRes, error)
+	// CreatePet invokes createPet operation.
+	//
+	// Creates a new Pet and persists it to storage.
+	//
+	// POST /pets
+	CreatePet(ctx context.Context, request *CreatePetReq) (CreatePetRes, error)
+	// CreateUser invokes createUser operation.
+	//
+	// Creates a new User and persists it to storage.
+	//
+	// POST /users
+	CreateUser(ctx context.Context, request *CreateUserReq) (CreateUserRes, error)
+	// DeleteAllTypes invokes deleteAllTypes operation.
+	//
+	// Deletes the AllTypes with the requested ID.
+	//
+	// DELETE /all-types/{id}
+	DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error)
+	// DeleteCategory invokes deleteCategory operation.
+	//
+	// Deletes the Category with the requested ID.
+	//
+	// DELETE /categories/{id}
+	DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error)
+	// DeleteHat invokes deleteHat operation.
+	//
+	// Deletes the Hat with the requested ID.
+	//
+	// DELETE /hats/{id}
+	DeleteHat(ctx context.Context, params DeleteHatParams) (DeleteHatRes, error)
+	// DeletePet invokes deletePet operation.
+	//
+	// Deletes the Pet with the requested ID.
+	//
+	// DELETE /pets/{id}
+	DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error)
+	// DeleteUser invokes deleteUser operation.
+	//
+	// Deletes the User with the requested ID.
+	//
+	// DELETE /users/{id}
+	DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error)
+	// ListAllTypes invokes listAllTypes operation.
+	//
+	// List AllTypes.
+	//
+	// GET /all-types
+	ListAllTypes(ctx context.Context, params ListAllTypesParams) (ListAllTypesRes, error)
+	// ListCategory invokes listCategory operation.
+	//
+	// List Categories.
+	//
+	// GET /categories
+	ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error)
+	// ListCategoryPets invokes listCategoryPets operation.
+	//
+	// List attached Pets.
+	//
+	// GET /categories/{id}/pets
+	ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error)
+	// ListHat invokes listHat operation.
+	//
+	// List Hats.
+	//
+	// GET /hats
+	ListHat(ctx context.Context, params ListHatParams) (ListHatRes, error)
+	// ListPet invokes listPet operation.
+	//
+	// List Pets.
+	//
+	// GET /pets
+	ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error)
+	// ListPetCategories invokes listPetCategories operation.
+	//
+	// List attached Categories.
+	//
+	// GET /pets/{id}/categories
+	ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error)
+	// ListPetFriends invokes listPetFriends operation.
+	//
+	// List attached Friends.
+	//
+	// GET /pets/{id}/friends
+	ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error)
+	// ListPetRescuer invokes listPetRescuer operation.
+	//
+	// List attached Rescuers.
+	//
+	// GET /pets/{id}/rescuer
+	ListPetRescuer(ctx context.Context, params ListPetRescuerParams) (ListPetRescuerRes, error)
+	// ListUser invokes listUser operation.
+	//
+	// List Users.
+	//
+	// GET /users
+	ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error)
+	// ListUserAnimalsSaved invokes listUserAnimalsSaved operation.
+	//
+	// List attached AnimalsSaveds.
+	//
+	// GET /users/{id}/animals-saved
+	ListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (ListUserAnimalsSavedRes, error)
+	// ListUserPets invokes listUserPets operation.
+	//
+	// List attached Pets.
+	//
+	// GET /users/{id}/pets
+	ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error)
+	// ReadAllTypes invokes readAllTypes operation.
+	//
+	// Finds the AllTypes with the requested ID and returns it.
+	//
+	// GET /all-types/{id}
+	ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error)
+	// ReadCategory invokes readCategory operation.
+	//
+	// Finds the Category with the requested ID and returns it.
+	//
+	// GET /categories/{id}
+	ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error)
+	// ReadHat invokes readHat operation.
+	//
+	// Finds the Hat with the requested ID and returns it.
+	//
+	// GET /hats/{id}
+	ReadHat(ctx context.Context, params ReadHatParams) (ReadHatRes, error)
+	// ReadHatWearer invokes readHatWearer operation.
+	//
+	// Find the attached User of the Hat with the given ID.
+	//
+	// GET /hats/{id}/wearer
+	ReadHatWearer(ctx context.Context, params ReadHatWearerParams) (ReadHatWearerRes, error)
+	// ReadPet invokes readPet operation.
+	//
+	// Finds the Pet with the requested ID and returns it.
+	//
+	// GET /pets/{id}
+	ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error)
+	// ReadPetOwner invokes readPetOwner operation.
+	//
+	// Find the attached User of the Pet with the given ID.
+	//
+	// GET /pets/{id}/owner
+	ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error)
+	// ReadUser invokes readUser operation.
+	//
+	// Finds the User with the requested ID and returns it.
+	//
+	// GET /users/{id}
+	ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error)
+	// ReadUserBestFriend invokes readUserBestFriend operation.
+	//
+	// Find the attached User of the User with the given ID.
+	//
+	// GET /users/{id}/best-friend
+	ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error)
+	// ReadUserFavoriteHat invokes readUserFavoriteHat operation.
+	//
+	// Find the attached Hat of the User with the given ID.
+	//
+	// GET /users/{id}/favorite-hat
+	ReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (ReadUserFavoriteHatRes, error)
+	// UpdateAllTypes invokes updateAllTypes operation.
+	//
+	// Updates a AllTypes and persists changes to storage.
+	//
+	// PATCH /all-types/{id}
+	UpdateAllTypes(ctx context.Context, request *UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error)
+	// UpdateCategory invokes updateCategory operation.
+	//
+	// Updates a Category and persists changes to storage.
+	//
+	// PATCH /categories/{id}
+	UpdateCategory(ctx context.Context, request *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error)
+	// UpdateHat invokes updateHat operation.
+	//
+	// Updates a Hat and persists changes to storage.
+	//
+	// PATCH /hats/{id}
+	UpdateHat(ctx context.Context, request *UpdateHatReq, params UpdateHatParams) (UpdateHatRes, error)
+	// UpdatePet invokes updatePet operation.
+	//
+	// Updates a Pet and persists changes to storage.
+	//
+	// PATCH /pets/{id}
+	UpdatePet(ctx context.Context, request *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error)
+	// UpdateUser invokes updateUser operation.
+	//
+	// Updates a User and persists changes to storage.
+	//
+	// PATCH /users/{id}
+	UpdateUser(ctx context.Context, request *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error)
+}
 
 // Client implements OAS client.
 type Client struct {
@@ -28,12 +245,19 @@ var _ Handler = struct {
 	*Client
 }{}
 
+func trimTrailingSlashes(u *url.URL) {
+	u.Path = strings.TrimRight(u.Path, "/")
+	u.RawPath = strings.TrimRight(u.RawPath, "/")
+}
+
 // NewClient initializes new Client defined by OAS.
 func NewClient(serverURL string, opts ...ClientOption) (*Client, error) {
 	u, err := url.Parse(serverURL)
 	if err != nil {
 		return nil, err
 	}
+	trimTrailingSlashes(u)
+
 	c, err := newClientConfig(opts...).baseClient()
 	if err != nil {
 		return nil, err
@@ -66,33 +290,26 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 // POST /all-types
 func (c *Client) CreateAllTypes(ctx context.Context, request *CreateAllTypesReq) (CreateAllTypesRes, error) {
 	res, err := c.sendCreateAllTypes(ctx, request)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendCreateAllTypes(ctx context.Context, request *CreateAllTypesReq) (res CreateAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createAllTypes"),
-	}
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/all-types"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateAllTypes",
@@ -105,17 +322,19 @@ func (c *Client) sendCreateAllTypes(ctx context.Context, request *CreateAllTypes
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/all-types"
+	var pathParts [1]string
+	pathParts[0] = "/all-types"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u, nil)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -146,24 +365,26 @@ func (c *Client) sendCreateAllTypes(ctx context.Context, request *CreateAllTypes
 // POST /categories
 func (c *Client) CreateCategory(ctx context.Context, request *CreateCategoryReq) (CreateCategoryRes, error) {
 	res, err := c.sendCreateCategory(ctx, request)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendCreateCategory(ctx context.Context, request *CreateCategoryReq) (res CreateCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createCategory"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/categories"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateCategory",
@@ -176,17 +397,19 @@ func (c *Client) sendCreateCategory(ctx context.Context, request *CreateCategory
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories"
+	var pathParts [1]string
+	pathParts[0] = "/categories"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u, nil)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -217,33 +440,26 @@ func (c *Client) sendCreateCategory(ctx context.Context, request *CreateCategory
 // POST /hats
 func (c *Client) CreateHat(ctx context.Context, request *CreateHatReq) (CreateHatRes, error) {
 	res, err := c.sendCreateHat(ctx, request)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendCreateHat(ctx context.Context, request *CreateHatReq) (res CreateHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createHat"),
-	}
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/hats"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateHat",
@@ -256,17 +472,19 @@ func (c *Client) sendCreateHat(ctx context.Context, request *CreateHatReq) (res 
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats"
+	var pathParts [1]string
+	pathParts[0] = "/hats"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u, nil)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -297,24 +515,26 @@ func (c *Client) sendCreateHat(ctx context.Context, request *CreateHatReq) (res 
 // POST /pets
 func (c *Client) CreatePet(ctx context.Context, request *CreatePetReq) (CreatePetRes, error) {
 	res, err := c.sendCreatePet(ctx, request)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendCreatePet(ctx context.Context, request *CreatePetReq) (res CreatePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createPet"),
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/pets"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreatePet",
@@ -327,17 +547,19 @@ func (c *Client) sendCreatePet(ctx context.Context, request *CreatePetReq) (res 
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets"
+	var pathParts [1]string
+	pathParts[0] = "/pets"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u, nil)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -368,33 +590,26 @@ func (c *Client) sendCreatePet(ctx context.Context, request *CreatePetReq) (res 
 // POST /users
 func (c *Client) CreateUser(ctx context.Context, request *CreateUserReq) (CreateUserRes, error) {
 	res, err := c.sendCreateUser(ctx, request)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendCreateUser(ctx context.Context, request *CreateUserReq) (res CreateUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createUser"),
-	}
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
+		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/users"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "CreateUser",
@@ -407,17 +622,19 @@ func (c *Client) sendCreateUser(ctx context.Context, request *CreateUserReq) (re
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users"
+	var pathParts [1]string
+	pathParts[0] = "/users"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u, nil)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -448,24 +665,26 @@ func (c *Client) sendCreateUser(ctx context.Context, request *CreateUserReq) (re
 // DELETE /all-types/{id}
 func (c *Client) DeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (DeleteAllTypesRes, error) {
 	res, err := c.sendDeleteAllTypes(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendDeleteAllTypes(ctx context.Context, params DeleteAllTypesParams) (res DeleteAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteAllTypes"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/all-types/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteAllTypes",
@@ -478,14 +697,15 @@ func (c *Client) sendDeleteAllTypes(ctx context.Context, params DeleteAllTypesPa
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/all-types/"
+	var pathParts [2]string
+	pathParts[0] = "/all-types/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -498,11 +718,16 @@ func (c *Client) sendDeleteAllTypes(ctx context.Context, params DeleteAllTypesPa
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u, nil)
+	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -530,24 +755,26 @@ func (c *Client) sendDeleteAllTypes(ctx context.Context, params DeleteAllTypesPa
 // DELETE /categories/{id}
 func (c *Client) DeleteCategory(ctx context.Context, params DeleteCategoryParams) (DeleteCategoryRes, error) {
 	res, err := c.sendDeleteCategory(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendDeleteCategory(ctx context.Context, params DeleteCategoryParams) (res DeleteCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteCategory"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/categories/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteCategory",
@@ -560,14 +787,15 @@ func (c *Client) sendDeleteCategory(ctx context.Context, params DeleteCategoryPa
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories/"
+	var pathParts [2]string
+	pathParts[0] = "/categories/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -580,11 +808,16 @@ func (c *Client) sendDeleteCategory(ctx context.Context, params DeleteCategoryPa
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u, nil)
+	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -612,24 +845,26 @@ func (c *Client) sendDeleteCategory(ctx context.Context, params DeleteCategoryPa
 // DELETE /hats/{id}
 func (c *Client) DeleteHat(ctx context.Context, params DeleteHatParams) (DeleteHatRes, error) {
 	res, err := c.sendDeleteHat(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendDeleteHat(ctx context.Context, params DeleteHatParams) (res DeleteHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteHat"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/hats/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteHat",
@@ -642,14 +877,15 @@ func (c *Client) sendDeleteHat(ctx context.Context, params DeleteHatParams) (res
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats/"
+	var pathParts [2]string
+	pathParts[0] = "/hats/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -662,11 +898,16 @@ func (c *Client) sendDeleteHat(ctx context.Context, params DeleteHatParams) (res
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u, nil)
+	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -694,24 +935,26 @@ func (c *Client) sendDeleteHat(ctx context.Context, params DeleteHatParams) (res
 // DELETE /pets/{id}
 func (c *Client) DeletePet(ctx context.Context, params DeletePetParams) (DeletePetRes, error) {
 	res, err := c.sendDeletePet(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendDeletePet(ctx context.Context, params DeletePetParams) (res DeletePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deletePet"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/pets/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeletePet",
@@ -724,14 +967,15 @@ func (c *Client) sendDeletePet(ctx context.Context, params DeletePetParams) (res
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [2]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -744,11 +988,16 @@ func (c *Client) sendDeletePet(ctx context.Context, params DeletePetParams) (res
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u, nil)
+	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -776,24 +1025,26 @@ func (c *Client) sendDeletePet(ctx context.Context, params DeletePetParams) (res
 // DELETE /users/{id}
 func (c *Client) DeleteUser(ctx context.Context, params DeleteUserParams) (DeleteUserRes, error) {
 	res, err := c.sendDeleteUser(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendDeleteUser(ctx context.Context, params DeleteUserParams) (res DeleteUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteUser"),
+		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/users/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteUser",
@@ -806,14 +1057,15 @@ func (c *Client) sendDeleteUser(ctx context.Context, params DeleteUserParams) (r
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [2]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -826,11 +1078,16 @@ func (c *Client) sendDeleteUser(ctx context.Context, params DeleteUserParams) (r
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u, nil)
+	r, err := ht.NewRequest(ctx, "DELETE", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -858,24 +1115,26 @@ func (c *Client) sendDeleteUser(ctx context.Context, params DeleteUserParams) (r
 // GET /all-types
 func (c *Client) ListAllTypes(ctx context.Context, params ListAllTypesParams) (ListAllTypesRes, error) {
 	res, err := c.sendListAllTypes(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListAllTypes(ctx context.Context, params ListAllTypesParams) (res ListAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listAllTypes"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/all-types"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListAllTypes",
@@ -888,14 +1147,16 @@ func (c *Client) sendListAllTypes(ctx context.Context, params ListAllTypesParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/all-types"
+	var pathParts [1]string
+	pathParts[0] = "/all-types"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -936,7 +1197,7 @@ func (c *Client) sendListAllTypes(ctx context.Context, params ListAllTypesParams
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -964,24 +1225,26 @@ func (c *Client) sendListAllTypes(ctx context.Context, params ListAllTypesParams
 // GET /categories
 func (c *Client) ListCategory(ctx context.Context, params ListCategoryParams) (ListCategoryRes, error) {
 	res, err := c.sendListCategory(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListCategory(ctx context.Context, params ListCategoryParams) (res ListCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listCategory"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/categories"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategory",
@@ -994,14 +1257,16 @@ func (c *Client) sendListCategory(ctx context.Context, params ListCategoryParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories"
+	var pathParts [1]string
+	pathParts[0] = "/categories"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1042,7 +1307,7 @@ func (c *Client) sendListCategory(ctx context.Context, params ListCategoryParams
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1070,24 +1335,26 @@ func (c *Client) sendListCategory(ctx context.Context, params ListCategoryParams
 // GET /categories/{id}/pets
 func (c *Client) ListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (ListCategoryPetsRes, error) {
 	res, err := c.sendListCategoryPets(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPetsParams) (res ListCategoryPetsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listCategoryPets"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/categories/{id}/pets"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListCategoryPets",
@@ -1100,14 +1367,15 @@ func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPe
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories/"
+	var pathParts [3]string
+	pathParts[0] = "/categories/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1120,9 +1388,14 @@ func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPe
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/pets"
+	pathParts[2] = "/pets"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1163,7 +1436,7 @@ func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPe
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1191,24 +1464,26 @@ func (c *Client) sendListCategoryPets(ctx context.Context, params ListCategoryPe
 // GET /hats
 func (c *Client) ListHat(ctx context.Context, params ListHatParams) (ListHatRes, error) {
 	res, err := c.sendListHat(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListHat(ctx context.Context, params ListHatParams) (res ListHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listHat"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/hats"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListHat",
@@ -1221,14 +1496,16 @@ func (c *Client) sendListHat(ctx context.Context, params ListHatParams) (res Lis
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats"
+	var pathParts [1]string
+	pathParts[0] = "/hats"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1269,7 +1546,7 @@ func (c *Client) sendListHat(ctx context.Context, params ListHatParams) (res Lis
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1297,24 +1574,26 @@ func (c *Client) sendListHat(ctx context.Context, params ListHatParams) (res Lis
 // GET /pets
 func (c *Client) ListPet(ctx context.Context, params ListPetParams) (ListPetRes, error) {
 	res, err := c.sendListPet(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListPet(ctx context.Context, params ListPetParams) (res ListPetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPet"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPet",
@@ -1327,14 +1606,16 @@ func (c *Client) sendListPet(ctx context.Context, params ListPetParams) (res Lis
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets"
+	var pathParts [1]string
+	pathParts[0] = "/pets"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1375,7 +1656,7 @@ func (c *Client) sendListPet(ctx context.Context, params ListPetParams) (res Lis
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1403,24 +1684,26 @@ func (c *Client) sendListPet(ctx context.Context, params ListPetParams) (res Lis
 // GET /pets/{id}/categories
 func (c *Client) ListPetCategories(ctx context.Context, params ListPetCategoriesParams) (ListPetCategoriesRes, error) {
 	res, err := c.sendListPetCategories(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCategoriesParams) (res ListPetCategoriesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPetCategories"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets/{id}/categories"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetCategories",
@@ -1433,14 +1716,15 @@ func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCatego
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [3]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1453,9 +1737,14 @@ func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCatego
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/categories"
+	pathParts[2] = "/categories"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1496,7 +1785,7 @@ func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCatego
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1524,24 +1813,26 @@ func (c *Client) sendListPetCategories(ctx context.Context, params ListPetCatego
 // GET /pets/{id}/friends
 func (c *Client) ListPetFriends(ctx context.Context, params ListPetFriendsParams) (ListPetFriendsRes, error) {
 	res, err := c.sendListPetFriends(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsParams) (res ListPetFriendsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPetFriends"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets/{id}/friends"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetFriends",
@@ -1554,14 +1845,15 @@ func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsPa
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [3]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1574,9 +1866,14 @@ func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsPa
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/friends"
+	pathParts[2] = "/friends"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1617,7 +1914,7 @@ func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsPa
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1645,24 +1942,26 @@ func (c *Client) sendListPetFriends(ctx context.Context, params ListPetFriendsPa
 // GET /pets/{id}/rescuer
 func (c *Client) ListPetRescuer(ctx context.Context, params ListPetRescuerParams) (ListPetRescuerRes, error) {
 	res, err := c.sendListPetRescuer(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListPetRescuer(ctx context.Context, params ListPetRescuerParams) (res ListPetRescuerRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listPetRescuer"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets/{id}/rescuer"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListPetRescuer",
@@ -1675,14 +1974,15 @@ func (c *Client) sendListPetRescuer(ctx context.Context, params ListPetRescuerPa
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [3]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1695,9 +1995,14 @@ func (c *Client) sendListPetRescuer(ctx context.Context, params ListPetRescuerPa
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/rescuer"
+	pathParts[2] = "/rescuer"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1738,7 +2043,7 @@ func (c *Client) sendListPetRescuer(ctx context.Context, params ListPetRescuerPa
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1766,24 +2071,26 @@ func (c *Client) sendListPetRescuer(ctx context.Context, params ListPetRescuerPa
 // GET /users
 func (c *Client) ListUser(ctx context.Context, params ListUserParams) (ListUserRes, error) {
 	res, err := c.sendListUser(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListUser(ctx context.Context, params ListUserParams) (res ListUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listUser"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListUser",
@@ -1796,14 +2103,16 @@ func (c *Client) sendListUser(ctx context.Context, params ListUserParams) (res L
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users"
+	var pathParts [1]string
+	pathParts[0] = "/users"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1844,7 +2153,7 @@ func (c *Client) sendListUser(ctx context.Context, params ListUserParams) (res L
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1872,24 +2181,26 @@ func (c *Client) sendListUser(ctx context.Context, params ListUserParams) (res L
 // GET /users/{id}/animals-saved
 func (c *Client) ListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (ListUserAnimalsSavedRes, error) {
 	res, err := c.sendListUserAnimalsSaved(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListUserAnimalsSaved(ctx context.Context, params ListUserAnimalsSavedParams) (res ListUserAnimalsSavedRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listUserAnimalsSaved"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users/{id}/animals-saved"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListUserAnimalsSaved",
@@ -1902,14 +2213,15 @@ func (c *Client) sendListUserAnimalsSaved(ctx context.Context, params ListUserAn
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [3]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -1922,9 +2234,14 @@ func (c *Client) sendListUserAnimalsSaved(ctx context.Context, params ListUserAn
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/animals-saved"
+	pathParts[2] = "/animals-saved"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -1965,7 +2282,7 @@ func (c *Client) sendListUserAnimalsSaved(ctx context.Context, params ListUserAn
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -1993,24 +2310,26 @@ func (c *Client) sendListUserAnimalsSaved(ctx context.Context, params ListUserAn
 // GET /users/{id}/pets
 func (c *Client) ListUserPets(ctx context.Context, params ListUserPetsParams) (ListUserPetsRes, error) {
 	res, err := c.sendListUserPets(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams) (res ListUserPetsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listUserPets"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users/{id}/pets"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ListUserPets",
@@ -2023,14 +2342,15 @@ func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [3]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2043,9 +2363,14 @@ func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/pets"
+	pathParts[2] = "/pets"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
@@ -2086,7 +2411,7 @@ func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams
 	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2114,24 +2439,26 @@ func (c *Client) sendListUserPets(ctx context.Context, params ListUserPetsParams
 // GET /all-types/{id}
 func (c *Client) ReadAllTypes(ctx context.Context, params ReadAllTypesParams) (ReadAllTypesRes, error) {
 	res, err := c.sendReadAllTypes(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadAllTypes(ctx context.Context, params ReadAllTypesParams) (res ReadAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readAllTypes"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/all-types/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadAllTypes",
@@ -2144,14 +2471,15 @@ func (c *Client) sendReadAllTypes(ctx context.Context, params ReadAllTypesParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/all-types/"
+	var pathParts [2]string
+	pathParts[0] = "/all-types/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2164,11 +2492,16 @@ func (c *Client) sendReadAllTypes(ctx context.Context, params ReadAllTypesParams
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2196,24 +2529,26 @@ func (c *Client) sendReadAllTypes(ctx context.Context, params ReadAllTypesParams
 // GET /categories/{id}
 func (c *Client) ReadCategory(ctx context.Context, params ReadCategoryParams) (ReadCategoryRes, error) {
 	res, err := c.sendReadCategory(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadCategory(ctx context.Context, params ReadCategoryParams) (res ReadCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readCategory"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/categories/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadCategory",
@@ -2226,14 +2561,15 @@ func (c *Client) sendReadCategory(ctx context.Context, params ReadCategoryParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories/"
+	var pathParts [2]string
+	pathParts[0] = "/categories/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2246,11 +2582,16 @@ func (c *Client) sendReadCategory(ctx context.Context, params ReadCategoryParams
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2278,24 +2619,26 @@ func (c *Client) sendReadCategory(ctx context.Context, params ReadCategoryParams
 // GET /hats/{id}
 func (c *Client) ReadHat(ctx context.Context, params ReadHatParams) (ReadHatRes, error) {
 	res, err := c.sendReadHat(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadHat(ctx context.Context, params ReadHatParams) (res ReadHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readHat"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/hats/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadHat",
@@ -2308,14 +2651,15 @@ func (c *Client) sendReadHat(ctx context.Context, params ReadHatParams) (res Rea
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats/"
+	var pathParts [2]string
+	pathParts[0] = "/hats/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2328,11 +2672,16 @@ func (c *Client) sendReadHat(ctx context.Context, params ReadHatParams) (res Rea
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2360,24 +2709,26 @@ func (c *Client) sendReadHat(ctx context.Context, params ReadHatParams) (res Rea
 // GET /hats/{id}/wearer
 func (c *Client) ReadHatWearer(ctx context.Context, params ReadHatWearerParams) (ReadHatWearerRes, error) {
 	res, err := c.sendReadHatWearer(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadHatWearer(ctx context.Context, params ReadHatWearerParams) (res ReadHatWearerRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readHatWearer"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/hats/{id}/wearer"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadHatWearer",
@@ -2390,14 +2741,15 @@ func (c *Client) sendReadHatWearer(ctx context.Context, params ReadHatWearerPara
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats/"
+	var pathParts [3]string
+	pathParts[0] = "/hats/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2410,12 +2762,17 @@ func (c *Client) sendReadHatWearer(ctx context.Context, params ReadHatWearerPara
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/wearer"
+	pathParts[2] = "/wearer"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2443,24 +2800,26 @@ func (c *Client) sendReadHatWearer(ctx context.Context, params ReadHatWearerPara
 // GET /pets/{id}
 func (c *Client) ReadPet(ctx context.Context, params ReadPetParams) (ReadPetRes, error) {
 	res, err := c.sendReadPet(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadPet(ctx context.Context, params ReadPetParams) (res ReadPetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readPet"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPet",
@@ -2473,14 +2832,15 @@ func (c *Client) sendReadPet(ctx context.Context, params ReadPetParams) (res Rea
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [2]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2493,11 +2853,16 @@ func (c *Client) sendReadPet(ctx context.Context, params ReadPetParams) (res Rea
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2525,24 +2890,26 @@ func (c *Client) sendReadPet(ctx context.Context, params ReadPetParams) (res Rea
 // GET /pets/{id}/owner
 func (c *Client) ReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (ReadPetOwnerRes, error) {
 	res, err := c.sendReadPetOwner(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadPetOwner(ctx context.Context, params ReadPetOwnerParams) (res ReadPetOwnerRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readPetOwner"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/pets/{id}/owner"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadPetOwner",
@@ -2555,14 +2922,15 @@ func (c *Client) sendReadPetOwner(ctx context.Context, params ReadPetOwnerParams
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [3]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2575,12 +2943,17 @@ func (c *Client) sendReadPetOwner(ctx context.Context, params ReadPetOwnerParams
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/owner"
+	pathParts[2] = "/owner"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2608,24 +2981,26 @@ func (c *Client) sendReadPetOwner(ctx context.Context, params ReadPetOwnerParams
 // GET /users/{id}
 func (c *Client) ReadUser(ctx context.Context, params ReadUserParams) (ReadUserRes, error) {
 	res, err := c.sendReadUser(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadUser(ctx context.Context, params ReadUserParams) (res ReadUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readUser"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadUser",
@@ -2638,14 +3013,15 @@ func (c *Client) sendReadUser(ctx context.Context, params ReadUserParams) (res R
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [2]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2658,11 +3034,16 @@ func (c *Client) sendReadUser(ctx context.Context, params ReadUserParams) (res R
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2690,24 +3071,26 @@ func (c *Client) sendReadUser(ctx context.Context, params ReadUserParams) (res R
 // GET /users/{id}/best-friend
 func (c *Client) ReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (ReadUserBestFriendRes, error) {
 	res, err := c.sendReadUserBestFriend(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadUserBestFriend(ctx context.Context, params ReadUserBestFriendParams) (res ReadUserBestFriendRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readUserBestFriend"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users/{id}/best-friend"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadUserBestFriend",
@@ -2720,14 +3103,15 @@ func (c *Client) sendReadUserBestFriend(ctx context.Context, params ReadUserBest
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [3]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2740,12 +3124,17 @@ func (c *Client) sendReadUserBestFriend(ctx context.Context, params ReadUserBest
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/best-friend"
+	pathParts[2] = "/best-friend"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2773,24 +3162,26 @@ func (c *Client) sendReadUserBestFriend(ctx context.Context, params ReadUserBest
 // GET /users/{id}/favorite-hat
 func (c *Client) ReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (ReadUserFavoriteHatRes, error) {
 	res, err := c.sendReadUserFavoriteHat(ctx, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendReadUserFavoriteHat(ctx context.Context, params ReadUserFavoriteHatParams) (res ReadUserFavoriteHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("readUserFavoriteHat"),
+		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/users/{id}/favorite-hat"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "ReadUserFavoriteHat",
@@ -2803,14 +3194,15 @@ func (c *Client) sendReadUserFavoriteHat(ctx context.Context, params ReadUserFav
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [3]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2823,12 +3215,17 @@ func (c *Client) sendReadUserFavoriteHat(ctx context.Context, params ReadUserFav
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
-	u.Path += "/favorite-hat"
+	pathParts[2] = "/favorite-hat"
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u, nil)
+	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2856,33 +3253,26 @@ func (c *Client) sendReadUserFavoriteHat(ctx context.Context, params ReadUserFav
 // PATCH /all-types/{id}
 func (c *Client) UpdateAllTypes(ctx context.Context, request *UpdateAllTypesReq, params UpdateAllTypesParams) (UpdateAllTypesRes, error) {
 	res, err := c.sendUpdateAllTypes(ctx, request, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendUpdateAllTypes(ctx context.Context, request *UpdateAllTypesReq, params UpdateAllTypesParams) (res UpdateAllTypesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateAllTypes"),
-	}
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/all-types/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateAllTypes",
@@ -2895,14 +3285,15 @@ func (c *Client) sendUpdateAllTypes(ctx context.Context, request *UpdateAllTypes
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/all-types/"
+	var pathParts [2]string
+	pathParts[0] = "/all-types/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -2915,11 +3306,16 @@ func (c *Client) sendUpdateAllTypes(ctx context.Context, request *UpdateAllTypes
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u, nil)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -2950,24 +3346,26 @@ func (c *Client) sendUpdateAllTypes(ctx context.Context, request *UpdateAllTypes
 // PATCH /categories/{id}
 func (c *Client) UpdateCategory(ctx context.Context, request *UpdateCategoryReq, params UpdateCategoryParams) (UpdateCategoryRes, error) {
 	res, err := c.sendUpdateCategory(ctx, request, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendUpdateCategory(ctx context.Context, request *UpdateCategoryReq, params UpdateCategoryParams) (res UpdateCategoryRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateCategory"),
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/categories/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateCategory",
@@ -2980,14 +3378,15 @@ func (c *Client) sendUpdateCategory(ctx context.Context, request *UpdateCategory
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/categories/"
+	var pathParts [2]string
+	pathParts[0] = "/categories/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -3000,11 +3399,16 @@ func (c *Client) sendUpdateCategory(ctx context.Context, request *UpdateCategory
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u, nil)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -3035,24 +3439,26 @@ func (c *Client) sendUpdateCategory(ctx context.Context, request *UpdateCategory
 // PATCH /hats/{id}
 func (c *Client) UpdateHat(ctx context.Context, request *UpdateHatReq, params UpdateHatParams) (UpdateHatRes, error) {
 	res, err := c.sendUpdateHat(ctx, request, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendUpdateHat(ctx context.Context, request *UpdateHatReq, params UpdateHatParams) (res UpdateHatRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateHat"),
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/hats/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateHat",
@@ -3065,14 +3471,15 @@ func (c *Client) sendUpdateHat(ctx context.Context, request *UpdateHatReq, param
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/hats/"
+	var pathParts [2]string
+	pathParts[0] = "/hats/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -3085,11 +3492,16 @@ func (c *Client) sendUpdateHat(ctx context.Context, request *UpdateHatReq, param
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u, nil)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -3120,24 +3532,26 @@ func (c *Client) sendUpdateHat(ctx context.Context, request *UpdateHatReq, param
 // PATCH /pets/{id}
 func (c *Client) UpdatePet(ctx context.Context, request *UpdatePetReq, params UpdatePetParams) (UpdatePetRes, error) {
 	res, err := c.sendUpdatePet(ctx, request, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendUpdatePet(ctx context.Context, request *UpdatePetReq, params UpdatePetParams) (res UpdatePetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updatePet"),
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/pets/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdatePet",
@@ -3150,14 +3564,15 @@ func (c *Client) sendUpdatePet(ctx context.Context, request *UpdatePetReq, param
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/pets/"
+	var pathParts [2]string
+	pathParts[0] = "/pets/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -3170,11 +3585,16 @@ func (c *Client) sendUpdatePet(ctx context.Context, request *UpdatePetReq, param
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u, nil)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -3205,33 +3625,26 @@ func (c *Client) sendUpdatePet(ctx context.Context, request *UpdatePetReq, param
 // PATCH /users/{id}
 func (c *Client) UpdateUser(ctx context.Context, request *UpdateUserReq, params UpdateUserParams) (UpdateUserRes, error) {
 	res, err := c.sendUpdateUser(ctx, request, params)
-	_ = res
 	return res, err
 }
 
 func (c *Client) sendUpdateUser(ctx context.Context, request *UpdateUserReq, params UpdateUserParams) (res UpdateUserRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateUser"),
-	}
-	// Validate request before sending.
-	if err := func() error {
-		if err := request.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return res, errors.Wrap(err, "validate")
+		semconv.HTTPMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/users/{id}"),
 	}
 
 	// Run stopwatch.
 	startTime := time.Now()
 	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, elapsedDuration.Microseconds(), otelAttrs...)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
-	c.requests.Add(ctx, 1, otelAttrs...)
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
 	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateUser",
@@ -3244,14 +3657,15 @@ func (c *Client) sendUpdateUser(ctx context.Context, request *UpdateUserReq, par
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, otelAttrs...)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 		}
 		span.End()
 	}()
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	u.Path += "/users/"
+	var pathParts [2]string
+	pathParts[0] = "/users/"
 	{
 		// Encode "id" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -3264,11 +3678,16 @@ func (c *Client) sendUpdateUser(ctx context.Context, request *UpdateUserReq, par
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
-		u.Path += e.Result()
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
 	}
+	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PATCH", u, nil)
+	r, err := ht.NewRequest(ctx, "PATCH", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}

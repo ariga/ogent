@@ -157,11 +157,7 @@ func HasWearer() predicate.Hat {
 // HasWearerWith applies the HasEdge predicate on the "wearer" edge with a given conditions (other predicates).
 func HasWearerWith(preds ...predicate.User) predicate.Hat {
 	return predicate.Hat(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(WearerInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, WearerTable, WearerColumn),
-		)
+		step := newWearerStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -172,32 +168,15 @@ func HasWearerWith(preds ...predicate.User) predicate.Hat {
 
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Hat) predicate.Hat {
-	return predicate.Hat(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for _, p := range predicates {
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Hat(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
 func Or(predicates ...predicate.Hat) predicate.Hat {
-	return predicate.Hat(func(s *sql.Selector) {
-		s1 := s.Clone().SetP(nil)
-		for i, p := range predicates {
-			if i > 0 {
-				s1.Or()
-			}
-			p(s1)
-		}
-		s.Where(s1.P())
-	})
+	return predicate.Hat(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
 func Not(p predicate.Hat) predicate.Hat {
-	return predicate.Hat(func(s *sql.Selector) {
-		p(s.Not())
-	})
+	return predicate.Hat(sql.NotPredicates(p))
 }

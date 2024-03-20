@@ -33,6 +33,14 @@ func (hu *HatUpdate) SetName(s string) *HatUpdate {
 	return hu
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (hu *HatUpdate) SetNillableName(s *string) *HatUpdate {
+	if s != nil {
+		hu.SetName(*s)
+	}
+	return hu
+}
+
 // Mutation returns the HatMutation object of the builder.
 func (hu *HatUpdate) Mutation() *HatMutation {
 	return hu.mutation
@@ -40,7 +48,7 @@ func (hu *HatUpdate) Mutation() *HatMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (hu *HatUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, HatMutation](ctx, hu.sqlSave, hu.mutation, hu.hooks)
+	return withHooks(ctx, hu.sqlSave, hu.mutation, hu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -103,6 +111,14 @@ func (huo *HatUpdateOne) SetName(s string) *HatUpdateOne {
 	return huo
 }
 
+// SetNillableName sets the "name" field if the given value is not nil.
+func (huo *HatUpdateOne) SetNillableName(s *string) *HatUpdateOne {
+	if s != nil {
+		huo.SetName(*s)
+	}
+	return huo
+}
+
 // Mutation returns the HatMutation object of the builder.
 func (huo *HatUpdateOne) Mutation() *HatMutation {
 	return huo.mutation
@@ -123,7 +139,7 @@ func (huo *HatUpdateOne) Select(field string, fields ...string) *HatUpdateOne {
 
 // Save executes the query and returns the updated Hat entity.
 func (huo *HatUpdateOne) Save(ctx context.Context) (*Hat, error) {
-	return withHooks[*Hat, HatMutation](ctx, huo.sqlSave, huo.mutation, huo.hooks)
+	return withHooks(ctx, huo.sqlSave, huo.mutation, huo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
